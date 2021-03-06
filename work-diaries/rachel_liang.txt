@@ -1,0 +1,13 @@
+Week 1
+Collaborated with the team to determine key details such as features, deciding on project, and tech stack. 
+
+Week 2
+Wrote User Stories and Epics
+Scaffolding for the Proposal
+UI Flow diagrams 
+Architecture diagram (Front-end)
+Creating tickets for the backlog + sprint backlog
+
+Week 3
+UI Flow diagrams for further pages (market, summary, profile, stock details)
+Estimating user stories and split them between sprints

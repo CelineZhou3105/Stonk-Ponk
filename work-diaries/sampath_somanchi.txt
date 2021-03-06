@@ -1,0 +1,3 @@
+This week I accepted the position of backend engineer on this project. I have engaged in conversations with my team on how the architecture and tech stack would look like. As part of my role deliverable I have indentified data sources from which we can pull financial data on US stocks. 
+
+We have also set up a Git Lab repo to store all of our work. I have set up a vs code environment on which I will be working. 
