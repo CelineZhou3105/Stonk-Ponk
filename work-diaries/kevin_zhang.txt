@@ -7,3 +7,9 @@ Worked on the user stories for the backend.
 Added some jira tickets.
 Wrote about the technical depth.
 Clarified system architecture.
+
+Week3
+Cleaned up user stories.
+Estimated SP.
+Begun designing API.
+
