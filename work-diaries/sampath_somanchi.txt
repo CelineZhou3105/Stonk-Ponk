@@ -1,3 +1,7 @@
+Week 1: 
 This week I accepted the position of backend engineer on this project. I have engaged in conversations with my team on how the architecture and tech stack would look like. As part of my role deliverable I have indentified data sources from which we can pull financial data on US stocks. 
 
 We have also set up a Git Lab repo to store all of our work. I have set up a vs code environment on which I will be working. 
+
+Week 2: 
+We set up an in-person team meeting to iron out details. WE agreed upon the architecture and the fact that we will be using an API to connect the front end and the back end. A round table discussion was held to determine what features were most important to us and the product. We examined the different products which exist in the market and attempted to work out the novel features we could implement in our application. We made design decisions too. We determined that the product should have a simple look and feel to it. WE determined that our target audience will be.  
