@@ -1,0 +1,86 @@
+li {
+    display: inline;
+    position: relative; 
+    padding: 15px 0;
+}
+
+.nav-item {
+    color: #000;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    
+    display: inline-block;
+    padding: 15px 20px;
+    position: relative;
+}
+
+.nav-item:hover:after { 
+    width: 100%; 
+    left: 0; 
+}
+
+ul {
+    list-style-type: none;
+    text-align: center;
+    padding: 0; 
+    margin: 0;
+}
+
+a:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 50%;
+    position: absolute;
+    background: #9e22ff;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    padding-left: 30px;
+}
+
+.navigation-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Profile Photo */
+.profile-photo-container {
+    text-align: right;
+    padding-right: 30px;
+}
+.profile-photo {
+    width: 80px;
+    border: grey solid 1px;
+    border-radius: 50px;
+}
+
+/* Profile Popup Modal */
+.profile-modal {
+    float:right;
+    border: grey solid 1px;
+    border-radius: 10px;
+    position: absolute;
+    top: 120px;
+    right: 50px;
+    background: white;
+}
+.profile-modal-item {
+    width: 250px;
+    height: 80px;
+}
+
+.profile-modal-item:hover {
+    background-color: #9f22ff3f;
+    transition: background-color 1s;
+}
+
+
