@@ -1,3 +1,4 @@
+import React from 'react';
 import Particles from 'react-particles-js';
 import './login.css'
 
@@ -37,7 +38,7 @@ function Login() {
                 <div className="title">
                     <h1>Stonk Ponk</h1>
                 </div>
-                <form>
+                <form action="/home">
                     <div class="label-container"><label for="username">Username</label></div>
                     <input id="username" type="text" required></input>
                     <div class="underline"></div><br></br>

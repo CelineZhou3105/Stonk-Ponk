@@ -3,6 +3,10 @@ import './navigation.css';
 import logo from './atlassian.png';
 import profile from './profile.png';
 
+import {
+    NavLink,
+  } from "react-router-dom";
+
 function Navigation() {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
 
@@ -12,11 +16,11 @@ function Navigation() {
                 <img src={logo} className="logo" alt=""/>
                 <div className="title">Stonk Ponk</div>
                 <ul className="navigation-list">
-                    <li><a className="nav-item" href="https://google.com">Summary</a></li>
-                    <li><a className="nav-item" href="https://google.com">Education</a></li>
-                    <li><a className="nav-item" href="https://google.com">Portfolio</a></li>
-                    <li><a className="nav-item" href="https://google.com">Market</a></li>
-                    <li><a className="nav-item" href="https://google.com">Watchlist</a></li>
+                    <li><NavLink className="nav-item" to="/home">Summary</NavLink></li>
+                    <li><NavLink className="nav-item" to="/education">Education</NavLink></li>
+                    <li><NavLink className="nav-item" to="/portfolio">Portfolio</NavLink></li>
+                    <li><NavLink className="nav-item" to="/market">Market</NavLink></li>
+                    <li><NavLink className="nav-item" to="/watchlist">Watchlist</NavLink></li>
                 </ul>
                 <div className="profile-photo-container">
                     <img className="profile-photo" src={profile} alt="" onClick={() => setProfileModalOpen(!profileModalOpen)}/>

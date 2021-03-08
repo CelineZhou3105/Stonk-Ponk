@@ -17,7 +17,7 @@ li {
 
 .nav-item:hover:after { 
     width: 100%; 
-    left: 0; 
+    left: 0;
 }
 
 ul {
@@ -28,16 +28,24 @@ ul {
 }
 
 a:after {    
-    background: none repeat scroll 0 0 transparent;
+    background: none repeat scroll 0 0 #9e22ff;
     bottom: 0;
     content: "";
     display: block;
     height: 2px;
     left: 50%;
-    position: absolute;
-    background: #9e22ff;
+    position: relative;
     transition: width 0.3s ease 0s, left 0.3s ease 0s;
     width: 0;
+    top: 15px;
+}
+
+.active {
+    border-bottom: 2px solid #9e22ff;
+}
+
+.active:after {
+    height: 0;
 }
 
 .logo {
