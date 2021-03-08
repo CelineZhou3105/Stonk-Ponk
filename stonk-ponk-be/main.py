@@ -17,5 +17,8 @@ def start_db():
 
 def insert_user(username, password):
 
+def delete_user(username, password):
+
+
 if __name__ == '__main__':
     main()
