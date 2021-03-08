@@ -2,7 +2,11 @@ import React from 'react';
 import Particles from 'react-particles-js';
 import './login.css'
 
-import logo from '../navigation/atlassian.png';
+import logo from '../navigation/logo.png';
+
+import {
+    NavLink,
+} from "react-router-dom";
 
 function Login() {
     return (
@@ -52,7 +56,7 @@ function Login() {
                     <input id="submit-button" type="submit" value="Login"/>
                 </form>
                 <hr></hr>
-                <p>Don't have an account? <a className="link" href="#">Sign up now!</a></p>
+                <p>Don't have an account? <NavLink className="link" to="/sign-up">Sign up now!</NavLink></p>
                 
             </div>
         </div>

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 
 import {
@@ -7,7 +6,6 @@ import {
   Switch,
 } from "react-router-dom";
 
-import Navigation from './navigation/Navigation';
 import Login from './login-page/Login';
 import Summary from './summary-page/Summary';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './navigation.css';
-import logo from './atlassian.png';
+import logo from './logo.png';
 import profile from './profile.png';
 
 import {
@@ -13,8 +13,10 @@ function Navigation() {
     return (
         <>
             <div className="navigation-container">
-                <img src={logo} className="logo" alt=""/>
-                <div className="title">Stonk Ponk</div>
+                <div className="brand">
+                    <img src={logo} className="logo" alt=""/>
+                    <div className="title">Stonk Ponk</div>
+                </div>
                 <ul className="navigation-list">
                     <li><NavLink className="nav-item" to="/home">Summary</NavLink></li>
                     <li><NavLink className="nav-item" to="/education">Education</NavLink></li>
