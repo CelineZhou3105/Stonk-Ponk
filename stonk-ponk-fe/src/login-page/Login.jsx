@@ -39,16 +39,20 @@ function Login() {
                 </div>
                 <form>
                     <div class="label-container"><label for="username">Username</label></div>
-                    <input id="username" type="text"></input>
+                    <input id="username" type="text" required></input>
                     <div class="underline"></div><br></br>
                     
                     <div class="label-container"><label for="password">Password</label></div>
-                    <input id="password" type="password"></input>
+                    <input id="password" type="password" required></input>
                     <div class="underline"></div><br></br>
+                    <p id="forgot-password">
+                        <a className="link" href="#"> Forgot your password?</a>
+                    </p>
                     <input id="submit-button" type="submit" value="Login"/>
                 </form>
                 <hr></hr>
-                <p>Don't have an account? <a id="sign-up" href="#">Sign up now!</a></p>
+                <p>Don't have an account? <a className="link" href="#">Sign up now!</a></p>
+                
             </div>
         </div>
     )
