@@ -2,15 +2,19 @@ import pymongo
 from pymongo import MongoClient
 import pprint
 
-client = MongoClient('localhost', 27017)
-db = client.test_database
-print("got here")
-collection = db['test-collection']
+def main():
+    start_db()
+    
 
-user_auth = {"u_name": "Ash",
-"pwd": "Sarkar"}
+def start_db():
+    client = MongoClient('localhost', 27017)
+    db = client.test_database
 
-user_auths = db.user_auths
-auth_id = user_auths.insert_one(user_auth).inserted_id
+    user_auth = {"u_name": "Ash",
+    "pwd": "Sarkar"}
 
-pprint.pprint(user_auths.find_one())
+    user_auths = db.user_auths
+
+    pprint.pprint(user_auths.find_one())
+if __name__ == '__main__':
+    main()
