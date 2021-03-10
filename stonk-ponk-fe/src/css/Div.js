@@ -8,6 +8,7 @@ function createFlexRowDiv(justifyContent) {
     return styled.div`
         ${FlexRow};
         justify-content: ${justifyContent};
+        align-content: center;
     `;
 }
 
@@ -21,12 +22,15 @@ export const FlexColumn = css`
 function createFlexColumnDiv(alignItem, margin) {
     return styled.div`
         ${FlexColumn};
+        justify-content: center;
         align-items: ${alignItem};
         margin: ${margin};
     `;
 }
 
 export const SignUpItemDiv = createFlexColumnDiv("flex-start", "20px");
+
+export const FlexColumnCenterDiv = createFlexColumnDiv("center", "50px");
 
 export const LineDivider = styled.div`
     height: 1px;

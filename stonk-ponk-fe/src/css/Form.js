@@ -9,7 +9,6 @@ export const FlexCenter = css`
 export const SignUpForm = styled.form`
     ${FlexCenter}
     flex-direction: column;
-    margin-top: 2%;
     margin-bottom: 5%;
 `;
 

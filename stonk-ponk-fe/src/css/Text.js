@@ -12,3 +12,7 @@ export const TitleItalicText = styled.h1`
     font-style: italic;
     font-size: 30pt;
 `;
+
+export const CompanyName = styled.p`
+    font-size: 20pt;
+`;
