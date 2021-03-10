@@ -8,6 +8,7 @@ import {
 
 import Login from './login-page/Login';
 import Summary from './summary-page/Summary';
+import Signup from './signup-page/SignUp';
 
 function App() {
   return (
@@ -15,11 +16,11 @@ function App() {
       <div className="App">
         <div className="content">
           <Switch>
-            <Route exact path="/" component={Login}/>
-            <Route path="/home" component={Summary}/>
+            <Route exact path="/" component={Login} />
+            <Route path="/home" component={Summary} />
+            <Route path="/sign-up" component={Signup} />
           </Switch>
         </div>
-        
       </div>
     </Router>
   );
