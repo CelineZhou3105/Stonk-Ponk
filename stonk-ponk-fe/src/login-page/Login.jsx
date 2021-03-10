@@ -51,9 +51,9 @@ function Login() {
                     <input id="password" type="password" required></input>
                     <div class="underline"></div><br></br>
                     <p id="forgot-password">
-                        <a className="link" href="#"> Forgot your password?</a>
+                        <a className="link" href="/forgot-password"> Forgot your password?</a>
                     </p>
-                    <input id="submit-button" type="submit" value="Login"/>
+                    <input className="submit-button" type="submit" value="Login"/>
                 </form>
                 <hr></hr>
                 <p>Don't have an account? <NavLink className="link" to="/sign-up">Sign up now!</NavLink></p>

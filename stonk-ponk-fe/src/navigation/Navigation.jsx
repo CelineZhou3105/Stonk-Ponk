@@ -11,7 +11,7 @@ function Navigation() {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
 
     return (
-        <>
+        <header>
             <div className="navigation-container">
                 <div className="brand">
                     <img src={logo} className="logo" alt=""/>
@@ -37,7 +37,7 @@ function Navigation() {
                     <div className="profile-modal-item">Logout</div>
                 </div>
             }
-        </>
+        </header>
     )
 }
 

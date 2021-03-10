@@ -8,6 +8,7 @@ import {
 
 import Login from './login-page/Login';
 import Summary from './summary-page/Summary';
+import PasswordReset from './forgot-password/PasswordReset';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={Login}/>
             <Route path="/home" component={Summary}/>
+            <Route path="/forgot-password" component={PasswordReset}/>
           </Switch>
         </div>
         

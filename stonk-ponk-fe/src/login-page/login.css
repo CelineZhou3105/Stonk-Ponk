@@ -1,4 +1,4 @@
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="email"] {
     border: none;
     padding: 15px;
     width: 320px;
@@ -6,6 +6,7 @@ input[type="text"], input[type="password"] {
     border-bottom: 1px solid #CCC;
     display: block;
     margin: 0 auto;
+    background-color: transparent;
 }
 
 .label-container {
@@ -71,15 +72,11 @@ input:focus+.underline {
     margin: 0 auto;
 }
 
-#tsparticles {
-    height: 100%;
-}
-
 #logo {
     width: 100%;
 }
 
-#submit-button {
+.submit-button {
     color: #ffffff;
     width: 200px;
     background-color: #9e22ff;
@@ -97,4 +94,9 @@ input:focus+.underline {
 #forgot-password {
     text-align: right;
     margin: 0;
+}
+
+#tsparticles {
+    height: 100%;
+    width: 100%;
 }
