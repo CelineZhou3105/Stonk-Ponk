@@ -1,0 +1,16 @@
+Week 1
+Participated in meetings to discuss and decide on the project.
+Split the group into frontend and backend team, joining the frontend team.
+
+Week 2
+Discussed details of the project and distributed workload with team members.
+Wrote epics and user stories.
+Designed UI on figma.
+Discussed the project architecture and tech stack in meetings.
+
+Week 3
+Fine tuned the UI design.
+Held frontend meetings to deligate tickets and talked about how to approach the tasks.
+
+Week 4
+Worked on tickets in the current sprint.
