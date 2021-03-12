@@ -10,21 +10,19 @@ export const FlexRow = css`
     display: flex;
 `;
 
-function createFlexRowDiv(justifyContent, padding) {
-    return styled.div`
-        ${FlexRow};
-        justify-content: ${justifyContent};
-        align-content: center;
-        padding: ${padding};
-    `;
-}
-
-export const FlexRowDiv = createFlexRowDiv("space-between");
-
 export const FlexColumn = css`
     display: flex;
     flex-direction: column;
 `;
+
+function createFlexRowDiv(justifyContent, padding) {
+    return styled.div`
+        ${FlexRow};
+        justify-content: ${justifyContent};
+        align-items: center;
+        padding: ${padding};
+    `;
+}
 
 function createFlexColumnDiv(alignItem, margin) {
     return styled.div`
@@ -34,6 +32,8 @@ function createFlexColumnDiv(alignItem, margin) {
         margin: ${margin};
     `;
 }
+
+export const FlexRowDiv = createFlexRowDiv("space-between", "auto");
 
 export const SignUpItemDiv = createFlexColumnDiv("flex-start", "20px");
 
@@ -108,4 +108,37 @@ export const LinkContainer = styled.div`
     align-items: center;
     width: 40%;
     padding: 10px 0px;
+`;
+
+
+/* Navigation */
+export const NavigationContainer = styled.div` 
+    ${FlexRow}
+    align-items: center;
+    justify-content: space-between;
+`;
+
+export const ProfileModal = styled.div`
+    text-align: center;
+    float:right;
+    border: grey solid 1px;
+    border-radius: 10px;
+    position: absolute;
+    top: 120px;
+    right: 50px;
+    background: white;
+    width: 300px;
+`;
+
+export const ProfilePhotoContainer = styled.div`
+    padding: 30px;
+`;
+
+export const ProfileModaItem = styled.div`
+    padding: 30px 0;
+
+    &:hover {
+        background-color: #9f22ff3f;
+        transition: background-color 1s;
+    }
 `;
