@@ -14,16 +14,26 @@ export const SignUpForm = styled.form`
 
 export const Label = styled.label`
     margin-bottom: 5px;
+    width: 40%;
+    text-align: left;
+    margin-top: 20px;
 `;
 
 export const TextField = styled.input`
+    outline: none;
     border: none;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #ccc;
     font-size: 13pt;
+    background-color: transparent;
+    width: 40%;
+
     &:focus {
-        transition: border-bottom 0.5s ease-in;
-        border-bottom: 1px solid #9e22ff;
+        text-decoration: none;
     }
+    &:focus+.underline {
+        transform: scale(1);
+    }
+    padding: 15px 0;
 `;
 
 export const SignUpBtn = styled.input`
@@ -63,4 +73,16 @@ export const GenericSubmitButton = styled.input`
         background-color: #401363;
         transition: background-color 0.5s;
     }
+`;
+
+export const InputUnderlineDiv = styled.div`
+    background-color: #9e22ff;
+    display: inline-block;
+    height: 2px;
+    -webkit-transform: scale(0, 1);
+    transform: scale(0, 1);
+    -webkit-transition: all 0.4s linear;
+    transition: all 0.4s linear;
+    width: 40%;
+    position: relative;
 `;

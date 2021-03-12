@@ -7,6 +7,7 @@ export const HeaderLogo = styled.img`
     margin-right: 15px;
 `;
 
-export const PasswordResetLogo = styled.img`
+export const DefaultLogo = styled.img`
+    height: auto;
     width: 25%;
 `;

@@ -5,8 +5,8 @@ import { useHistory } from 'react-router-dom';
 import logo from '../navigation/logo.png';
 
 import { FormContainer, LogoContainer, ParticleContainer,  PasswordResetBackground, PasswordResetPageContainer} from '../css/Div';
-import { GenericForm, GenericSubmitButton, Label, TextField } from '../css/Form';
-import { PasswordResetLogo } from '../css/Logo';
+import { GenericForm, GenericSubmitButton, InputUnderlineDiv, Label, TextField } from '../css/Form';
+import { DefaultLogo } from '../css/Logo';
 
 function PasswordReset() {
 
@@ -25,8 +25,7 @@ function PasswordReset() {
     // Navigate to log in form
     const history = useHistory();
     const redirectToLogin = () => {
-        const path = '/';
-        history.push(path);
+        history.push("/");
     };
 
     // Submit request for security question associated with account
@@ -133,14 +132,15 @@ function PasswordReset() {
                     />
                 </ParticleContainer>
                 <PasswordResetBackground>
-                    <LogoContainer><PasswordResetLogo src={logo} alt="Stonk Ponk Logo" /></LogoContainer>
+                    <LogoContainer><DefaultLogo src={logo} alt="Stonk Ponk Logo" /></LogoContainer>
                     {emailFormVisible &&
                         <FormContainer>
-                            <h1 id="password-reset-title">Reset your password</h1>
                             <GenericForm onSubmit={(e) => {submitPasswordForm(e)}}>
+                                <h1 id="password-reset-title">Reset your password</h1>
                                 <Label htmlFor="email">Enter your email below</Label>
                                 <TextField id="email" type="email" onChange={(e) => setEmail(e.target.value)} required/>
-                                <GenericSubmitButton type="submit" value="Submit" aria-label="Button to submit your email"/>
+                                <InputUnderlineDiv className="underline"></InputUnderlineDiv>
+                                <GenericSubmitButton type="submit" value="Next" aria-label="Button to submit your email"/>
                             </GenericForm>
                         </FormContainer>
                     }
@@ -151,6 +151,7 @@ function PasswordReset() {
                                 <div>{securityQuestion}</div>
                                 <Label htmlFor="security-question-answer">Enter your answer below</Label>
                                 <TextField type="text" id="security-question-answer" required onChange={(e) => {setAnswer(e.target.value)}} />
+                                <InputUnderlineDiv className="underline"></InputUnderlineDiv>
                                 <GenericSubmitButton type="submit" id="security-question-submit" value="Submit" aria-label="Button to submit your email" />
                             </GenericForm>
                         </FormContainer>
@@ -161,8 +162,10 @@ function PasswordReset() {
                                 <h1>Create your new password below:</h1>
                                 <Label htmlFor="new-password">New Password</Label>
                                 <TextField type="text" id="new-password" required onChange={(e) => {setPass(e.target.value)}} />
+                                <InputUnderlineDiv className="underline"></InputUnderlineDiv>
                                 <Label htmlFor="new-password-confirm">Confirm Password</Label>
                                 <TextField type="text" id="new-password-confirm" required onChange={(e) => {setPassConfirm(e.target.value)}} />
+                                <InputUnderlineDiv className="underline"></InputUnderlineDiv>
                                 <GenericSubmitButton type="submit" value="Submit" aria-label="Button to submit your new password"></GenericSubmitButton>
                             </GenericForm>
                         </FormContainer>

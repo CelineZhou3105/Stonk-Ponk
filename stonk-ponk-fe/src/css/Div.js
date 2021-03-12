@@ -49,11 +49,11 @@ export const LineDivider = styled.div`
 /* Particles.js */
 export const ParticleContainer = styled.div`
     background-color: #401363;
-    position: absolute;
-    z-index: -10;
-    top: 0;
+    position: ${props => props.login ? "relative": "absolute"};
+    z-index: ${props => props.login ? "auto": "-10"};
     width: 100%;
     height: 100%;
+    flex: ${props => props.login ? "3": "0"};
 `;
 
 /* Password Reset Page */
@@ -66,13 +66,46 @@ export const PasswordResetPageContainer = styled.div`
     height: 100%;
 `;
 export const FormContainer = styled.div`
+    width: 100%;
     text-align: center;
 `;
-
-/* Password Reset Page */
 export const PasswordResetBackground = styled.div`
     ${FlexCenter}
     flex-direction: column;
     background-color: white;
     box-shadow: 10px 10px rgba(0, 0, 0, 0.5);
+    width: 25%;
+    height: auto;
+    border-radius: 20px;
+    padding: 30px;
+`;
+
+/* Login Page */
+export const LoginPageContainer = styled.div` 
+    ${FlexRow}
+    height: 100%;
+    width: 100%;
+    align-items: center;
+`;
+
+export const LoginFormContainer = styled.div` 
+    ${FlexColumn}
+    flex: 2;
+    text-align: center;
+`;
+
+export const LinkContainer = styled.div`
+    display: flex;
+    justify-content: ${props => { 
+        if (props.left) {
+            return "flex-start"
+        } else if (props.right) {
+             return "flex-end"
+        } else {
+            return "center"
+        }
+    }};
+    align-items: center;
+    width: 40%;
+    padding: 10px 0px;
 `;
