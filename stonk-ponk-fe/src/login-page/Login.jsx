@@ -26,10 +26,10 @@ function Login() {
         await fetch("https://stonkponk.com/login", {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                email: email, 
+                email: email,
                 password: pass,
             }),
         }).then((response) => {
@@ -48,7 +48,7 @@ function Login() {
     return (
         <LoginPageContainer>
             <ParticleContainer login>
-                <Particles 
+                <Particles
                     width={"100%"}
                     height={"100%"}
                     params={{
@@ -73,23 +73,23 @@ function Login() {
             </ParticleContainer>
             <LoginFormContainer>
                 <LogoContainer>
-                    <DefaultLogo src={logo} alt="Stonk Ponk Logo"/>
+                    <DefaultLogo src={logo} alt="Stonk Ponk Logo" />
                 </LogoContainer>
                 <GenericForm onSubmit={(e) => submitLoginForm(e)}>
                     <h1>Stonk Ponk</h1>
                     <Label htmlFor="username">Username</Label>
-                    <TextField id="username" type="text" required onChange={(e) => {setEmail(e.target.value)}}/>
+                    <TextField id="username" type="text" required onChange={(e) => { setEmail(e.target.value) }} />
                     <InputUnderlineDiv className="underline"></InputUnderlineDiv>
-                    
+
                     <Label htmlFor="password">Password</Label>
-                    <TextField id="password" type="password" required onChange={(e) => {setPass(e.target.value)}}/>
+                    <TextField id="password" type="password" required onChange={(e) => { setPass(e.target.value) }} />
                     <InputUnderlineDiv className="underline"></InputUnderlineDiv>
                     <LinkContainer right id="forgot-password">
                         <LinkText href="/forgot-password"> Forgot your password?</LinkText>
                     </LinkContainer>
                     <GenericSubmitButton type="submit" value="Login" aria-label="Button to login"></GenericSubmitButton>
                     <LinkContainer>Don't have an account?&nbsp; <LinkText href="/sign-up"> Sign up now!</LinkText></LinkContainer>
-                </GenericForm>                
+                </GenericForm>
             </LoginFormContainer>
         </LoginPageContainer>
     )

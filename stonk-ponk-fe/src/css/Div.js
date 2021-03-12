@@ -49,15 +49,16 @@ export const LineDivider = styled.div`
 /* Particles.js */
 export const ParticleContainer = styled.div`
     background-color: #401363;
-    position: ${props => props.login ? "relative": "absolute"};
-    z-index: ${props => props.login ? "auto": "-10"};
+    position: ${props => props.login ? "relative" : "absolute"};
+    z-index: ${props => props.login ? "auto" : "-10"};
     width: 100%;
     height: 100%;
-    flex: ${props => props.login ? "3": "0"};
+    flex: ${props => props.login ? "3" : "0"};
 `;
 
 /* Password Reset Page */
 export const LogoContainer = createFlexRowDiv('center', '30px');
+
 export const PasswordResetPageContainer = styled.div`
     ${FlexRow};
     justify-content: center;
@@ -96,11 +97,11 @@ export const LoginFormContainer = styled.div`
 
 export const LinkContainer = styled.div`
     display: flex;
-    justify-content: ${props => { 
+    justify-content: ${props => {
         if (props.left) {
             return "flex-start"
         } else if (props.right) {
-             return "flex-end"
+            return "flex-end"
         } else {
             return "center"
         }
