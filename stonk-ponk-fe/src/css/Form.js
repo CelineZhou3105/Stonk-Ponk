@@ -12,29 +12,38 @@ export const SignUpForm = styled.form`
     margin-bottom: 5%;
 `;
 
-export const Label = styled.label`
-    margin-bottom: 5px;
-    width: 40%;
-    text-align: left;
-    margin-top: 20px;
-`;
+function createLabel(width) {
+    return styled.label`
+        margin-bottom: 5px;
+        width: ${width};
+        text-align: left;
+        margin-top: 20px;
+    `;
+}
 
-export const TextField = styled.input`
-    outline: none;
-    border: none;
-    border-bottom: 1px solid #ccc;
-    font-size: 13pt;
-    background-color: transparent;
-    width: 40%;
+export const Label = createLabel("100%");
 
-    &:focus {
-        text-decoration: none;
-    }
-    &:focus+.underline {
-        transform: scale(1);
-    }
-    padding: 15px 0;
-`;
+function createTextField(width) {
+    return styled.input`
+        outline: none;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        font-size: 13pt;
+        background-color: transparent;
+        width: ${width};
+
+        &:focus {
+            text-decoration: none;
+            border-color: #9e22ff;
+        }
+        &:focus+.underline {
+            transform: scale(1);
+        }
+        padding: 15px 0;
+    `;
+}
+
+export const TextField = createTextField("100%");
 
 export const SignUpBtn = styled.input`
     cursor: pointer;
