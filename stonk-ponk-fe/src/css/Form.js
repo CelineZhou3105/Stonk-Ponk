@@ -14,17 +14,6 @@ export const SignUpForm = styled.form`
 
 export const Label = styled.label`
     margin-bottom: 5px;
-<<<<<<< HEAD
-`;
-
-export const TextField = styled.input`
-    border: none;
-    border-bottom: 1px solid;
-    font-size: 13pt;
-    &:focus {
-        border-bottom: 1px solid #9e22ff;
-    }
-=======
     width: 40%;
     text-align: left;
     margin-top: 20px;
@@ -45,7 +34,6 @@ export const TextField = styled.input`
         transform: scale(1);
     }
     padding: 15px 0;
->>>>>>> 3143210165070260d92cc96970f7e894fc10299c
 `;
 
 export const SignUpBtn = styled.input`
@@ -59,8 +47,6 @@ export const SignUpBtn = styled.input`
     width: 15%;
     margin: 20px;
     ${FlexCenter}
-<<<<<<< HEAD
-=======
 `;
 
 /* Generic elements */
@@ -99,5 +85,4 @@ export const InputUnderlineDiv = styled.div`
     transition: all 0.4s linear;
     width: 40%;
     position: relative;
->>>>>>> 3143210165070260d92cc96970f7e894fc10299c
 `;

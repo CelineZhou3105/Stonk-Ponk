@@ -8,31 +8,21 @@ import {
 
 import Login from './login-page/Login';
 import Summary from './summary-page/Summary';
-<<<<<<< HEAD
 import Signup from './signup-page/SignUp';
 import SignupSuccess from './signup-page/SignUpSuccess';
-=======
 import PasswordReset from './forgot-password/PasswordReset';
->>>>>>> 3143210165070260d92cc96970f7e894fc10299c
 
 function App() {
   return (
     <Router>
       <div className="App">
-          <Switch>
-<<<<<<< HEAD
-            <Route exact path="/" component={Login} />
-            <Route path="/home" component={Summary} />
-            <Route path="/sign-up" component={Signup} />
-            <Route path="/sign-up-success" component={SignupSuccess} />
-          </Switch>
-        </div>
-=======
-            <Route exact path="/" component={Login}/>
-            <Route path="/home" component={Summary}/>
-            <Route path="/forgot-password" component={PasswordReset}/>
-          </Switch>       
->>>>>>> 3143210165070260d92cc96970f7e894fc10299c
+        <Switch>
+          <Route exact path="/" component={Login} />
+          <Route path="/home" component={Summary} />
+          <Route path="/sign-up" component={Signup} />
+          <Route path="/sign-up-success" component={SignupSuccess} />
+          <Route path="/forgot-password" component={PasswordReset} />
+        </Switch>
       </div>
     </Router>
   );
