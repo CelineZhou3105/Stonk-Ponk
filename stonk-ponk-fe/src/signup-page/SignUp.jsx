@@ -65,6 +65,7 @@ const SignUp = () => {
     return (
         <div>
             <HeaderBar />
+            <h1>hi</h1>
             <SignUpForm onSubmit={(e) => submitSignUpForm(e)}>
                 <TitleItalicText>Get started right now, Join us!</TitleItalicText>
                 <FlexRowDiv>
