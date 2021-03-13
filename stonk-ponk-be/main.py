@@ -19,19 +19,18 @@ def listen(db_conn):
     online = True
     while online: 
         command_string = input("Please Enter a Command: \n")
-        command = get_func(command_string.split()[0])
+        command = command_string.split()[0]
+        
+        action = get_func(command, command_string)
 
-        if command == 'Quit':
+        if action == 'Quit':
             online = False
             continue
-        
-        if command == 1: 
-            print("We got an insert\n")
 
-        if command == 0: 
+        if action == "Unknown": 
             print("We got an unknown command\n")
 
-def get_func(command):
+def get_func(command, command_string):
     return{
         'Quit': 'Quit',
         'Insert': 1
