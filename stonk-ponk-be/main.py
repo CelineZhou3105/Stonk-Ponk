@@ -18,16 +18,24 @@ def main():
 def listen(db_conn):
     online = True
     while online: 
-        command = input("Please Enter a Command: \n")
-        
-        if command == "Quit":
+        command_string = input("Please Enter a Command: \n")
+        command = get_func(command_string.split()[0])
+
+        if command == 'Quit':
             online = False
             continue
+        
+        if command == 1: 
+            print("We got an insert\n")
+
+        if command == 0: 
+            print("We got an unknown command\n")
 
 def get_func(command):
     return{
-        'Quit': 
-    }
+        'Quit': 'Quit',
+        'Insert': 1
+    }.get(command, 'Unknown')
 
 if __name__ == '__main__':
     main()
