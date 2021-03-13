@@ -15,3 +15,10 @@ export const LoginButton = styled.button`
     width: 15%;
     margin-top: 20px;
 `;
+
+export const EditButton = styled.button`
+    ${ButtonStyle}
+    font-size: 12pt;
+    padding: 15px;
+    margin: 5px;
+`;

@@ -12,16 +12,19 @@ export const SignUpForm = styled.form`
     margin-bottom: 5%;
 `;
 
-function createLabel(width) {
+function createLabel(width, marginBottom, marginTop) {
     return styled.label`
-        margin-bottom: 5px;
+        margin-bottom: ${marginBottom};
         width: ${width};
         text-align: left;
-        margin-top: 20px;
+        margin-top: ${marginTop};
     `;
 }
 
-export const Label = createLabel("100%");
+export const Label = createLabel("100%", "5%", "10%");
+
+export const SettingsLabel = createLabel("100%", "20%", "20%");
+
 
 function createTextField(width) {
     return styled.input`

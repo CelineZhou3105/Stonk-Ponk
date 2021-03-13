@@ -18,6 +18,10 @@ function Navigation() {
         history.push('/');
     }
 
+    const navigateToSettings = () => {
+        history.push('/settings');
+    }
+
     const logout = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem("token");
@@ -45,7 +49,7 @@ function Navigation() {
         <header>
             <NavigationContainer>
                 <LogoContainer>
-                    <DefaultLogo navigation src={logo} alt="Stonk Ponk Logo"/>
+                    <DefaultLogo navigation src={logo} alt="Stonk Ponk Logo" />
                     <CompanyName>Stonk Ponk</CompanyName>
                 </LogoContainer>
                 <NavList>
@@ -56,21 +60,21 @@ function Navigation() {
                     <NavListItem><NavLink className="nav-item" to="/watchlist">Watchlist</NavLink></NavListItem>
                 </NavList>
                 <ProfilePhotoContainer>
-                    <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" onClick={() => setProfileModalOpen(!profileModalOpen)}/>
+                    <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" onClick={() => setProfileModalOpen(!profileModalOpen)} />
                 </ProfilePhotoContainer>
-                {profileModalOpen && 
+                {profileModalOpen &&
                     <ProfileModal>
                         <ProfilePhotoContainer>
-                        <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture"/>
-                    </ProfilePhotoContainer>
-                    <h2>Samantha Anders</h2>
-                    <ProfileModaItem className="profile-modal-item">Settings</ProfileModaItem>
-                    <ProfileModaItem className="profile-modal-item">Contact Us</ProfileModaItem>
-                    <ProfileModaItem onClick={(e) => {logout(e)}} className="profile-modal-item">Logout</ProfileModaItem>
-                </ProfileModal>
+                            <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" />
+                        </ProfilePhotoContainer>
+                        <h2>Samantha Anders</h2>
+                        <ProfileModaItem className="profile-modal-item" onClick={navigateToSettings}>Settings</ProfileModaItem>
+                        <ProfileModaItem className="profile-modal-item">Contact Us</ProfileModaItem>
+                        <ProfileModaItem onClick={(e) => { logout(e) }} className="profile-modal-item">Logout</ProfileModaItem>
+                    </ProfileModal>
                 }
             </NavigationContainer>
-            
+
         </header>
     )
 }

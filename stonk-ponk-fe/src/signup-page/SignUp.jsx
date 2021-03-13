@@ -65,42 +65,44 @@ const SignUp = () => {
     return (
         <div>
             <HeaderBar />
-            <SignUpForm onSubmit={(e) => submitSignUpForm(e)}>
-                <TitleItalicText>Get started right now, Join us!</TitleItalicText>
-                <FlexRowDiv>
+            <main>
+                <SignUpForm onSubmit={(e) => submitSignUpForm(e)}>
+                    <TitleItalicText>Get started right now, Join us!</TitleItalicText>
+                    <FlexRowDiv>
+                        <SignUpItemDiv>
+                            <Label htmlFor="firstName">First Name</Label>
+                            <TextField type="text" id="firstName" value={firstName} required onChange={(e) => setFirstName(e.target.value)} />
+                        </SignUpItemDiv>
+                        <SignUpItemDiv>
+                            <Label htmlFor="lastName">Last Name</Label>
+                            <TextField type="text" id="lastName" value={lastName} required onChange={(e) => setLastName(e.target.value)} />
+                        </SignUpItemDiv>
+                    </FlexRowDiv>
                     <SignUpItemDiv>
-                        <Label htmlFor="firstName">First Name</Label>
-                        <TextField type="text" id="firstName" value={firstName} required onChange={(e) => setFirstName(e.target.value)} />
+                        <Label htmlFor="emailAdd">Email</Label>
+                        <TextField type="text" id="emailAdd" value={emailAdd} required onChange={(e) => setEmailAdd(e.target.value)} />
                     </SignUpItemDiv>
                     <SignUpItemDiv>
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <TextField type="text" id="lastName" value={lastName} required onChange={(e) => setLastName(e.target.value)} />
+                        <Label htmlFor="pass">Password</Label>
+                        <TextField type="password" id="pass" value={pass} required onChange={(e) => setPass(e.target.value)} />
                     </SignUpItemDiv>
-                </FlexRowDiv>
-                <SignUpItemDiv>
-                    <Label htmlFor="emailAdd">Email</Label>
-                    <TextField type="text" id="emailAdd" value={emailAdd} required onChange={(e) => setEmailAdd(e.target.value)} />
-                </SignUpItemDiv>
-                <SignUpItemDiv>
-                    <Label htmlFor="pass">Password</Label>
-                    <TextField type="password" id="pass" value={pass} required onChange={(e) => setPass(e.target.value)} />
-                </SignUpItemDiv>
-                <SignUpItemDiv>
-                    <Label htmlFor="passConfirm">Confirm Password</Label>
-                    <TextField type="password" id="passConfirm" value={passConfirm} required onChange={(e) => setPassConfirm(e.target.value)} />
-                </SignUpItemDiv>
-                <SignUpItemDiv>
-                    <Label htmlFor="securityQ">Security Question</Label>
-                    <TextField type="text" id="securityQ" value={securityQ} required onChange={(e) => setSecurityQ(e.target.value)} />
-                </SignUpItemDiv>
-                <SignUpItemDiv>
-                    <Label htmlFor="securityA">Security Question Answer</Label>
-                    <TextField type="text" id="securityA" value={securityA} required onChange={(e) => setSecurityA(e.target.value)} />
-                </SignUpItemDiv>
-                <SignUpBtn type="submit" value="Sign Up" aria-label="Button to submit the sign up form" />
-                <LineDivider />
-                <GreyText>Already have an account? <a href="/"><BlueLinkText>Login.</BlueLinkText></a></GreyText>
-            </SignUpForm>
+                    <SignUpItemDiv>
+                        <Label htmlFor="passConfirm">Confirm Password</Label>
+                        <TextField type="password" id="passConfirm" value={passConfirm} required onChange={(e) => setPassConfirm(e.target.value)} />
+                    </SignUpItemDiv>
+                    <SignUpItemDiv>
+                        <Label htmlFor="securityQ">Security Question</Label>
+                        <TextField type="text" id="securityQ" value={securityQ} required onChange={(e) => setSecurityQ(e.target.value)} />
+                    </SignUpItemDiv>
+                    <SignUpItemDiv>
+                        <Label htmlFor="securityA">Security Question Answer</Label>
+                        <TextField type="text" id="securityA" value={securityA} required onChange={(e) => setSecurityA(e.target.value)} />
+                    </SignUpItemDiv>
+                    <SignUpBtn type="submit" value="Sign Up" aria-label="Button to submit the sign up form" />
+                    <LineDivider />
+                    <GreyText>Already have an account? <a href="/"><BlueLinkText>Login.</BlueLinkText></a></GreyText>
+                </SignUpForm>
+            </main>
         </div>
     );
 };
