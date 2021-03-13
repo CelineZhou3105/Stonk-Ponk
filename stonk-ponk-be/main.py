@@ -18,10 +18,9 @@ def main():
 def listen(db_conn):
     online = True
     while online: 
-        command_string = input("Please Enter a Command: \n")
-        command = command_string.split()[0]
+        command_dict = {"command": "insert", "username": "sampath", "password": "pingas"}
         
-        action = get_func(command, command_string)
+        action = get_func(db_conn, command_dict)
 
         if action == 'Quit':
             online = False
@@ -30,11 +29,11 @@ def listen(db_conn):
         if action == "Unknown": 
             print("We got an unknown command\n")
 
-def get_func(command, command_string):
-    return{
-        'Quit': 'Quit',
-        'Insert': 1
-    }.get(command, 'Unknown')
+def get_func(db_conn, command_string):
+    command = command_string["command"]
+
+    if command == "insert":
+        
 
 if __name__ == '__main__':
     main()
