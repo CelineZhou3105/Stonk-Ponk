@@ -2,6 +2,9 @@ import pymongo
 from pymongo import MongoClient
 import pprint
 
+#This module has the functions which connect to a mongodb and operate on it. 
+#Db rules: No 2 users can have the same username
+
 #Creates a connection to a mongodb created on localhost and returns db pointer/client
 def start_db():
     client = MongoClient('localhost', 27017)
@@ -45,8 +48,10 @@ def check_user(db_conn, username):
     return False
 
 #Replaces the user with a new user
-def replace_user(db_conn, username):
+def replace_pwd(db_conn, username, password):
     if not check_user(db_conn, username):
-        return "User Exists"
+        return "User Does not Exist"
     else: 
         delete_user(db_conn, username)
+        insert_user(db_conn, username, password)
+
