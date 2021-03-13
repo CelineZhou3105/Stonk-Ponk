@@ -1,13 +1,13 @@
 import pymongo
 from pymongo import MongoClient
 import pprint
-import database_func as database
-import server
+
+from mongo import queryHandler
 
 #start up functions will be called to set up all connections. 
 # After this we will start a listener to take commands from the frontend
 def main():
-    be_server = server.Server()
+    be_server = queryHandler.queryHandler()
 
     command_dict = {"command": "insert", "username": "sampath", "password": "pingas"}
     be_server.request_handler(command_dict)

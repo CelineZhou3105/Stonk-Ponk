@@ -5,7 +5,7 @@ import os
 #This module has the functions which connect to a mongodb and operate on it. 
 #Db rules: No 2 users can have the same username
 
-class Database(object):
+class database(object):
     def __init__(self):
         self.conn = self.start_db()
 
@@ -16,7 +16,7 @@ class Database(object):
 
         db_conn = client.test_database
         db_conn.user_auths.remove()
-        os.system("mongoimport --jsonArray --db='test_database'  --collection='user_auths' --file='bootstrap.json'")
+        os.system("mongoimport --jsonArray --db='test_database'  --collection='user_auths' --file='mongo/bootstrap.json'")
         return db_conn
 
     #Inserts user if user already does not exist in the db
