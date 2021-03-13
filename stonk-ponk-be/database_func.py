@@ -1,7 +1,7 @@
 import pymongo
 from pymongo import MongoClient
 import pprint
-
+import os
 #This module has the functions which connect to a mongodb and operate on it. 
 #Db rules: No 2 users can have the same username
 
@@ -10,7 +10,8 @@ def start_db():
     client = MongoClient('localhost', 27017)
 
     db = client.test_database
-
+    db.user_auths.remove()
+    os.system("mongoimport --jsonArray --db='test_database'  --collection='user_auths' --file='bootstrap.json'")
     return db
 #Inserts user if user already does not exist in the db
 def insert_user(db_conn, username, password):
