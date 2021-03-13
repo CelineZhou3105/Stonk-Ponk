@@ -29,3 +29,8 @@ class Server(object):
         elif command == "replace":
             password = command_string["new_password"]
             return self.db.replace_pwd(username, password)
+        
+        elif command == "auth":
+            password = command_string["new_password"]
+            return self.db.auth(username, password)
+
