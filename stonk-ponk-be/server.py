@@ -1,17 +1,34 @@
-#Server listener 
-def request_handler(command_dict):
+import pymongo
+from pymongo import MongoClient
+import pprint
+import database_func as database
+
+class Server(object):
+    def __init__(self):
+        self.num_connections = 1
+        self.db = database.Database()
+
+    def request_handler(self, command_dict):
         command_dict = {"command": "insert", "username": "sampath", "password": "pingas"}
-        action = get_func(db_conn, command_dict)
+        
+        self.get_func(command_dict)
 
-        if action == 'Quit':
-            online = False
-            continue
 
-        if action == "Unknown": 
-            print("We got an unknown command\n")
+    def get_func(self, command_string):
+        command = command_string["command"]
+        username = command_string["username"]
 
-def get_func(db_conn, command_string):
-    command = command_string["command"]
-
-    if command == "insert":
-        return
+        if command == "insert":
+            password = command_string["password"]
+            return self.db.insert_user(username, password)
+        
+        elif command == "delete":
+            return self.db.delete_user(username)
+        
+        elif command == "check":
+            return self.db.check_user(username)
+        
+        elif command == "replace":
+            password = command_string["new_password"]
+            return self.db.replace_pwd(username, password)
+            
