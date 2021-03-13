@@ -9,7 +9,6 @@ class Server(object):
         self.db = database.Database()
 
     def request_handler(self, command_dict):
-        command_dict = {"command": "insert", "username": "sampath", "password": "pingas"}
         
         self.get_func(command_dict)
 
@@ -31,4 +30,3 @@ class Server(object):
         elif command == "replace":
             password = command_string["new_password"]
             return self.db.replace_pwd(username, password)
-            
