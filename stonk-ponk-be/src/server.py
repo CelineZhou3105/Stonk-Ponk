@@ -9,7 +9,6 @@ class Server(object):
         self.db = database.Database()
 
     def request_handler(self, command_dict):
-        
         self.get_func(command_dict)
 
 

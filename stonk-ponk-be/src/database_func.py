@@ -61,6 +61,13 @@ class Database(object):
         else: 
             self.delete_user(username)
             self.insert_user(username, new_password)
+    
+    def check_auth(self, username, password):
+        if(self.conn.user_auths.find_one({"u_name": username, "pwd": password})):
+            return True
+    
+        return False
+
 
 
 
