@@ -4,6 +4,8 @@ import { TextField, SettingsLabel } from '../css/Form';
 import { FlexRowLeftDiv, FlexColumnLeftDiv, LongLineDivider } from '../css/Div';
 import Navigation from '../navigation/Navigation';
 import { EditButton } from '../css/Button';
+import { ProfilePhoto } from '../css/Logo';
+import profile from '../navigation/blobfish.PNG';
 
 const Settings = () => {
 
@@ -43,6 +45,7 @@ const Settings = () => {
             <main>
                 <h1>Account Settings</h1>
                 <FlexRowLeftDiv>
+                    <ProfilePhoto src={profile} alt="Your profile picture" />
                     <FlexColumnLeftDiv>
                         <SettingsLabel htmlFor="firstName">First Name</SettingsLabel>
                         <SettingsLabel htmlFor="lastName">Last Name</SettingsLabel>

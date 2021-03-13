@@ -15,6 +15,7 @@ export const DefaultLogo = styled.img`
 
 export const ProfilePhoto = styled.img`
     width: 80px;
+    height: 80px;
     border: grey solid 1px;
     border-radius: 50px;
 `;

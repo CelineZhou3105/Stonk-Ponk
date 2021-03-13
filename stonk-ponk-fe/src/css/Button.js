@@ -6,6 +6,9 @@ export const ButtonStyle = css`
     border-radius: 5px;
     background-color: #9e22ff;
     color: white;
+    &:hover {
+        background-color: #b55cfa;
+    }
 `;
 
 export const LoginButton = styled.button`
