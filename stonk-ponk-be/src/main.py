@@ -16,7 +16,8 @@ def main():
     be_server.request_handler(command_dict)
 
     command_dict = {"command": "check", "username": "sampath"}
-    print(be_server.request_handler(command_dict))
+    if be_server.request_handler(command_dict) == False:
+        print("User Sampath Does Not Exist")
 
 
 if __name__ == '__main__':
