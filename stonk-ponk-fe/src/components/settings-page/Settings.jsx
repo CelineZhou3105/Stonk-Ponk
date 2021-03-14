@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { TextField, SettingsLabel } from '../css/Form';
-import { FlexRowLeftDiv, FlexColumnLeftDiv, LongLineDivider } from '../css/Div';
-import Navigation from '../navigation/Navigation';
-import { EditButton } from '../css/Button';
-import { ProfilePhoto } from '../css/Image';
-import profile from '../navigation/blobfish.PNG';
+import { TextField, SettingsLabel } from '../../css/Form';
+import { FlexRowLeftDiv, FlexColumnLeftDiv, LongLineDivider } from '../../css/Div';
+import Navigation from '../Navigation';
+import { EditButton } from '../../css/Button';
+import { ProfilePhoto } from '../../css/Image';
+import profile from '../../images/blobfish.png';
 
 const Settings = () => {
 

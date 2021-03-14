@@ -61,6 +61,10 @@ export const SignUpBtn = styled.input`
     ${FlexCenter}
 `;
 
+/* Login */
+export const LoginTextField = createTextField("40%");
+export const LoginLabel = createLabel("40%", "20px", "20px");
+
 /* Generic elements */
 export const GenericForm = styled.form`
     ${FlexCenter}
@@ -95,6 +99,6 @@ export const InputUnderlineDiv = styled.div`
     transform: scale(0, 1);
     -webkit-transition: all 0.4s linear;
     transition: all 0.4s linear;
-    width: 40%;
+    width: ${props => props.passwordReset ? "100%" : "40%" };
     position: relative;
 `;

@@ -6,7 +6,7 @@ import logo from '../images/logo.png';
 import { history } from '../helpers/history';
 
 import { LinkContainer, LoginFormContainer, LoginPageContainer, LogoContainer, ParticleContainer } from '../css/Div';
-import { GenericForm, GenericSubmitButton, InputUnderlineDiv, Label, TextField } from '../css/Form';
+import { GenericForm, GenericSubmitButton, InputUnderlineDiv, LoginLabel, LoginTextField } from '../css/Form';
 import { DefaultLogo } from '../css/Logo';
 import { LinkText } from '../css/Text';
 
@@ -68,12 +68,12 @@ function Login() {
                     }
                 )}>
                     <h1>Stonk Ponk</h1>
-                    <Label htmlFor="username">Username</Label>
-                    <TextField id="username" type="text" required onChange={(e) => { setEmail(e.target.value) }} />
+                    <LoginLabel htmlFor="username">Username</LoginLabel>
+                    <LoginTextField id="username" type="text" required onChange={(e) => { setEmail(e.target.value) }} />
                     <InputUnderlineDiv className="underline"></InputUnderlineDiv>
 
-                    <Label htmlFor="password">Password</Label>
-                    <TextField id="password" type="password" required onChange={(e) => { setPass(e.target.value) }} />
+                    <LoginLabel htmlFor="password">Password</LoginLabel>
+                    <LoginTextField id="password" type="password" required onChange={(e) => { setPass(e.target.value) }} />
                     <InputUnderlineDiv className="underline"></InputUnderlineDiv>
                     <LinkContainer right id="forgot-password">
                         <LinkText href="/forgot-password"> Forgot your password?</LinkText>

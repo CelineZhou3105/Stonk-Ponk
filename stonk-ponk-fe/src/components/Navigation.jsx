@@ -17,6 +17,10 @@ import { authentication } from '../services/authentication';
 function Navigation() {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
 
+    const navigateToSettings = () => {
+        history.push('/settings');
+    }
+
     function logout(event) {
         authentication.logout(event);
         history.push('/');

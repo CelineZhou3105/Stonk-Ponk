@@ -1,9 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { FlexColumnLeftDiv, FlexRowDiv } from '../css/Div';
-import { PurpleItalicText } from '../css/Text';
-import { BackButton } from '../css/Button';
-import Navigation from '../navigation/Navigation';
+import { FlexColumnLeftDiv, FlexRowDiv } from '../../css/Div';
+import { PurpleItalicText } from '../../css/Text';
+import { BackButton } from '../../css/Button';
+import Navigation from '../Navigation';
 
 const WhatIsTheStockMarket = () => {
     // navigate back to sign in

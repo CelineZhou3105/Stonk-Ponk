@@ -17,14 +17,14 @@ import Signup from './components/SignUp';
 import SignupSuccess from './components/SignUpSuccess';
 import PasswordReset from './components/PasswordReset';
 import Market from './components/Market';
-import Settings from './settings-page/Settings';
-import Education from './education/Education';
-import WhatIsTheStockMarket from './education/WhatIsTheStockMarket';
-import InterpretingTheNews from './education/InterpretingTheNews';
-import WhyInvest from './education/WhyInvest';
-import FinancialInstruments from './education/FinancialInstruments';
-import StatisticsAndGraphs from './education/StatisticsAndGraphs';
-import PassiveVSActive from './education/PassiveVSActive';
+import Settings from './components/settings-page/Settings';
+import Education from './components/education/Education';
+import WhatIsTheStockMarket from './components/education/WhatIsTheStockMarket';
+import InterpretingTheNews from './components/education/InterpretingTheNews';
+import WhyInvest from './components/education/WhyInvest';
+import FinancialInstruments from './components/education/FinancialInstruments';
+import StatisticsAndGraphs from './components/education/StatisticsAndGraphs';
+import PassiveVSActive from './components/education/PassiveVSActive';
 
 function App() {
   // Check whether the user is logged in
