@@ -8,7 +8,8 @@ import {
 
 import { CompanyName, NavList, NavListItem } from '../css/Text';
 import { LogoContainer, NavigationContainer, ProfileModaItem, ProfileModal, ProfilePhotoContainer } from '../css/Div';
-import { DefaultLogo, ProfilePhoto } from '../css/Logo';
+import { DefaultLogo } from '../css/Logo';
+import { ProfilePhoto } from '../css/Image';
 
 function Navigation() {
     const [profileModalOpen, setProfileModalOpen] = useState(false);

@@ -11,11 +11,6 @@ export const DefaultLogo = styled.img`
     height: auto;
     width: ${props => props.navigation ? "120px" : "25%"};
     padding-right: ${props => props.navigation ? "30px" : "auto"};
+    border-radius: 50%;
 `;
 
-export const ProfilePhoto = styled.img`
-    width: 80px;
-    height: 80px;
-    border: grey solid 1px;
-    border-radius: 50px;
-`;

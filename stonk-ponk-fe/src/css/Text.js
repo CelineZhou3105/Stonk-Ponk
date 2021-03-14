@@ -17,6 +17,11 @@ export const CompanyName = styled.p`
     font-size: 20pt;
 `;
 
+export const PurpleItalicText = styled.h2`
+    color: #9e22ff;
+    font-style: italic;
+`;
+
 export const LinkText = styled.a`
     color: #44BCFF;
     text-decoration: none;

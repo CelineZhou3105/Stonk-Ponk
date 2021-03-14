@@ -31,10 +31,17 @@ export const EducationBox = styled.button`
     width: 250px;
     height: 250px;
     margin: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 export const BackButton = styled.button`
     ${ButtonStyle}
+    width: 5%;
+    height: 50%;
+    font-size: 13pt;
     background-color: #d6d6d6;
     &:hover {
         background-color: #c2c2c2;

@@ -4,7 +4,7 @@ import { TextField, SettingsLabel } from '../css/Form';
 import { FlexRowLeftDiv, FlexColumnLeftDiv, LongLineDivider } from '../css/Div';
 import Navigation from '../navigation/Navigation';
 import { EditButton } from '../css/Button';
-import { ProfilePhoto } from '../css/Logo';
+import { ProfilePhoto } from '../css/Image';
 import profile from '../navigation/blobfish.PNG';
 
 const Settings = () => {
@@ -14,13 +14,6 @@ const Settings = () => {
     const [lastName, setLastName] = useState('Arcstar');
     const [emailAdd, setEmailAdd] = useState('ayowassup@itsurgirl.com');
     const [pass, setPass] = useState('123456789');
-
-    // navigate back to sign in
-    const history = useHistory();
-    const successfulSignUp = () => {
-        const path = '/sign-up-success';
-        history.push(path);
-    };
 
     const EditFirstName = () => {
         console.log("Edit first name!");
