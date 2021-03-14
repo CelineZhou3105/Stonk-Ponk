@@ -12,7 +12,7 @@ import Signup from './signup-page/SignUp';
 import SignupSuccess from './signup-page/SignUpSuccess';
 import PasswordReset from './forgot-password/PasswordReset';
 import Settings from './settings-page/Settings';
-
+import Education from './education/Education';
 function App() {
   return (
     <Router>
@@ -24,6 +24,7 @@ function App() {
           <Route path="/sign-up-success" component={SignupSuccess} />
           <Route path="/forgot-password" component={PasswordReset} />
           <Route path='/settings' component={Settings} />
+          <Route path='/education' component={Education} />
         </Switch>
       </div>
     </Router>

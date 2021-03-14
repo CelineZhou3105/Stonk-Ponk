@@ -68,7 +68,7 @@ const Settings = () => {
                 <LongLineDivider />
                 <FlexRowLeftDiv>
                     <label class="switch">
-                        <input type="checkbox" checked />
+                        <input type="checkbox" />
                         <span class="slider" />
                     </label>
                     <FlexColumnLeftDiv>

@@ -25,3 +25,18 @@ export const EditButton = styled.button`
     padding: 15px;
     margin: 5px;
 `;
+
+export const EducationBox = styled.button`
+    ${ButtonStyle}
+    width: 250px;
+    height: 250px;
+    margin: 50px;
+`;
+
+export const BackButton = styled.button`
+    ${ButtonStyle}
+    background-color: #d6d6d6;
+    &:hover {
+        background-color: #c2c2c2;
+    }
+`;
