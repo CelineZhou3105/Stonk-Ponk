@@ -2,43 +2,22 @@ import React, { useState } from 'react';
 import logo from './logo.png';
 import profile from './profile.png';
 
-import {
-    NavLink, useHistory,
-} from "react-router-dom";
+import { history } from '../helpers/history';
+
+import { NavLink } from "react-router-dom";
 
 import { CompanyName, NavList, NavListItem } from '../css/Text';
 import { LogoContainer, NavigationContainer, ProfileModaItem, ProfileModal, ProfilePhotoContainer } from '../css/Div';
 import { DefaultLogo, ProfilePhoto } from '../css/Logo';
 
+import { authentication } from '../services/authentication';
+
 function Navigation() {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
 
-    const history = useHistory();
-    const redirectToLogin = () => {
+    function logout(event) {
+        authentication.logout(event);
         history.push('/');
-    }
-
-    const logout = async (event) => {
-        event.preventDefault();
-        const token = localStorage.getItem("token");
-        await fetch(`https://stonk-ponk.com/logout/${token}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token: token,
-            })
-        }).then((response) => {
-            if (response.ok) {
-                redirectToLogin();
-            }
-        }).catch((error) => {
-            // TODO - do something about this error
-        });
-
-        // TODO - remove this because redirection should only occur upon successful logout
-        redirectToLogin();
     }
 
     return (

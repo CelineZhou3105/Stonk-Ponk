@@ -1,13 +1,16 @@
 import React from 'react';
 import Navigation from '../navigation/Navigation';
 
+import { authentication } from '../services/authentication';
+
 function Summary() {
+
+    const user = authentication.currentUserValue;
     return (
         <div>
-            <header>
-                <Navigation />
-            </header>
+            <Navigation />
             <h1>I am a summary page.</h1>
+            <h1>Congratulations {user.firstName}! You've signed in.</h1>
         </div>
     )
 }
