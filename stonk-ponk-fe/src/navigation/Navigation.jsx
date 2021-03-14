@@ -10,6 +10,7 @@ import { CompanyName, NavList, NavListItem } from '../css/Text';
 import { LogoContainer, NavigationContainer, ProfileModaItem, ProfileModal, ProfilePhotoContainer } from '../css/Div';
 import { DefaultLogo } from '../css/Logo';
 import { ProfilePhoto } from '../css/Image';
+import { LoggedInHeader } from '../css/Header';
 
 function Navigation() {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -47,7 +48,7 @@ function Navigation() {
     }
 
     return (
-        <header>
+        <LoggedInHeader>
             <NavigationContainer>
                 <LogoContainer>
                     <DefaultLogo navigation src={logo} alt="Stonk Ponk Logo" />
@@ -75,8 +76,7 @@ function Navigation() {
                     </ProfileModal>
                 }
             </NavigationContainer>
-
-        </header>
+        </LoggedInHeader>
     )
 }
 
