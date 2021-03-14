@@ -15,36 +15,46 @@ export const FlexColumn = css`
     flex-direction: column;
 `;
 
-function createFlexRowDiv(justifyContent, padding) {
+function createFlexRowDiv(justifyContent, margin, padding) {
     return styled.div`
         ${FlexRow};
         justify-content: ${justifyContent};
         align-items: center;
+        margin: ${margin};
         padding: ${padding};
     `;
 }
 
-function createFlexColumnDiv(alignItem, margin) {
+function createFlexColumnDiv(justifyContent, alignItem, margin) {
     return styled.div`
         ${FlexColumn};
-        justify-content: center;
+        justify-content: ${justifyContent};
         align-items: ${alignItem};
         margin: ${margin};
     `;
 }
 
-export const FlexRowDiv = createFlexRowDiv("space-between", "auto");
+export const FlexRowDiv = createFlexRowDiv("space-between", "auto", "auto");
 
-export const SignUpItemDiv = createFlexColumnDiv("flex-start", "20px");
+export const FlexRowLeftDiv = createFlexRowDiv("flex-start", "auto", "auto");
 
-export const FlexColumnCenterDiv = createFlexColumnDiv("center", "50px");
+export const SignUpItemDiv = createFlexColumnDiv("center", "flex-start", "20px");
 
-export const LineDivider = styled.div`
-    height: 1px;
-    width: 40%;
-    background-color: #bababa;
-    margin: 10px;
-`;
+export const FlexColumnCenterDiv = createFlexColumnDiv("center", "center", "50px");
+
+export const FlexColumnLeftDiv = createFlexColumnDiv("center", "flex-start", "2%");
+
+function createLineDivider(width) {
+    return styled.div`
+        height: 1px;
+        width: ${width};
+        background-color: #bababa;
+        margin: 10px;
+    `;
+}
+export const LineDivider = createLineDivider("40%");
+
+export const LongLineDivider = createLineDivider("90%");
 
 /* Particles.js */
 export const ParticleContainer = styled.div`

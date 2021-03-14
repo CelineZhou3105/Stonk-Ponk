@@ -6,6 +6,9 @@ export const ButtonStyle = css`
     border-radius: 5px;
     background-color: #9e22ff;
     color: white;
+    &:hover {
+        background-color: #b55cfa;
+    }
 `;
 
 export const LoginButton = styled.button`
@@ -14,4 +17,33 @@ export const LoginButton = styled.button`
     padding: 15px;
     width: 15%;
     margin-top: 20px;
+`;
+
+export const EditButton = styled.button`
+    ${ButtonStyle}
+    font-size: 12pt;
+    padding: 15px;
+    margin: 5px;
+`;
+
+export const EducationBox = styled.button`
+    ${ButtonStyle}
+    width: 250px;
+    height: 250px;
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const BackButton = styled.button`
+    ${ButtonStyle}
+    width: 5%;
+    height: 50%;
+    font-size: 13pt;
+    background-color: #d6d6d6;
+    &:hover {
+        background-color: #c2c2c2;
+    }
 `;
