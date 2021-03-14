@@ -10,7 +10,7 @@ export const HeaderLogo = styled.img`
 export const DefaultLogo = styled.img`
     height: auto;
     width: ${props => props.navigation ? "120px" : "25%"};
-    margin-right: ${props => props.navigation ? "30px" : "auto"};
+    margin-right: ${props => props.navigation ? "30px" : "0"};
     border-radius: 50%;
 `;
 
