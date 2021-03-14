@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import logo from './logo.png';
-import profile from './profile.png';
+import logo from '../images/logo.png';
+import profile from '../images/profile.png';
 
 import { history } from '../helpers/history';
 

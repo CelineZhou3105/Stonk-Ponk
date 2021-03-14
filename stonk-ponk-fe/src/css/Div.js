@@ -143,3 +143,6 @@ export const ProfileModaItem = styled.div`
         transition: background-color 1s;
     }
 `;
+
+/* Market Filters */
+export const MarketFilterContainer = createFlexRowDiv('flex-end', '30px');

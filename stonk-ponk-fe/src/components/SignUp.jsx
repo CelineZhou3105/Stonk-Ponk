@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { SignUpForm, TextField, SignUpBtn, Label } from '../css/Form';
 import { FlexRowDiv, SignUpItemDiv, LineDivider } from '../css/Div';
 import { BlueLinkText, GreyText, TitleItalicText } from '../css/Text';
-import HeaderBar from '../navigation/HeaderBar';
+import HeaderBar from './HeaderBar';
 
 const SignUp = () => {
 

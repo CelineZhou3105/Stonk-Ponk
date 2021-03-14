@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Particles from 'react-particles-js';
 import { useHistory } from 'react-router-dom';
 
-import logo from '../navigation/logo.png';
+import logo from '../images/logo.png';
 
 import { FormContainer, LogoContainer, ParticleContainer,  PasswordResetBackground, PasswordResetPageContainer} from '../css/Div';
 import { GenericForm, GenericSubmitButton, InputUnderlineDiv, Label, TextField } from '../css/Form';
@@ -32,7 +32,7 @@ function PasswordReset() {
     let securityQuestion;
     const submitPasswordForm = async (event) => {
         event.preventDefault();
-        await fetch('https://stonkponk.com/reset-password', {
+        await fetch('localhost:8000/api/account/reset-password', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ function PasswordReset() {
     // Submit security question answer
     const submitSecurityQuestion = async (event) => {
         event.preventDefault();
-        await fetch("https://stonkponk.com/security-question", {
+        await fetch("localhost:8000/api/account/security-question", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ function PasswordReset() {
             alert("Passwords does not match! Re-enter your password.");
             return;
         } else {
-            await fetch("https://stonkponk.com/new-password", {
+            await fetch("localhost:8000/api/account/new-password", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -161,10 +161,10 @@ function PasswordReset() {
                             <GenericForm onSubmit={(e) => {submitNewPassword(e)}}>
                                 <h1>Create your new password below:</h1>
                                 <Label htmlFor="new-password">New Password</Label>
-                                <TextField type="text" id="new-password" required onChange={(e) => {setPass(e.target.value)}} />
+                                <TextField type="password" id="new-password" required onChange={(e) => {setPass(e.target.value)}} />
                                 <InputUnderlineDiv className="underline"></InputUnderlineDiv>
                                 <Label htmlFor="new-password-confirm">Confirm Password</Label>
-                                <TextField type="text" id="new-password-confirm" required onChange={(e) => {setPassConfirm(e.target.value)}} />
+                                <TextField type="password" id="new-password-confirm" required onChange={(e) => {setPassConfirm(e.target.value)}} />
                                 <InputUnderlineDiv className="underline"></InputUnderlineDiv>
                                 <GenericSubmitButton type="submit" value="Submit" aria-label="Button to submit your new password"></GenericSubmitButton>
                             </GenericForm>

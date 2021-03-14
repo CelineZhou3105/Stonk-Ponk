@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Particles from 'react-particles-js';
 
-import logo from '../navigation/logo.png';
+import logo from '../images/logo.png';
 
 import { history } from '../helpers/history';
 

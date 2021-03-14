@@ -9,13 +9,14 @@ import {
 
 import { history } from './helpers/history';
 
-import { PrivateRoute } from './login-page/PrivateRoute';
+import { PrivateRoute } from './components/PrivateRoute';
 
-import Login from './login-page/Login';
-import Summary from './summary-page/Summary';
-import Signup from './signup-page/SignUp';
-import SignupSuccess from './signup-page/SignUpSuccess';
-import PasswordReset from './forgot-password/PasswordReset';
+import Login from './components/Login';
+import Summary from './components/Summary';
+import Signup from './components/SignUp';
+import SignupSuccess from './components/SignUpSuccess';
+import PasswordReset from './components/PasswordReset';
+import Market from './components/Market';
 
 import { authentication } from './services/authentication';
 import { useEffect } from 'react';
@@ -31,6 +32,7 @@ function App() {
           <Route exact path="/sign-up" component={Signup} />
           <Route exact path="/sign-up-success" component={SignupSuccess} />
           <Route exact path="/forgot-password" component={PasswordReset} />
+          <Route exact path="/market" component={Market} />
         </Switch>
       </div>
     </Router>

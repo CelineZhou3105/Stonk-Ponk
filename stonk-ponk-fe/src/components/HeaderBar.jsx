@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from '../css/Header';
 import { HeaderLogo } from '../css/Logo';
 import { CompanyName } from '../css/Text';
-import logo from './logo.png';
+import logo from '../images/logo.png';
 
 const HeaderBar = () => {
     return (
