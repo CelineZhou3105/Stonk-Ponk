@@ -156,3 +156,8 @@ export const ProfileModaItem = styled.div`
 
 /* Market Filters */
 export const MarketFilterContainer = createFlexRowDiv('flex-end', '30px');
+
+
+/* Stock Details Page*/
+export const ChartContainer = createFlexRowDiv('space-evenly', '30px');
+export const StockDetailsContainer = createFlexColumnDiv('center', 'center', '100px');
