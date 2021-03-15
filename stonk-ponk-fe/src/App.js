@@ -2,34 +2,42 @@ import './App.css';
 
 import {
   Route,
-  BrowserRouter as Router,
+  Router,
+  // BrowserRouter as Router,
   Switch,
 } from "react-router-dom";
 
-import Login from './login-page/Login';
-import Summary from './summary-page/Summary';
-import Signup from './signup-page/SignUp';
-import SignupSuccess from './signup-page/SignUpSuccess';
-import PasswordReset from './forgot-password/PasswordReset';
-import Settings from './settings-page/Settings';
-import Education from './education/Education';
-import WhatIsTheStockMarket from './education/WhatIsTheStockMarket';
-import InterpretingTheNews from './education/InterpretingTheNews';
-import WhyInvest from './education/WhyInvest';
-import FinancialInstruments from './education/FinancialInstruments';
-import StatisticsAndGraphs from './education/StatisticsAndGraphs';
-import PassiveVSActive from './education/PassiveVSActive';
+import { history } from './helpers/history';
+
+import { PrivateRoute } from './components/PrivateRoute';
+
+import Login from './components/Login';
+import Summary from './components/Summary';
+import Signup from './components/SignUp';
+import SignupSuccess from './components/SignUpSuccess';
+import PasswordReset from './components/PasswordReset';
+import Market from './components/Market';
+import Settings from './components/settings-page/Settings';
+import Education from './components/education/Education';
+import WhatIsTheStockMarket from './components/education/WhatIsTheStockMarket';
+import InterpretingTheNews from './components/education/InterpretingTheNews';
+import WhyInvest from './components/education/WhyInvest';
+import FinancialInstruments from './components/education/FinancialInstruments';
+import StatisticsAndGraphs from './components/education/StatisticsAndGraphs';
+import PassiveVSActive from './components/education/PassiveVSActive';
 
 function App() {
+  // Check whether the user is logged in
   return (
-    <Router>
+    <Router history={history}>
       <div className="App">
         <Switch>
           <Route exact path="/" component={Login} />
-          <Route exact path="/home" component={Summary} />
+          <PrivateRoute path="/home" component={Summary} />
           <Route exact path="/sign-up" component={Signup} />
           <Route exact path="/sign-up-success" component={SignupSuccess} />
           <Route exact path="/forgot-password" component={PasswordReset} />
+          <Route exact path="/market" component={Market} />
           <Route exact path='/settings' component={Settings} />
           <Route exact path='/education' component={Education} />
           <Route exact path='/education/what-is-the-stock-market' component={WhatIsTheStockMarket} />

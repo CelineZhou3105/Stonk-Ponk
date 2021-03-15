@@ -31,3 +31,10 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+### Logging in
+
+Once you're gotten the application started, use the credentials:
+`username: test`
+`password: test`
+to get into the application.

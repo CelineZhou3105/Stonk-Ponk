@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Particles from 'react-particles-js';
 
-import { useHistory } from 'react-router-dom';
+import logo from '../images/logo.png';
 
-import logo from '../navigation/logo.png';
+import { history } from '../helpers/history';
 
 import { LinkContainer, LoginFormContainer, LoginPageContainer, LogoContainer, ParticleContainer } from '../css/Div';
-import { GenericForm, GenericSubmitButton, InputUnderlineDiv, Label, TextField } from '../css/Form';
+import { GenericForm, GenericSubmitButton, InputUnderlineDiv, LoginLabel, LoginTextField } from '../css/Form';
 import { DefaultLogo } from '../css/Logo';
 import { LinkText } from '../css/Text';
+
+import { authentication } from '../services/authentication';
+
+import { Redirect } from 'react-router-dom';
 
 function Login() {
 
@@ -16,34 +20,13 @@ function Login() {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
-    const history = useHistory();
-    function redirectToHome() {
-        history.push("/home");
+    const currentUser = authentication.currentUserValue;
+    console.log("hello" + currentUser);
+    if (authentication.currentUserValue) {
+        console.log("tried to redirect to summary page...");
+        history.push('/home');
+        <Redirect to={{ pathname: '/home' }} />
     }
-
-    const submitLoginForm = async (event) => {
-        event.preventDefault();
-        await fetch("https://stonkponk.com/login", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                password: pass,
-            }),
-        }).then((response) => {
-            if (response.ok) {
-                redirectToHome();
-            }
-        }).catch((error) => {
-            // TODO - do something with the error
-        });
-
-        // TODO - remove this because we want to only redirect upon login success
-        redirectToHome();
-    }
-
 
     return (
         <LoginPageContainer>
@@ -75,14 +58,22 @@ function Login() {
                 <LogoContainer>
                     <DefaultLogo src={logo} alt="Stonk Ponk Logo" />
                 </LogoContainer>
-                <GenericForm onSubmit={(e) => submitLoginForm(e)}>
+                <GenericForm onSubmit={(e) => authentication.login(e, email, pass).then(
+                    user => {
+                        console.log("Form has been submitted. The current user value is: " + currentUser);
+                        history.push('/home');
+                    },
+                    error => {
+                        alert("Error, couldn't login");
+                    }
+                )}>
                     <h1>Stonk Ponk</h1>
-                    <Label htmlFor="username">Username</Label>
-                    <TextField id="username" type="text" required onChange={(e) => { setEmail(e.target.value) }} />
+                    <LoginLabel htmlFor="username">Username</LoginLabel>
+                    <LoginTextField id="username" type="text" required onChange={(e) => { setEmail(e.target.value) }} />
                     <InputUnderlineDiv className="underline"></InputUnderlineDiv>
 
-                    <Label htmlFor="password">Password</Label>
-                    <TextField id="password" type="password" required onChange={(e) => { setPass(e.target.value) }} />
+                    <LoginLabel htmlFor="password">Password</LoginLabel>
+                    <LoginTextField id="password" type="password" required onChange={(e) => { setPass(e.target.value) }} />
                     <InputUnderlineDiv className="underline"></InputUnderlineDiv>
                     <LinkContainer right id="forgot-password">
                         <LinkText href="/forgot-password"> Forgot your password?</LinkText>

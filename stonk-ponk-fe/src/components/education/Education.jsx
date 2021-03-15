@@ -1,15 +1,15 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { FlexColumnCenterDiv, FlexRowDiv } from '../css/Div';
-import { EducationBox } from '../css/Button';
-import Navigation from '../navigation/Navigation';
-import market from '../images/stock-market.png';
-import news from '../images/newspaper.png';
-import invest from '../images/investing.png';
-import instrument from '../images/tools-and-utensils.png';
-import graph from '../images/diagram.png';
-import fund from '../images/funds.png';
-import { EducationIcon } from '../css/Image';
+import { FlexColumnCenterDiv, FlexRowDiv } from '../../css/Div';
+import { EducationBox } from '../../css/Button';
+import Navigation from '../Navigation';
+import market from '../../images/stock-market.png';
+import news from '../../images/newspaper.png';
+import invest from '../../images/investing.png';
+import instrument from '../../images/tools-and-utensils.png';
+import graph from '../../images/diagram.png';
+import fund from '../../images/funds.png';
+import { EducationIcon } from '../../css/Image';
 
 const Education = () => {
     // navigate back to sign in

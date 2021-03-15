@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { SignUpForm, TextField, SignUpBtn, Label } from '../css/Form';
 import { FlexRowDiv, SignUpItemDiv, LineDivider } from '../css/Div';
 import { BlueLinkText, GreyText, TitleItalicText } from '../css/Text';
-import HeaderBar from '../navigation/HeaderBar';
+import HeaderBar from './HeaderBar';
 
 const SignUp = () => {
 
@@ -16,8 +16,6 @@ const SignUp = () => {
     const [securityQ, setSecurityQ] = useState('');
     const [securityA, setSecurityA] = useState('');
 
-    // const [signUpSuccess, setSignUpSuccess] = useState(false);
-
     // navigate back to sign in
     const history = useHistory();
     const successfulSignUp = () => {
@@ -29,38 +27,32 @@ const SignUp = () => {
     const submitSignUpForm = (event) => {
         event.preventDefault();
         console.log("User submitted Sign Up Form!!!");
-        if (pass.length <= 8) { // check password strength
-            alert("Password needs to be longer than 8 characters/digits.");
-            // setSignUpSuccess(false);
+        if (pass.length <= 8) {
+            alert("Password must be longer than 8 characters/digits.");
             return;
         }
-        if (pass !== passConfirm) { // check passwords match
+        if (pass.match(/[A-Z]/) === null) {
+            alert("Password must include at least 1 upper case letter.");
+            return;
+        }
+        if (pass.match(/[a-z]/) === null) {
+            alert("Password must include at least 1 lower case letter.");
+            return;
+        }
+        if (pass.match(/\d/) === null) {
+            alert("Password must include at least 1 number.");
+            return;
+        }
+        if (pass.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]+/) === null) {
+            alert("Password must include at least 1 special character.");
+            return;
+        }
+        if (pass !== passConfirm) {
             alert("Passwords does not match! Re-enter your password.");
-            // setSignUpSuccess(false);
             return;
         }
         successfulSignUp();
     };
-
-    // const checkPasswordStrength = () => {
-    //     if (pass.length <= 8) {
-    //         alert("Password needs to be longer than 8 characters/digits.");
-    //         setSignUpSuccess(false);
-    //         return;
-    //     }
-    //     console.log(signUpSuccess);
-    //     setSignUpSuccess(true);
-    //     console.log(signUpSuccess);
-    // }
-
-    // const confirmPassword = () => {
-    //     if (pass !== passConfirm) {
-    //         alert("Passwords does not match! Re-enter your password.");
-    //         setSignUpSuccess(false);
-    //         return;
-    //     }
-    //     setSignUpSuccess(true);
-    // }
 
     return (
         <div>
