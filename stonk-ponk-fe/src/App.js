@@ -17,7 +17,7 @@ import Signup from './components/SignUp';
 import SignupSuccess from './components/SignUpSuccess';
 import PasswordReset from './components/PasswordReset';
 import Market from './components/Market';
-import Settings from './components/settings-page/Settings';
+import Settings from './components/Settings';
 import Education from './components/education/Education';
 import WhatIsTheStockMarket from './components/education/WhatIsTheStockMarket';
 import InterpretingTheNews from './components/education/InterpretingTheNews';
@@ -25,6 +25,7 @@ import WhyInvest from './components/education/WhyInvest';
 import FinancialInstruments from './components/education/FinancialInstruments';
 import StatisticsAndGraphs from './components/education/StatisticsAndGraphs';
 import PassiveVSActive from './components/education/PassiveVSActive';
+import StockDetails from './components/StockDetails';
 
 function App() {
   // Check whether the user is logged in
@@ -46,6 +47,7 @@ function App() {
           <Route exact path='/education/financial-instruments-101' component={FinancialInstruments} />
           <Route exact path='/education/statistics-and-graphs-101' component={StatisticsAndGraphs} />
           <Route exact path='/education/passive-vs-active-investing' component={PassiveVSActive} />
+          <Route path='/stocks/:id' component={StockDetails} />
         </Switch>
       </div>
     </Router>

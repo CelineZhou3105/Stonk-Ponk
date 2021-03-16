@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { TextField, SettingsLabel } from '../../css/Form';
-import { FlexRowLeftDiv, FlexColumnLeftDiv, LongLineDivider } from '../../css/Div';
-import Navigation from '../Navigation';
-import { EditButton } from '../../css/Button';
-import { ProfilePhoto } from '../../css/Image';
-import profile from '../../images/blobfish.png';
+import { TextField, SettingsLabel } from '../css/Form';
+import { FlexRowLeftDiv, FlexColumnLeftDiv, LongLineDivider } from '../css/Div';
+import Navigation from './Navigation';
+import { EditButton } from '../css/Button';
+import { ProfilePhoto } from '../css/Image';
+import profile from '../images/blobfish.png';
+import { changeDetails } from '../services/changeDetails';
 
 const Settings = () => {
 
@@ -17,18 +17,26 @@ const Settings = () => {
 
     const EditFirstName = () => {
         console.log("Edit first name!");
+        if (changeDetails.changeFirstName(firstName)) {
+            alert("You changed your first name!");
+        }
     }
 
     const EditLastName = () => {
         console.log("Edit last name!");
+        if (changeDetails.changeLastName(lastName)) {
+            alert("You changed your last name!");
+        }
     }
 
     const EditEmail = () => {
         console.log("Edit email!");
+        changeDetails.changeEmail(emailAdd);
     }
 
     const ChangePassword = () => {
         console.log("Change password!");
+        changeDetails.changePassword(pass);
     }
 
 

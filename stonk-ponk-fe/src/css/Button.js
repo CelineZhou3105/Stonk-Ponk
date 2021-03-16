@@ -47,3 +47,18 @@ export const BackButton = styled.button`
         background-color: #c2c2c2;
     }
 `;
+
+export const PeriodButton = styled.button`
+    cursor: pointer;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background-color: Transparent;
+    color: black;
+    &:hover {
+        background-color: #b55cfa;
+    }
+    &:select {
+        color: #9e22ff;
+    }
+`;
+
