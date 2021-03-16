@@ -5,12 +5,12 @@ import { authentication } from '../services/authentication';
 
 function Summary() {
 
-    const user = authentication.currentUserValue;
+    // const user = authentication.currentUserValue;
     return (
         <div>
             <Navigation />
-            <h1>I am a summary page.</h1>
-            <h1>Congratulations {user.firstName}! You've signed in.</h1>
+            <h1>Summary Page</h1>
+            <h1>Congratulations! You've signed in.</h1>
         </div>
     )
 }
