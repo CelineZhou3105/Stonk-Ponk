@@ -14,6 +14,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
 
+    security_question = models.CharField(_('security question'), default='security question',  max_length=50)
+    security_answer = models.CharField(_('security answer'), default='security answer', max_length=30)
+        
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
