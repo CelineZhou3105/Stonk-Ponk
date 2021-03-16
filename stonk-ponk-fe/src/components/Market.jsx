@@ -8,7 +8,7 @@ import Select from 'react-select'
 
 import { MarketFilterContainer } from '../css/Div';
 
-
+import { history } from '../helpers/history';
   
 // Headings for each table column
 const headings = [
@@ -125,7 +125,7 @@ function StockTable(props) {
                             .map((row, index) => {
 
                             return (
-                                <TableRow
+                                <TableRow 
                                     hover
                                     role="checkbox"
                                     tabIndex={-1}
@@ -134,7 +134,7 @@ function StockTable(props) {
                                     <TableCell component="th" scope="row" padding="none">
                                         {row.name}
                                         <br/>
-                                        {row.ticker}
+                                        <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                     </TableCell>
                                     <TableCell align="center">
                                         <SummaryChart/>
