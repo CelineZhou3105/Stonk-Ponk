@@ -43,4 +43,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         '''
         Sends an email to this User.
         '''
+    def get_security_question(self):
+        return str(self.security_question)
+
+    def get_security_answer(self):
+        return str(self.security_answer)
+    
 
