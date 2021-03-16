@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 import json
 
+from django.contrib.auth.models import User
+
 from mongo.queryHandler import queryHandler
 
 def index(request):
@@ -22,6 +24,10 @@ def register(request):
     response = {"code": 100}
     if (request.method == 'POST'):
         body = json.loads(request.POST['body']);
+        user = User.objects.create_user(username=body['username'], email=body['username'],password=body['password'])        
+        print(user)
+    '''
+        body = json.loads(request.POST['body']);
         body['command'] = 'check'
         qh = queryHandler()
         if qh.get_func(body) == False:
@@ -30,6 +36,7 @@ def register(request):
             response['code'] = 0
         else:
             response['code'] = 1
+    '''
     return HttpResponse(json.dumps(response))
 
 '''
@@ -48,7 +55,10 @@ Response
 def login(request):
     response = {"code": 100}
     if (request.method == 'POST'):
-        body = json.loads(request.POST['body']);
+        print("======================")
+        print(request.body)
+        print("======================")
+        body = json.loads(request.body.decode('utf-8'));
         body['command'] = 'auth'
         qh = queryHandler()
         if qh.get_func(body):
@@ -57,3 +67,32 @@ def login(request):
         else:
             response['code'] = 1
     return HttpResponse(json.dumps(response))
+
+
+'''
+API call to /api/account/login
+Request
+    username ->str
+    password ->
+
+Response
+    code -> number
+        0   - success
+        1   - username or password wrong
+        100 - other 
+    authToken -> str
+
+'''
+'''
+def change_password(request):
+    response = {"code": 100}
+    if (request.method == 'POST'):
+        body = json.loads(request.POST['body'])
+        body['command'] = 'replace'
+        qh = queryHandler()
+        if qh.get_func(body):
+            response['authToken'] = "random"
+        else:
+            response['code'] = 1
+        
+'''
