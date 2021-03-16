@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 function StockDetails() {
 
     // TODO - replace this with not dummy share data
-    let {id} = useParams(); // gets the ticker of the share
+    let { id } = useParams(); // gets the ticker of the share
 
     const share = { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf' };
 
@@ -25,7 +25,7 @@ function StockDetails() {
         { label: 'Close', value: 340.00 },
     ];
 
-    return(
+    return (
         <div>
             <Navigation />
             <StockDetailsContainer>
@@ -35,7 +35,7 @@ function StockDetails() {
                 <TableContainer>
                     <Table>
                         {stats.map((value, index) => {
-                            return(
+                            return (
                                 <TableRow>
                                     <TableCell variant="head">
                                         {value.label}
@@ -51,14 +51,13 @@ function StockDetails() {
                 <ChartContainer>
                     <StockDetailsChart />
                     <LoginButton>What if I buy now?</LoginButton>
-                    <LoginButton>What if I buy now?</LoginButton>
                     <LoginButton>What if I sell now?</LoginButton>
                 </ChartContainer>
                 <div>
                     <h1>News feed for {share.name}</h1>
                 </div>
             </StockDetailsContainer>
-            
+
         </div>
     )
 }
