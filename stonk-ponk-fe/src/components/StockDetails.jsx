@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { LoginButton } from '../css/Button';
+import { LoginButton, PeriodButton } from '../css/Button';
 import StockDetailsChart from './StockDetailsChart';
 import Navigation from './Navigation';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import { ChartContainer, StockDetailsContainer } from '../css/Div';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Tab } from '@material-ui/core';
+import { ChartContainer, StockDetailsContainer, GraphAndPeriodDiv, FlexRowDiv } from '../css/Div';
+import { CompanyName, NavList, NavListItem } from '../css/Text';
 
 import { useParams } from "react-router-dom";
 
 function StockDetails() {
 
     // TODO - replace this with not dummy share data
-    let {id} = useParams(); // gets the ticker of the share
+    let { id } = useParams(); // gets the ticker of the share
 
     const share = { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf' };
 
@@ -24,8 +25,32 @@ function StockDetails() {
         { label: 'Open', value: 321.90 },
         { label: 'Close', value: 340.00 },
     ];
-
-    return(
+    const [period, setPeriod] = useState('day');
+    const [tabValue, setTabValue] = React.useState(0);
+    const handleChange = (event, newValue) => {
+        setTabValue(newValue);
+        switch (newValue) {
+            case 0:
+                setPeriod('day');
+                break;
+            case 1:
+                setPeriod('week');
+                break;
+            case 2:
+                setPeriod('month');
+                break;
+            case 3:
+                setPeriod('6 months');
+                break;
+            case 4:
+                setPeriod('year');
+                break;
+            default:
+                setPeriod('day');
+                break;
+        }
+    };
+    return (
         <div>
             <Navigation />
             <StockDetailsContainer>
@@ -35,7 +60,7 @@ function StockDetails() {
                 <TableContainer>
                     <Table>
                         {stats.map((value, index) => {
-                            return(
+                            return (
                                 <TableRow>
                                     <TableCell variant="head">
                                         {value.label}
@@ -48,9 +73,21 @@ function StockDetails() {
                         })}
                     </Table>
                 </TableContainer>
-                <ChartContainer>
-                    <StockDetailsChart />
-                    <LoginButton>What if I buy now?</LoginButton>
+                <ChartContainer style={{ width: "100%" }}>
+                    <GraphAndPeriodDiv>
+                        <StockDetailsChart period={period} />
+                        <Tabs value={tabValue}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            onChange={handleChange}
+                            aria-label="tabs to switch between different periods to view the graph with">
+                            <Tab label="Day" />
+                            <Tab label="Week" />
+                            <Tab label="Month" />
+                            <Tab label="6 months" />
+                            <Tab label="Year" />
+                        </Tabs>
+                    </GraphAndPeriodDiv>
                     <LoginButton>What if I buy now?</LoginButton>
                     <LoginButton>What if I sell now?</LoginButton>
                 </ChartContainer>
@@ -58,7 +95,7 @@ function StockDetails() {
                     <h1>News feed for {share.name}</h1>
                 </div>
             </StockDetailsContainer>
-            
+
         </div>
     )
 }

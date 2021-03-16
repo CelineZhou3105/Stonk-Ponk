@@ -4,6 +4,7 @@ import { SignUpForm, TextField, SignUpBtn, Label } from '../css/Form';
 import { FlexRowDiv, SignUpItemDiv, LineDivider } from '../css/Div';
 import { BlueLinkText, GreyText, TitleItalicText } from '../css/Text';
 import HeaderBar from './HeaderBar';
+import { authentication } from '../services/authentication';
 
 const SignUp = () => {
 
@@ -27,32 +28,40 @@ const SignUp = () => {
     const submitSignUpForm = (event) => {
         event.preventDefault();
         console.log("User submitted Sign Up Form!!!");
+        if (passwordCheck(pass)) {
+            if (authentication.register(firstName, lastName, emailAdd, pass, securityQ, securityA)) {
+                successfulSignUp();
+            }
+        }
+    };
+
+    const passwordCheck = (pass) => {
         if (pass.length <= 8) {
             alert("Password must be longer than 8 characters/digits.");
-            return;
+            return false;
         }
         if (pass.match(/[A-Z]/) === null) {
             alert("Password must include at least 1 upper case letter.");
-            return;
+            return false;
         }
         if (pass.match(/[a-z]/) === null) {
             alert("Password must include at least 1 lower case letter.");
-            return;
+            return false;
         }
         if (pass.match(/\d/) === null) {
             alert("Password must include at least 1 number.");
-            return;
+            return false;
         }
         if (pass.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]+/) === null) {
             alert("Password must include at least 1 special character.");
-            return;
+            return false;
         }
         if (pass !== passConfirm) {
             alert("Passwords does not match! Re-enter your password.");
-            return;
+            return false;
         }
-        successfulSignUp();
-    };
+        return true;
+    }
 
     return (
         <div>

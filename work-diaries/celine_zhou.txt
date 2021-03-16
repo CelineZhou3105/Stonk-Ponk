@@ -16,3 +16,7 @@ Week 4
 Worked on and finished tickets in the current sprint.
 Discussed how to manage the frontend project and how to keep code consistent among members.
 
+Week 5
+Connected frontend and backend through meetings.
+Adjusted tickets and practiced demoing.
+Worked on tickets in the current sprint.
