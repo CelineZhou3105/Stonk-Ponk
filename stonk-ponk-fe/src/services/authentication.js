@@ -17,7 +17,7 @@ async function login (event, email, password) {
             password: password,
         }),
     };
-    return fetch("localhost:8000/api/account/login", requestOptions)
+    return fetch("http://localhost:8000/api/account/login", requestOptions)
         .then(response => handleResponse(response))
         .then(user => {
             // Store token 
