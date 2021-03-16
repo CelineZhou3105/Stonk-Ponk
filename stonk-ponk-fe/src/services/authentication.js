@@ -2,10 +2,12 @@ import { BehaviorSubject } from 'rxjs';
 
 import { handleResponse } from '../helpers/handle-response';
 
+import { LoginLink } from '../api-links/constants';
+
 console.log("localStorage: " + localStorage.getItem('currentUser'));
 const currentUserSubject = new BehaviorSubject('');
 
-async function login (event, email, password) {
+async function login(event, email, password) {
     event.preventDefault();
     const requestOptions = {
         method: 'POST',
@@ -17,7 +19,7 @@ async function login (event, email, password) {
             password: password,
         }),
     };
-    return fetch("localhost:8000/api/account/login", requestOptions)
+    return fetch(LoginLink, requestOptions)
         .then(response => handleResponse(response))
         .then(user => {
             // Store token 
@@ -51,7 +53,7 @@ async function logout(event) {
     //     })
     // }).then((response) => {
     //     if (response.ok) {
-            
+
     //     }
     // }).catch((error) => {
     //     // TODO - do something about this error
@@ -62,5 +64,5 @@ export const authentication = {
     login,
     logout,
     currentUser: currentUserSubject.asObservable(),
-    get currentUserValue () { return currentUserSubject.value }
+    get currentUserValue() { return currentUserSubject.value }
 };
