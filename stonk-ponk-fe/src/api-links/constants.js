@@ -4,10 +4,12 @@ export const RegisterLink = "http://localhost:8000/api/account/register";
 
 export const LogoutLink = "http://localhost:8000/api/account/logout";
 
-export const ForgetPasswordLink = "http://localhost:8000/api/account/forget-password";
-
+// Reset password flow
+export const ResetPasswordCheckEmailLink = "http://localhost:8000/api/account/forget-password";
+export const AnswerSecurityQuestionLink = "http://localhost:8000/api/account/security-question";
 export const ChangePasswordWithoutAuthLink = "http://localhost:8000/api/account/change-password-without-auth";
 
+// Change password while logged in
 export const ChangePasswordWithAuthLink = "http://localhost:8000/api/account/change-password-with-auth";
 
 export const ChangeFirstNameLink = "http://localhost:8000/api/account/change-first-name";
