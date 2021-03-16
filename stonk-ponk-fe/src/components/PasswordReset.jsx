@@ -8,6 +8,8 @@ import { FormContainer, LogoContainer, ParticleContainer,  PasswordResetBackgrou
 import { GenericForm, GenericSubmitButton, InputUnderlineDiv, Label, TextField } from '../css/Form';
 import { DefaultLogo } from '../css/Logo';
 
+import { ResetPasswordCheckEmailLink, AnswerSecurityQuestionLink, ChangePasswordWithoutAuthLink} from '../api-links/constants';
+
 function PasswordReset() {
 
     // Form values
@@ -27,80 +29,123 @@ function PasswordReset() {
     const redirectToLogin = () => {
         history.push("/");
     };
+    
+    /* resetPasswordCheckEmail - The first of three parts to the 'forgot password' user flow. User submits 
+    their email to retrieve their security question.  
 
-    // Submit request for security question associated with account
+        Request = {
+            email: string;
+        }
+
+        Response = {
+            status: number (200 - OK, 403 - Invalid email/Unauthorised)
+            security_question: string
+        }
+
+    */
     let securityQuestion;
-    const submitPasswordForm = async (event) => {
+    const resetPasswordCheckEmail = async (event) => {
         event.preventDefault();
-        await fetch('localhost:8000/api/account/reset-password', {
+        await fetch(ResetPasswordCheckEmailLink, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 email: email, 
             }),
         }).then((response) => {
-            if (response.ok) {
+            if (response.status === 200) {
+                response.json().then(res => {
+                    securityQuestion = res.security_queston;
+                })
                 setEmailFormVisible(false);
                 setSecurityQuestionVisible(true);
-                // TODO - set the security question based on the response given.    
             }
         }).catch((error) => {
-            console.log("this didn't work!!");
-        })
+            return Promise.resolve(e => {
+                alert(e.error);
+            })
+        });
     }
 
-    // Submit security question answer
-    const submitSecurityQuestion = async (event) => {
+    /* answerSecurityQuestion - The second of three parts to the 'forgot password' user flow. User submits 
+    the answer to their security question.
+    
+        Request = {
+            email: string;
+            answer: string;
+        }
+    
+        Response = {
+            status: number; (200 - OK, 403 - incorrect answer)
+        }
+    */
+    const answerSecurityQuestion = async (event) => {
         event.preventDefault();
-        await fetch("localhost:8000/api/account/security-question", {
+        await fetch(AnswerSecurityQuestionLink, {
             method: 'POST',
             headers: {
+                'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                securityQuestion: securityQuestion,
+                email: email,
                 answer: answer,
             })
         }).then((response) => {
-            if (response.ok) {
+            if (response.status === 200) {
                 setSecurityQuestionVisible(false);
                 setNewPasswordFormVisible(true);
             }
         }).catch((error) => {
-            console.log("Couldn't fetch security");
+            return Promise.resolve(e => {
+                alert(e.error);
+            })
         })
     }
 
-    // Submit new password
-    const submitNewPassword = async (event) => {
+    /* changePasswordWithoutAuth - The last of three parts to the 'forgot password' user flow. User submits
+        their new password. 
+    
+        Request = {
+            email: string;
+            new_password: string;
+        }
+    
+        Response = {
+            status: number; (200 - OK)
+        }
+    */
+    const changePasswordWithoutAuth = async (event) => {
         event.preventDefault();
-
-        if (pass !== passConfirm) { // check passwords match
+        if (pass !== passConfirm) { // Check passwords match
             alert("Passwords does not match! Re-enter your password.");
+
+            // TODO - Need to do further checks here for passwords meeting criteria. 
             return;
         } else {
-            await fetch("localhost:8000/api/account/new-password", {
+            await fetch(ChangePasswordWithoutAuthLink, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     email: email,
-                    password: pass,
+                    answer: answer,
+                    new_password: pass,
                 })
             }).then((response) => {
                 if (response.ok) {
                     setNewPasswordFormVisible(false);
                     setResetSuccess(true);
-
-                    redirectToLogin();
-                    return;
                 }
                 alert('Could not fetch security questions. Please try again.');
             }).catch((error) => {
-                console.log("Couldn't fetch security questions.");
+                return Promise.resolve(e => {
+                    alert("Couldn't fetch security questions.");
+                })
             });
         }
     }
@@ -135,7 +180,7 @@ function PasswordReset() {
                     <LogoContainer><DefaultLogo src={logo} alt="Stonk Ponk Logo" /></LogoContainer>
                     {emailFormVisible &&
                         <FormContainer>
-                            <GenericForm onSubmit={(e) => {submitPasswordForm(e)}}>
+                            <GenericForm onSubmit={(e) => {resetPasswordCheckEmail(e)}}>
                                 <h1 id="password-reset-title">Reset your password</h1>
                                 <Label htmlFor="email">Enter your email below</Label>
                                 <TextField id="email" type="email" onChange={(e) => setEmail(e.target.value)} required/>
@@ -146,7 +191,7 @@ function PasswordReset() {
                     }
                     {securityQuestionVisible  &&
                         <FormContainer>
-                            <GenericForm onSubmit={(e) => {submitSecurityQuestion(e)}}>
+                            <GenericForm onSubmit={(e) => {answerSecurityQuestion(e)}}>
                                 <h1>Your security question:</h1>
                                 <div>{securityQuestion}</div>
                                 <Label htmlFor="security-question-answer">Enter your answer below</Label>
@@ -158,7 +203,7 @@ function PasswordReset() {
                     }
                     {newPasswordFormVisible && 
                         <FormContainer>
-                            <GenericForm onSubmit={(e) => {submitNewPassword(e)}}>
+                            <GenericForm onSubmit={(e) => {changePasswordWithoutAuth(e)}}>
                                 <h1>Create your new password below:</h1>
                                 <Label htmlFor="new-password">New Password</Label>
                                 <TextField type="password" id="new-password" required onChange={(e) => {setPass(e.target.value)}} />
@@ -171,7 +216,10 @@ function PasswordReset() {
                         </FormContainer>
                     }
                     {resetSuccess &&
-                        <h1>Hooray! You've reset your password.</h1>
+                        <div>
+                            <h1>Hooray! You've reset your password.</h1>
+                            <button onClick={e => redirectToLogin(e)}>Back to login page.</button>
+                        </div>
                     }
                 </PasswordResetBackground>
         </PasswordResetPageContainer>
