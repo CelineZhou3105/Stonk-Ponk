@@ -237,9 +237,45 @@ function Market() {
     const [rows, setRows] = useState(data);
 
     const [searchItem, setSearchItem] = useState('');
+    // boi this is hardcoded for now cuz we got no api 
     const onSearch = () => {
-        console.log(searchItem);
+        switch (searchItem.name) {
+            case "Wesfarmers":
+                setRows([data[0]]);
+                break;
+            case "Atlassian":
+                setRows([data[1]]);
+                break;
+            case "Alphabet Inc Class C":
+                setRows([data[2]]);
+                break;
+            case "Kogan.com Ltd":
+                setRows([data[3]]);
+                break;
+            case "BHP Group":
+                setRows([data[4]]);
+                break;
+            case "Santos Limited":
+                setRows([data[5]]);
+                break;
+            case "Australia and New Zealand Banking Group Limited":
+                setRows([data[6]]);
+                break;
+            case "Westpac Banking Corporation":
+                setRows([data[7]]);
+                break;
+            case "Airtasker Limited":
+                setRows([data[8]]);
+                break;
+            case "Bendigo and Adelaide Bank Limited":
+                setRows([data[9]]);
+                break;
+            default:
+                setRows([]);
+                break;
+        }
     };
+
     return (
         <>
             <Navigation />
@@ -252,7 +288,8 @@ function Market() {
                     options={data}
                     getOptionLabel={(option) => option.name}
                     style={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} label="Search..." variant="outlined" value={searchItem} onChange={(e) => setSearchItem(e.target.value)} />}
+                    onChange={(e, value) => setSearchItem(value)}
+                    renderInput={(params) => <TextField {...params} label="Search..." variant="outlined" />}
                 />
                 <SearchButton aria-label="search for the stock in the search bar" onClick={onSearch}>Search</SearchButton>
             </MarketFilterContainer>
