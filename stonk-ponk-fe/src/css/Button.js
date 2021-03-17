@@ -62,3 +62,9 @@ export const PeriodButton = styled.button`
     }
 `;
 
+export const SearchButton = styled.button`
+    ${ButtonStyle}
+    width: 5%;
+    height: 35px;
+    margin: 5px;
+`;

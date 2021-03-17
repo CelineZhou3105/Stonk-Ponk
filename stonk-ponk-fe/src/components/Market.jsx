@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-
 import Navigation from './Navigation';
 import SummaryChart from './SummaryChart';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel } from '@material-ui/core';
-
+import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, TextField } from '@material-ui/core';
 import Select from 'react-select'
-
 import { MarketFilterContainer } from '../css/Div';
+import { SearchBar } from '../css/Form';
+import { SearchButton } from '../css/Button';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { history } from '../helpers/history';
-  
+// import { history } from '../helpers/history';
+
 // Headings for each table column
 const headings = [
     { id: 'name', disablePadding: true, numeric: false, label: 'Name' },
@@ -21,10 +21,10 @@ const headings = [
 // Comparator to determine the order which items should be displayed
 function comparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
-      return -1;
+        return -1;
     }
     if (b[orderBy] > a[orderBy]) {
-      return 1;
+        return 1;
     }
     return 0;
 }
@@ -56,13 +56,13 @@ function StockTableHead(props) {
         <TableHead>
             <TableRow>
                 {headings.map((cell) => {
-                    return(
-                        <TableCell 
+                    return (
+                        <TableCell
                             key={cell.id}
                             align={cell.numeric ? 'right' : 'left'}
                             padding={cell.disablePadding ? 'none' : 'default'}
                             sortDirection={orderBy === cell.id ? order : false}
-                        >   
+                        >
                             {cell.id === "performance" ? (cell.label) : (
                                 <TableSortLabel
                                     active={orderBy === cell.id}
@@ -124,28 +124,28 @@ function StockTable(props) {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => {
 
-                            return (
-                                <TableRow 
-                                    hover
-                                    role="checkbox"
-                                    tabIndex={-1}
-                                    key={row.name}
-                                >
-                                    <TableCell component="th" scope="row" padding="none">
-                                        {row.name}
-                                        <br/>
-                                        <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <SummaryChart/>
-                                    </TableCell>
-                                    <TableCell align="right">{row.price}</TableCell>
-                                </TableRow>
-                            );
+                                return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        tabIndex={-1}
+                                        key={row.name}
+                                    >
+                                        <TableCell component="th" scope="row" padding="none">
+                                            {row.name}
+                                            <br />
+                                            <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <SummaryChart />
+                                        </TableCell>
+                                        <TableCell align="right">{row.price}</TableCell>
+                                    </TableRow>
+                                );
                             })}
                         {emptyRows > 0 && (
                             <TableRow style={{ height: 53, emptyRows }}>
-                            <TableCell colSpan={6} />
+                                <TableCell colSpan={6} />
                             </TableRow>
                         )}
                     </TableBody>
@@ -167,14 +167,14 @@ function StockTable(props) {
 
 // Filter for sectors
 const sectorOptions = [
-    { value: 'all', label: 'All'},
+    { value: 'all', label: 'All' },
     { value: 'aus', label: 'Australia' },
     { value: 'us', label: 'US' },
 ];
 
 // Filter for security type (ETFs, Shares)
 const securityTypeOption = [
-    { value: 'all', label: 'All'},
+    { value: 'all', label: 'All' },
     { value: 'stock', label: 'Stocks' },
     { value: 'derivative', label: 'Deriviatives' },
     { value: 'etf', label: 'ETFs' },
@@ -208,8 +208,8 @@ const customStyles = {
         ...styles,
         width: 200,
     }),
-    option: (styles, {data, isDisabled, isFocused, isSelected}) => {
-        return{
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+        return {
             ...styles,
             color: 'black',
             backgroundColor: isFocused ? 'rgba(158, 34, 255, 0.48)' : null,
@@ -223,26 +223,38 @@ function Market() {
     const data = [
         { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf' },
         { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf' },
-        { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf'},
-        { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock'},
-        { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, sector: 'aus', type: 'stock'},
-        { name: 'Santos Limited', ticker: 'STO', performance: 'graph', price: 499.00, sector: 'us', type: 'stock'},
+        { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf' },
+        { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock' },
+        { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, sector: 'aus', type: 'stock' },
+        { name: 'Santos Limited', ticker: 'STO', performance: 'graph', price: 499.00, sector: 'us', type: 'stock' },
         { name: 'Australia and New Zealand Banking Group Limited', ticker: 'ANZ', performance: 'graph', price: 80.42, sector: 'us', type: 'derivative' },
         { name: 'Westpac Banking Corporation', ticker: 'WBC', performance: 'graph', price: 320.00, sector: 'us', type: 'derivative' },
         { name: 'Airtasker Limited', ticker: 'ART', performance: 'graph', price: 20.53, sector: 'us', type: 'derivative' },
-        { name: 'Bendigo and Adelaide Bank Limited', ticker: 'BEN', performance: 'graph', price: 443.0, sector: 'us', type: 'derivative'},
+        { name: 'Bendigo and Adelaide Bank Limited', ticker: 'BEN', performance: 'graph', price: 443.0, sector: 'us', type: 'derivative' },
     ];
 
     // Component will rerender upon filtering the rows
     const [rows, setRows] = useState(data);
 
+    const [searchItem, setSearchItem] = useState('');
+    const onSearch = () => {
+
+    };
     return (
         <>
             <Navigation />
             <h1>Market</h1>
             <MarketFilterContainer>
-                <Select styles={customStyles} options={sectorOptions} defaultValue={{value: 'all', label: 'All'}} aria-label="Dropdown for filtering by sector." onChange={(e) => {setRows(onSectorChange(e, data))}}/>
-                <Select styles={customStyles} options={securityTypeOption} defaultValue={{value: 'all', label: 'All'}} aria-label="Dropdown for filtering by security type." onChange={(e) => {setRows(onSecurityChange(e, data))}}/>
+                <Select styles={customStyles} options={sectorOptions} defaultValue={{ value: 'all', label: 'All' }} aria-label="Dropdown for filtering by sector." onChange={(e) => { setRows(onSectorChange(e, data)) }} />
+                <Select styles={customStyles} options={securityTypeOption} defaultValue={{ value: 'all', label: 'All' }} aria-label="Dropdown for filtering by security type." onChange={(e) => { setRows(onSecurityChange(e, data)) }} />
+                <Autocomplete
+                    id="search"
+                    options={data}
+                    getOptionLabel={(option) => option.name}
+                    style={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label="Search..." variant="outlined" />}
+                />
+                <SearchButton aria-label="search for the stock in the search bar" onClick={onSearch}>Search</SearchButton>
             </MarketFilterContainer>
             <div className="stock-container">
                 <StockTable data={rows}></StockTable>
