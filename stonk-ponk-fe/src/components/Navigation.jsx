@@ -48,7 +48,7 @@ function Navigation() {
                         <ProfilePhotoContainer>
                             <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" />
                         </ProfilePhotoContainer>
-                        <h2>Samantha Anders</h2>
+                        <h2>Bob The Blobfish</h2>
                         <ProfileModaItem className="profile-modal-item" onClick={navigateToSettings}>Settings</ProfileModaItem>
                         <ProfileModaItem className="profile-modal-item">Contact Us</ProfileModaItem>
                         <ProfileModaItem onClick={(e) => { logout(e) }} className="profile-modal-item">Logout</ProfileModaItem>
