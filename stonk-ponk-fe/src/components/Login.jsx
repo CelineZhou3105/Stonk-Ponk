@@ -3,7 +3,8 @@ import Particles from 'react-particles-js';
 
 import logo from '../images/logo.png';
 
-import { history } from '../helpers/history';
+// import { history } from '../helpers/history';
+import { useHistory } from 'react-router-dom';
 
 import { LinkContainer, LoginFormContainer, LoginPageContainer, LogoContainer, ParticleContainer } from '../css/Div';
 import { GenericForm, GenericSubmitButton, InputUnderlineDiv, LoginLabel, LoginTextField } from '../css/Form';
@@ -17,6 +18,7 @@ import { Redirect } from 'react-router-dom';
 
 
 function Login() {
+    const history = useHistory();
 
     // Form values
     const [email, setEmail] = useState('');
@@ -63,8 +65,7 @@ function Login() {
                 <GenericForm onSubmit={(e) => authentication.login(e, email, pass).then(
                     user => {
                         console.log("dfgdfg");
-                        //console.log("Form has been submitted. The current user value is: " + currentUser);
-			history.push('/home');
+			            history.push('/home');
                     },
                     error => {
                         alert("Error, couldn't login");
