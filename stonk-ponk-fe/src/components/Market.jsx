@@ -238,7 +238,7 @@ function Market() {
 
     const [searchItem, setSearchItem] = useState('');
     const onSearch = () => {
-
+        console.log(searchItem);
     };
     return (
         <>
@@ -252,7 +252,7 @@ function Market() {
                     options={data}
                     getOptionLabel={(option) => option.name}
                     style={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} label="Search..." variant="outlined" />}
+                    renderInput={(params) => <TextField {...params} label="Search..." variant="outlined" value={searchItem} onChange={(e) => setSearchItem(e.target.value)} />}
                 />
                 <SearchButton aria-label="search for the stock in the search bar" onClick={onSearch}>Search</SearchButton>
             </MarketFilterContainer>

@@ -102,11 +102,3 @@ export const InputUnderlineDiv = styled.div`
     width: ${props => props.passwordReset ? "100%" : "40%"};
     position: relative;
 `;
-
-export const SearchBar = styled.input`
-    width: 15%;
-    height: 30px;
-    border-color: #ccc;
-    border-radius: 5px;
-    margin: 5px;
-`;
