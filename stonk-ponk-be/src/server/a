@@ -1,0 +1,6 @@
+            firstName: firstN,
+            lastName: lastN,
+            email: emailAdd,
+            password: pass,
+            securityQuestion: securityQ,
+            securityAnswer: securityA

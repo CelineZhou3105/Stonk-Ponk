@@ -2,6 +2,7 @@ import pymongo
 from pymongo import MongoClient
 import pprint
 import os
+from bson.objectid import ObjectId
 #This module has the functions which connect to a mongodb and operate on it. 
 #Db rules: No 2 users can have the same username
 
@@ -16,9 +17,14 @@ class database(object):
 
         db_conn = client.test_database
         db_conn.user_auths.remove()
-        os.system("mongoimport --jsonArray --db='test_database'  --collection='user_auths' --file='mongo/bootstrap.json'")
+        db_conn.user_security.remove()
+        os.system("mongoimport --jsonArray --db='test_database'  --collection='user_auths' --file='mongo/bootstrap_users.json'")
         return db_conn
 
+    def get_id_by_username(self, username):
+        for i in self.conn.user_auths.find({"u_name" : "ash"},{"_id" : 1}):
+            return i["_id"]
+        
     #Inserts user if user already does not exist in the db
     def insert_user(self, username, password):
     
@@ -30,7 +36,6 @@ class database(object):
             user_auth = {"u_name": username, "pwd": password}
 
             user_auths.insert_one(user_auth).inserted_id
-            pprint.pprint(user_auths.find_one())
         return 
 
     #Removes user if they are in the db.
@@ -68,6 +73,7 @@ class database(object):
     
         return False
 
-
+    def set_pwd_security(self, username, question, answer):
+        return self.conn.user_security.insert_one({"_id" : ObjectId(self.get_id_by_username(username)), "question" : question, "answer" : answer}) 
 
 

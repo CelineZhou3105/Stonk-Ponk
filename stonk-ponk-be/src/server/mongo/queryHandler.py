@@ -17,7 +17,6 @@ class queryHandler(object):
             
         return cls._instance
 
-
     def request_handler(self, command_dict):
         self.get_func(command_dict)
 
@@ -43,6 +42,13 @@ class queryHandler(object):
         elif command == "auth":
             password = command_string["password"]
             return self._db.auth(username, password)
+        
+        elif command == "set_password_security" :
+            password = command_string["password"]
+            question = command_string["question"]
+            return self._db.set_pwd_security(username, question, answer) 
+
+
 
 if __name__=='__main__':
     a = queryHandler()

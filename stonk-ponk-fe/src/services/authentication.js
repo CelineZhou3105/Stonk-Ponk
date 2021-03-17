@@ -1,38 +1,37 @@
-import { BehaviorSubject } from 'rxjs';
+// import { BehaviorSubject } from 'rxjs';
 
 import { handleResponse } from '../helpers/handle-response';
 
-import { LoginLink, RegisterLink } from '../api-links/constants';
+import { LoginLink, LogoutLink, RegisterLink } from '../api-links/constants';
 
-console.log("localStorage: " + localStorage.getItem('currentUser'));
-const currentUserSubject = new BehaviorSubject('');
+// console.log("localStorage: " + localStorage.getItem('currentUser'));
+// const currentUserSubject = new BehaviorSubject('');
 
 async function login(event, email, password) {
     event.preventDefault();
     const requestOptions = {
         method: 'POST',
         headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username: email,
+            email: email,
             password: password
         }),
     };
-    return fetch(LoginLink, requestOptions)
-        .then(response => handleResponse(response))
-        .then(user => {
-            // Store token 
-            console.log("stored!");
-            console.log(user);
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            currentUserSubject.next(user);
-            console.log(currentUserSubject.value);
-            return user;
+    await fetch(LoginLink, requestOptions)
+        .then(response => {
+            if (response.status === 200) {
+                console.log("Successful login.");
+                response.json().then(res => {
+                    localStorage.setItem('token', res.token);
+                    return Promise.resolve(res);
+                })
+            }
         })
         .catch((error) => {
-            // TODO - do something with the error
-            console.log("Error in login, could not submit login details.");
+            alert("Error: Couldn't initiate login fetch: ", error);
         });
 }
 
@@ -40,6 +39,7 @@ async function register(firstN, lastN, emailAdd, pass, securityQ, securityA) {
     const requestOptions = {
         method: 'POST',
         headers: {
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -70,31 +70,36 @@ async function register(firstN, lastN, emailAdd, pass, securityQ, securityA) {
 async function logout(event) {
     event.preventDefault();
 
-    localStorage.removeItem('currentUser');
-    console.log("I'm logging out.");
-    currentUserSubject.next(null);
+    // localStorage.removeItem('currentUser');
+    // currentUserSubject.next(null);
+    console.log("Initiating logout request...");
+    const token = localStorage.getItem('token');
 
-    // await fetch(`localhost:3000/logout/${token}`, {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //         token: token,
-    //     })
-    // }).then((response) => {
-    //     if (response.ok) {
-
-    //     }
-    // }).catch((error) => {
-    //     // TODO - do something about this error
-    // });
+    await fetch(LogoutLink, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            token: token,
+        })
+    }).then((response) => {
+        if (response.status === 200) {
+            // Logged out successfully
+            console.log("Successfully logged out!");
+            localStorage.remove('token');
+        } else {
+            alert("An error occured.");
+        }
+    }).catch((error) => {
+        alert("Error: Couldn't initiate logout fetch: ", error);
+    });
 }
 
 export const authentication = {
     login,
     register,
     logout,
-    currentUser: currentUserSubject.asObservable(),
-    get currentUserValue() { return currentUserSubject.value }
+    // currentUser: currentUserSubject.asObservable(),
+    // get currentUserValue() { return currentUserSubject.value }
 };
