@@ -27,10 +27,9 @@ async function login(event, email, password) {
                 response.json().then(res => {
                     localStorage.setItem('token', res.token);
                 })
+            } else {
+                return Promise.reject(response);
             }
-        })
-        .catch((error) => {
-            alert("Error: Couldn't initiate login fetch: ", error);
         });
 }
 

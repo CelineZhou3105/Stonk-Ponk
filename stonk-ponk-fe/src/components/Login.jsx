@@ -22,9 +22,9 @@ function Login() {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
-    const currentUser = authentication.currentUserValue;
-    console.log("hello" + currentUser);
-    if (authentication.currentUserValue) {
+    //const currentUser = authentication.currentUserValue;
+    //console.log("hello" + currentUser);
+    if (localStorage.getItem("token")) {
         console.log("tried to redirect to summary page...");
         history.push('/home');
         <Redirect to={{ pathname: '/home' }} />
@@ -62,8 +62,9 @@ function Login() {
                 </LogoContainer>
                 <GenericForm onSubmit={(e) => authentication.login(e, email, pass).then(
                     user => {
-                        console.log("Form has been submitted. The current user value is: " + currentUser);
-                        history.push('/home');
+                        console.log("dfgdfg");
+                        //console.log("Form has been submitted. The current user value is: " + currentUser);
+			history.push('/home');
                     },
                     error => {
                         alert("Error, couldn't login");
