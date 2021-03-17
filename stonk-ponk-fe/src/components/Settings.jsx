@@ -10,7 +10,7 @@ import { changeDetails } from '../services/changeDetails';
 const Settings = () => {
 
     // initialise variables
-    const [firstName, setFirstName] = useState('Bob');
+    const [firstName, setFirstName] = useState('Bobfish');
     const [lastName, setLastName] = useState('The Blobfish');
     const [emailAdd, setEmailAdd] = useState('ayowassup@itsurgirl.com');
     const [pass, setPass] = useState('hellothisisBobTheBlobf1sh!');
