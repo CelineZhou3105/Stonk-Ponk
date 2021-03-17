@@ -10,10 +10,10 @@ import { changeDetails } from '../services/changeDetails';
 const Settings = () => {
 
     // initialise variables
-    const [firstName, setFirstName] = useState('Horizon');
-    const [lastName, setLastName] = useState('Arcstar');
+    const [firstName, setFirstName] = useState('Bobfish');
+    const [lastName, setLastName] = useState('The Blobfish');
     const [emailAdd, setEmailAdd] = useState('ayowassup@itsurgirl.com');
-    const [pass, setPass] = useState('123456789');
+    const [pass, setPass] = useState('hellothisisBobTheBlobf1sh!');
 
     const EditFirstName = () => {
         console.log("Edit first name!");

@@ -5,8 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // TODO - change this to real backend later
-import { configureFakeBackend } from './helpers/fake-backend';
-configureFakeBackend();
+//import { configureFakeBackend } from './helpers/fake-backend';
+//configureFakeBackend();
 
 ReactDOM.render(
   <React.StrictMode>

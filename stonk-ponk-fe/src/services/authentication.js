@@ -26,6 +26,7 @@ async function login(event, email, password) {
                 console.log("Successful login.");
                 response.json().then(res => {
                     localStorage.setItem('token', res.token);
+                    return Promise.resolve(res);
                 })
             } else {
                 return Promise.reject(response);

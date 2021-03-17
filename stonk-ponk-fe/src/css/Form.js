@@ -99,6 +99,6 @@ export const InputUnderlineDiv = styled.div`
     transform: scale(0, 1);
     -webkit-transition: all 0.4s linear;
     transition: all 0.4s linear;
-    width: ${props => props.passwordReset ? "100%" : "40%" };
+    width: ${props => props.passwordReset ? "100%" : "40%"};
     position: relative;
 `;

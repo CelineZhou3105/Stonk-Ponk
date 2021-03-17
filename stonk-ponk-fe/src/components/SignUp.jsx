@@ -87,6 +87,7 @@ const SignUp = () => {
                         <Label htmlFor="pass">Password</Label>
                         <TextField type="password" id="pass" value={pass} required onChange={(e) => setPass(e.target.value)} />
                     </SignUpItemDiv>
+                    <GreyText>Password must be 8 digits long and must include at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.</GreyText>
                     <SignUpItemDiv>
                         <Label htmlFor="passConfirm">Confirm Password</Label>
                         <TextField type="password" id="passConfirm" value={passConfirm} required onChange={(e) => setPassConfirm(e.target.value)} />
