@@ -6,7 +6,7 @@ from django.views.decorators.http import require_http_methods
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 from rest_framework_jwt.utils import jwt_decode_handler
 
-from jwt.exceptions import InvalidSignatureError
+import jwt.exceptions 
 
 from .models import User
 
