@@ -17,3 +17,6 @@ export const ChangeFirstNameLink = "http://localhost:8000/api/account/change-fir
 export const ChangeLastNameLink = "http://localhost:8000/api/account/change-last-name";
 
 export const ChangeEmailLink = "http://localhost:8000/api/account/change-email";
+
+// Stock API calls
+export const MarketsLink = "http://localhost:8000/stock/markets";
