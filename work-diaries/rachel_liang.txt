@@ -20,4 +20,6 @@ Several meetings with backend team to figure out API schema and bug fixes.
 
 Week 5
 Presented demo A.
+Facilitated retrospective and submitted corresponding report. 
+
 
