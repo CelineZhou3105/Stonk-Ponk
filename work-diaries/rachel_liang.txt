@@ -11,3 +11,13 @@ Creating tickets for the backlog + sprint backlog
 Week 3
 UI Flow diagrams for further pages (market, summary, profile, stock details)
 Estimating user stories and split them between sprints
+
+
+Week 4
+Login page and JWT token handling for authentication
+Market page - material ui tables for the data display, google charts for graphs
+Several meetings with backend team to figure out API schema and bug fixes.
+
+Week 5
+Presented demo A.
+
