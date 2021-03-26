@@ -3,13 +3,14 @@ import Navigation from './Navigation';
 
 // import { getPortfolio } from '../services/portfolio';
 
-import { FilterContainer, FlexColumnLeftDiv, PageContainer, Container, PortfolioValueContainer, SectionRowDiv } from '../css/Div';
+import { FilterContainer, FlexColumnLeftDiv, EditPortfolioButtonContainer, PageContainer, Container, PortfolioValueContainer, SectionRowDiv } from '../css/Div';
 import { Link, SubText, SubTitle, NormalText, PageTitle, PortfolioValue, ColorText } from '../css/Text';
 
 import Chart from "react-google-charts";
 
 import StockTable from './StockTable';
 import Filter from './Filter';
+import { CancelButton, GenericButton, SaveButton } from '../css/Button';
 
 // Headings for each table column
 const tableHeadings = [
@@ -17,8 +18,8 @@ const tableHeadings = [
     { id: 'performance', disablePadding: false, numeric: false, label: 'Performance' },
     { id: 'date', disablePadding: true, numeric: true, label: 'Purchase Date' },
     { id: 'purchase_price', disablePadding: false, numeric: true, label: 'Purchase Price' },
-    { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price' },
     { id: 'units', disablePadding: false, numeric: false, label: 'Units Owned' },
+    { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price' },
     { id: 'value', disablePadding: false, numeric: true, label: 'Total Value' },
 ];
 
@@ -160,7 +161,18 @@ function Portfolio() {
                 <FilterContainer>
                     <Filter setState={setRows} data={stocksDummyData}></Filter>
                 </FilterContainer>
-                <StockTable data={rows} headings={tableHeadings} place="portfolio"></StockTable>
+                {/* <EditPortfolioButtonContainer>
+                    {!editMode &&
+                        <GenericButton onClick={() => setEditMode(true)}>Edit Portfolio</GenericButton>
+                    }
+                    {editMode &&
+                        <>
+                            <SaveButton onClick={() => saveChanges(setEditMode)}>Save</SaveButton>
+                            <CancelButton onClick={() => cancelChanges(setEditMode)}>Cancel</CancelButton>
+                        </>
+                    }
+                </EditPortfolioButtonContainer> */}
+                <StockTable data={rows} headings={tableHeadings} place="portfolio" setRows={setRows}></StockTable>
             </PageContainer>
         </div>
         

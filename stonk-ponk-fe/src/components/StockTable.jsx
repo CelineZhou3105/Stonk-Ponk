@@ -9,8 +9,11 @@ import {
     TableRow, 
     TableSortLabel, 
 } from '@material-ui/core';
+import Input from "@material-ui/core/Input";
 import SummaryChart from './SummaryChart';
 import { NormalText } from '../css/Text';
+import { EditPortfolioButtonContainer } from '../css/Div';
+import { CancelButton, GenericButton, SaveButton } from '../css/Button';
 
 /**
  * StockTableHead - The header column of the table
@@ -65,7 +68,11 @@ function StockTable(props) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const { data, headings, place } = props;
+    const [editMode, setEditMode ] = useState(false);
+
+    const { data, headings, place, setRows } = props;
+
+    const [previousRows, setPreviousRows] = useState(data);
 
     const handleSort = (event, property) => {
         const ascending = (orderBy === property && order === 'asc');
@@ -84,8 +91,47 @@ function StockTable(props) {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
+    const onChange = (e, changedRow, changedColumn) => {
+        console.log(Date.parse(e.target.value));
+        const newValue = (changedColumn === 'last_purchased') ? Date.parse(e.target.value)/1000 : e.target.value;
+        
+        const newRows = data.map(row => {
+            if (row.ticker === changedRow.ticker) {
+                return { ...row, [changedColumn]: newValue};
+            } else {
+                return {...row};
+            }
+        })
+        setRows(newRows);
+    };
+
+    function saveChanges() {
+        // TODO: Call the API to save changes
+        setEditMode(false);
+        console.log("Changes saved.");
+        setPreviousRows(data);
+    }
+    
+    function cancelChanges() {
+        // TODO: Call the API to save changes
+        setEditMode(false);
+        console.log("Changes cancelled.");
+        setRows(previousRows);
+    }
+
     return (
         <div>
+            <EditPortfolioButtonContainer>
+                {!editMode &&
+                    <GenericButton onClick={() => setEditMode(true)}>Edit Portfolio</GenericButton>
+                }
+                {editMode &&
+                    <>
+                        <SaveButton onClick={() => saveChanges()}>Save</SaveButton>
+                        <CancelButton onClick={() => cancelChanges()}>Cancel</CancelButton>
+                    </>
+                }
+            </EditPortfolioButtonContainer>
             <TableContainer>
                 <Table
                     size="medium"
@@ -118,10 +164,20 @@ function StockTable(props) {
                                             <TableCell align="center">
                                                 <SummaryChart />
                                             </TableCell>
-                                            <TableCell align="right">{new Date(row.last_purchased).toDateString()}</TableCell>
-                                            <TableCell align="right">{row.purchase_price}</TableCell>
+                                            {editMode ?
+                                                <>
+                                                    <CustomTableCell row={row} column='last_purchased' onChange={onChange}></CustomTableCell>
+                                                    <CustomTableCell row={row} column='purchase_price' onChange={onChange}></CustomTableCell>
+                                                    <CustomTableCell row={row} column='units_owned' onChange={onChange}></CustomTableCell>
+                                                </>:
+                                                <>
+                                                    <TableCell align="right">{formatDate(row.last_purchased)}</TableCell>
+                                                    <TableCell align="right">{row.purchase_price}</TableCell>
+                                                    <TableCell align="right">{row.units_owned}</TableCell>
+                                                </>
+                                            }
+                                            
                                             <TableCell align="right">{row.price}</TableCell>
-                                            <TableCell align="right">{row.units_owned}</TableCell>
                                             <TableCell align="right">{(row.units_owned * row.price).toFixed(2)}</TableCell>
                                         </TableRow> :
 
@@ -205,4 +261,62 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
+/**
+ * 
+ * @param {} param0 
+ */
+const CustomTableCell = (props) => {
+    const {row, column, onBlur, onChange} = props;
+    const value = (column === 'last_purchased') ? formatDate(row[column]) : row[column];
+    const type = (column === 'last_purchased') ? 'date' : 'number';
+
+    return (
+      <TableCell align="left">
+        <Input
+            name={column}
+            value={value}
+            onChange={e => onChange(e, row, column)}
+            type={type}
+        />
+      </TableCell>
+    );
+};
+
+
+
+//   const onRevert = id => {
+//     const newRows = rows.map(row => {
+//       if (row.id === id) {
+//         return previous[id] ? previous[id] : row;
+//       }
+//       return row;
+//     });
+//     setRows(newRows);
+//     setPrevious(state => {
+//       delete state[id];
+//       return state;
+//     });
+//     onToggleEditMode(id);
+//   };
+
 export default StockTable;
+
+
+/**
+ * formatDate - converts a unix timestamp to a readable date
+ * @param {number} date - number of seconds in Unix time  
+ */
+function formatDate(date) {
+    var d = new Date(date * 1000),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+

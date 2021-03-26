@@ -38,6 +38,8 @@ export const FlexRowDiv = createFlexRowDiv("space-between", "auto", "auto");
 
 export const FlexRowLeftDiv = createFlexRowDiv("flex-start", "auto", "auto");
 
+
+
 export const SignUpItemDiv = createFlexColumnDiv("center", "flex-start", "20px");
 
 export const FlexColumnCenterDiv = createFlexColumnDiv("center", "center", "50px");
@@ -190,5 +192,12 @@ export const PageContainer = styled.div`
 
 export const SectionRowDiv = styled.div`
     ${FlexRow}
+    gap: 1em;
+`;
+
+export const EditPortfolioButtonContainer = styled.div` 
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     gap: 1em;
 `;

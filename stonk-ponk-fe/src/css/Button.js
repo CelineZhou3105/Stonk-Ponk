@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 export const ButtonStyle = css`
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #9e22ff;
     color: white;
     &:hover {
@@ -67,4 +67,48 @@ export const SearchButton = styled.button`
     width: 5%;
     height: 35px;
     margin: 5px;
+`;
+
+
+export const GenericButton = styled.button`
+    ${ButtonStyle}
+    font-size: 18px;
+    padding: 15px;
+    width: 15%;
+    margin-top: 20px;
+`;
+
+export const SaveButton = styled.button`
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background-color: #00AD30;
+    color: white;
+    font-size: 18px;
+    padding: 15px;
+    width: 15%;
+    margin-top: 20px;
+    transition: background-color 0.5s;
+
+    &:hover {
+        background-color: #2de361;
+    }
+`;
+
+export const CancelButton = styled.button`
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background-color: #e80000;
+    color: white;
+
+    font-size: 18px;
+    padding: 15px;
+    width: 15%;
+    margin-top: 20px;
+    transition: background-color 0.5s;
+
+    &:hover {
+        background-color: #ff5757;
+    }
 `;
