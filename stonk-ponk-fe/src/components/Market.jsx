@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import Navigation from './Navigation';
-import Select from 'react-select'
-import { MarketFilterContainer } from '../css/Div';
+import { FilterContainer, PageContainer } from '../css/Div';
+import { PageTitle } from '../css/Text';
 import { SearchButton } from '../css/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import StockTable from './StockTable';
 import { TextField } from '@material-ui/core';
+
+import Filter from './Filter';
 
 // Headings for each table column
 const headings = [
@@ -14,58 +16,6 @@ const headings = [
     { id: 'performance', disablePadding: false, numeric: false, label: 'Performance' },
     { id: 'price', disablePadding: false, numeric: true, label: 'Current Price' },
 ];
-
-// Filter for sectors
-const sectorOptions = [
-    { value: 'all', label: 'All' },
-    { value: 'aus', label: 'Australia' },
-    { value: 'us', label: 'US' },
-];
-
-// Filter for security type (ETFs, Shares)
-const securityTypeOption = [
-    { value: 'all', label: 'All' },
-    { value: 'stock', label: 'Stocks' },
-    { value: 'derivative', label: 'Deriviatives' },
-    { value: 'etf', label: 'ETFs' },
-];
-
-
-export function onSectorChange(event, stocks) {
-    if (event.value === 'all') {
-        return stocks;
-    }
-    const filteredData = stocks.filter((stock) => stock.sector === event.value);
-    return filteredData;
-};
-
-export function onSecurityChange(event, stocks) {
-    if (event.value === 'all') {
-        return stocks;
-    }
-    const filteredData = stocks.filter((stock) => stock.type === event.value);
-    return filteredData;
-};
-
-const customStyles = {
-    menu: (provided, state) => ({
-        ...provided,
-        width: 200,
-        backgroundColor: 'white',
-        padding: 10,
-    }),
-    control: (styles) => ({
-        ...styles,
-        width: 200,
-    }),
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-        return {
-            ...styles,
-            color: 'black',
-            backgroundColor: isFocused ? 'rgba(158, 34, 255, 0.48)' : null,
-        }
-    }
-};
 
 function Market() {
 
@@ -129,23 +79,24 @@ function Market() {
     return (
         <>
             <Navigation />
-            <h1>Market</h1>
-            <MarketFilterContainer>
-                <Select styles={customStyles} options={sectorOptions} defaultValue={{ value: 'all', label: 'All' }} aria-label="Dropdown for filtering by sector." onChange={(e) => { setRows(onSectorChange(e, data)) }} />
-                <Select styles={customStyles} options={securityTypeOption} defaultValue={{ value: 'all', label: 'All' }} aria-label="Dropdown for filtering by security type." onChange={(e) => { setRows(onSecurityChange(e, data)) }} />
-                <Autocomplete
-                    id="search"
-                    options={data}
-                    getOptionLabel={(option) => option.name}
-                    style={{ width: 300 }}
-                    onChange={(e, value) => setSearchItem(value)}
-                    renderInput={(params) => <TextField {...params} label="Search..." variant="outlined" />}
-                />
-                <SearchButton aria-label="search for the stock in the search bar" onClick={onSearch}>Search</SearchButton>
-            </MarketFilterContainer>
-            <div className="stock-container">
-                <StockTable data={rows} headings={headings} place="market"></StockTable>
-            </div>
+            <PageContainer>
+                <PageTitle>Market</PageTitle>
+                <FilterContainer>
+                    <Filter setState={setRows} data={data}></Filter>
+                    <Autocomplete
+                        id="search"
+                        options={data}
+                        getOptionLabel={(option) => option.name}
+                        style={{ width: 300 }}
+                        onChange={(e, value) => setSearchItem(value)}
+                        renderInput={(params) => <TextField {...params} label="Search..." variant="outlined" />}
+                    />
+                    <SearchButton aria-label="search for the stock in the search bar" onClick={onSearch}>Search</SearchButton>
+                </FilterContainer>
+                <div className="stock-container">
+                    <StockTable data={rows} headings={headings} place="market"></StockTable>
+                </div>
+            </PageContainer>
         </>
     )
 }

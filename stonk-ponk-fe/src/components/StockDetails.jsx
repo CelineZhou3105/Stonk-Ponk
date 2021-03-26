@@ -3,9 +3,8 @@ import React, { useState } from 'react';
 import { LoginButton, PeriodButton } from '../css/Button';
 import StockDetailsChart from './StockDetailsChart';
 import Navigation from './Navigation';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Tab } from '@material-ui/core';
-import { ChartContainer, StockDetailsContainer, GraphAndPeriodDiv, FlexRowDiv } from '../css/Div';
-import { CompanyName, NavList, NavListItem } from '../css/Text';
+import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
+import { ChartContainer, StockDetailsContainer, GraphAndPeriodDiv } from '../css/Div';
 
 import { useParams } from "react-router-dom";
 

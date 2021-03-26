@@ -10,6 +10,7 @@ import {
     TableSortLabel, 
 } from '@material-ui/core';
 import SummaryChart from './SummaryChart';
+import { NormalText } from '../css/Text';
 
 /**
  * StockTableHead - The header column of the table
@@ -111,9 +112,8 @@ function StockTable(props) {
                                             key={row.name}
                                         >
                                             <TableCell component="th" scope="row" padding="none">
-                                            {row.name}
-                                            <br />
-                                            <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
+                                                <NormalText>{row.name}</NormalText>
+                                                <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <SummaryChart />
@@ -132,9 +132,8 @@ function StockTable(props) {
                                             key={row.name}
                                         >
                                             <TableCell component="th" scope="row" padding="none">
-                                            {row.name}
-                                            <br />
-                                            <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
+                                                <NormalText>{row.name}</NormalText>
+                                                <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <SummaryChart />

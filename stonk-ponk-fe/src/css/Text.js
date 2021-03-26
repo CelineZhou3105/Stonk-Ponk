@@ -34,15 +34,14 @@ export const NavList = styled.ul`
 
 
 export const NavListItem = styled.li`
-    position: relative; 
-    padding: 20px 60px;
+    position: relative;
+    padding: 1em 3em;
     display: inline-block;
-    font-size: 20pt;
+    font-size: 18px;
 
     & > a:hover:after {
         width: 100%;
         left: 0;
-        top: 15px;
     }
 
     & > a {
@@ -60,15 +59,14 @@ export const NavListItem = styled.li`
         transition: width 0.3s ease 0s, left 0.3s ease 0s;
         position: relative;
         width: 0;
-        top: 15px;
     }
 
     & .active {
         border-bottom: 2px solid #9e22ff;
     }
 
-    &. active:after {
-        height: 0;
+    & .active:after {
+        height: 0px;
     }
 `;
 

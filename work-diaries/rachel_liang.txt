@@ -20,6 +20,10 @@ Several meetings with backend team to figure out API schema and bug fixes.
 
 Week 5
 Presented demo A.
-Facilitated retrospective and submitted corresponding report. 
+Facilitated retrospective and submitted corresponding report.
+
+Week 6
+Portfolio Page - filtering, pie graph for portfolio makeup, value calculations.
+Refactoring Filter component and StockTable components into their own files.
 
 

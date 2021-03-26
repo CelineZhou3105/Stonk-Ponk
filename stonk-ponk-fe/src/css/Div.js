@@ -155,7 +155,13 @@ export const ProfileModaItem = styled.div`
 `;
 
 /* Market Filters */
-export const MarketFilterContainer = createFlexRowDiv('flex-end', '30px');
+export const FilterContainer = styled.div`
+    ${FlexRow};
+    justify-content: flex-end;
+    align-items: center;
+    margin: 30px;
+    gap: 1em;
+`
 
 
 /* Stock Details Page*/

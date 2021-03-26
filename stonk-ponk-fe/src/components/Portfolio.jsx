@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navigation from './Navigation';
 
 // import { getPortfolio } from '../services/portfolio';
 
-import { FlexColumnLeftDiv, PageContainer, Container, PortfolioValueContainer, SectionRowDiv } from '../css/Div';
+import { FilterContainer, FlexColumnLeftDiv, PageContainer, Container, PortfolioValueContainer, SectionRowDiv } from '../css/Div';
 import { Link, SubText, SubTitle, NormalText, PageTitle, PortfolioValue, ColorText } from '../css/Text';
 
 import Chart from "react-google-charts";
 
 import StockTable from './StockTable';
+import Filter from './Filter';
 
 // Headings for each table column
 const tableHeadings = [
@@ -79,6 +80,8 @@ function Portfolio() {
     // TODO - Connect this with the backend.
     // const token = localStorage.getItem('token');
     // const data = getPortfolio(token);
+
+    const [rows, setRows] = useState(stocksDummyData);
     
 
     // Calculations for the value of the portfolio
@@ -154,7 +157,10 @@ function Portfolio() {
                             </NormalText>
                         </Container>
                 </SectionRowDiv>
-                <StockTable data={stocksDummyData} headings={tableHeadings} place="portfolio"></StockTable>
+                <FilterContainer>
+                    <Filter setState={setRows} data={stocksDummyData}></Filter>
+                </FilterContainer>
+                <StockTable data={rows} headings={tableHeadings} place="portfolio"></StockTable>
             </PageContainer>
         </div>
         
