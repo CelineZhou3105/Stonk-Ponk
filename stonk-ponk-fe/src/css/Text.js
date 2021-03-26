@@ -71,3 +71,43 @@ export const NavListItem = styled.li`
         height: 0;
     }
 `;
+
+/* Portfolio Page */
+export const SubText = styled.p`
+    color: ${ props => props.color ? props.color : '#7B7B7B' };
+    font-size: 14px;
+    display: ${props => props.inline ? 'inline ': 'block'};
+`;
+
+export const SubTitle = styled.p`
+    font-size: 20px;
+    margin: 1em auto;
+`;
+
+export const PortfolioValue = styled.p`
+    font-size: 48px;
+    margin-bottom: 0;
+    margin-top: 0.3em;
+`;
+
+export const PageTitle = styled.p`
+    font-size: 36px;
+`
+
+export const NormalText = styled.p`
+    font-size: 16px;
+    margin-bottom: 0;
+    margin-top: 0;
+`;
+
+export const ColorText = styled.span`
+    color: ${props=> props.color ? props.color : '#000000'};
+`;
+
+export const Link = styled.a`
+    color: #7B7B7B;
+
+    &:hover {
+        color: #44BCFF;
+    }
+`;

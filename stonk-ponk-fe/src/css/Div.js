@@ -162,3 +162,27 @@ export const MarketFilterContainer = createFlexRowDiv('flex-end', '30px');
 export const ChartContainer = createFlexRowDiv('space-evenly', '30px');
 export const StockDetailsContainer = createFlexColumnDiv('center', 'center', '100px');
 export const GraphAndPeriodDiv = createFlexColumnDiv("center", "center", "10px");
+
+/* Portfolio Page */
+export const Container = styled.div`
+    background: rgba(158, 34, 255, 0.02);
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: ${props => props.flex_direction? props.flex_direction : "row"};
+    flex: 1;
+    margin-bottom: 1em;
+    box-shadow: 4px 4px 4px rgba(108, 108, 108, 0.25);
+    padding: 0 1em;
+`;
+export const PortfolioValueContainer = createFlexColumnDiv('center', 'center', '0');
+
+export const PageContainer = styled.div` 
+    margin: 3em;
+`;
+
+export const SectionRowDiv = styled.div`
+    ${FlexRow}
+    gap: 1em;
+`;

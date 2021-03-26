@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import Navigation from './Navigation';
-import SummaryChart from './SummaryChart';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TableSortLabel, TextField } from '@material-ui/core';
 import Select from 'react-select'
 import { MarketFilterContainer } from '../css/Div';
-import { SearchBar } from '../css/Form';
 import { SearchButton } from '../css/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-// import { history } from '../helpers/history';
+import StockTable from './StockTable';
+import { TextField } from '@material-ui/core';
 
 // Headings for each table column
 const headings = [
@@ -16,154 +14,6 @@ const headings = [
     { id: 'performance', disablePadding: false, numeric: false, label: 'Performance' },
     { id: 'price', disablePadding: false, numeric: true, label: 'Current Price' },
 ];
-
-
-// Comparator to determine the order which items should be displayed
-function comparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-function getComparator(order, orderBy) {
-    return order === 'desc'
-        ? (a, b) => comparator(a, b, orderBy)
-        : (a, b) => -comparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = comparator(a[0], b[0]);
-        if (order !== 0) return order;
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map((el) => el[0]);
-}
-
-/** StockTableHead - Header row for the table */
-function StockTableHead(props) {
-    const { order, orderBy, onRequestSort } = props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
-
-    return (
-        <TableHead>
-            <TableRow>
-                {headings.map((cell) => {
-                    return (
-                        <TableCell
-                            key={cell.id}
-                            align={cell.numeric ? 'right' : 'left'}
-                            padding={cell.disablePadding ? 'none' : 'default'}
-                            sortDirection={orderBy === cell.id ? order : false}
-                        >
-                            {cell.id === "performance" ? (cell.label) : (
-                                <TableSortLabel
-                                    active={orderBy === cell.id}
-                                    direction={orderBy === cell.id ? order : 'asc'}
-                                    onClick={createSortHandler(cell.id)}
-                                >
-                                    {cell.label}
-                                </TableSortLabel>)
-                            }
-                        </TableCell>
-                    )
-                })}
-            </TableRow>
-        </TableHead>
-    )
-};
-
-function StockTable(props) {
-    const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('calories');
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    const { data } = props;
-
-    const handleSort = (event, property) => {
-        const ascending = (orderBy === property && order === 'asc');
-        setOrder(ascending ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
-
-    const changePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const changeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
-    return (
-        <div>
-            <TableContainer>
-                <Table
-                    size="medium"
-                    aria-label="Table of stocks in the market"
-                >
-                    <StockTableHead
-                        order={order}
-                        orderBy={orderBy}
-                        onRequestSort={handleSort}
-                        rowCount={data.length}
-                    >
-                    </StockTableHead>
-                    <TableBody>
-                        {stableSort(data, getComparator(order, orderBy))
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row, index) => {
-
-                                return (
-                                    <TableRow
-                                        hover
-                                        role="checkbox"
-                                        tabIndex={-1}
-                                        key={row.name}
-                                    >
-                                        <TableCell component="th" scope="row" padding="none">
-                                            {row.name}
-                                            <br />
-                                            <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <SummaryChart />
-                                        </TableCell>
-                                        <TableCell align="right">{row.price}</TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        {emptyRows > 0 && (
-                            <TableRow style={{ height: 53, emptyRows }}>
-                                <TableCell colSpan={6} />
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={data.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={changePage}
-                onChangeRowsPerPage={changeRowsPerPage}
-            />
-        </div>
-    )
-
-}
 
 // Filter for sectors
 const sectorOptions = [
@@ -294,7 +144,7 @@ function Market() {
                 <SearchButton aria-label="search for the stock in the search bar" onClick={onSearch}>Search</SearchButton>
             </MarketFilterContainer>
             <div className="stock-container">
-                <StockTable data={rows}></StockTable>
+                <StockTable data={rows} headings={headings} place="market"></StockTable>
             </div>
         </>
     )

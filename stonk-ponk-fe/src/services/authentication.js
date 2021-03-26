@@ -1,11 +1,4 @@
-// import { BehaviorSubject } from 'rxjs';
-
-import { handleResponse } from '../helpers/handle-response';
-
 import { LoginLink, LogoutLink, RegisterLink } from '../api-links/constants';
-
-// console.log("localStorage: " + localStorage.getItem('currentUser'));
-// const currentUserSubject = new BehaviorSubject('');
 
 async function login(event, email, password) {
     event.preventDefault();

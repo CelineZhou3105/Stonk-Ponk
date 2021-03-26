@@ -27,6 +27,8 @@ import StatisticsAndGraphs from './components/education/StatisticsAndGraphs';
 import PassiveVSActive from './components/education/PassiveVSActive';
 import StockDetails from './components/StockDetails';
 
+import Portfolio from './components/Portfolio';
+
 function App() {
   // Check whether the user is logged in
   return (
@@ -40,6 +42,9 @@ function App() {
           <Route exact path="/forgot-password" component={PasswordReset} />
           <Route exact path="/market" component={Market} />
           <Route exact path='/settings' component={Settings} />
+          <Route exact path='/portfolio' component={Portfolio} />
+
+          {/*Education pages*/}
           <Route exact path='/education' component={Education} />
           <Route exact path='/education/what-is-the-stock-market' component={WhatIsTheStockMarket} />
           <Route exact path='/education/interpreting-the-news-page' component={InterpretingTheNews} />

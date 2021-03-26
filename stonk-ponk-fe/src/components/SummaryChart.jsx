@@ -38,7 +38,7 @@ function SummaryChart() {
 
     return (
         <Chart
-            width={300}
+            width={250}
             height={100}
             chartType="LineChart" 
             loader={<div>Loading Chart</div>}

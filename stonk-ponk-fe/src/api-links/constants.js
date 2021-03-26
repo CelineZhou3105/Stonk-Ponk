@@ -17,3 +17,9 @@ export const ChangeFirstNameLink = "http://localhost:8000/api/account/change-fir
 export const ChangeLastNameLink = "http://localhost:8000/api/account/change-last-name";
 
 export const ChangeEmailLink = "http://localhost:8000/api/account/change-email";
+
+
+// Portfolio Information 
+export const RemoveStockLink = "http://localhost:8000/api/portfolio/remove-stock";
+export const AddStockLink = "http://localhost:8000/api/portfolio/add-stock";
+export const GetPortfolio = "http://localhost:8000/api/portfolio";
