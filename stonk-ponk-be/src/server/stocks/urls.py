@@ -6,4 +6,5 @@ from . import views
 
 urlpatterns = [
     path('markets', views.markets, name='markets')
+    
 ]
