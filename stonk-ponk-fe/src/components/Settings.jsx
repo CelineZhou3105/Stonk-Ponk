@@ -35,7 +35,6 @@ const Settings = () => {
         changeDetails.changePassword(pass);
     }
 
-
     return (
         <div>
             <Navigation />

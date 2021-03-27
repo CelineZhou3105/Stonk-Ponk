@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import Chart from "react-google-charts";
 
 /**
@@ -22,34 +22,34 @@ function SummaryChart() {
         [11, 35],
     ];
 
-    const series = React.useMemo(
-        () => ({
-          showPoints: false
-        }),
-        []
-    );
+    // const series = React.useMemo(
+    //     () => ({
+    //       showPoints: false
+    //     }),
+    //     []
+    // );
 
-    const axes = useMemo(
-        () => [
-            { primary: true, type: 'linear', position: 'bottom' },
-            { type: 'linear', position: 'left' }
-        ]
-    );
+    // const axes = useMemo(
+    //     () => [
+    //         { primary: true, type: 'linear', position: 'bottom' },
+    //         { type: 'linear', position: 'left' }
+    //     ]
+    // );
 
     return (
         <Chart
             width={250}
             height={100}
-            chartType="LineChart" 
+            chartType="LineChart"
             loader={<div>Loading Chart</div>}
-            data={data} 
+            data={data}
             options={{
                 hAxis: {
-                  gridlines: {color: 'white'}  
+                    gridlines: { color: 'white' }
                 },
                 vAxis: {
-                    gridlines: {color: 'white'}  
-                  },
+                    gridlines: { color: 'white' }
+                },
                 legend: {
                     position: 'none'
                 }

@@ -25,31 +25,31 @@ const tableHeadings = [
 
 
 const stocksDummyData = [
-    { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf', units_owned: 5, purchase_price: 60.000, last_purchased: 1612962000, original_contribution: 300.00},
-    { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf', units_owned: 5, purchase_price: 16.00, last_purchased: 1613912400, original_contribution: 80.00},
-    { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf', units_owned: 3, purchase_price: 300.00, last_purchased: 1613912400, original_contribution: 900.00},
-    { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock', units_owned: 5, purchase_price: 180.00, last_purchased: 1614344400, original_contribution: 900.00},
-    { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, sector: 'aus', type: 'stock', units_owned: 3, purchase_price: 300.00, last_purchased: 1614517200, original_contribution: 900.00},
-    { name: 'Santos Limited', ticker: 'STO', performance: 'graph', price: 499.00, sector: 'aus', type: 'stock', units_owned: 5, purchase_price: 180.00, last_purchased: 1614517200, original_contribution: 900.00},
+    { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf', units_owned: 5, purchase_price: 60.000, last_purchased: 1612962000, original_contribution: 300.00 },
+    { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf', units_owned: 5, purchase_price: 16.00, last_purchased: 1613912400, original_contribution: 80.00 },
+    { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf', units_owned: 3, purchase_price: 300.00, last_purchased: 1613912400, original_contribution: 900.00 },
+    { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock', units_owned: 5, purchase_price: 180.00, last_purchased: 1614344400, original_contribution: 900.00 },
+    { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, sector: 'aus', type: 'stock', units_owned: 3, purchase_price: 300.00, last_purchased: 1614517200, original_contribution: 900.00 },
+    { name: 'Santos Limited', ticker: 'STO', performance: 'graph', price: 499.00, sector: 'aus', type: 'stock', units_owned: 5, purchase_price: 180.00, last_purchased: 1614517200, original_contribution: 900.00 },
 ];
 
 const responseData = {
     stocks: stocksDummyData,
     contribution: 20800.20,
     best_performing: [
-        { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock', units_owned: 5, last_purchased: 1614344400, original_contribution: 900.00},
-        { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, sector: 'aus', type: 'stock', units_owned: 3, last_purchased: 1614517200, original_contribution: 900.00},
-        { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf', units_owned: 3, last_purchased: 1613912400, original_contribution: 900.00},
+        { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock', units_owned: 5, last_purchased: 1614344400, original_contribution: 900.00 },
+        { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, sector: 'aus', type: 'stock', units_owned: 3, last_purchased: 1614517200, original_contribution: 900.00 },
+        { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf', units_owned: 3, last_purchased: 1613912400, original_contribution: 900.00 },
     ],
     worst_performing: [
-        { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf', units_owned: 5, last_purchased: 1613912400, original_contribution: 80.00},
-        { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf', units_owned: 5, last_purchased: 1612962000, original_contribution: 300.00},
-        { name: 'Santos Limited', ticker: 'STO', performance: 'graph', price: 499.00, sector: 'aus', type: 'stock', units_owned: 5, last_purchased: 1614517200, original_contribution: 900.00},
+        { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf', units_owned: 5, last_purchased: 1613912400, original_contribution: 80.00 },
+        { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf', units_owned: 5, last_purchased: 1612962000, original_contribution: 300.00 },
+        { name: 'Santos Limited', ticker: 'STO', performance: 'graph', price: 499.00, sector: 'aus', type: 'stock', units_owned: 5, last_purchased: 1614517200, original_contribution: 900.00 },
     ]
 }
 
 const bestStockSummary = responseData.best_performing.map(stock => {
-    const diff = (((stock.price * stock.units_owned) - (stock.original_contribution))/(stock.original_contribution) * 100).toFixed(2);
+    const diff = (((stock.price * stock.units_owned) - (stock.original_contribution)) / (stock.original_contribution) * 100).toFixed(2);
 
     return (
         <FlexColumnLeftDiv key={stock.ticker}>
@@ -63,7 +63,7 @@ const bestStockSummary = responseData.best_performing.map(stock => {
 });
 
 const worstStockSummary = responseData.worst_performing.map(stock => {
-    const diff = (((stock.price * stock.units_owned) - (stock.original_contribution))/(stock.original_contribution) * 100).toFixed(2);
+    const diff = (((stock.price * stock.units_owned) - (stock.original_contribution)) / (stock.original_contribution) * 100).toFixed(2);
 
     return (
         <FlexColumnLeftDiv key={stock.ticker}>
@@ -82,7 +82,7 @@ function Portfolio() {
     // const data = getPortfolio(token);
 
     const [rows, setRows] = useState(stocksDummyData);
-    
+
 
     // Calculations for the value of the portfolio
     let stockData = [['Stock name', 'Portfolio value']];
@@ -99,7 +99,7 @@ function Portfolio() {
     let date = new Date(mostRecent * 1000).toDateString();
 
     let diff = (value - responseData.contribution).toFixed(2);
-    let percentageDiff = ((diff/responseData.contribution) * 100).toFixed(2);
+    let percentageDiff = ((diff / responseData.contribution) * 100).toFixed(2);
 
     return (
         <div>
@@ -125,37 +125,37 @@ function Portfolio() {
                         <SubText color="#000000">
                             {diff + ' '}
                             <ColorText color="#00AD30">
-                                ({diff > 0 ? ('+' + percentageDiff + '%') : (percentageDiff+ '%')})
+                                ({diff > 0 ? ('+' + percentageDiff + '%') : (percentageDiff + '%')})
                             </ColorText>
                         </SubText>
                         <SubText>
                             Contributions: ${responseData.contribution}
-                            <br/>
+                            <br />
                             Last Investment: {date}
                         </SubText>
                     </PortfolioValueContainer>
                 </Container>
                 <SectionRowDiv>
-                        <Container flex_direction="column">
-                            <SubTitle>
-                                Best Performing Stocks
+                    <Container flex_direction="column">
+                        <SubTitle>
+                            Best Performing Stocks
                             </SubTitle>
-                            {bestStockSummary}
-                        </Container>
-                        <Container flex_direction="column">
-                            <SubTitle>
-                                Worst Performing Stocks
+                        {bestStockSummary}
+                    </Container>
+                    <Container flex_direction="column">
+                        <SubTitle>
+                            Worst Performing Stocks
                             </SubTitle>
-                            {worstStockSummary}
-                        </Container>
-                        <Container flex_direction="column">
-                            <SubTitle>
-                                Suggestions:
+                        {worstStockSummary}
+                    </Container>
+                    <Container flex_direction="column">
+                        <SubTitle>
+                            Suggestions:
                             </SubTitle>
-                            <NormalText>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                        <NormalText>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
                             </NormalText>
-                        </Container>
+                    </Container>
                 </SectionRowDiv>
                 <FilterContainer>
                     <Filter setState={setRows} data={stocksDummyData}></Filter>
@@ -163,7 +163,7 @@ function Portfolio() {
                 <StockTable data={rows} headings={tableHeadings} place="portfolio"></StockTable>
             </PageContainer>
         </div>
-        
+
     )
 }
 

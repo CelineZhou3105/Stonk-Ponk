@@ -31,8 +31,7 @@ const SignUp = () => {
         if (passwordCheck(pass)) {
             authentication.register(firstName, lastName, emailAdd, pass, securityQ, securityA)
                 .then(() => {
-                    // successfulSignUp();
-                    console.log('success');
+                    successfulSignUp();
                 })
                 .catch((error) => {
                     Promise.resolve(error)
