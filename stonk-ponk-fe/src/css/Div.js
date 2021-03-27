@@ -180,9 +180,11 @@ export const Container = styled.div`
     display: flex;
     flex-direction: ${props => props.flex_direction? props.flex_direction : "row"};
     flex: 1;
+    margin-top: 1em;
     margin-bottom: 1em;
     box-shadow: 4px 4px 4px rgba(108, 108, 108, 0.25);
     padding: 0 1em;
+    gap: ${props => props.gap ? props.gap : 0};
 `;
 export const PortfolioValueContainer = createFlexColumnDiv('center', 'center', '0');
 
@@ -195,7 +197,7 @@ export const SectionRowDiv = styled.div`
     gap: 1em;
 `;
 
-export const EditPortfolioButtonContainer = styled.div` 
+export const RightAlignedButtonContainer = styled.div` 
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -222,3 +224,16 @@ export const ModalContent = styled.div`
     width: 50%;
     border-radius: 20px;
 `;
+
+export const NewsContainer = styled.div`
+    display:flex;
+    align-items: center;
+    gap: 1em;
+    border-bottom: 1px solid #7B7B7B;
+    padding: 20px;
+
+    & > img {
+        width: 150px;
+        height: fit-content;
+    }
+`

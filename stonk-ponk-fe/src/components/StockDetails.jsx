@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
-import { LoginButton, PeriodButton } from '../css/Button';
+import { CustomButton } from '../css/Button';
 import StockDetailsChart from './StockDetailsChart';
 import Navigation from './Navigation';
 import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
-import { ChartContainer, StockDetailsContainer, GraphAndPeriodDiv } from '../css/Div';
+import { ChartContainer, GraphAndPeriodDiv, PageContainer } from '../css/Div';
 
 import { useParams } from "react-router-dom";
+import { PageTitle } from '../css/Text';
 
 function StockDetails() {
 
@@ -52,8 +53,8 @@ function StockDetails() {
     return (
         <div>
             <Navigation />
-            <StockDetailsContainer>
-                <h1>{share.name} <span>({share.ticker})</span></h1>
+            <PageContainer>
+                <PageTitle>{share.name} <span>({share.ticker})</span></PageTitle>
                 <h1>${share.price}AUD</h1>
                 <p>Market: ASX (Australian Stocks Exchange)</p>
                 <TableContainer>
@@ -87,14 +88,13 @@ function StockDetails() {
                             <Tab label="Year" />
                         </Tabs>
                     </GraphAndPeriodDiv>
-                    <LoginButton>What if I buy now?</LoginButton>
-                    <LoginButton>What if I sell now?</LoginButton>
+                    <CustomButton>What if I buy now?</CustomButton>
+                    <CustomButton>What if I sell now?</CustomButton>
                 </ChartContainer>
                 <div>
                     <h1>News feed for {share.name}</h1>
                 </div>
-            </StockDetailsContainer>
-
+            </PageContainer>
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Particles from 'react-particles-js';
 
 import logo from '../images/logo.png';
@@ -14,8 +14,6 @@ import { LinkText } from '../css/Text';
 import { authentication } from '../services/authentication';
 
 import { Redirect } from 'react-router-dom';
-
-
 
 function Login() {
     const history = useHistory();
@@ -64,7 +62,6 @@ function Login() {
                 </LogoContainer>
                 <GenericForm onSubmit={(e) => authentication.login(e, email, pass).then(
                     user => {
-                        console.log("dfgdfg");
 			            history.push('/home');
                     },
                     error => {

@@ -103,7 +103,7 @@ export const ColorText = styled.span`
 `;
 
 export const Link = styled.a`
-    color: #7B7B7B;
+    color: ${props => props.color ? props.color : '#7B7B7B'};
 
     &:hover {
         color: #44BCFF;

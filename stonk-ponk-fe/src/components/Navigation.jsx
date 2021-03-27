@@ -34,11 +34,11 @@ function Navigation() {
                     <CompanyName>Stonk Ponk</CompanyName>
                 </LogoContainer>
                 <NavList>
-                    <NavListItem><NavLink to="/home">Summary</NavLink></NavListItem>
                     <NavListItem><NavLink to="/education">Education</NavLink></NavListItem>
                     <NavListItem><NavLink to="/portfolio">Portfolio</NavLink></NavListItem>
                     <NavListItem><NavLink to="/market">Market</NavLink></NavListItem>
                     <NavListItem><NavLink to="/watchlist">Watchlist</NavLink></NavListItem>
+                    <NavListItem><NavLink to="/news">News</NavLink></NavListItem>
                 </NavList>
                 <ProfilePhotoContainer>
                     <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" onClick={() => setProfileModalOpen(!profileModalOpen)} />

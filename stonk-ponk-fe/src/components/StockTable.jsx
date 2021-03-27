@@ -17,8 +17,8 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import SummaryChart from './SummaryChart';
 import { NormalText } from '../css/Text';
-import { EditPortfolioButtonContainer } from '../css/Div';
-import { CancelButton, GenericButton, SaveButton } from '../css/Button';
+import { RightAlignedButtonContainer } from '../css/Div';
+import { CustomButton } from '../css/Button';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
@@ -229,17 +229,17 @@ function StockTable(props) {
     return (
         <div>
             {place === 'portfolio' &&
-                <EditPortfolioButtonContainer>
+                <RightAlignedButtonContainer>
                     {!editMode &&
-                        <GenericButton onClick={() => setEditMode(true)}><EditIcon/>&nbsp;Edit Portfolio</GenericButton>
+                        <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon/>&nbsp;Edit Portfolio</CustomButton>
                     }
                     {editMode &&
                         <>
-                            <SaveButton onClick={() => saveChanges()}>Save</SaveButton>
-                            <CancelButton onClick={() => cancelChanges()}>Cancel</CancelButton>
+                            <CustomButton id="save-button" backgroundColor="#00AD30" hoverColor="#2de361" onClick={() => saveChanges()}>Save</CustomButton>
+                            <CustomButton id="cancel-button" backgroundColor="#e80000" hoverColor="#ff5757" onClick={() => cancelChanges()}>Cancel</CustomButton>
                         </>
                     }
-                </EditPortfolioButtonContainer>
+                </RightAlignedButtonContainer>
             }
             <TableToolbar numSelected={selected.length} handleDelete={handleDelete}></TableToolbar>
             <TableContainer>
@@ -329,9 +329,9 @@ function StockTable(props) {
                 </Table>
             </TableContainer>
             {editMode &&
-                <GenericButton onClick={() => setCreateModalOpen(true)}>
+                <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setCreateModalOpen(true)}>
                     <AddCircleIcon />&nbsp;Add New Stock
-                </GenericButton>
+                </CustomButton>
             }
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}

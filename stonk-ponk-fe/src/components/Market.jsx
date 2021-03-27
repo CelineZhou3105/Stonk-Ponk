@@ -33,7 +33,6 @@ function Market() {
 
     // Component will rerender upon filtering the rows
     const [rows, setRows] = useState(data);
-    console.log(rows);
 
     return (
         <>
@@ -53,3 +52,5 @@ function Market() {
 }
 
 export default Market;
+
+
