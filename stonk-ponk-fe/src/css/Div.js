@@ -201,3 +201,24 @@ export const EditPortfolioButtonContainer = styled.div`
     align-items: center;
     gap: 1em;
 `;
+
+/* Create Modal */
+export const ModalContainer = styled.div` 
+    position: fixed;
+    z-index: 1; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4);
+`
+
+export const ModalContent = styled.div` 
+    background-color: #e7e7e7;
+    margin: auto;
+    padding: 20px;
+    width: 50%;
+    border-radius: 20px;
+`;

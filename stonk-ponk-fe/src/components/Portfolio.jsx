@@ -3,14 +3,13 @@ import Navigation from './Navigation';
 
 // import { getPortfolio } from '../services/portfolio';
 
-import { FilterContainer, FlexColumnLeftDiv, EditPortfolioButtonContainer, PageContainer, Container, PortfolioValueContainer, SectionRowDiv } from '../css/Div';
+import { FilterContainer, FlexColumnLeftDiv, PageContainer, Container, PortfolioValueContainer, SectionRowDiv } from '../css/Div';
 import { Link, SubText, SubTitle, NormalText, PageTitle, PortfolioValue, ColorText } from '../css/Text';
 
 import Chart from "react-google-charts";
 
 import StockTable from './StockTable';
 import Filter from './Filter';
-import { CancelButton, GenericButton, SaveButton } from '../css/Button';
 
 // Headings for each table column
 const tableHeadings = [
@@ -22,8 +21,6 @@ const tableHeadings = [
     { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price' },
     { id: 'value', disablePadding: false, numeric: true, label: 'Total Value' },
 ];
-
-
 
 const stocksDummyData = [
     { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf', units_owned: 5, purchase_price: 60.000, last_purchased: 1612962000, original_contribution: 300.00},
@@ -161,17 +158,6 @@ function Portfolio() {
                 <FilterContainer>
                     <Filter setState={setRows} data={stocksDummyData}></Filter>
                 </FilterContainer>
-                {/* <EditPortfolioButtonContainer>
-                    {!editMode &&
-                        <GenericButton onClick={() => setEditMode(true)}>Edit Portfolio</GenericButton>
-                    }
-                    {editMode &&
-                        <>
-                            <SaveButton onClick={() => saveChanges(setEditMode)}>Save</SaveButton>
-                            <CancelButton onClick={() => cancelChanges(setEditMode)}>Cancel</CancelButton>
-                        </>
-                    }
-                </EditPortfolioButtonContainer> */}
                 <StockTable data={rows} headings={tableHeadings} place="portfolio" setRows={setRows}></StockTable>
             </PageContainer>
         </div>

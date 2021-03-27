@@ -1,8 +1,6 @@
 import React from 'react';
 import Navigation from './Navigation';
 
-import { authentication } from '../services/authentication';
-
 function Summary() {
 
     // const user = authentication.currentUserValue;

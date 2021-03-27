@@ -24,6 +24,6 @@ Facilitated retrospective and submitted corresponding report.
 
 Week 6
 Portfolio Page - filtering, pie graph for portfolio makeup, value calculations.
-Refactoring Filter component and StockTable components into their own files.
+Refactoring Filter component, Search components, and StockTable components into their own files.
 
 

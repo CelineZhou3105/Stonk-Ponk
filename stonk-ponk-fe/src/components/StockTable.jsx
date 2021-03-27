@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import { 
     Table, 
     TableBody, 
@@ -10,10 +11,21 @@ import {
     TableSortLabel, 
 } from '@material-ui/core';
 import Input from "@material-ui/core/Input";
+import Checkbox from '@material-ui/core/Checkbox';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import SummaryChart from './SummaryChart';
 import { NormalText } from '../css/Text';
 import { EditPortfolioButtonContainer } from '../css/Div';
 import { CancelButton, GenericButton, SaveButton } from '../css/Button';
+import { lighten, makeStyles } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import EditIcon from '@material-ui/icons/Edit';
+import CreateModal from './CreateModal';
+
 
 /**
  * StockTableHead - The header column of the table
@@ -24,7 +36,7 @@ import { CancelButton, GenericButton, SaveButton } from '../css/Button';
  * @param {Array} headings - an array of strings for headings of each column in the table 
  */
 function StockTableHead(props) {
-    const { order, orderBy, onRequestSort, headings } = props;
+    const { order, orderBy, onRequestSort, headings, numSelected, rowCount, onSelectAllClick, editMode } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -32,6 +44,17 @@ function StockTableHead(props) {
     return (
         <TableHead>
             <TableRow>
+                {editMode &&
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={rowCount > 0 && numSelected === rowCount}
+                            onChange={onSelectAllClick}
+                            inputProps={{ 'aria-label': 'select all desserts' }}
+                        />
+                    </TableCell>
+                }
+                
                 {headings.map((cell) => {
                     return (
                         <TableCell
@@ -58,6 +81,42 @@ function StockTableHead(props) {
 };
 
 /**
+ * TableToolbar - header that appears in when the user is in edit mode and has selected items 
+ * @param {number} numSelected - number of items selected in the table
+ * @param {function} handleDelete - the function to handle deleting the selected items 
+ */
+const TableToolbar = (props) => {
+    const classes = useToolbarStyles();
+    const { numSelected, handleDelete } = props;
+  
+    return (
+      <Toolbar
+        className={clsx(classes.root, {
+            [classes.highlight]: numSelected > 0,
+        })}
+      >
+        {numSelected > 0 ? (
+          <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+            Your Stocks
+          </Typography>
+        )}
+  
+        {numSelected > 0 &&
+            <Tooltip title="Delete">
+                <IconButton onClick={handleDelete} aria-label="filter list">
+                    <DeleteIcon />
+                </IconButton>
+          </Tooltip>
+        }
+      </Toolbar>
+    );
+  };
+
+/**
  * StockTable - the body of the table which displays the data
  * @param {} data - the list of data you want to display on the table
  * @param {Array} headings - the list of headings you want to display on the header of the table
@@ -72,15 +131,17 @@ function StockTable(props) {
 
     const { data, headings, place, setRows } = props;
 
+    console.log(data);
+
     const [previousRows, setPreviousRows] = useState(data);
 
-    const handleSort = (event, property) => {
+    const handleSort = (property) => {
         const ascending = (orderBy === property && order === 'asc');
         setOrder(ascending ? 'desc' : 'asc');
         setOrderBy(property);
     };
 
-    const changePage = (event, newPage) => {
+    const changePage = (newPage) => {
         setPage(newPage);
     };
 
@@ -90,6 +151,8 @@ function StockTable(props) {
     };
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+
+    const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const onChange = (e, changedRow, changedColumn) => {
         console.log(Date.parse(e.target.value));
@@ -110,6 +173,7 @@ function StockTable(props) {
         setEditMode(false);
         console.log("Changes saved.");
         setPreviousRows(data);
+        setSelected([]);
     }
     
     function cancelChanges() {
@@ -117,21 +181,67 @@ function StockTable(props) {
         setEditMode(false);
         console.log("Changes cancelled.");
         setRows(previousRows);
+        setSelected([]);
     }
+
+    const [selected, setSelected] = useState([]);
+    const handleSelectAllClick = (event) => {
+        if (event.target.checked) {
+          const newSelecteds = data.map((n) => n.ticker);
+          setSelected(newSelecteds);
+          return;
+        }
+        setSelected([]);
+    };
+    
+    const handleClick = (event, ticker) => {
+        const selectedIndex = selected.indexOf(ticker);
+        let newSelected = [];
+    
+        if (selectedIndex === -1) {
+          newSelected = newSelected.concat(selected, ticker);
+        } else if (selectedIndex === 0) {
+          newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+          newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+          newSelected = newSelected.concat(
+            selected.slice(0, selectedIndex),
+            selected.slice(selectedIndex + 1),
+          );
+        }
+    
+        setSelected(newSelected);
+    };
+
+    const handleDelete = () => {
+        const newRows = data.filter(row => {
+            if(selected.indexOf(row.ticker) === -1) {
+                return true;
+            }
+            return false;
+        })
+        setRows(newRows);
+    }
+
+    const [createModalOpen, setCreateModalOpen] = useState(false);
 
     return (
         <div>
-            <EditPortfolioButtonContainer>
-                {!editMode &&
-                    <GenericButton onClick={() => setEditMode(true)}>Edit Portfolio</GenericButton>
-                }
-                {editMode &&
-                    <>
-                        <SaveButton onClick={() => saveChanges()}>Save</SaveButton>
-                        <CancelButton onClick={() => cancelChanges()}>Cancel</CancelButton>
-                    </>
-                }
-            </EditPortfolioButtonContainer>
+            {place === 'portfolio' &&
+                <EditPortfolioButtonContainer>
+                    {!editMode &&
+                        <GenericButton onClick={() => setEditMode(true)}><EditIcon/>&nbsp;Edit Portfolio</GenericButton>
+                    }
+                    {editMode &&
+                        <>
+                            <SaveButton onClick={() => saveChanges()}>Save</SaveButton>
+                            <CancelButton onClick={() => cancelChanges()}>Cancel</CancelButton>
+                        </>
+                    }
+                </EditPortfolioButtonContainer>
+            }
+            <TableToolbar numSelected={selected.length} handleDelete={handleDelete}></TableToolbar>
             <TableContainer>
                 <Table
                     size="medium"
@@ -142,13 +252,17 @@ function StockTable(props) {
                         orderBy={orderBy}
                         onRequestSort={handleSort}
                         rowCount={data.length}
+                        numSelected={selected.length}
                         headings={headings}
+                        editMode={editMode}
+                        onSelectAllClick={handleSelectAllClick}
                     >
                     </StockTableHead>
                     <TableBody>
                         {stableSort(data, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => {
+                                const isItemSelected = isSelected(row.ticker);
                                 return (
                                     place === "portfolio" ?
                                         <TableRow
@@ -156,7 +270,15 @@ function StockTable(props) {
                                             role="checkbox"
                                             tabIndex={-1}
                                             key={row.name}
+                                            onClick={(event) => handleClick(event, row.ticker)}
                                         >
+                                            {editMode &&
+                                                <TableCell padding="checkbox">
+                                                    <Checkbox
+                                                        checked={isItemSelected}
+                                                    />
+                                                </TableCell>
+                                            }
                                             <TableCell component="th" scope="row" padding="none">
                                                 <NormalText>{row.name}</NormalText>
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
@@ -206,6 +328,11 @@ function StockTable(props) {
                     </TableBody>
                 </Table>
             </TableContainer>
+            {editMode &&
+                <GenericButton onClick={() => setCreateModalOpen(true)}>
+                    <AddCircleIcon />&nbsp;Add New Stock
+                </GenericButton>
+            }
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
@@ -215,6 +342,9 @@ function StockTable(props) {
                 onChangePage={changePage}
                 onChangeRowsPerPage={changeRowsPerPage}
             />
+            {createModalOpen &&
+                <CreateModal setVisibility={setCreateModalOpen} setRows={setRows}/>
+            }
         </div>
     )
 }
@@ -262,11 +392,12 @@ function stableSort(array, comparator) {
 }
 
 /**
- * 
- * @param {} param0 
+ * CustomTableCell - a cell which renders an input that the user can modify.
+ * @param {object} row - Row in the data provided which has changed
+ * @param {string} column - The column key which has changed
  */
 const CustomTableCell = (props) => {
-    const {row, column, onBlur, onChange} = props;
+    const {row, column, onChange} = props;
     const value = (column === 'last_purchased') ? formatDate(row[column]) : row[column];
     const type = (column === 'last_purchased') ? 'date' : 'number';
 
@@ -281,23 +412,6 @@ const CustomTableCell = (props) => {
       </TableCell>
     );
 };
-
-
-
-//   const onRevert = id => {
-//     const newRows = rows.map(row => {
-//       if (row.id === id) {
-//         return previous[id] ? previous[id] : row;
-//       }
-//       return row;
-//     });
-//     setRows(newRows);
-//     setPrevious(state => {
-//       delete state[id];
-//       return state;
-//     });
-//     onToggleEditMode(id);
-//   };
 
 export default StockTable;
 
@@ -320,3 +434,25 @@ function formatDate(date) {
     return [year, month, day].join('-');
 }
 
+
+const useToolbarStyles = makeStyles((theme) => ({
+    root: {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(1),
+      display: 'flex',
+      alignItems: 'center',
+    },
+    highlight:
+      theme.palette.type === 'light'
+        ? {
+            color: theme.palette.secondary.main,
+            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+          }
+        : {
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.secondary.dark,
+          },
+    title: {
+      flex: '1 1 100%',
+    },
+  }));

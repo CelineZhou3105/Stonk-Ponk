@@ -74,8 +74,9 @@ export const GenericButton = styled.button`
     ${ButtonStyle}
     font-size: 18px;
     padding: 15px;
-    width: 15%;
     margin-top: 20px;
+    display: flex;
+    align-items: center;
 `;
 
 export const SaveButton = styled.button`
@@ -112,3 +113,32 @@ export const CancelButton = styled.button`
         background-color: #ff5757;
     }
 `;
+
+export const DeleteButton = styled.button`
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    background-color: #e80000;
+    color: white;
+    font-size: 18px;
+    padding: 15px;
+    width: 15%;
+    transition: background-color 0.5s;
+
+    &:hover {
+        background-color: #ff5757;
+    }
+`;
+
+export const CloseButton = styled.span`
+    color: #727272;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+
+    &:hover, &:focus {
+        color: #D8315E;
+        text-decoration: none;
+        cursor: pointer;
+    }
+`

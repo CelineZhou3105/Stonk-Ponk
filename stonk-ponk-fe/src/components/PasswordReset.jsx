@@ -184,7 +184,7 @@ function PasswordReset() {
                                 <h1 id="password-reset-title">Reset your password</h1>
                                 <Label htmlFor="email">Enter your email below</Label>
                                 <TextField id="email" type="email" onChange={(e) => setEmail(e.target.value)} required/>
-                                <InputUnderlineDiv passwordReset className="underline"></InputUnderlineDiv>
+                                <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
                                 <GenericSubmitButton type="submit" value="Next" aria-label="Button to submit your email"/>
                             </GenericForm>
                         </FormContainer>
@@ -196,7 +196,7 @@ function PasswordReset() {
                                 <div>{securityQuestion}</div>
                                 <Label htmlFor="security-question-answer">Enter your answer below</Label>
                                 <TextField type="text" id="security-question-answer" required onChange={(e) => {setAnswer(e.target.value)}} />
-                                <InputUnderlineDiv className="underline"></InputUnderlineDiv>
+                                <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
                                 <GenericSubmitButton type="submit" id="security-question-submit" value="Submit" aria-label="Button to submit your email" />
                             </GenericForm>
                         </FormContainer>
@@ -207,10 +207,10 @@ function PasswordReset() {
                                 <h1>Create your new password below:</h1>
                                 <Label htmlFor="new-password">New Password</Label>
                                 <TextField type="password" id="new-password" required onChange={(e) => {setPass(e.target.value)}} />
-                                <InputUnderlineDiv className="underline"></InputUnderlineDiv>
+                                <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
                                 <Label htmlFor="new-password-confirm">Confirm Password</Label>
                                 <TextField type="password" id="new-password-confirm" required onChange={(e) => {setPassConfirm(e.target.value)}} />
-                                <InputUnderlineDiv className="underline"></InputUnderlineDiv>
+                                <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
                                 <GenericSubmitButton type="submit" value="Submit" aria-label="Button to submit your new password"></GenericSubmitButton>
                             </GenericForm>
                         </FormContainer>

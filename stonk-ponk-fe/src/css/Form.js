@@ -99,6 +99,8 @@ export const InputUnderlineDiv = styled.div`
     transform: scale(0, 1);
     -webkit-transition: all 0.4s linear;
     transition: all 0.4s linear;
-    width: ${props => props.passwordReset ? "100%" : "40%"};
+    width: ${props => props.width ? props.width : "40%"};
     position: relative;
 `;
+
+export const ModalLabel = createLabel("100%", "10px", "10px");
