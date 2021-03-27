@@ -23,4 +23,4 @@ export const ChangeEmailLink = "http://localhost:8000/api/account/change-email";
 export const EditPortfolio = "http://localhost:8000/api/portfolio/add-stock";
 export const GetPortfolio = "http://localhost:8000/api/portfolio";
 // Stock API calls
-export const MarketsLink = "http://localhost:8000/stock/markets";
+export const MarketsLink = "http://localhost:8000/api/stock/markets";
