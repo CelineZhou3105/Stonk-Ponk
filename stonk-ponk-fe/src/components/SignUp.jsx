@@ -29,9 +29,18 @@ const SignUp = () => {
         event.preventDefault();
         console.log("User submitted Sign Up Form!!!");
         if (passwordCheck(pass)) {
-            if (authentication.register(firstName, lastName, emailAdd, pass, securityQ, securityA)) {
-                successfulSignUp();
-            }
+            authentication.register(firstName, lastName, emailAdd, pass, securityQ, securityA)
+                .then(() => {
+                    // successfulSignUp();
+                    console.log('success');
+                })
+                .catch((error) => {
+                    Promise.resolve(error)
+                        .then((e) => {
+                            console.log(e);
+                            alert(`${e.status} ${e.statusText}`);
+                        });
+                })
         }
     };
 
