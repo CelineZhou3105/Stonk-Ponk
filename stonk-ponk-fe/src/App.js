@@ -29,6 +29,8 @@ import StockDetails from './components/StockDetails';
 
 import Portfolio from './components/Portfolio';
 
+import News from './components/News';
+
 function App() {
   // Check whether the user is logged in
   return (
@@ -43,6 +45,8 @@ function App() {
           <Route exact path="/market" component={Market} />
           <Route exact path='/settings' component={Settings} />
           <Route exact path='/portfolio' component={Portfolio} />
+
+          <Route exact path='/news' component={News} />
 
           {/*Education pages*/}
           <Route exact path='/education' component={Education} />

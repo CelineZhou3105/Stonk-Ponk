@@ -17,12 +17,10 @@ const tableHeadings = [
     { id: 'performance', disablePadding: false, numeric: false, label: 'Performance' },
     { id: 'date', disablePadding: true, numeric: true, label: 'Purchase Date' },
     { id: 'purchase_price', disablePadding: false, numeric: true, label: 'Purchase Price' },
-    { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price' },
     { id: 'units', disablePadding: false, numeric: false, label: 'Units Owned' },
+    { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price' },
     { id: 'value', disablePadding: false, numeric: true, label: 'Total Value' },
 ];
-
-
 
 const stocksDummyData = [
     { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf', units_owned: 5, purchase_price: 60.000, last_purchased: 1612962000, original_contribution: 300.00},
@@ -160,7 +158,7 @@ function Portfolio() {
                 <FilterContainer>
                     <Filter setState={setRows} data={stocksDummyData}></Filter>
                 </FilterContainer>
-                <StockTable data={rows} headings={tableHeadings} place="portfolio"></StockTable>
+                <StockTable data={rows} headings={tableHeadings} place="portfolio" setRows={setRows}></StockTable>
             </PageContainer>
         </div>
         

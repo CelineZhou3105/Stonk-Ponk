@@ -3,30 +3,25 @@ import styled, { css } from 'styled-components';
 export const ButtonStyle = css`
     cursor: pointer;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #9e22ff;
     color: white;
+    font-size: 16px;
+    transition: background-color 500ms;
     &:hover {
         background-color: #b55cfa;
     }
 `;
 
-export const LoginButton = styled.button`
-    ${ButtonStyle}
-    font-size: 18pt;
-    padding: 15px;
-    width: 15%;
-    margin-top: 20px;
-`;
-
+/* EditButton - for editing profile on the Settings Page */
 export const EditButton = styled.button`
     ${ButtonStyle}
-    font-size: 12pt;
     padding: 15px;
     margin: 5px;
 `;
 
-export const EducationBox = styled.button`
+/* Education Tile - for each button on the education page */
+export const EducationTile = styled.button`
     ${ButtonStyle}
     width: 250px;
     height: 250px;
@@ -37,34 +32,43 @@ export const EducationBox = styled.button`
     align-items: center;
 `;
 
-export const BackButton = styled.button`
-    ${ButtonStyle}
-    width: 5%;
-    height: 50%;
-    font-size: 13pt;
-    background-color: #d6d6d6;
-    &:hover {
-        background-color: #c2c2c2;
-    }
-`;
-
-export const PeriodButton = styled.button`
-    cursor: pointer;
-    border: none;
-    border-bottom: 1px solid #ccc;
-    background-color: Transparent;
-    color: black;
-    &:hover {
-        background-color: #b55cfa;
-    }
-    &:select {
-        color: #9e22ff;
-    }
-`;
-
+/* SearchButton - used to trigger the search functionality */
 export const SearchButton = styled.button`
     ${ButtonStyle}
+    font-size: 12px;
     width: 5%;
     height: 35px;
     margin: 5px;
+`;
+
+/* CloseButton - used on modals for closing the modal */
+export const CloseButton = styled.span`
+    color: #727272;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+
+    &:hover, &:focus {
+        color: #D8315E;
+        text-decoration: none;
+        cursor: pointer;
+    }
+`
+/* GenericButton - used on most pages, colours and hover colours customisable */
+export const CustomButton = styled.button`
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: ${props => props.backgroundColor ? props.backgroundColor : '#9e22ff'};
+    color: ${props => props.color ? props.color: 'white'};
+    padding: 15px;
+    transition: background-color 0.5s;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        background-color: ${props => props.hoverColor ? props.hoverColor : '#b55cfa'};
+    }
 `;

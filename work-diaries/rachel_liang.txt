@@ -24,6 +24,9 @@ Facilitated retrospective and submitted corresponding report.
 
 Week 6
 Portfolio Page - filtering, pie graph for portfolio makeup, value calculations.
-Refactoring Filter component and StockTable components into their own files.
+Refactoring Filter component, Search components, and StockTable components into their own files.
+Market wide News Page
+Hooking up the FE to the BE for Market Data and Portfolio Data
+UI Consistency improvements for titles, buttons, divs
 
 

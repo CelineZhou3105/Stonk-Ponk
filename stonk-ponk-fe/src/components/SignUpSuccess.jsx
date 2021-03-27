@@ -1,8 +1,8 @@
 import React from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import HeaderBar from './HeaderBar';
 import { FlexColumnCenterDiv, LineDivider } from '../css/Div';
-import { LoginButton } from '../css/Button';
+import { CustomButton } from '../css/Button';
 
 const SignUpSuccess = () => {
 
@@ -19,7 +19,7 @@ const SignUpSuccess = () => {
             <FlexColumnCenterDiv>
                 <h1>Sign Up Successful!</h1>
                 <LineDivider />
-                <LoginButton onClick={navigateToLogin}>Log In</LoginButton>
+                <CustomButton onClick={navigateToLogin}>Log In</CustomButton>
             </FlexColumnCenterDiv>
         </div>
     );

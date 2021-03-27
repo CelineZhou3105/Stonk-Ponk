@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { TextField, SettingsLabel } from '../css/Form';
-import { FlexRowLeftDiv, FlexColumnLeftDiv, LongLineDivider } from '../css/Div';
+import { FlexRowLeftDiv, FlexColumnLeftDiv, LongLineDivider, PageContainer } from '../css/Div';
 import Navigation from './Navigation';
 import { EditButton } from '../css/Button';
 import { ProfilePhoto } from '../css/Image';
 import profile from '../images/blobfish.png';
 import { changeDetails } from '../services/changeDetails';
+import { PageTitle } from '../css/Text';
 
 const Settings = () => {
 
@@ -39,8 +40,8 @@ const Settings = () => {
     return (
         <div>
             <Navigation />
-            <main>
-                <h1>Account Settings</h1>
+            <PageContainer>
+                <PageTitle>Account Settings</PageTitle>
                 <FlexRowLeftDiv>
                     <ProfilePhoto src={profile} alt="Your profile picture" />
                     <FlexColumnLeftDiv>
@@ -74,7 +75,7 @@ const Settings = () => {
                         <p>Depending on the composition of your portfolio and earnings, we will give you suggestions on your next investment move.</p>
                     </FlexColumnLeftDiv>
                 </FlexRowLeftDiv>
-            </main>
+            </PageContainer>
         </div>
     );
 };
