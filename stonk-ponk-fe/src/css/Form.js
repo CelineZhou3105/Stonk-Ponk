@@ -10,6 +10,9 @@ export const SignUpForm = styled.form`
     ${FlexCenter}
     flex-direction: column;
     margin-bottom: 5%;
+    width: 70%;
+    margin: 0 auto;
+    gap: 1em;
 `;
 
 function createLabel(width, marginBottom, marginTop) {
@@ -21,7 +24,7 @@ function createLabel(width, marginBottom, marginTop) {
     `;
 }
 
-export const Label = createLabel("100%", "5%", "10%");
+export const Label = createLabel("100%", "0", "5%");
 
 export const SettingsLabel = createLabel("100%", "20%", "20%");
 
@@ -61,14 +64,12 @@ export const SignUpBtn = styled.input`
     ${FlexCenter}
 `;
 
-/* Login */
-export const LoginTextField = createTextField("40%");
-export const LoginLabel = createLabel("40%", "20px", "20px");
-
 /* Generic elements */
 export const GenericForm = styled.form`
     ${FlexCenter}
     flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
 `;
 
 export const GenericSubmitButton = styled.input`
@@ -99,7 +100,7 @@ export const InputUnderlineDiv = styled.div`
     transform: scale(0, 1);
     -webkit-transition: all 0.4s linear;
     transition: all 0.4s linear;
-    width: ${props => props.width ? props.width : "40%"};
+    width: 100%;
     position: relative;
 `;
 

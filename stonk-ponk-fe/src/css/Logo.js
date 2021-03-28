@@ -9,7 +9,8 @@ export const HeaderLogo = styled.img`
 
 export const DefaultLogo = styled.img`
     height: auto;
-    width: ${props => props.navigation ? "120px" : "25%"};
+    width: ${props => props.width ? props.width : "120px"};
+    padding: ${props => props.padding ? props.padding: "0px"};
     margin-right: ${props => props.navigation ? "30px" : "0"};
     border-radius: 50%;
 `;

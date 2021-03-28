@@ -17,5 +17,5 @@ source virtual/bin/activate
 
 cd src/server
 
-mongod &
+#mongod &
 python3 manage.py runserver 

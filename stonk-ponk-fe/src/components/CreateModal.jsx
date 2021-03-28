@@ -66,20 +66,20 @@ function CreateModal(props) {
                         onChange={(e, value) => { setSelectedStock(value)}}
                         renderInput={(params) => <AutocompleteTextField {...params} label="Search..." variant="outlined" />}
                     />
-                    <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
+                    <InputUnderlineDiv width="100%" className="underline"/>
 
                     <ModalLabel htmlFor="purchase-data">Purchase Date</ModalLabel>
                     <TextField id="purchase-data" type="date" defaultValue={purchaseDate} required onChange={(e) => { setPurchaseDate(e.target.value) }} />
-                    <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
+                    <InputUnderlineDiv width="100%" className="underline"/>
 
 
                     <ModalLabel htmlFor="purchase-price">Purchase Price</ModalLabel>
                     <TextField id="purchase-price" type="text" defaultValue={purchasePrice} required onChange={(e) => { setPurchasePrice(e.target.value) }} />
-                    <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
+                    <InputUnderlineDiv width="100%" className="underline"/>
 
                     <ModalLabel htmlFor="units-owned">Units Owned</ModalLabel>
                     <TextField id="units-owned" type="number" min={1} defaultValue={unitsOwned} required onChange={(e) => { setUnitsOwned(e.target.value) }} />
-                    <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
+                    <InputUnderlineDiv width="100%" className="underline"/>
 
                     <GenericSubmitButton type="submit" value="Add Stock" aria-label="Button to login" />
                 </GenericForm>

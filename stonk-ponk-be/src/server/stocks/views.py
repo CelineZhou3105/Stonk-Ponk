@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import json
 
-import stock_api
+from . import stock_api
 
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
@@ -13,12 +13,12 @@ import jwt.exceptions
 # Create your views here.
 
 # Markets will return data on day most active stocks
-@require_http_methods(["POST"])
+@require_http_methods(["POST", "GET"])
 def markets(request):
-    body = json.loads(request.body.decode('utf-8'))
+    # body = json.loads(request.body.decode('utf-8'))
     
     responseData = stock_api.get_most_active()
-    return JsonResponse(responseData)
+    return HttpResponse(responseData)
 
 
 @require_http_methods(["POST"])

@@ -116,6 +116,7 @@ def forgot_password(request):
 
         r_new_password = body["new_password"]
         user.set_password(r_new_password)
+        user.save()
     except KeyError:
         if r_email == None:
             return HttpResponseBadRequest()
@@ -131,3 +132,16 @@ def forgot_password(request):
     except Exception:
         return HttpResponseBadRequest()
     return HttpResponse()
+
+@require_http_methods(["POST"])
+def logout(request):
+    '''
+    take the token
+    match the token with the account
+    disable the token
+    '''
+    body = json.loads(request.body.decode("utf-8"))
+    payload = jwt_decode_handler(body["token"])
+    user = User.objects.get(id=payload["user_id"])
+
+

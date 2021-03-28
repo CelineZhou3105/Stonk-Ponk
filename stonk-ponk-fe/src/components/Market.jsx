@@ -7,6 +7,7 @@ import Search from './Search';
 import StockTable from './StockTable';
 
 import Filter from './Filter';
+import { market } from '../services/market';
 
 // Headings for each table column
 const headings = [
@@ -31,8 +32,17 @@ function Market() {
         { name: 'Bendigo and Adelaide Bank Limited', ticker: 'BEN', performance: 'graph', price: 443.0, sector: 'us', type: 'derivative' },
     ];
 
+    const [marketData, setMarketData] = useState('');
+
+    market.getMarketData().then(response => {
+        setMarketData(response);
+    }).catch(error => {
+        console.log(error);
+    });
+
     // Component will rerender upon filtering the rows
     const [rows, setRows] = useState(data);
+    console.log(marketData);
 
     return (
         <>

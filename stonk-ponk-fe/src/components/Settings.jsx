@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, SettingsLabel } from '../css/Form';
-import { FlexRowLeftDiv, FlexColumnLeftDiv, LongLineDivider, PageContainer } from '../css/Div';
+import { FlexRowLeftDiv, FlexColumnLeftDiv, PageContainer, LineDivider } from '../css/Div';
 import Navigation from './Navigation';
 import { EditButton } from '../css/Button';
 import { ProfilePhoto } from '../css/Image';
@@ -67,7 +67,7 @@ const Settings = () => {
                         <EditButton aria-label="Change Password Button" onClick={ChangePassword}>Change Password</EditButton>
                     </FlexColumnLeftDiv>
                 </FlexRowLeftDiv>
-                <LongLineDivider />
+                <LineDivider />
                 <FlexRowLeftDiv>
                     <label class="switch">
                         <input type="checkbox" />
