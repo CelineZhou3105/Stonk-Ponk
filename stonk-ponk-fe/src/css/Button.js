@@ -59,6 +59,7 @@ export const CustomButton = styled.button`
     cursor: pointer;
     border: none;
     border-radius: 5px;
+    font-size: 16px;
     background-color: ${props => props.backgroundColor ? props.backgroundColor : '#9e22ff'};
     color: ${props => props.color ? props.color: 'white'};
     padding: 15px;
@@ -67,6 +68,7 @@ export const CustomButton = styled.button`
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: ${props => props.margin ? props.margin : ''};
 
     &:hover {
         background-color: ${props => props.hoverColor ? props.hoverColor : '#b55cfa'};

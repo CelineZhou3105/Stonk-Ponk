@@ -7,13 +7,14 @@ import logo from '../images/logo.png';
 import { useHistory } from 'react-router-dom';
 
 import { LinkContainer, LoginFormContainer, LoginPageContainer, LogoContainer, ParticleContainer } from '../css/Div';
-import { GenericForm, GenericSubmitButton, InputUnderlineDiv, LoginLabel, LoginTextField } from '../css/Form';
+import { GenericForm, InputUnderlineDiv, Label, TextField } from '../css/Form';
 import { DefaultLogo } from '../css/Logo';
-import { LinkText } from '../css/Text';
+import { CompanyName, LinkText } from '../css/Text';
 
 import { authentication } from '../services/authentication';
 
 import { Redirect } from 'react-router-dom';
+import { CustomButton } from '../css/Button';
 
 function Login() {
     const history = useHistory();
@@ -22,12 +23,9 @@ function Login() {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
-    //const currentUser = authentication.currentUserValue;
-    //console.log("hello" + currentUser);
     if (localStorage.getItem("token")) {
-        console.log("tried to redirect to summary page...");
-        history.push('/home');
-        <Redirect to={{ pathname: '/home' }} />
+        history.push('/market');
+        <Redirect to={{ pathname: '/market' }} />
     }
 
     return (
@@ -61,25 +59,26 @@ function Login() {
                     <DefaultLogo src={logo} alt="Stonk Ponk Logo" />
                 </LogoContainer>
                 <GenericForm onSubmit={(e) => authentication.login(e, email, pass).then(
-                    user => {
-			            history.push('/home');
+                    response => {
+                        localStorage.setItem('token', response.token);
+			            history.push('/market');
                     },
-                    error => {
+                    response => {
                         alert("Error, couldn't login");
                     }
                 )}>
-                    <h1>Stonk Ponk</h1>
-                    <LoginLabel htmlFor="username">Username</LoginLabel>
-                    <LoginTextField id="username" type="text" required onChange={(e) => { setEmail(e.target.value) }} />
+                    <CompanyName>Stonk Ponk</CompanyName>
+                    <Label htmlFor="username">Username</Label>
+                    <TextField id="username" type="text" required onChange={(e) => { setEmail(e.target.value) }} />
                     <InputUnderlineDiv className="underline"></InputUnderlineDiv>
 
-                    <LoginLabel htmlFor="password">Password</LoginLabel>
-                    <LoginTextField id="password" type="password" required onChange={(e) => { setPass(e.target.value) }} />
+                    <Label htmlFor="password">Password</Label>
+                    <TextField id="password" type="password" required onChange={(e) => { setPass(e.target.value) }} />
                     <InputUnderlineDiv className="underline"></InputUnderlineDiv>
                     <LinkContainer right id="forgot-password">
                         <LinkText href="/forgot-password"> Forgot your password?</LinkText>
                     </LinkContainer>
-                    <GenericSubmitButton type="submit" value="Login" aria-label="Button to login"></GenericSubmitButton>
+                    <CustomButton margin="30px 0" type="submit" value="Login" aria-label="Button to login">Login</CustomButton>
                     <LinkContainer>Don't have an account?&nbsp; <LinkText href="/sign-up"> Sign up now!</LinkText></LinkContainer>
                 </GenericForm>
             </LoginFormContainer>

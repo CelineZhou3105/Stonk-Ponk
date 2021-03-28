@@ -15,10 +15,10 @@ import jwt.exceptions
 # Markets will return data on day most active stocks
 @require_http_methods(["POST", "GET"])
 def markets(request):
-    body = json.loads(request.body.decode('utf-8'))
+    # body = json.loads(request.body.decode('utf-8'))
     
     responseData = stock_api.get_most_active()
-    return JsonResponse(responseData)
+    return HttpResponse(responseData)
 
 
 @require_http_methods(["POST"])
