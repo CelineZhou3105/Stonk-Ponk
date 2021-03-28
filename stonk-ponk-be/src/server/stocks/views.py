@@ -13,7 +13,7 @@ import jwt.exceptions
 # Create your views here.
 
 # Markets will return data on day most active stocks
-@require_http_methods(["POST"])
+@require_http_methods(["POST", "GET"])
 def markets(request):
     body = json.loads(request.body.decode('utf-8'))
     
