@@ -1,3 +1,26 @@
-This Week I :
+week 1:
+collaborated with rest of backend team to determine tech stack.
+determined rough outline of project proposal
 
-collaborated with rest of backend team to determine tech stack. 
+week2:
+worked with sampath to setup a local mongoDB instance.
+fixed python dependencies and managed to hook up a python script to a runner mongo local server instance
+
+week3:
+started adding database functionality, we switched to sqlite3 so I began working on porting over username/password rego to
+the new server. 
+paired more with sampath to achieve this
+
+week4:
+finished rewriting the database to sqlite to work better with the Django framework so we could support JWT 
+paired more with the front end team (rachel and celine) to connect backend to front end so we were all on the same page. 
+
+week 5:
+had demo week, worked hard with team to make sure we had a demoable object; Realised some team short comings in communication,
+had a retro to rectify this. set out more goals for next sprint and what to have finished by the next demo.
+Started building the portfolio schema 
+
+week6:
+quiet week. 
+
+

@@ -9,10 +9,7 @@ import {
 
 import { history } from './helpers/history';
 
-import { PrivateRoute } from './components/PrivateRoute';
-
 import Login from './components/Login';
-import Summary from './components/Summary';
 import Signup from './components/SignUp';
 import SignupSuccess from './components/SignUpSuccess';
 import PasswordReset from './components/PasswordReset';
@@ -30,6 +27,7 @@ import StockDetails from './components/StockDetails';
 import Portfolio from './components/Portfolio';
 
 import News from './components/News';
+import { PrivateRoute } from './components/PrivateRoute';
 
 function App() {
   // Check whether the user is logged in
@@ -38,25 +36,25 @@ function App() {
       <div className="App">
         <Switch>
           <Route exact path="/" component={Login} />
-          <PrivateRoute path="/home" component={Summary} />
           <Route exact path="/sign-up" component={Signup} />
           <Route exact path="/sign-up-success" component={SignupSuccess} />
           <Route exact path="/forgot-password" component={PasswordReset} />
-          <Route exact path="/market" component={Market} />
-          <Route exact path='/settings' component={Settings} />
-          <Route exact path='/portfolio' component={Portfolio} />
 
-          <Route exact path='/news' component={News} />
+          <PrivateRoute exact path="/market" component={Market} />
+          <PrivateRoute path='/stocks/:id' component={StockDetails} />
+
+          <PrivateRoute exact path='/settings' component={Settings} />
+          <PrivateRoute exact path='/portfolio' component={Portfolio} />
+          <PrivateRoute exact path='/news' component={News} />
 
           {/*Education pages*/}
-          <Route exact path='/education' component={Education} />
-          <Route exact path='/education/what-is-the-stock-market' component={WhatIsTheStockMarket} />
-          <Route exact path='/education/interpreting-the-news-page' component={InterpretingTheNews} />
-          <Route exact path='/education/why-invest' component={WhyInvest} />
-          <Route exact path='/education/financial-instruments-101' component={FinancialInstruments} />
-          <Route exact path='/education/statistics-and-graphs-101' component={StatisticsAndGraphs} />
-          <Route exact path='/education/passive-vs-active-investing' component={PassiveVSActive} />
-          <Route path='/stocks/:id' component={StockDetails} />
+          <PrivateRoute exact path='/education' component={Education} />
+          <PrivateRoute exact path='/education/what-is-the-stock-market' component={WhatIsTheStockMarket} />
+          <PrivateRoute exact path='/education/interpreting-the-news-page' component={InterpretingTheNews} />
+          <PrivateRoute exact path='/education/why-invest' component={WhyInvest} />
+          <PrivateRoute exact path='/education/financial-instruments-101' component={FinancialInstruments} />
+          <PrivateRoute exact path='/education/statistics-and-graphs-101' component={StatisticsAndGraphs} />
+          <PrivateRoute exact path='/education/passive-vs-active-investing' component={PassiveVSActive} />
         </Switch>
       </div>
     </Router>
