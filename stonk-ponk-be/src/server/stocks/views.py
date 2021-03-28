@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import json
 
-import stock_api
+from . import stock_api
 
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
