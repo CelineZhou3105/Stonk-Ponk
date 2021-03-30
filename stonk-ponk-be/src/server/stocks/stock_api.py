@@ -119,3 +119,15 @@ def get_stock_prices(ticker, interval_type):
         
 
     return price_list
+
+def get_historical_price(ticker, date):
+    start_date = date.strftime("%d/%m/%Y")
+    end_date = date.strftime("%d/%m/%Y")
+    price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = "1d")
+
+    price_dict = {}
+    for index, row in price_data.iterrows():
+        price_dict['low'] = row['low']
+        price_dict['high'] = row['high']
+
+    return price_dict
