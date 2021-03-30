@@ -24,21 +24,24 @@ def markets(request):
 
 
 @require_http_methods(["POST", "GET"])
-def stock_data(request, ticker):
+def stock_data(request):
     try:
-        responseData = get_stock_data(ticker)
+        body = json.loads(request.body.decode('utf-8'))
+        responseData = get_stock_data(body['ticker'])
         
-        return JsonResponse(responseData)
+        return HttpResponse(responseData)
     
     except:
         return HttpResponseBadRequest("Stock Not Found")
 
 @require_http_methods(["POST", "GET"])
-def stock_prices(request, ticker, interval_type):
+def stock_prices(request):
     try:
-        responseData = get_stock_prices(ticker, interval_type)
+        body = json.loads(request.body.decode('utf-8'))
+
+        responseData = get_stock_prices(body['ticker'], body['interval_type'])
         
-        return JsonResponse(responseData)
+        return HttpResponse(responseData)
     
     except:
         return HttpResponseBadRequest("Stock Not Found")
