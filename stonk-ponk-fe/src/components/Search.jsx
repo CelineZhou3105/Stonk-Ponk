@@ -14,42 +14,10 @@ function Search(props) {
 
     // TODO - Remove the hardcoding and add an API call.
     const onSearch = () => {
-        switch (searchItem.name) {
-            case "Wesfarmers":
-                setResults([options[0]]);
-                break;
-            case "Atlassian":
-                setResults([options[1]]);
-                console.log("the new results", [options[1]])
-                break;
-            case "Alphabet Inc Class C":
-                setResults([options[2]]);
-                break;
-            case "Kogan.com Ltd":
-                setResults([options[3]]);
-                break;
-            case "BHP Group":
-                setResults([options[4]]);
-                break;
-            case "Santos Limited":
-                setResults([options[5]]);
-                break;
-            case "Australia and New Zealand Banking Group Limited":
-                setResults([options[6]]);
-                break;
-            case "Westpac Banking Corporation":
-                setResults([options[7]]);
-                break;
-            case "Airtasker Limited":
-                setResults([options[8]]);
-                break;
-            case "Bendigo and Adelaide Bank Limited":
-                setResults([options[9]]);
-                break;
-            default:
-                setResults([]);
-                break;
-        }
+        const index = options.findIndex([searchItem]);
+        console.log(searchItem);
+        console.log(index);
+        // setResults(options[index]);
     };
 
     return(

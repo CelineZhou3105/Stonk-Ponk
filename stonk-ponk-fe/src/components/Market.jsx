@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from './Navigation';
 import { FilterContainer, PageContainer } from '../css/Div';
 import { PageTitle } from '../css/Text';
@@ -16,10 +16,19 @@ const headings = [
     { id: 'price', disablePadding: false, numeric: true, label: 'Current Price' },
 ];
 
+const marketdata = market.getMarketData(0).then(response => {
+    console.log(response);
+    return response;
+}).catch(error => {
+    console.log(error);
+});
+
+console.log(marketdata);
+
 function Market() {
 
     // TODO - Remove dummy data to populate table
-    const data = [
+    const hello = [
         { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf' },
         { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf' },
         { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf' },
@@ -32,17 +41,18 @@ function Market() {
         { name: 'Bendigo and Adelaide Bank Limited', ticker: 'BEN', performance: 'graph', price: 443.0, sector: 'us', type: 'derivative' },
     ];
 
-    const [marketData, setMarketData] = useState('');
-
-    market.getMarketData().then(response => {
-        setMarketData(response);
-    }).catch(error => {
-        console.log(error);
-    });
-
     // Component will rerender upon filtering the rows
-    const [rows, setRows] = useState(data);
-    console.log(marketData);
+    const [marketData, setMarketData] = useState([]);
+    const [rows, setRows] = useState([]);
+    useEffect(() => {
+        market.getMarketData(0).then(response => {
+            console.log(response);
+            setRows(response);
+            setMarketData(response);
+        }).catch(error => {
+            console.log(error);
+        });
+    }, []);
 
     return (
         <>
@@ -50,8 +60,8 @@ function Market() {
             <PageContainer>
                 <PageTitle>Market</PageTitle>
                 <FilterContainer>
-                    <Filter setState={setRows} data={data}></Filter>
-                    <Search setResults={setRows} options={data} ></Search>
+                    <Filter setState={setRows} data={marketData}></Filter>
+                    <Search setResults={setRows} options={marketData} ></Search>
                 </FilterContainer>
                 <div className="stock-container">
                     <StockTable data={rows} headings={headings} place="market"></StockTable>
