@@ -31,3 +31,13 @@ def stock_data(request, ticker):
     
     except:
         return HttpResponseBadRequest("Stock Not Found")
+
+@require_http_methods(["POST", "GET"])
+def stock_prices(request, ticker, interval_type):
+    try:
+        responseData = get_stock_prices(ticker, interval_type)
+        
+        return JsonResponse(responseData)
+    
+    except:
+        return HttpResponseBadRequest("Stock Not Found")
