@@ -13,11 +13,13 @@ import jwt.exceptions
 # Create your views here.
 
 # Markets will return data on day most active stocks
+# function takes in page number indexed from 0
 @require_http_methods(["POST", "GET"])
-def markets(request):
+def markets(request, page_num):
     # body = json.loads(request.body.decode('utf-8'))
     
-    responseData = stock_api.get_most_active()
+    responseData = stock_api.get_most_active(page_num)
+    
     return HttpResponse(responseData)
 
 
