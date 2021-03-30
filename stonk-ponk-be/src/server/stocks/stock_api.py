@@ -27,7 +27,7 @@ def get_market_data(type, page_num):
     market_stocks_list = []
 
     market_stock_dict = {}
-    for index, row in market_stocks.head().iterrows():
+    for index, row in market_stocks.iterrows():
         market_stock_dict = {}
         market_stock_dict['ticker'] = row['Symbol']
         market_stock_dict['name'] = row['Name']
