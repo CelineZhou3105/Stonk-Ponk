@@ -46,12 +46,14 @@ def get_market_data(type, page_num):
 def get_stock_data(ticker):
     try:
         quotes = si.get_quote_data(ticker)
+        print(json.dumps(quotes))
         
         stock_dict = {}
         stock_dict['ticker'] = ticker
         stock_dict['price'] = get_price(ticker)
         stock_dict['name'] = quotes['shortName']
         stock_dict['bid'] = quotes['bid']
+        print('Quotes bid ', quotes['bid'])
         stock_dict['ask'] = quotes['ask']
         stock_dict['open'] = quotes['regularMarketOpen']
         stock_dict['high'] = quotes['regularMarketDayHigh']
@@ -67,7 +69,7 @@ def get_stock_data(ticker):
 
         stock_dict['1_week_prices'] = get_stock_prices(ticker, 'd')
         
-        return json.dumps(quotes)
+        return json.dumps(stock_dict)
     except:
         return "Stock Not Found"
 

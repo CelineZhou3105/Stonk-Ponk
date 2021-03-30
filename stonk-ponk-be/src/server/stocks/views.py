@@ -15,21 +15,19 @@ import jwt.exceptions
 # Markets will return data on day most active stocks
 # function takes in page number indexed from 0
 @require_http_methods(["POST", "GET"])
-def markets(request, page_num):
+def markets(request, type, page_num):
     # body = json.loads(request.body.decode('utf-8'))
-    
     responseData = stock_api.get_most_active(page_num)
     
     return HttpResponse(responseData)
 
 
-@require_http_methods(["POST"])
-def stock_price(request):
+@require_http_methods(["POST", "GET"])
+def stock_data(request, ticker):
     try:
-        body = json.loads(request.body.decode('utf-8'))
-        stock_ticker = body["stockName"]
-        stock_price = stock_api.get_stock_price(stock_ticker)
-        responseData = stock_price.to_json()
+        responseData = get_stock_data(ticker)
+        
         return JsonResponse(responseData)
+    
     except:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("Stock Not Found")
