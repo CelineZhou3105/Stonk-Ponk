@@ -10,45 +10,66 @@ def get_market_status():
     print(market_status)
     return market_status
 
-def get_top(page_num):
-    gainers = si.get_day_gainers()
-
-    #top 10
-    gainers = gainers.head(10)
-    
-    return gainers.to_json()
-
-def get_bottom(page_num):
-    losers = si.get_day_losers()
-
-    #bottom 10
-    losers = losers.head(10)
-    
-    return losers.to_json()
-
-def get_most_active(page_num):
-    actives = si.get_day_most_active()
+# types: losers, gainers, most_active
+def get_market_data(type, page_num):
+    if type == "losers":
+        market_stocks = si.get_day_losers()
+    elif type == "gainers":
+        market_stocks = si.get_day_gainers()
+    elif type == "most_active":
+        market_stocks = si.get_day_most_active()
+    else:
+        return "unknown type" + str(type)
 
     start_index = int(page_num) * 10
     end_index = start_index + 10
-    actives = actives.iloc[start_index:end_index]
-    actives_list = []
+    market_stocks = market_stocks.iloc[start_index:end_index]
+    market_stocks_list = []
 
-    active_dict = {}
-    for index, row in actives.head().iterrows():
-        active_dict = {}
-        active_dict['ticker'] = row['Symbol']
-        active_dict['name'] = row['Name']
-        active_dict['price'] = row['Price (Intraday)']
-        active_dict['change_perc'] = row['% Change']
+    market_stock_dict = {}
+    for index, row in market_stocks.head().iterrows():
+        market_stock_dict = {}
+        market_stock_dict['ticker'] = row['Symbol']
+        market_stock_dict['name'] = row['Name']
+        market_stock_dict['price'] = row['Price (Intraday)']
+        market_stock_dict['change_perc'] = row['% Change']
 
-        prices = get_prices(active_dict['ticker'], 'd')
-        prices = get_prices(active_dict['ticker'], 'y')
-        active_dict['prev_week_prices'] = prices
+        prices = get_stock_prices(market_stock_dict['ticker'], 'd')
+        market_stock_dict['prev_week_prices'] = prices
 
-        actives_list.append(active_dict)
+        market_stocks_list.append(market_stock_dict)
     
-    return json.dumps(actives_list)
+    return json.dumps(market_stocks_list)
+
+#gets data for individual stocks
+#returns: stock name, price, bid, ask, high, low, open, close, change in price, market
+def get_stock_data(ticker):
+    try:
+        quotes = si.get_quote_data(ticker)
+        
+        stock_dict = {}
+        stock_dict['ticker'] = ticker
+        stock_dict['price'] = get_price(ticker)
+        stock_dict['name'] = quotes['shortName']
+        stock_dict['bid'] = quotes['bid']
+        stock_dict['ask'] = quotes['ask']
+        stock_dict['open'] = quotes['regularMarketOpen']
+        stock_dict['high'] = quotes['regularMarketDayHigh']
+        stock_dict['close'] = quotes['regularMarketPreviousClose']
+        stock_dict['change'] = quotes['regularMarketChange']
+        stock_dict['change_perc'] = quotes['regularMarketChangePercent']
+
+        stock_dict['market'] = quotes['market']
+        stock_dict['exchange'] = quotes['fullExchangeName']
+
+        stock_dict['52_day_range'] = quotes['fiftyTwoWeekRange']
+        stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
+
+        stock_dict['1_week_prices'] = get_stock_prices(ticker, 'd')
+        
+        return json.dumps(quotes)
+    except:
+        return "Stock Not Found"
 
 def get_price(ticker):
     try:
@@ -69,7 +90,7 @@ def get_quotes(ticker):
         return "Stock Not Found"
 
 #interval will be d, wk, mo, or y
-def get_prices(ticker, interval_type):
+def get_stock_prices(ticker, interval_type):
     price_list = []
     
     interval_string = str(1) + interval_type
