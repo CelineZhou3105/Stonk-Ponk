@@ -2,34 +2,74 @@ import pandas as pd
 import requests
 import yahoo_fin.stock_info as si
 import json
+from datetime import date, datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 def get_market_status():
     market_status = si.get_market_status()
     print(market_status)
     return market_status
 
-def get_top_ten():
-    gainers = si.get_day_gainers()
+# types: losers, gainers, most_active
+def get_market_data(type, page_num):
+    if type == "losers":
+        market_stocks = si.get_day_losers()
+    elif type == "gainers":
+        market_stocks = si.get_day_gainers()
+    elif type == "most_active":
+        market_stocks = si.get_day_most_active()
+    else:
+        return "unknown type" + str(type)
 
-    #top 10
-    gainers = gainers.head(10)
+    start_index = int(page_num) * 10
+    end_index = start_index + 10
+    market_stocks = market_stocks.iloc[start_index:end_index]
+    market_stocks_list = []
+
+    market_stock_dict = {}
+    for index, row in market_stocks.iterrows():
+        market_stock_dict = {}
+        market_stock_dict['ticker'] = row['Symbol']
+        market_stock_dict['name'] = row['Name']
+        market_stock_dict['price'] = row['Price (Intraday)']
+        market_stock_dict['change_perc'] = row['% Change']
+
+        prices = get_stock_prices(market_stock_dict['ticker'], 'd')
+        market_stock_dict['prev_week_prices'] = prices
+
+        market_stocks_list.append(market_stock_dict)
     
-    return gainers.to_json()
+    return json.dumps(market_stocks_list)
 
-def get_bot_ten():
-    losers = si.get_day_losers()
+#gets data for individual stocks
+#returns: stock name, price, bid, ask, high, low, open, close, change in price, market
+def get_stock_data(ticker):
+    try:
+        quotes = si.get_quote_data(ticker)
+        
+        stock_dict = {}
+        stock_dict['ticker'] = ticker
+        stock_dict['price'] = get_price(ticker)
+        stock_dict['name'] = quotes['shortName']
+        stock_dict['bid'] = quotes['bid']
+        stock_dict['ask'] = quotes['ask']
+        stock_dict['open'] = quotes['regularMarketOpen']
+        stock_dict['high'] = quotes['regularMarketDayHigh']
+        stock_dict['close'] = quotes['regularMarketPreviousClose']
+        stock_dict['change'] = quotes['regularMarketChange']
+        stock_dict['change_perc'] = quotes['regularMarketChangePercent']
 
-    #bottom 10
-    losers = losers.head(10)
-    
-    return losers.to_json()
+        stock_dict['market'] = quotes['market']
+        stock_dict['exchange'] = quotes['fullExchangeName']
 
-def get_most_active():
-    actives = si.get_day_most_active()
+        stock_dict['52_day_range'] = quotes['fiftyTwoWeekRange']
+        stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
 
-    actives = actives.head(10)
-    
-    return actives.to_json()
+        stock_dict['1_week_prices'] = get_stock_prices(ticker, 'd')
+        
+        return json.dumps(stock_dict)
+    except:
+        return "Stock Not Found"
 
 def get_price(ticker):
     try:
@@ -48,3 +88,34 @@ def get_quotes(ticker):
         return si.get_quote_table(ticker)
     except:
         return "Stock Not Found"
+
+#interval will be d, wk, mo, or y
+def get_stock_prices(ticker, interval_type):
+    price_list = []
+    
+    interval_string = str(1) + interval_type
+    end_date = date.today()
+
+    if interval_type == 'd':  
+        start_date = end_date - timedelta(days = 14)
+    
+    elif interval_type == 'wk':
+        start_date = end_date - timedelta(weeks = 10)
+
+    elif interval_type == 'mo':
+        start_date = end_date - timedelta(months = 10)
+
+    elif interval_type == "y":
+        start_date = end_date - relativedelta(months = 10*12)
+        interval_string = str(1) + "mo"
+
+    end_date = date.today().strftime("%d/%m/%Y")
+    start_date = start_date.strftime("%d/%m/%Y")
+
+    price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = interval_string)
+
+    for index, row in price_data.iterrows():
+        price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
+        
+
+    return price_list

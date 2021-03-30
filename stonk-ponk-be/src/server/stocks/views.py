@@ -13,21 +13,31 @@ import jwt.exceptions
 # Create your views here.
 
 # Markets will return data on day most active stocks
+# function takes in page number indexed from 0
 @require_http_methods(["POST", "GET"])
-def markets(request):
+def markets(request, type, page_num):
     # body = json.loads(request.body.decode('utf-8'))
+    responseData = stock_api.get_most_active(page_num)
     
-    responseData = stock_api.get_most_active()
     return HttpResponse(responseData)
 
 
-@require_http_methods(["POST"])
-def stock_price(request):
+@require_http_methods(["POST", "GET"])
+def stock_data(request, ticker):
     try:
-        body = json.loads(request.body.decode('utf-8'))
-        stock_ticker = body["stockName"]
-        stock_price = stock_api.get_stock_price(stock_ticker)
-        responseData = stock_price.to_json()
+        responseData = get_stock_data(ticker)
+        
         return JsonResponse(responseData)
+    
     except:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("Stock Not Found")
+
+@require_http_methods(["POST", "GET"])
+def stock_prices(request, ticker, interval_type):
+    try:
+        responseData = get_stock_prices(ticker, interval_type)
+        
+        return JsonResponse(responseData)
+    
+    except:
+        return HttpResponseBadRequest("Stock Not Found")
