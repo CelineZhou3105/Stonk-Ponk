@@ -1,9 +1,9 @@
 import { MarketsLink } from '../api-links/constants';
 
-export async function getMarketData(page_num) {
+export async function getMarketData(type, page_num) {
     // TODO - Add page_num to the variables
     const requestBody = {
-        type: 'most_active',
+        type: type,
         page_num: page_num,
     }
 

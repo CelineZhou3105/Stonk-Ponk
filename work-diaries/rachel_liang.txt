@@ -29,4 +29,9 @@ Market wide News Page
 Hooking up the FE to the BE for Market Data and Portfolio Data
 UI Consistency improvements for titles, buttons, divs
 
+Week 7
+Market page - hooking the FE to the BE for most active stocks, gainers and losers
+Graph designs
+
+
 

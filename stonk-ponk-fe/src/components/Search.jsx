@@ -14,10 +14,12 @@ function Search(props) {
 
     // TODO - Remove the hardcoding and add an API call.
     const onSearch = () => {
-        const index = options.findIndex([searchItem]);
-        console.log(searchItem);
-        console.log(index);
-        // setResults(options[index]);
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].ticker === searchItem.ticker) {
+                setResults([options[i]]);
+                break;
+            }
+        }
     };
 
     return(
@@ -30,8 +32,6 @@ function Search(props) {
                 onChange={(e, value) => {
                     console.log("changing value to ", value);
                     setSearchItem(value)
-                    // console.log(searchItem);
-                    // onSearch();
                 }}
                 renderInput={(params) => <TextField {...params} label="Search..." variant="outlined" />}
             />
