@@ -97,7 +97,7 @@ def get_stock_prices(ticker, interval_type):
     end_date = date.today()
 
     if interval_type == 'd':  
-        start_date = end_date - timedelta(days = 14)
+        start_date = end_date - timedelta(days = 100)
     
     elif interval_type == 'wk':
         start_date = end_date - timedelta(weeks = 10)
@@ -119,3 +119,15 @@ def get_stock_prices(ticker, interval_type):
         
 
     return price_list
+
+def get_historical_price(ticker, date):
+    start_date = date.strftime("%d/%m/%Y")
+    end_date = date.strftime("%d/%m/%Y")
+    price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = "1d")
+
+    price_dict = {}
+    for index, row in price_data.iterrows():
+        price_dict['low'] = row['low']
+        price_dict['high'] = row['high']
+
+    return price_dict
