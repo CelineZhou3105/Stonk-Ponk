@@ -134,7 +134,7 @@ def forgot_password(request):
     return HttpResponse()
 
 @require_http_methods(["POST"])
-def logout(request):
+def update_account(request):
     '''
     take the token
     match the token with the account
