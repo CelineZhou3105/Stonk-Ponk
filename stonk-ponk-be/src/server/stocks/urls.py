@@ -6,4 +6,5 @@ from . import views
 
 urlpatterns = [
     path('markets', views.markets, name='markets')
+    path('stock_detail', view.stock_data, name='stock_detail')
 ]
