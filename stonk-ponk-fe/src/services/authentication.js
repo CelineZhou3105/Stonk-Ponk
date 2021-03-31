@@ -13,16 +13,16 @@ async function login(event, email, password) {
             password: password
         }),
     };
-    await fetch(LoginLink, requestOptions)
+    return await fetch(LoginLink, requestOptions)
         .then(response => {
             if (response.status === 200) {
                 console.log("Successful login.");
-                response.json().then(res => {
-                    localStorage.setItem('token', res.token);
+                return response.json().then(res => {
+                    // localStorage.setItem('token', res.token);
                     return Promise.resolve(res);
                 })
             } else {
-                return Promise.reject(response);
+                return Promise.reject(response.json());
             }
         });
 }

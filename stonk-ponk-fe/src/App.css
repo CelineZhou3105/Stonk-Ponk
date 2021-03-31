@@ -102,3 +102,13 @@ input:checked + .slider:before {
   -ms-transform: translateX(26px);
   transform: translateX(26px);
 }
+
+#particles-js {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: -100;
+  background-color: #401363;
+  top: 0;
+  left: 0;
+}

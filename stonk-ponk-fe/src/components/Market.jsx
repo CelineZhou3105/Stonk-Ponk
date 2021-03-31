@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from './Navigation';
-import { FilterContainer, PageContainer } from '../css/Div';
-import { PageTitle } from '../css/Text';
+import { Container, FilterContainer, SectionRowDiv, PageContainer } from '../css/Div';
+import { ColorText, NormalText, PageTitle, SubText, SubTitle } from '../css/Text';
 import Search from './Search';
 
 import StockTable from './StockTable';
 
 import Filter from './Filter';
+import { market } from '../services/market';
 
 // Headings for each table column
 const headings = [
@@ -16,23 +17,45 @@ const headings = [
 ];
 
 function Market() {
-
-    // TODO - Remove dummy data to populate table
-    const data = [
-        { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf' },
-        { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf' },
-        { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf' },
-        { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock' },
-        { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, sector: 'aus', type: 'stock' },
-        { name: 'Santos Limited', ticker: 'STO', performance: 'graph', price: 499.00, sector: 'us', type: 'stock' },
-        { name: 'Australia and New Zealand Banking Group Limited', ticker: 'ANZ', performance: 'graph', price: 80.42, sector: 'us', type: 'derivative' },
-        { name: 'Westpac Banking Corporation', ticker: 'WBC', performance: 'graph', price: 320.00, sector: 'us', type: 'derivative' },
-        { name: 'Airtasker Limited', ticker: 'ART', performance: 'graph', price: 20.53, sector: 'us', type: 'derivative' },
-        { name: 'Bendigo and Adelaide Bank Limited', ticker: 'BEN', performance: 'graph', price: 443.0, sector: 'us', type: 'derivative' },
-    ];
-
     // Component will rerender upon filtering the rows
-    const [rows, setRows] = useState(data);
+    const [marketData, setMarketData] = useState([]);
+    const [rows, setRows] = useState([]);
+    const [page, setPage] = useState(0);
+    const [pageDirection, setPageDirection] = useState('right');
+    const [losers, setLosers] = useState([]);
+    const [gainers, setGainers] = useState([]);
+
+    useEffect(() => {
+        console.log("Page direction: ", pageDirection);
+        if (pageDirection === 'right') {
+            console.log("I am getting page: ", page);
+            market.getMarketData('most_active', page).then(response => {
+                console.log(response);
+                setRows(rows => rows.concat(response));
+                setMarketData(response);
+            }).catch(error => {
+                console.log(error);
+            });
+        } 
+    }, [page, pageDirection]);
+
+    useEffect(() => {
+        market.getMarketData('losers', 0).then(response => {
+            console.log("Losers: ", response);
+            setLosers(response);
+        }).catch(error => {
+            console.log(error);
+        });
+    }, []);
+
+    useEffect(() => {
+        market.getMarketData('gainers', 0).then(response => {
+            console.log("Gainers: ", response);
+            setGainers(response);
+        }).catch(error => {
+            console.log(error);
+        });
+    }, []);
 
     return (
         <>
@@ -40,12 +63,36 @@ function Market() {
             <PageContainer>
                 <PageTitle>Market</PageTitle>
                 <FilterContainer>
-                    <Filter setState={setRows} data={data}></Filter>
-                    <Search setResults={setRows} options={data} ></Search>
+                    <Filter setState={setRows} data={marketData}></Filter>
+                    <Search setResults={setRows} options={marketData} ></Search>
                 </FilterContainer>
                 <div className="stock-container">
-                    <StockTable data={rows} headings={headings} place="market"></StockTable>
+                    <StockTable data={rows} headings={headings} place="market" page={page} setPage={setPage} pageDirection={pageDirection} setPageDirection={setPageDirection}></StockTable>
                 </div>
+                <SectionRowDiv>
+                    <Container flex_direction="column">
+                        <SubTitle>Top 10 Gainers</SubTitle>
+                        {gainers.map((stock) => {
+                            return(
+                                <>
+                                    <NormalText>{stock.name}</NormalText>
+                                    <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.change_perc}%)</ColorText></SubText>
+                                </>
+                            )
+                        })}
+                    </Container>
+                    <Container flex_direction="column">
+                        <SubTitle>Top 10 Losers</SubTitle>
+                        {losers.map((stock) => {
+                            return(
+                                <>
+                                    <NormalText>{stock.name}</NormalText>
+                                    <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.change_perc}%)</ColorText></SubText>
+                                </>
+                            )
+                        })}
+                    </Container>
+                </SectionRowDiv>
             </PageContainer>
         </>
     )

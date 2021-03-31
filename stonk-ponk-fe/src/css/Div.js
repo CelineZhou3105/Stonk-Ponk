@@ -39,8 +39,14 @@ export const FlexRowDiv = createFlexRowDiv("space-between", "auto", "auto");
 export const FlexRowLeftDiv = createFlexRowDiv("flex-start", "auto", "auto");
 
 
-
-export const SignUpItemDiv = createFlexColumnDiv("center", "flex-start", "20px");
+export const SignUpSectionDiv = styled.div`
+    display: flex;
+    flex-direction: ${props => props.row ? "row" : "column"};
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    gap: ${props => props.gap ? props.gap: "0"};
+`;
 
 export const FlexColumnCenterDiv = createFlexColumnDiv("center", "center", "50px");
 
@@ -50,13 +56,11 @@ function createLineDivider(width) {
     return styled.div`
         height: 1px;
         width: ${width};
-        background-color: #bababa;
+        background-color: #7B7B7B;
         margin: 10px;
     `;
 }
-export const LineDivider = createLineDivider("40%");
-
-export const LongLineDivider = createLineDivider("90%");
+export const LineDivider = createLineDivider("100%");
 
 /* Particles.js */
 export const ParticleContainer = styled.div`
@@ -69,7 +73,7 @@ export const ParticleContainer = styled.div`
 `;
 
 /* Password Reset Page */
-export const LogoContainer = createFlexRowDiv('center', '30px');
+export const LogoContainer = createFlexRowDiv('center', '0px');
 
 export const PasswordResetPageContainer = styled.div`
     ${FlexRow};
@@ -77,6 +81,14 @@ export const PasswordResetPageContainer = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
+`;
+
+export const SignUpPageContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    /* ${FlexRow};
+    justify-content: center;
+    align-items: center; */
 `;
 export const FormContainer = styled.div`
     width: 100%;
@@ -87,10 +99,11 @@ export const PasswordResetBackground = styled.div`
     flex-direction: column;
     background-color: white;
     box-shadow: 10px 10px rgba(0, 0, 0, 0.5);
-    width: 25%;
+    width: 50%;
     height: auto;
     border-radius: 20px;
     padding: 30px;
+    margin: 50px auto;
 `;
 
 /* Login Page */
@@ -119,7 +132,7 @@ export const LinkContainer = styled.div`
         }
     }};
     align-items: center;
-    width: 40%;
+    width: 100%;
     padding: 10px 0px;
 `;
 
@@ -129,6 +142,7 @@ export const NavigationContainer = styled.div`
     ${FlexRow}
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid rgba(0,0,0,.0975);
 `;
 
 export const ProfileModal = styled.div`

@@ -5,10 +5,14 @@ import { useHistory } from 'react-router-dom';
 import logo from '../images/logo.png';
 
 import { FormContainer, LogoContainer, ParticleContainer,  PasswordResetBackground, PasswordResetPageContainer} from '../css/Div';
-import { GenericForm, GenericSubmitButton, InputUnderlineDiv, Label, TextField } from '../css/Form';
+import { GenericForm, InputUnderlineDiv, Label, TextField } from '../css/Form';
 import { DefaultLogo } from '../css/Logo';
+import { ColorText, PageTitle, SubTitle } from '../css/Text';
 
-import { ResetPasswordCheckEmailLink, AnswerSecurityQuestionLink, ChangePasswordWithoutAuthLink} from '../api-links/constants';
+import { ForgotPasswordLink } from '../api-links/constants';
+import { CustomButton } from '../css/Button';
+
+import { checkPassword } from '../helpers/helpers';
 
 function PasswordReset() {
 
@@ -43,10 +47,10 @@ function PasswordReset() {
         }
 
     */
-    let securityQuestion;
+    const [securityQuestion, setSecurityQuestion] = useState('');
     const resetPasswordCheckEmail = async (event) => {
         event.preventDefault();
-        await fetch(ResetPasswordCheckEmailLink, {
+        await fetch(ForgotPasswordLink, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -56,9 +60,9 @@ function PasswordReset() {
                 email: email, 
             }),
         }).then((response) => {
-            if (response.status === 200) {
+            if (response.status === 202) {
                 response.json().then(res => {
-                    securityQuestion = res.security_queston;
+                    setSecurityQuestion(res.question);
                 })
                 setEmailFormVisible(false);
                 setSecurityQuestionVisible(true);
@@ -72,19 +76,10 @@ function PasswordReset() {
 
     /* answerSecurityQuestion - The second of three parts to the 'forgot password' user flow. User submits 
     the answer to their security question.
-    
-        Request = {
-            email: string;
-            answer: string;
-        }
-    
-        Response = {
-            status: number; (200 - OK, 403 - incorrect answer)
-        }
     */
     const answerSecurityQuestion = async (event) => {
         event.preventDefault();
-        await fetch(AnswerSecurityQuestionLink, {
+        await fetch(ForgotPasswordLink, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -95,13 +90,15 @@ function PasswordReset() {
                 answer: answer,
             })
         }).then((response) => {
-            if (response.status === 200) {
+            if (response.status === 202) {
                 setSecurityQuestionVisible(false);
                 setNewPasswordFormVisible(true);
+            } else {
+                alert("Answer to security question is incorrect.");
             }
         }).catch((error) => {
             return Promise.resolve(e => {
-                alert(e.error);
+                alert(e);
             })
         })
     }
@@ -120,13 +117,10 @@ function PasswordReset() {
     */
     const changePasswordWithoutAuth = async (event) => {
         event.preventDefault();
-        if (pass !== passConfirm) { // Check passwords match
-            alert("Passwords does not match! Re-enter your password.");
-
-            // TODO - Need to do further checks here for passwords meeting criteria. 
+        if (!checkPassword(pass, passConfirm)) { // Check password is valid
             return;
         } else {
-            await fetch(ChangePasswordWithoutAuthLink, {
+            await fetch(ForgotPasswordLink, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -141,7 +135,6 @@ function PasswordReset() {
                     setNewPasswordFormVisible(false);
                     setResetSuccess(true);
                 }
-                alert('Could not fetch security questions. Please try again.');
             }).catch((error) => {
                 return Promise.resolve(e => {
                     alert("Couldn't fetch security questions.");
@@ -177,48 +170,50 @@ function PasswordReset() {
                     />
                 </ParticleContainer>
                 <PasswordResetBackground>
-                    <LogoContainer><DefaultLogo src={logo} alt="Stonk Ponk Logo" /></LogoContainer>
+                    <LogoContainer>
+                        <a href="/"><DefaultLogo src={logo} alt="Stonk Ponk Logo" /></a>
+                    </LogoContainer>
+                    <PageTitle id="password-reset-title">Reset Password</PageTitle>
                     {emailFormVisible &&
                         <FormContainer>
                             <GenericForm onSubmit={(e) => {resetPasswordCheckEmail(e)}}>
-                                <h1 id="password-reset-title">Reset your password</h1>
                                 <Label htmlFor="email">Enter your email below</Label>
                                 <TextField id="email" type="email" onChange={(e) => setEmail(e.target.value)} required/>
                                 <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
-                                <GenericSubmitButton type="submit" value="Next" aria-label="Button to submit your email"/>
+                                <CustomButton margin="20px 0" type="submit" value="Next" aria-label="Button to submit your email">Submit</CustomButton>
                             </GenericForm>
                         </FormContainer>
                     }
                     {securityQuestionVisible  &&
                         <FormContainer>
                             <GenericForm onSubmit={(e) => {answerSecurityQuestion(e)}}>
-                                <h1>Your security question:</h1>
-                                <div>{securityQuestion}</div>
+                                <SubTitle>Your security question:</SubTitle>
+                                <ColorText color="#9e22ff">{securityQuestion}</ColorText>
                                 <Label htmlFor="security-question-answer">Enter your answer below</Label>
                                 <TextField type="text" id="security-question-answer" required onChange={(e) => {setAnswer(e.target.value)}} />
                                 <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
-                                <GenericSubmitButton type="submit" id="security-question-submit" value="Submit" aria-label="Button to submit your email" />
+                                <CustomButton margin="20px 0" type="submit" id="security-question-submit" value="Submit" aria-label="Button to submit your email">Submit</CustomButton>
                             </GenericForm>
                         </FormContainer>
                     }
                     {newPasswordFormVisible && 
                         <FormContainer>
                             <GenericForm onSubmit={(e) => {changePasswordWithoutAuth(e)}}>
-                                <h1>Create your new password below:</h1>
+                                <SubTitle>Create your new password below:</SubTitle>
                                 <Label htmlFor="new-password">New Password</Label>
                                 <TextField type="password" id="new-password" required onChange={(e) => {setPass(e.target.value)}} />
                                 <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
                                 <Label htmlFor="new-password-confirm">Confirm Password</Label>
                                 <TextField type="password" id="new-password-confirm" required onChange={(e) => {setPassConfirm(e.target.value)}} />
                                 <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
-                                <GenericSubmitButton type="submit" value="Submit" aria-label="Button to submit your new password"></GenericSubmitButton>
+                                <CustomButton margin="20px 0" type="submit" value="Submit" aria-label="Button to submit your new password">Submit</CustomButton>
                             </GenericForm>
                         </FormContainer>
                     }
                     {resetSuccess &&
                         <div>
-                            <h1>Hooray! You've reset your password.</h1>
-                            <button onClick={e => redirectToLogin(e)}>Back to login page.</button>
+                            <SubTitle>Hooray! You've reset your password.</SubTitle>
+                            <CustomButton margin="0 auto" onClick={e => redirectToLogin(e)}>Back to Login.</CustomButton>
                         </div>
                     }
                 </PasswordResetBackground>

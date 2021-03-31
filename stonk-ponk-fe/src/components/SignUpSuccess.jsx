@@ -1,8 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import HeaderBar from './HeaderBar';
-import { FlexColumnCenterDiv, LineDivider } from '../css/Div';
+import { PasswordResetBackground, LogoContainer, SignUpPageContainer } from '../css/Div';
 import { CustomButton } from '../css/Button';
+import { DefaultLogo } from '../css/Logo';
+import logo from '../images/logo.png';
+import Particles from 'react-particles-js';
+import { PageTitle } from '../css/Text';
 
 const SignUpSuccess = () => {
 
@@ -14,14 +17,39 @@ const SignUpSuccess = () => {
     };
 
     return (
-        <div>
-            <HeaderBar />
-            <FlexColumnCenterDiv>
-                <h1>Sign Up Successful!</h1>
-                <LineDivider />
-                <CustomButton onClick={navigateToLogin}>Log In</CustomButton>
-            </FlexColumnCenterDiv>
-        </div>
+        <SignUpPageContainer>
+            <div id="particles-js">
+                <Particles 
+                    width={"100%"}
+                    height={"100%"}
+                    params={{
+                        "particles": {
+                            "number": {
+                                "value": 70
+                            },
+                            "size": {
+                                "value": 3
+                            }
+                        },
+                        "interactivity": {
+                            "events": {
+                                "onhover": {
+                                    "enable": true,
+                                    "mode": "repulse"
+                                }
+                            }
+                        }
+                    }}
+                />
+            </div>
+            <PasswordResetBackground>
+                <LogoContainer>
+                    <DefaultLogo src={logo} alt="Stonk Ponk Logo" />
+                </LogoContainer>
+                <PageTitle>Sign Up Successful!</PageTitle>
+                <CustomButton onClick={navigateToLogin}>Back to Login</CustomButton>
+            </PasswordResetBackground>
+        </SignUpPageContainer>
     );
 };
 

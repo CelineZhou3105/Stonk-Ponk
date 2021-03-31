@@ -50,7 +50,7 @@ function StockTableHead(props) {
                             indeterminate={numSelected > 0 && numSelected < rowCount}
                             checked={rowCount > 0 && numSelected === rowCount}
                             onChange={onSelectAllClick}
-                            inputProps={{ 'aria-label': 'select all desserts' }}
+                            inputProps={{ 'aria-label': 'select all stocks' }}
                         />
                     </TableCell>
                 }
@@ -123,13 +123,10 @@ const TableToolbar = (props) => {
  */
 function StockTable(props) {
     const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('name');
-    const [page, setPage] = useState(0);
+    const [orderBy, setOrderBy] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
     const [editMode, setEditMode] = useState(false);
-
-    const { data, headings, place, setRows } = props;
+    const { data, headings, place, setRows, pageDirection, setPageDirection, page, setPage } = props;
 
     console.log(data);
 
@@ -141,7 +138,9 @@ function StockTable(props) {
         setOrderBy(property);
     };
 
-    const changePage = (newPage) => {
+    const changePage = (event, newPage) => {
+        event.preventDefault();
+        console.log('new page is: ', newPage);
         setPage(newPage);
     };
 
@@ -284,7 +283,7 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart />
+                                                <SummaryChart pricePoints={[]} />
                                             </TableCell>
                                             {editMode ?
                                                 <>
@@ -314,7 +313,7 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart />
+                                                <SummaryChart points={[]} />
                                             </TableCell>
                                             <TableCell align="right">{row.price}</TableCell>
                                         </TableRow>
@@ -336,11 +335,23 @@ function StockTable(props) {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={data.length}
+                count={300}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={changePage}
                 onChangeRowsPerPage={changeRowsPerPage}
+                nextIconButtonProps={{
+                    onClick: () => {
+                        setPage(page => page + 1);
+                        setPageDirection('right')
+                    }
+                }}
+                backIconButtonProps={{
+                    onClick: () => {
+                        setPage(page => page - 1);
+                        setPageDirection('left');
+                    }
+                }}
             />
             {createModalOpen &&
                 <CreateModal setVisibility={setCreateModalOpen} setRows={setRows} />

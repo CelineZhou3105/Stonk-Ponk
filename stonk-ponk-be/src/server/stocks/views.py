@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import json
 
-import stock_api
+from . import stock_api
 
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
@@ -13,21 +13,35 @@ import jwt.exceptions
 # Create your views here.
 
 # Markets will return data on day most active stocks
-@require_http_methods(["POST"])
+# function takes in page number indexed from 0
+@require_http_methods(["POST", "GET"])
 def markets(request):
     body = json.loads(request.body.decode('utf-8'))
+    print(body)
+    responseData = stock_api.get_market_data(body['type'], body['page_num'])
     
-    responseData = stock_api.get_most_active()
-    return JsonResponse(responseData)
+    return HttpResponse(responseData)
 
 
-@require_http_methods(["POST"])
-def stock_price(request):
+@require_http_methods(["POST", "GET"])
+def stock_data(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
-        stock_ticker = body["stockName"]
-        stock_price = stock_api.get_stock_price(stock_ticker)
-        responseData = stock_price.to_json()
-        return JsonResponse(responseData)
+        responseData = get_stock_data(body['ticker'])
+        
+        return HttpResponse(responseData)
+    
     except:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("Stock Not Found")
+
+@require_http_methods(["POST", "GET"])
+def stock_prices(request):
+    try:
+        body = json.loads(request.body.decode('utf-8'))
+
+        responseData = get_stock_prices(body['ticker'], body['interval_type'])
+        
+        return HttpResponse(responseData)
+    
+    except:
+        return HttpResponseBadRequest("Stock Not Found")
