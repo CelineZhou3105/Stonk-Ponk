@@ -90,7 +90,7 @@ class Portfolio(models.Model) :
     def get_stock_ownerships(self):
         return StockOwnership.objects.filter(owner=self)
 
-    def get_value(self):
+    def get_value(self, date=datetime.date.today()):
         tVal = 0
         for so in self.get_stock_ownerships():
             try:
@@ -142,13 +142,10 @@ class StockOwnership(models.Model):
         return self.stock.ticker
 
     def get_profit(self):
-        return (self.volume*stock_api.get_price(self.get_stock_ticker)) - (self.volume * self.VWAP); 
-
-    def get_percentage_profit(self):
-        return (self.get_profit/(self.volume*self.VWAP)) * 100 
+        return stock_api.get_price(self.get_stock_ticker() - self.VWAP) * self.volume
 
     def calc_profit_margin(self):
-        return (stock_api.get_price(self.get_stock_ticker) - self.VWAP)/self.VWAP
+        return (stock_api.get_price(self.get_stock_ticker())/self.VWAP - 1) * 100
     
 class Transaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
