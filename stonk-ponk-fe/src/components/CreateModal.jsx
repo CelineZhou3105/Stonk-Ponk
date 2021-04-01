@@ -29,11 +29,10 @@ function CreateModal(props) {
         const newRow = {};
         newRow['name'] = selectedStock.name;
         newRow['ticker'] = selectedStock.ticker;
-        newRow['performance'] = 'graph';
         newRow['price'] = selectedStock.price;
         newRow['sector'] = selectedStock.sector;
         newRow['type'] = selectedStock.type;
-        newRow['last_purchased'] = Date.parse(purchaseDate)/1000;
+        newRow['first_purchase_date'] = Date.parse(purchaseDate)/1000;
         newRow['units_owned'] = unitsOwned;
         newRow['purchase_price'] = purchasePrice;
         newRow['original_contribution'] = purchasePrice * unitsOwned;
@@ -42,7 +41,6 @@ function CreateModal(props) {
     }
 
     function handleSubmit(event) {
-        //TODO - create the stock row, add it to the actual table rows 
         event.preventDefault();
         const newRow = createStockRow();
         setRows(rows => [...rows, newRow])
@@ -71,7 +69,6 @@ function CreateModal(props) {
                     <ModalLabel htmlFor="purchase-data">Purchase Date</ModalLabel>
                     <TextField id="purchase-data" type="date" defaultValue={purchaseDate} required onChange={(e) => { setPurchaseDate(e.target.value) }} />
                     <InputUnderlineDiv width="100%" className="underline"/>
-
 
                     <ModalLabel htmlFor="purchase-price">Purchase Price</ModalLabel>
                     <TextField id="purchase-price" type="text" defaultValue={purchasePrice} required onChange={(e) => { setPurchasePrice(e.target.value) }} />

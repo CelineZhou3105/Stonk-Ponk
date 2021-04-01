@@ -18,8 +18,12 @@ export const ChangeEmailLink = "http://localhost:8000/api/account/change-email";
 
 
 // Portfolio Information 
-export const EditPortfolio = "http://localhost:8000/api/portfolio/add-stock";
-export const GetPortfolio = "http://localhost:8000/api/portfolio";
+export const EditPortfolio = "http://localhost:8000/api/portfolio/edit";
+export const GetPortfolioSummary = "http://localhost:8000/api/portfolio/summary"; // Only for the pie chart, value, last accessed
+export const GetPortfolioDetail = "http://localhost:8000/api/portfolio/details"; // Actual stocks owned
+export const GetPortfolioBestStocks = "http://localhost:8000/api/portfolio/best";
+export const GetPortfolioWorstStocks = "http://localhost:8000/api/portfolio/worst";
+
 
 // Stock API calls
 export const MarketsLink = "http://localhost:8000/api/stocks/markets";

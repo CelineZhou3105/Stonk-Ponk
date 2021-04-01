@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from './Navigation';
 
 // import { getPortfolio } from '../services/portfolio';
@@ -10,6 +10,10 @@ import Chart from "react-google-charts";
 
 import StockTable from './StockTable';
 import Filter from './Filter';
+
+import { portfolio } from '../services/portfolio';
+
+import PortfolioChart from './PortfolioChart';
 
 // Headings for each table column
 const tableHeadings = [
@@ -23,21 +27,21 @@ const tableHeadings = [
 ];
 
 const stocksDummyData = [
-    { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf', units_owned: 5, purchase_price: 60.000, last_purchased: 1612962000, original_contribution: 300.00},
-    { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf', units_owned: 5, purchase_price: 16.00, last_purchased: 1613912400, original_contribution: 80.00},
-    { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf', units_owned: 3, purchase_price: 300.00, last_purchased: 1613912400, original_contribution: 900.00},
-    { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock', units_owned: 5, purchase_price: 180.00, last_purchased: 1614344400, original_contribution: 900.00},
-    { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, sector: 'aus', type: 'stock', units_owned: 3, purchase_price: 300.00, last_purchased: 1614517200, original_contribution: 900.00},
-    { name: 'Santos Limited', ticker: 'STO', performance: 'graph', price: 499.00, sector: 'aus', type: 'stock', units_owned: 5, purchase_price: 180.00, last_purchased: 1614517200, original_contribution: 900.00},
+    { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, vwap: 290.93, sector: 'aus', type: 'etf', volume: 5, purchase_price: 60.000, last_purchased: 1612962000, original_contribution: 300.00},
+    { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, vwap: 290.93, sector: 'aus', type: 'etf', volume: 5, purchase_price: 16.00, last_purchased: 1613912400, original_contribution: 80.00},
+    { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', vwap: 290.93, price: 2061.92, sector: 'aus', type: 'etf', volume: 3, purchase_price: 300.00, last_purchased: 1613912400, original_contribution: 900.00},
+    { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, vwap: 900.93, sector: 'aus', type: 'stock', volume: 5, purchase_price: 180.00, last_purchased: 1614344400, original_contribution: 900.00},
+    { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, vwap: 1000.93, sector: 'aus', type: 'stock', volume: 3, purchase_price: 300.00, last_purchased: 1614517200, original_contribution: 900.00},
+    { name: 'Santos Limited', ticker: 'STO', performance: 'graph', price: 499.00, vwap: 250.93, sector: 'aus', type: 'stock', volume: 5, purchase_price: 180.00, last_purchased: 1614517200, original_contribution: 900.00},
 ];
 
 const responseData = {
     stocks: stocksDummyData,
     contribution: 20800.20,
     best_performing: [
-        { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock', units_owned: 5, last_purchased: 1614344400, original_contribution: 900.00},
-        { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, sector: 'aus', type: 'stock', units_owned: 3, last_purchased: 1614517200, original_contribution: 900.00},
-        { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf', units_owned: 3, last_purchased: 1613912400, original_contribution: 900.00},
+        { name: 'Kogan.com Ltd', ticker: 'KGN', performance: 'graph', price: 2061.92, vwap: 290.93, sector: 'aus', type: 'stock', units_owned: 5, last_purchased: 1614344400, original_contribution: 900.00},
+        { name: 'BHP Group', ticker: 'BHP', performance: 'graph', price: 2399.32, vwap: 290.93, sector: 'aus', type: 'stock', units_owned: 3, last_purchased: 1614517200, original_contribution: 900.00},
+        { name: 'Alphabet Inc Class C', ticker: 'GOOG', performance: 'graph',  vwap: 290.93, price: 2061.92, sector: 'aus', type: 'etf', units_owned: 3, last_purchased: 1613912400, original_contribution: 900.00},
     ],
     worst_performing: [
         { name: 'Atlassian', ticker: 'TEAM', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf', units_owned: 5, last_purchased: 1613912400, original_contribution: 80.00},
@@ -75,13 +79,46 @@ const worstStockSummary = responseData.worst_performing.map(stock => {
 });
 
 function Portfolio() {
-    // TODO - Connect this with the backend.
-    // const token = localStorage.getItem('token');
-    // const data = getPortfolio(token);
+
+    const [chartData, setChartData] = useState([]);
+    const [portfolioValue, setPortfolioValue] = useState(0);
+    const [lastContribution, setLastContribution] = useState(0);
+    const [profit, setProfit] = useState(0);
+    const [gainers, setGainers] = useState([]);
+    const [losers, setLosers] = useState([]);
+
+    /* useEffect to get the summary for portfolio */
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        portfolio.getPortfolioSummary(token).then(response => {
+            console.log(response);
+            setChartData(response.stocks);
+            setPortfolioValue(response.value);
+            setLastContribution(response.last_update);
+            setProfit(response.profit);
+        });
+    }, []);
+
+    /* useEffect to get the best stocks for portfolio */
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     portfolio.getPortfolioBest(token, 5).then(response => {
+    //         console.log(response);
+    //         setGainers(response.stocks);
+    //     });
+    // }, []);
+
+    // /* useEffect to get the worst stocks for portfolio */
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     portfolio.getPortfolioWorst(token, 5).then(response => {
+    //         console.log(response);
+    //         setLosers(response.stocks);
+    //     });
+    // }, []);
 
     const [rows, setRows] = useState(stocksDummyData);
     
-
     // Calculations for the value of the portfolio
     let stockData = [['Stock name', 'Portfolio value']];
     let value = 0;
@@ -105,21 +142,10 @@ function Portfolio() {
             <PageContainer>
                 <PageTitle>Your Portfolio</PageTitle>
                 <Container>
-                    <Chart
-                        width={'500px'}
-                        height={'300px'}
-                        chartType="PieChart"
-                        loader={<div>Loading Chart</div>}
-                        data={stockData}
-                        options={{
-                            title: 'Portfolio makeup',
-                            backgroundColor: 'transparent',
-                        }}
-                        rootProps={{ 'data-testid': '1' }}
-                    />
+                    <PortfolioChart stockData={stocksDummyData} portfolioValue={25000} />
                     <PortfolioValueContainer>
                         <SubTitle>Portfolio Value</SubTitle>
-                        <PortfolioValue>A${value}</PortfolioValue>
+                        <PortfolioValue>A${portfolioValue}</PortfolioValue>
                         <SubText color="#000000">
                             {diff + ' '}
                             <ColorText color="#00AD30">
@@ -127,9 +153,9 @@ function Portfolio() {
                             </ColorText>
                         </SubText>
                         <SubText>
-                            Contributions: ${responseData.contribution}
+                            Contributions: ${portfolioValue - profit}
                             <br/>
-                            Last Investment: {date}
+                            Last Investment: {new Date(lastContribution).toLocaleDateString()}
                         </SubText>
                     </PortfolioValueContainer>
                 </Container>
@@ -139,12 +165,28 @@ function Portfolio() {
                                 Best Performing Stocks
                             </SubTitle>
                             {bestStockSummary}
+                            {/* {gainers.map((stock) => {
+                                return(
+                                    <>
+                                        <NormalText>{stock.name}</NormalText>
+                                        <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.change_perc}%)</ColorText></SubText>
+                                    </>
+                                )
+                            })} */}
                         </Container>
                         <Container flex_direction="column">
                             <SubTitle>
                                 Worst Performing Stocks
                             </SubTitle>
                             {worstStockSummary}
+                            {/* {losers.map((stock) => {
+                                return(
+                                    <>
+                                        <NormalText>{stock.name}</NormalText>
+                                        <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.change_perc}%)</ColorText></SubText>
+                                    </>
+                                )
+                            })} */}
                         </Container>
                         <Container flex_direction="column">
                             <SubTitle>
@@ -158,7 +200,7 @@ function Portfolio() {
                 <FilterContainer>
                     <Filter setState={setRows} data={stocksDummyData}></Filter>
                 </FilterContainer>
-                <StockTable data={rows} headings={tableHeadings} place="portfolio" setRows={setRows}></StockTable>
+                <StockTable data={rows} headings={tableHeadings} place="portfolio" setRows={setRows} page={0} setPage={() => {}}></StockTable>
             </PageContainer>
         </div>
         
