@@ -33,6 +33,8 @@ response
 
 @require_http_methods(["GET"])
 def details(request):
+    # TODO also give time series
+    # current price
     try:
         token = request.headers["Authorization"]
         payload = jwt_decode_handler(token)
@@ -82,7 +84,7 @@ response
 
 @require_http_methods(["GET"])
 def summary(request):
-    # TODO change
+    # TODO change %
     try:
         token = request.headers["Authorization"]
         
@@ -121,14 +123,46 @@ def summary(request):
         } ...
     ]
 '''
+
 @require_http_methods(["GET"])
 def best(request):
-    pass
+    return rank(request, True)    
 
 @require_http_methods(["GET"])
 def worst(request):
-    pass
+    return rank(request, False)    
 
+def rank(request, reverse=True):
+    try:
+        n = int(request.GET.get("n"))
+
+        token = request.headers["Authorization"]
+        payload = jwt_decode_handler(token)
+
+        user = User.objects.get(id=payload["user_id"])
+        portfolio = Portfolio.objects.get(email=user.email)
+
+        profit_margins = []
+
+        for stockOwnership in StockOwnership.objects.filter(owner = portfolio):
+            profit_margins.append( 
+                {
+                    "name": str(stockOwnership.get_stock_name()),
+                    "ticker": str(stockOwnership.get_stock_ticker()),
+                    "price": stock_api.get_price(stockOwnership.get_stock_ticker()),
+                    "profit_margin": stockOwnership.calc_profit_margin()
+               })
+
+        profit_margins.sort(reverse=reverse, key=lambda pm : pm["profit_margin"])
+        profit_margins = profit_margins[:min(len(profit_margins), n)]
+        
+        ret = {"stocks" : []}
+        ret["stocks"] = profit_margins
+        
+        return HttpResponse(json.dumps(ret))  
+    except Exception as e:
+        return HttpResponseBadRequest("portfolio best bad request")
+    return HttpResponseBadRequest("portfolio best really bad request")
 
 '''
 request
@@ -166,6 +200,3 @@ def edit(request):
         return HttpResponseBadRequest()
     return HttpResponse()
         
-
-
-
