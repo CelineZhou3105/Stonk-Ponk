@@ -112,11 +112,11 @@ def get_stock_prices(ticker, interval_type):
 
     elif interval_type == 'last_six_months':
         start_date = end_date - relativedelta(months = 6)
-        interval_string = str(1) + "mo"
+        interval_string = str(1) + "d"
 
-    elif interval_type == "y":
-        start_date = end_date - relativedelta(months = 10*12)
-        interval_string = str(1) + "mo"
+    elif interval_type == "last_year":
+        start_date = end_date - relativedelta(months = 12)
+        interval_string = str(1) + "d"
 
     end_date = end_date - timedelta(days = 1)
     end_date = end_date.strftime("%d/%m/%Y")
