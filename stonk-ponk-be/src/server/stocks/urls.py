@@ -5,6 +5,6 @@ from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh
 from . import views
 
 urlpatterns = [
-    path('markets', views.markets, name='markets')
-    #path('stock_detail', view.stock_data, name='stock_detail')
+    path('markets', views.markets, name='markets'),
+    path('stock_detail', views.stock_data, name='stock_detail')
 ]

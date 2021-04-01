@@ -27,7 +27,7 @@ def markets(request):
 def stock_data(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
-        responseData = get_stock_data(body['ticker'])
+        responseData = stock_api.get_stock_data(body['ticker'])
         
         return HttpResponse(responseData)
     
