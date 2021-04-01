@@ -46,7 +46,7 @@ def get_market_data(type, page_num):
 def get_stock_data(ticker):
     try:
         quotes = si.get_quote_data(ticker)
-        print(quotes)
+
         stock_dict = {}
         stock_dict['ticker'] = ticker
         stock_dict['price'] = get_price(ticker)
@@ -70,7 +70,7 @@ def get_stock_data(ticker):
         return json.dumps(stock_dict)
     
     except:
-        return "Stock Not Found"
+        raise Error("Stock Not Found")
 
 def get_price(ticker):
     try:
@@ -88,7 +88,7 @@ def get_quotes(ticker):
     try:
         return si.get_quote_table(ticker)
     except:
-        return "Stock Not Found"
+        raise Error("Stock Not Found")
 
 #interval will be market, last_week, last_month, last_six_months, last_year
 def get_stock_prices(ticker, interval_type):
