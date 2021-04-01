@@ -1,19 +1,27 @@
 from django.db import models
 
+from stocks import stock_api
+
 import uuid
 import datetime
-
-def getPrice(trans):
-    return trans.purchase_price
-
 
 class Portfolio(models.Model) :
     email = models.EmailField(('email address'), unique=True)
     stocks = models.ManyToManyField("PortfolioStock", through = 'StockOwnership')
+    last_update = models.DateField(null=True)
     
-    def add_stock(self, ticker, date, volume, price) :
+    def log_date(func):
+        def inner(self=None, *args, **kwargs):
+            if isinstance(self, Portfolio):
+                self.last_update = datetime.date.today()
+                self.save()
+            return func(self, *args, **kwargs)
+        return inner
+
+    @log_date
+    def add_stock(self, ticker, date, volume, price):
         # get this from market price
-        stock = PortfolioStock.objects.get(ticker=ticker)
+        stock, created = PortfolioStock.objects.get_or_create(ticker=ticker)
         ownership, created = StockOwnership.objects.get_or_create(owner=self, stock=stock)
         ownership.VWAP = (ownership.VWAP * ownership.volume + price * volume) / (ownership.volume + volume)
         ownership.volume = ownership.volume + volume 
@@ -25,7 +33,7 @@ class Portfolio(models.Model) :
                 purchase_vol   = volume,
                 purchase_price = price)
 
-   
+    @log_date
     def remove_transaction(self, _uuid):
         trans_id = uuid.UUID(_uuid); 
         trans = Transaction.objects.get(id=trans_id)
@@ -44,6 +52,7 @@ class Portfolio(models.Model) :
         else:
             trans.delete()
 
+    @log_date
     def update_transaction(self, _uuid, new_date, new_volume, new_price):
         if new_volume <= 0:
             return
@@ -67,6 +76,7 @@ class Portfolio(models.Model) :
         trans.save()
 
 
+    @log_date
     def remove_ownership(self, ticker):
         stock = PortfolioStock.objects.get(ticker=ticker)
         ownership = StockOwnership.objects.get(owner=self,stock=stock)
@@ -78,7 +88,25 @@ class Portfolio(models.Model) :
         return Transaction.objects.filter(stockOwnership=stockOwnership)
     
     def get_stock_ownerships(self):
-        return StockOwnership.objects.get(owner=self)
+        return StockOwnership.objects.filter(owner=self)
+
+    def get_value(self):
+        tVal = 0
+        for so in self.get_stock_ownerships():
+            try:
+                tVal += stock_api.get_price(so.get_stock_ticker()) * so.volume
+            except:
+                print("LOG: ERROR: could not process {} in get_value".format(so.get_stock_ticker()))
+        return tVal
+
+    def get_investment(self):
+        tVal = 0
+        for so in self.get_stock_ownerships():
+            try:
+                tVal += so.VWAP * so.volume
+            except:
+                print("LOG: ERROR: could not process {} in get_investment".format(so.get_stock_ticker()))
+        return tVal
 
 class PortfolioStock(models.Model):
     ticker = models.CharField(max_length = 20)
@@ -91,7 +119,6 @@ class StockOwnership(models.Model):
     VWAP = models.FloatField(default=0)
     volume = models.IntegerField(default=0)
     first_purchase = models.DateField(null=True)
-            #blank=True)
    
     def recalculate(self):
         tVol = 0
@@ -108,10 +135,10 @@ class StockOwnership(models.Model):
         self.first_purchase = minDate
         self.save()
 
-    def getStockName(self):
+    def get_stock_name(self):
         return self.stock.ticker 
 
-    def getStockTicker(self):
+    def get_stock_ticker(self):
         return self.stock.ticker
 
     

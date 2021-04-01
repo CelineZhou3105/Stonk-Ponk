@@ -8,8 +8,6 @@ def main():
     #print(si.get_most_active(1))
     #print(si.get_market_data("most_active", 1))
     #print(si.get_stock_data('NFLX'))
-    date = datetime.today()
-    #print(si.get_historical_price("NFLX", date))
-    print(si.get_stock_data("NIO"))
+    print(si.get_historical_price("NFLX", date))
 if __name__ == '__main__':
     main()
