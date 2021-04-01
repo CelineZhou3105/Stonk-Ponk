@@ -9,6 +9,7 @@ import jwt.exceptions
 
 from account.models import User
 from .models import Portfolio, PortfolioStock, StockOwnership, Transaction
+from stocks import stock_api
 
 '''
 request
@@ -22,7 +23,6 @@ response
             vwap  : <float>
             first_purchase_date : <date>
             transactions : [
-                uuid  : <string>
                 volume: <integer>
                 price : <float>
                 date  : <string> # format ??? YYYY-MM-DD??
@@ -38,31 +38,28 @@ def details(request):
         payload = jwt_decode_handler(token)
         user = User.objects.get(id=payload["user_id"])
         portfolio = Portfolio.objects.get(email=user.email)
-        holdings = StockOwnership.objects.filter(owner=portfolio)
+        holdings = portfolio.get_stock_ownerships()
 
         ret = {"stocks": []}
 
         for h in holdings:
-            if h == None:
-                print(1)
-            print(h)
             # TODO we should use query set sort or make use of meta
             transactions = list(Transaction.objects.filter(stockOwnership=h))
             transactions.sort(key=lambda x : x.purchase_date)
             
             retTrans = [
-                    {"uuid" : str(t.id),
+                    {#"uuid" : str(t.id),
                      "volume": str(t.purchase_vol),
                      "price": str(t.purchase_price),
                      "date": str(t.purchase_date)} 
                     for t in transactions]
-            print(h)
-            h.recalculate()
+
+            #h.recalculate()
 
             ret["stocks"].append( 
                 {
-                    "name": str(h.getStockName()),
-                    "ticker": str(h.getStockTicker()),
+                    "name": str(h.get_stock_name()),
+                    "ticker": str(h.get_stock_ticker()),
                     "volume": str(h.volume),
                     "vwap": str(h.VWAP),
                     "first_purchase_date": str(h.first_purchase),
@@ -70,7 +67,6 @@ def details(request):
                 })
         return HttpResponse(json.dumps(ret))  
     except Exception as e:
-        print(e.message)
         return HttpResponseBadRequest("portfolio details bad request")
     return HttpResponseBadRequest("portfolio details really bad request")
 
@@ -81,14 +77,42 @@ request
 response
     value : <integer>
     profit: <float>
-    last-access <date> #YYYY-MM-DD
+    last_update: <date> #YYYY-MM-DD
 '''
 
 @require_http_methods(["GET"])
 def summary(request):
+    # TODO change
+    try:
+        token = request.headers["Authorization"]
+        
+        payload = jwt_decode_handler(token)
+        user = User.objects.get(id=payload["user_id"])
+        portfolio = Portfolio.objects.get(email=user.email)
 
+        pInvestment = portfolio.get_investment()
+        pValue = portfolio.get_value()
+        pProfit = pValue - pInvestment
+        pLastUpdate = str(portfolio.last_update)
 
-    pass
+        ownerships = list(portfolio.get_stock_ownerships())
+        ownerships.sort(reverse=True, key=lambda x : x.VWAP * x.volume)
+        ownerships = ownerships[:min(5,len(ownerships))] # get top 5
+        pKeyStocks = [ {"name": so.get_stock_name(),
+                        "ticker": so.get_stock_ticker(),
+                        "value": so.VWAP * so.volume}
+                        for so in ownerships]
+
+        ret = { "value": pValue, 
+                "profit": pProfit, 
+                "last_update": pLastUpdate,
+                "stocks": pKeyStocks }
+
+        return HttpResponse(json.dumps(ret))
+    except Exception as e:
+        return HttpResponseBadRequest()
+    return HttpResponseBadRequest()
+
 '''
     stocks [
         {   name  : <name>
@@ -108,25 +132,40 @@ def worst(request):
 
 '''
 request
-    {
-        stockChange : [{ # this is for stock
-            type : <new, delete, edit>
-            ticker: <string>
-            transChange : [{
-                type : <new, delete, edit>
-                uuid : <string> # new is null
-                date : <date>
-                volume:<integer>
-                price: <float>
-            } ...]
+{
+    stocks : [{   
+        ticker: <string>
+        transactions : [{
+            volume: <integer>
+            price : <float>
+            date  : <string> # format ??? YYYY-MM-DD??
         } ...]
-    }
+    } ...]
+}
+
 response
     code from http
 '''
 @require_http_methods(["POST"])
 def edit(request):
-    pass     
+    try:
+        body = json.loads(request.body.decode('utf-8'))
+        token = request.headers["Authorization"]
+        payload = jwt_decode_handler(token)
+        user = User.objects.get(id=payload["user_id"])
+        portfolio = Portfolio.objects.get(email=user.email)
+        for so in portfolio.get_stock_ownerships():
+            so.delete()
+
+        for s in body["stocks"]:
+            ticker = s["ticker"]
+            for t in s["transactions"]:
+                portfolio.add_stock(ticker, t["date"], t["volume"], t["price"])
+    except Exception as e:
+        print(e)
+        return HttpResponseBadRequest()
+    return HttpResponse()
+        
 
 
 

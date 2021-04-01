@@ -46,7 +46,7 @@ def get_market_data(type, page_num):
 def get_stock_data(ticker):
     try:
         quotes = si.get_quote_data(ticker)
-        
+        print(quotes)
         stock_dict = {}
         stock_dict['ticker'] = ticker
         stock_dict['price'] = get_price(ticker)
@@ -55,6 +55,8 @@ def get_stock_data(ticker):
         stock_dict['ask'] = quotes['ask']
         stock_dict['open'] = quotes['regularMarketOpen']
         stock_dict['high'] = quotes['regularMarketDayHigh']
+        stock_dict['low'] = quotes['regularMarketDayLow']
+
         stock_dict['close'] = quotes['regularMarketPreviousClose']
         stock_dict['change'] = quotes['regularMarketChange']
         stock_dict['change_perc'] = quotes['regularMarketChangePercent']
@@ -62,10 +64,8 @@ def get_stock_data(ticker):
         stock_dict['market'] = quotes['market']
         stock_dict['exchange'] = quotes['fullExchangeName']
 
-        stock_dict['52_day_range'] = quotes['fiftyTwoWeekRange']
+        stock_dict['fifty_two_week_range'] = quotes['fiftyTwoWeekRange']
         stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
-
-        stock_dict['1_week_prices'] = get_stock_prices(ticker, 'd')
         
         return json.dumps(stock_dict)
     except:
@@ -95,6 +95,7 @@ def get_stock_prices(ticker, interval_type):
     
     interval_string = str(1) + interval_type
     end_date = date.today()
+    start_date = end_date
 
     if interval_type == 'd':  
         start_date = end_date - timedelta(days = 100)
@@ -109,7 +110,8 @@ def get_stock_prices(ticker, interval_type):
         start_date = end_date - relativedelta(months = 10*12)
         interval_string = str(1) + "mo"
 
-    end_date = date.today().strftime("%d/%m/%Y")
+    end_date = end_date - timedelta(days = 1)
+    end_date = end_date.strftime("%d/%m/%Y")
     start_date = start_date.strftime("%d/%m/%Y")
 
     price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = interval_string)
