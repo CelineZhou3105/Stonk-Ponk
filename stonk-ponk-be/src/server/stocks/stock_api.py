@@ -46,7 +46,7 @@ def get_market_data(type, page_num):
 def get_stock_data(ticker):
     try:
         quotes = si.get_quote_data(ticker)
-        
+        print(quotes)
         stock_dict = {}
         stock_dict['ticker'] = ticker
         stock_dict['price'] = get_price(ticker)
@@ -55,6 +55,8 @@ def get_stock_data(ticker):
         stock_dict['ask'] = quotes['ask']
         stock_dict['open'] = quotes['regularMarketOpen']
         stock_dict['high'] = quotes['regularMarketDayHigh']
+        stock_dict['low'] = quotes['regularMarketDayLow']
+
         stock_dict['close'] = quotes['regularMarketPreviousClose']
         stock_dict['change'] = quotes['regularMarketChange']
         stock_dict['change_perc'] = quotes['regularMarketChangePercent']
