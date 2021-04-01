@@ -11,8 +11,6 @@ import { LogoContainer, NavigationContainer, ProfileModaItem, ProfileModal, Prof
 import { DefaultLogo } from '../css/Logo';
 import { ProfilePhoto } from '../css/Image';
 
-import { authentication } from '../services/authentication';
-
 function Navigation() {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
 
@@ -21,7 +19,8 @@ function Navigation() {
     }
 
     function logout(event) {
-        authentication.logout(event);
+        event.preventDefault();
+        localStorage.removeItem('token');
         history.push('/');
     }
 

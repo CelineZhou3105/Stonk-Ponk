@@ -1,6 +1,10 @@
-import { MarketsLink, StockDetailLink, StockPriceLink } from '../api-links/constants';
+import { 
+    MarketsLink, 
+    StockDetailLink, 
+    StockPriceLink
+} from '../api-links/constants';
 
-async function getMarketData(type, page_num) {
+export async function getMarketData(type, page_num) {
     // TODO - Add page_num to the variables
     const requestBody = {
         type: type,
@@ -41,7 +45,7 @@ async function getStockDetail(ticker) {
             if (response.ok) { // if status code is 200
                 return Promise.resolve(response);
             } // if status code is not 200
-            console.log('error');
+            console.log('error for this ticker: ', ticker);
             return Promise.reject(response);
         })
 }

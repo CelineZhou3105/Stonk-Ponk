@@ -62,8 +62,9 @@ def details(request):
                 {
                     "name": str(h.get_stock_name()),
                     "ticker": str(h.get_stock_ticker()),
-                    "volume": str(h.volume),
-                    "vwap": str(h.VWAP),
+                    "volume": h.volume,
+                    "vwap": h.VWAP,
+                    "price": stock_api.get_price(h.get_stock_ticker()),
                     "first_purchase_date": str(h.first_purchase),
                     "transactions": retTrans
                 })
@@ -102,7 +103,7 @@ def summary(request):
         ownerships = ownerships[:min(5,len(ownerships))] # get top 5
         pKeyStocks = [ {"name": so.get_stock_name(),
                         "ticker": so.get_stock_ticker(),
-                        "value": so.VWAP * so.volume}
+                        "value": stock_api.get_price(so.get_stock_ticker()) * so.volume}
                         for so in ownerships]
 
         ret = { "value": pValue, 
@@ -194,7 +195,10 @@ def edit(request):
         for s in body["stocks"]:
             ticker = s["ticker"]
             for t in s["transactions"]:
-                portfolio.add_stock(ticker, t["date"], t["volume"], t["price"])
+                portfolio.add_stock(ticker, t["date"], int(t["volume"]), float(t["price"]))
+
+        for so in portfolio.get_stock_ownerships():
+            so.recalculate()
     except Exception as e:
         print(e)
         return HttpResponseBadRequest()

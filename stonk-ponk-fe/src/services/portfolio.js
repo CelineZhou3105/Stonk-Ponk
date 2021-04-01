@@ -2,7 +2,8 @@ import {
     EditPortfolio, 
     GetPortfolioSummary, 
     GetPortfolioBestStocks, 
-    GetPortfolioWorstStocks 
+    GetPortfolioWorstStocks, 
+    GetPortfolioDetails
 } from '../api-links/constants';
 
 /**
@@ -18,10 +19,39 @@ export async function getPortfolioSummary(token) {
             'Authorization': token,
         },
     };
-    return await fetch(GetPortfolioSummary, requestOptions)
+    return await fetch(GetPortfolioSummary + '?n=5', requestOptions)
         .then(response => {
             if (response.status === 200) {
                 console.log("Successfully got portfolio");
+                return response.json().then(res => {
+                    return Promise.resolve(res);
+                })
+            } else {
+                response.json().then(res => {
+                    return Promise.reject(res.message);
+                })
+                
+            }
+        });
+}
+
+/**
+ * getPortfolioDetails - sends a request to get the user's portfolio stocks
+ * @param {string} token - token of the logged in user
+ */
+export async function getPortfolioDetails(token) {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': token,
+        },
+    };
+    return await fetch(GetPortfolioDetails, requestOptions)
+        .then(response => {
+            if (response.status === 200) {
+                console.log("Successfully retrieved portfolio stocks.");
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })
@@ -53,15 +83,11 @@ export async function editPortfolio(token, data) {
     return await fetch(EditPortfolio, requestOptions)
         .then(response => {
             if (response.status === 200) {
-                console.log("Successful edit.");
-                return response.json().then(res => {
-                    return Promise.resolve(res);
-                })
+                console.log("Successful edit. Response: ", response);
+                return Promise.resolve();
             } else {
-                return response.json().then(res => {
-                    return Promise.reject(res.message);
-                })
-                
+                return Promise.reject();
+
             }
         });
 }
@@ -130,6 +156,7 @@ export async function getPortfolioWorst(token, num_stocks) {
 
 export const portfolio = {
     getPortfolioBest,
+    getPortfolioDetails,
     getPortfolioSummary,
     getPortfolioWorst,
     editPortfolio

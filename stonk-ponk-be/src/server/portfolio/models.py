@@ -4,6 +4,7 @@ from stocks import stock_api
 
 import uuid
 import datetime
+import json
 
 class Portfolio(models.Model) :
     email = models.EmailField(('email address'), unique=True)
@@ -136,7 +137,7 @@ class StockOwnership(models.Model):
         self.save()
 
     def get_stock_name(self):
-        return self.stock.ticker 
+        return json.loads(stock_api.get_stock_data(self.stock.ticker))['name']
 
     def get_stock_ticker(self):
         return self.stock.ticker

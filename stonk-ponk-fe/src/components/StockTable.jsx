@@ -117,7 +117,7 @@ const TableToolbar = (props) => {
                 </Typography>
             ) : (
                 <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                    Your Stocks
+                    Stocks
                 </Typography>
             )}
 
@@ -170,8 +170,7 @@ function StockTable(props) {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const onChange = (e, changedRow, changedColumn) => {
-        console.log(Date.parse(e.target.value));
-        const newValue = (changedColumn === 'last_purchased') ? Date.parse(e.target.value) / 1000 : e.target.value;
+        const newValue = (changedColumn === 'last_purchased') ? e.target.value : e.target.value;
 
         const newRows = data.map(row => {
             if (row.ticker === changedRow.ticker) {
@@ -186,18 +185,40 @@ function StockTable(props) {
     function saveChanges() {
         // TODO: Call the API to save changes
         const token = localStorage.getItem('token');
-        portfolio.editPortfolio(token, data).then(() => {
+
+        const newPortfolio = {};
+        const newStocks = [];
+        const newStockMapping = {};
+
+        for (let i = 0; i < data.length; i++) {
+            let currentTicker = data[i].ticker;
+            if (!(currentTicker in newStockMapping)) {
+                newStockMapping[currentTicker] = newStocks.length;
+                newStocks.push({
+                    ticker: currentTicker,
+                    transactions: []
+                })
+            } 
+            newStocks[newStockMapping[currentTicker]].transactions.push({
+                date: data[i].first_purchase_date,
+                volume: data[i].volume,
+                price: data[i].vwap,
+            })
+        }
+        newPortfolio['stocks'] = newStocks;
+
+        portfolio.editPortfolio(token, newPortfolio).then(() => {
             setEditMode(false);
             console.log("Changes saved.");
             setPreviousRows(data);
             setSelected([]);
         }).catch(error => {
+            console.log("???");
             alert(error);
         })
     }
 
     function cancelChanges() {
-        // TODO: Call the API to save changes
         setEditMode(false);
         console.log("Changes cancelled.");
         setRows(previousRows);
@@ -313,14 +334,14 @@ function StockTable(props) {
                                                     <CustomTableCell row={row} column='volume' onChange={onChange}></CustomTableCell>
                                                 </> :
                                                 <>
-                                                    <TableCell align="right">{formatDate(row.first_purchase_date)}</TableCell>
+                                                    <TableCell align="right">{row.first_purchase_date}</TableCell>
                                                     <TableCell align="right">{row.vwap}</TableCell>
                                                     <TableCell align="right">{row.volume}</TableCell>
                                                 </>
                                             }
 
-                                            <TableCell align="right">{"current price: 1000"}</TableCell> 
-                                            <TableCell align="right">{(row.units_owned * row.price).toFixed(2)}</TableCell>
+                                            <TableCell align="right">{row.price.toFixed(2)}</TableCell> 
+                                            <TableCell align="right">{(row.volume * row.price).toFixed(2)}</TableCell>
                                         </TableRow> :
 
                                         <TableRow
@@ -334,7 +355,7 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart points={row.prev_week_prices}/>
+                                                <SummaryChart points={JSON.parse(row.prev_week_prices)}/>
                                             </TableCell>
                                             <TableCell align="right">{row.price}</TableCell>
                                         </TableRow>
@@ -353,7 +374,17 @@ function StockTable(props) {
                     <AddCircleIcon />&nbsp;Add New Stock
                 </CustomButton>
             }
+            {place === 'portfolio' ? 
             <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={data.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={changePage}
+                onChangeRowsPerPage={changeRowsPerPage}
+            />
+            : <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={300}
@@ -374,6 +405,7 @@ function StockTable(props) {
                     }
                 }}
             />
+            }
             {createModalOpen &&
                 <CreateModal setVisibility={setCreateModalOpen} setRows={setRows} />
             }
@@ -431,9 +463,9 @@ function stableSort(array, comparator) {
 const CustomTableCell = (props) => {
     const { row, column, onChange } = props;
 
-
-    const value = (column === 'last_purchased') ? formatDate(row[column]) : row[column];
-    const type = (column === 'last_purchased') ? 'date' : 'number';
+    const value = (column === 'first_purchase_date') ?row[column] : row[column];
+    console.log("value: ",value);
+    const type = (column === 'first_purchase_date') ? 'date' : 'number';
 
     return (
         <TableCell align="left">
@@ -448,26 +480,6 @@ const CustomTableCell = (props) => {
 };
 
 export default StockTable;
-
-
-/**
- * formatDate - converts a unix timestamp to a readable date
- * @param {number} date - number of seconds in Unix time  
- */
-function formatDate(date) {
-    var d = new Date(date * 1000),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}
-
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {

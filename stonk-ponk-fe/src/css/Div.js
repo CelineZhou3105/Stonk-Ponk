@@ -200,7 +200,9 @@ export const Container = styled.div`
     margin-bottom: 1em;
     box-shadow: 4px 4px 4px rgba(108, 108, 108, 0.25);
     padding: 0 1em;
+    justify-content: ${props => props.justify_content ? props.justify_content : "flex-start"};
     gap: ${props => props.gap ? props.gap : 0};
+    align-items: ${props => props.align_items ? props.align_items : 'flex-start'};
 `;
 export const PortfolioValueContainer = createFlexColumnDiv('center', 'center', '0');
 
