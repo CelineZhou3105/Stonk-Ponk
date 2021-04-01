@@ -64,6 +64,21 @@ function StockDetails() {
             })
     }, [id, setStats, setName, setTicker, setPrice, setMarketName, setExchange]);
 
+    useEffect(() => {
+        market.getStockPrice(id, 'd')
+            .then(response => response.json())
+            .then(json => {
+                console.log(json);
+            })
+            .catch((error) => {
+                Promise.resolve(error)
+                    .then((error) => {
+                        console.log(error)
+                        alert(`${error.status} ${error.statusText}`);
+                    });
+            })
+    }, [id]);
+
     const [period, setPeriod] = useState('week');
     const [tabValue, setTabValue] = React.useState(0);
     const handleChange = (event, newValue) => {
@@ -93,6 +108,7 @@ function StockDetails() {
                 <PageTitle>{name} <span>({ticker})</span></PageTitle>
                 <h1>${parseFloat(price).toFixed(2)}USD</h1>
                 <p>Market: {marketName}</p>
+                <p>Exchange: {exchange}</p>
                 <TableContainer>
                     <Table>
                         {stats.map((value, index) => {
