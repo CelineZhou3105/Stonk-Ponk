@@ -5,8 +5,9 @@ def main():
     #print(si.get_stats('CBA.AX'))
     #print(si.get_quotes('CBA.AX'))
     #print(si.get_most_active(1))
-    print(si.get_market_data("most_active", 1))
-    print(si.get_stock_data('NFLX'))
+    #print(si.get_market_data("most_active", 1))
+    #print(si.get_stock_data('GME'))
+    print(si.get_price('GME'))
 
 if __name__ == '__main__':
     main()
