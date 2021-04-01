@@ -117,7 +117,7 @@ def best(request):
     try:
         token = request.headers["Authorization"]
         payload = jwt_decode_handler(token)
-        length = payload["length"]
+        length = payload["n"]
         user = User.objects.get(id=payload["user_id"])
         portfolio = Portfolio.objects.get(email=user.email)
     
@@ -133,7 +133,7 @@ def best(request):
                })
         
         ret = {"stocks" : []}
-        ret["stocks"] = sorted(profit_margins, key = lambda so : so["profit_margin"])[(-1*length):]
+        ret["stocks"] = sorted(profit_margins, key = lambda so : so["profit_margin"])[(-1*n):]
         
         return HttpResponse(json.dumps(ret))  
     except Exception as e:
