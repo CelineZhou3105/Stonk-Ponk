@@ -59,9 +59,7 @@ function Filter(props) {
     return(
         <>  
             <SubText>SECTOR:</SubText>
-            <Select styles={customStyles} options={sectorOptions} defaultValue={{ value: 'all', label: 'All' }} aria-label="Dropdown for filtering by sector." onChange={(e) => { setState(onSectorChange(e, data)) }} />
-            <SubText>SECURITY TYPE:</SubText>
-            <Select styles={customStyles} options={securityTypeOption} defaultValue={{ value: 'all', label: 'All' }} aria-label="Dropdown for filtering by security type." onChange={(e) => { setState(onSecurityChange(e, data)) }} />
+            <Select isDisabled={true} styles={customStyles} options={sectorOptions} defaultValue={{ value: 'us', label: 'US' }} aria-label="Dropdown for filtering by sector." onChange={(e) => { setState(onSectorChange(e, data)) }} />
         </>
     );
 }

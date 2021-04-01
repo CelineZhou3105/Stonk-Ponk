@@ -13,17 +13,19 @@ async function changeFirstName(firstN) {
         }),
     };
     await fetch(ChangeFirstNameLink, requestOptions)
-        .then(response => response.json)
-        .then((response) => {
+        .then(response => {
             if (response.ok) { // if status code is 200
-                return true;
+                return response.json();
             } // if status code is not 200
-            return Promise.reject(response.json());
+            return Promise.reject(response);
+        })
+        .then(() => {
+            alert("You changed your first name!");
         })
         .catch((error) => {
             Promise.resolve(error)
                 .then((e) => {
-                    alert(e.error);
+                    alert(`${e.status} ${e.statusText}`);
                 });
         });
 }
@@ -40,17 +42,19 @@ async function changeLastName(lastN) {
         }),
     };
     await fetch(ChangeLastNameLink, requestOptions)
-        .then(response => response.json)
-        .then((response) => {
+        .then(response => {
             if (response.ok) { // if status code is 200
-                return true;
+                return response.json();
             } // if status code is not 200
-            return Promise.reject(response.json());
+            return Promise.reject(response);
+        })
+        .then(() => {
+            alert("You changed your last name!");
         })
         .catch((error) => {
             Promise.resolve(error)
                 .then((e) => {
-                    alert(e.error);
+                    alert(`${e.status} ${e.statusText}`);
                 });
         });
 }
@@ -67,12 +71,11 @@ async function changeEmail(emailAdd) {
         }),
     };
     await fetch(ChangeEmailLink, requestOptions)
-        .then(response => response.json)
-        .then((response) => {
+        .then(response => {
             if (response.ok) { // if status code is 200
                 return response.json();
             } // if status code is not 200
-            return Promise.reject(response.json());
+            return Promise.reject(response);
         })
         .then(() => {
             alert("You changed your email! Please relog, logging out...");
@@ -83,7 +86,7 @@ async function changeEmail(emailAdd) {
         .catch((error) => {
             Promise.resolve(error)
                 .then((e) => {
-                    alert(e.error);
+                    alert(`${e.status} ${e.statusText}`);
                 });
         });
 }
@@ -100,12 +103,11 @@ async function changePassword(pass) {
         }),
     };
     await fetch(ChangePasswordWithAuthLink, requestOptions)
-        .then(response => response.json)
-        .then((response) => {
+        .then(response => {
             if (response.ok) { // if status code is 200
                 return response.json();
             } // if status code is not 200
-            return Promise.reject(response.json());
+            return Promise.reject(response);
         })
         .then(() => {
             alert("You changed your password! Please relog, logging out...");
@@ -116,7 +118,7 @@ async function changePassword(pass) {
         .catch((error) => {
             Promise.resolve(error)
                 .then((e) => {
-                    alert(e.error);
+                    alert(`${e.status} ${e.statusText}`);
                 });
         });
 }

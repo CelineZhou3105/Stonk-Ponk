@@ -18,16 +18,12 @@ const Settings = () => {
 
     const EditFirstName = () => {
         console.log("Edit first name!");
-        if (changeDetails.changeFirstName(firstName)) {
-            alert("You changed your first name!");
-        }
+        changeDetails.changeFirstName(firstName);
     }
 
     const EditLastName = () => {
         console.log("Edit last name!");
-        if (changeDetails.changeLastName(lastName)) {
-            alert("You changed your last name!");
-        }
+        changeDetails.changeLastName(lastName);
     }
 
     const EditEmail = () => {
@@ -55,10 +51,10 @@ const Settings = () => {
                         <SettingsLabel htmlFor="pass">Password</SettingsLabel>
                     </FlexColumnLeftDiv>
                     <FlexColumnLeftDiv>
-                        <TextField type="text" id="firstName" value={firstName} required onChange={(e) => setFirstName(e.target.value)} />
-                        <TextField type="text" id="lastName" value={lastName} required onChange={(e) => setLastName(e.target.value)} />
-                        <TextField type="text" id="emailAdd" value={emailAdd} required onChange={(e) => setEmailAdd(e.target.value)} />
-                        <TextField type="password" id="pass" value={pass} required onChange={(e) => setPass(e.target.value)} />
+                        <TextField type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                        <TextField type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                        <TextField type="text" id="emailAdd" value={emailAdd} onChange={(e) => setEmailAdd(e.target.value)} />
+                        <TextField type="password" id="pass" value={pass} onChange={(e) => setPass(e.target.value)} />
                     </FlexColumnLeftDiv>
                     <FlexColumnLeftDiv>
                         <EditButton aria-label="Edit First Name Button" onClick={EditFirstName}>Edit</EditButton>

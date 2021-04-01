@@ -31,18 +31,26 @@ const SignUp = () => {
     // handles user submitting the form
     const submitSignUpForm = (event) => {
         event.preventDefault();
-        console.log("User submitted Sign Up Form!!!");
         if (checkPassword(pass, passConfirm)) {
-            if (authentication.register(firstName, lastName, emailAdd, pass, securityQ, securityA)) {
-                successfulSignUp();
-            }
+            authentication.register(firstName, lastName, emailAdd, pass, securityQ, securityA)
+                .then(() => {
+                    successfulSignUp();
+                    console.log('success');
+                })
+                .catch((error) => {
+                    Promise.resolve(error)
+                        .then((e) => {
+                            console.log(e);
+                            alert(`${e.status} ${e.statusText}`);
+                        });
+                })
         }
     };
 
     return (
         <SignUpPageContainer>
             <div id="particles-js">
-                <Particles 
+                <Particles
                     width={"100%"}
                     height={"100%"}
                     params={{
@@ -67,7 +75,7 @@ const SignUp = () => {
             </div>
             <PasswordResetBackground>
                 <LogoContainer>
-                <a href="/"><DefaultLogo src={logo} alt="Stonk Ponk Logo" /></a>
+                    <a href="/"><DefaultLogo src={logo} alt="Stonk Ponk Logo" /></a>
                 </LogoContainer>
                 <SignUpForm onSubmit={(e) => submitSignUpForm(e)}>
                     <PageTitle>Get started right now, Join us!</PageTitle>
@@ -75,39 +83,39 @@ const SignUp = () => {
                         <SignUpSectionDiv>
                             <Label htmlFor="firstName">First Name</Label>
                             <TextField type="text" id="firstName" value={firstName} required onChange={(e) => setFirstName(e.target.value)} />
-                            <InputUnderlineDiv className="underline"/>
+                            <InputUnderlineDiv className="underline" />
                         </SignUpSectionDiv>
                         <SignUpSectionDiv>
                             <Label htmlFor="lastName">Last Name</Label>
                             <TextField type="text" id="lastName" value={lastName} required onChange={(e) => setLastName(e.target.value)} />
-                            <InputUnderlineDiv className="underline"/>
+                            <InputUnderlineDiv className="underline" />
                         </SignUpSectionDiv>
                     </SignUpSectionDiv>
                     <SignUpSectionDiv>
                         <Label htmlFor="emailAdd">Email</Label>
                         <TextField type="text" id="emailAdd" value={emailAdd} required onChange={(e) => setEmailAdd(e.target.value)} />
-                        <InputUnderlineDiv className="underline"/>
+                        <InputUnderlineDiv className="underline" />
                     </SignUpSectionDiv>
                     <SignUpSectionDiv>
                         <Label htmlFor="pass">Password</Label>
                         <TextField type="password" id="pass" value={pass} required onChange={(e) => setPass(e.target.value)} />
-                        <InputUnderlineDiv className="underline"/>
+                        <InputUnderlineDiv className="underline" />
                     </SignUpSectionDiv>
                     <SubText>Password must be 8 digits long and must include at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character.</SubText>
                     <SignUpSectionDiv>
                         <Label htmlFor="passConfirm">Confirm Password</Label>
                         <TextField type="password" id="passConfirm" value={passConfirm} required onChange={(e) => setPassConfirm(e.target.value)} />
-                        <InputUnderlineDiv className="underline"/>
+                        <InputUnderlineDiv className="underline" />
                     </SignUpSectionDiv>
                     <SignUpSectionDiv>
                         <Label htmlFor="securityQ">Security Question</Label>
                         <TextField type="text" id="securityQ" value={securityQ} required onChange={(e) => setSecurityQ(e.target.value)} />
-                        <InputUnderlineDiv className="underline"/>
+                        <InputUnderlineDiv className="underline" />
                     </SignUpSectionDiv>
                     <SignUpSectionDiv>
                         <Label htmlFor="securityA">Security Question Answer</Label>
                         <TextField type="text" id="securityA" value={securityA} required onChange={(e) => setSecurityA(e.target.value)} />
-                        <InputUnderlineDiv className="underline"/>
+                        <InputUnderlineDiv className="underline" />
                     </SignUpSectionDiv>
                     <CustomButton margin="2em 0 0 0" type="submit" value="Sign Up" aria-label="Button to submit the sign up form">Sign Up</CustomButton>
                     <LinkContainer>Already have an account?&nbsp;<LinkText href="/">Login.</LinkText></LinkContainer>

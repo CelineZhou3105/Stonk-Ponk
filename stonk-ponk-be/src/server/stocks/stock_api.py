@@ -95,7 +95,7 @@ def get_stock_prices(ticker, interval_type):
     end_date = date.today()
 
     if interval_type == 'd':  
-        start_date = end_date - timedelta(days = 10)
+        start_date = end_date - timedelta(days = 100)
     
     elif interval_type == 'wk':
         start_date = end_date - timedelta(weeks = 10)

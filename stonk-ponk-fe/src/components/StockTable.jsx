@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { 
-    Table, 
-    TableBody, 
-    TableCell, 
-    TableContainer, 
-    TableHead, 
-    TablePagination, 
-    TableRow, 
-    TableSortLabel, 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow,
+    TableSortLabel,
 } from '@material-ui/core';
 import Input from "@material-ui/core/Input";
 import Checkbox from '@material-ui/core/Checkbox';
@@ -50,11 +50,11 @@ function StockTableHead(props) {
                             indeterminate={numSelected > 0 && numSelected < rowCount}
                             checked={rowCount > 0 && numSelected === rowCount}
                             onChange={onSelectAllClick}
-                            inputProps={{ 'aria-label': 'select all desserts' }}
+                            inputProps={{ 'aria-label': 'select all stocks' }}
                         />
                     </TableCell>
                 }
-                
+
                 {headings.map((cell) => {
                     return (
                         <TableCell
@@ -88,33 +88,33 @@ function StockTableHead(props) {
 const TableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected, handleDelete } = props;
-  
+
     return (
-      <Toolbar
-        className={clsx(classes.root, {
-            [classes.highlight]: numSelected > 0,
-        })}
-      >
-        {numSelected > 0 ? (
-          <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-            Your Stocks
-          </Typography>
-        )}
-  
-        {numSelected > 0 &&
-            <Tooltip title="Delete">
-                <IconButton onClick={handleDelete} aria-label="filter list">
-                    <DeleteIcon />
-                </IconButton>
-          </Tooltip>
-        }
-      </Toolbar>
+        <Toolbar
+            className={clsx(classes.root, {
+                [classes.highlight]: numSelected > 0,
+            })}
+        >
+            {numSelected > 0 ? (
+                <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+                    {numSelected} selected
+                </Typography>
+            ) : (
+                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+                    Your Stocks
+                </Typography>
+            )}
+
+            {numSelected > 0 &&
+                <Tooltip title="Delete">
+                    <IconButton onClick={handleDelete} aria-label="filter list">
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+            }
+        </Toolbar>
     );
-  };
+};
 
 /**
  * StockTable - the body of the table which displays the data
@@ -123,13 +123,10 @@ const TableToolbar = (props) => {
  */
 function StockTable(props) {
     const [order, setOrder] = useState('asc');
-    const [orderBy, setOrderBy] = useState('name');
-    const [page, setPage] = useState(0);
+    const [orderBy, setOrderBy] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    const [editMode, setEditMode ] = useState(false);
-
-    const { data, headings, place, setRows } = props;
+    const [editMode, setEditMode] = useState(false);
+    const { data, headings, place, setRows, pageDirection, setPageDirection, page, setPage } = props;
 
     console.log(data);
 
@@ -141,7 +138,9 @@ function StockTable(props) {
         setOrderBy(property);
     };
 
-    const changePage = (newPage) => {
+    const changePage = (event, newPage) => {
+        event.preventDefault();
+        console.log('new page is: ', newPage);
         setPage(newPage);
     };
 
@@ -156,13 +155,13 @@ function StockTable(props) {
 
     const onChange = (e, changedRow, changedColumn) => {
         console.log(Date.parse(e.target.value));
-        const newValue = (changedColumn === 'last_purchased') ? Date.parse(e.target.value)/1000 : e.target.value;
-        
+        const newValue = (changedColumn === 'last_purchased') ? Date.parse(e.target.value) / 1000 : e.target.value;
+
         const newRows = data.map(row => {
             if (row.ticker === changedRow.ticker) {
-                return { ...row, [changedColumn]: newValue};
+                return { ...row, [changedColumn]: newValue };
             } else {
-                return {...row};
+                return { ...row };
             }
         })
         setRows(newRows);
@@ -175,7 +174,7 @@ function StockTable(props) {
         setPreviousRows(data);
         setSelected([]);
     }
-    
+
     function cancelChanges() {
         // TODO: Call the API to save changes
         setEditMode(false);
@@ -187,36 +186,36 @@ function StockTable(props) {
     const [selected, setSelected] = useState([]);
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-          const newSelecteds = data.map((n) => n.ticker);
-          setSelected(newSelecteds);
-          return;
+            const newSelecteds = data.map((n) => n.ticker);
+            setSelected(newSelecteds);
+            return;
         }
         setSelected([]);
     };
-    
+
     const handleClick = (event, ticker) => {
         const selectedIndex = selected.indexOf(ticker);
         let newSelected = [];
-    
+
         if (selectedIndex === -1) {
-          newSelected = newSelected.concat(selected, ticker);
+            newSelected = newSelected.concat(selected, ticker);
         } else if (selectedIndex === 0) {
-          newSelected = newSelected.concat(selected.slice(1));
+            newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
-          newSelected = newSelected.concat(selected.slice(0, -1));
+            newSelected = newSelected.concat(selected.slice(0, -1));
         } else if (selectedIndex > 0) {
-          newSelected = newSelected.concat(
-            selected.slice(0, selectedIndex),
-            selected.slice(selectedIndex + 1),
-          );
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1),
+            );
         }
-    
+
         setSelected(newSelected);
     };
 
     const handleDelete = () => {
         const newRows = data.filter(row => {
-            if(selected.indexOf(row.ticker) === -1) {
+            if (selected.indexOf(row.ticker) === -1) {
                 return true;
             }
             return false;
@@ -231,7 +230,7 @@ function StockTable(props) {
             {place === 'portfolio' &&
                 <RightAlignedButtonContainer>
                     {!editMode &&
-                        <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon/>&nbsp;Edit Portfolio</CustomButton>
+                        <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon />&nbsp;Edit Portfolio</CustomButton>
                     }
                     {editMode &&
                         <>
@@ -284,21 +283,21 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart />
+                                                <SummaryChart pricePoints={[]} />
                                             </TableCell>
                                             {editMode ?
                                                 <>
                                                     <CustomTableCell row={row} column='last_purchased' onChange={onChange}></CustomTableCell>
                                                     <CustomTableCell row={row} column='purchase_price' onChange={onChange}></CustomTableCell>
                                                     <CustomTableCell row={row} column='units_owned' onChange={onChange}></CustomTableCell>
-                                                </>:
+                                                </> :
                                                 <>
                                                     <TableCell align="right">{formatDate(row.last_purchased)}</TableCell>
                                                     <TableCell align="right">{row.purchase_price}</TableCell>
                                                     <TableCell align="right">{row.units_owned}</TableCell>
                                                 </>
                                             }
-                                            
+
                                             <TableCell align="right">{row.price}</TableCell>
                                             <TableCell align="right">{(row.units_owned * row.price).toFixed(2)}</TableCell>
                                         </TableRow> :
@@ -314,7 +313,7 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart />
+                                                <SummaryChart points={[]} />
                                             </TableCell>
                                             <TableCell align="right">{row.price}</TableCell>
                                         </TableRow>
@@ -336,14 +335,26 @@ function StockTable(props) {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={data.length}
+                count={300}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={changePage}
                 onChangeRowsPerPage={changeRowsPerPage}
+                nextIconButtonProps={{
+                    onClick: () => {
+                        setPage(page => page + 1);
+                        setPageDirection('right')
+                    }
+                }}
+                backIconButtonProps={{
+                    onClick: () => {
+                        setPage(page => page - 1);
+                        setPageDirection('left');
+                    }
+                }}
             />
             {createModalOpen &&
-                <CreateModal setVisibility={setCreateModalOpen} setRows={setRows}/>
+                <CreateModal setVisibility={setCreateModalOpen} setRows={setRows} />
             }
         </div>
     )
@@ -397,19 +408,19 @@ function stableSort(array, comparator) {
  * @param {string} column - The column key which has changed
  */
 const CustomTableCell = (props) => {
-    const {row, column, onChange} = props;
+    const { row, column, onChange } = props;
     const value = (column === 'last_purchased') ? formatDate(row[column]) : row[column];
     const type = (column === 'last_purchased') ? 'date' : 'number';
 
     return (
-      <TableCell align="left">
-        <Input
-            name={column}
-            value={value}
-            onChange={e => onChange(e, row, column)}
-            type={type}
-        />
-      </TableCell>
+        <TableCell align="left">
+            <Input
+                name={column}
+                value={value}
+                onChange={e => onChange(e, row, column)}
+                type={type}
+            />
+        </TableCell>
     );
 };
 
@@ -426,9 +437,9 @@ function formatDate(date) {
         day = '' + d.getDate(),
         year = d.getFullYear();
 
-    if (month.length < 2) 
+    if (month.length < 2)
         month = '0' + month;
-    if (day.length < 2) 
+    if (day.length < 2)
         day = '0' + day;
 
     return [year, month, day].join('-');
@@ -437,22 +448,22 @@ function formatDate(date) {
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(1),
-      display: 'flex',
-      alignItems: 'center',
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
     },
     highlight:
-      theme.palette.type === 'light'
-        ? {
-            color: theme.palette.secondary.main,
-            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-          }
-        : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.dark,
-          },
+        theme.palette.type === 'light'
+            ? {
+                color: theme.palette.secondary.main,
+                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+            }
+            : {
+                color: theme.palette.text.primary,
+                backgroundColor: theme.palette.secondary.dark,
+            },
     title: {
-      flex: '1 1 100%',
+        flex: '1 1 100%',
     },
-  }));
+}));

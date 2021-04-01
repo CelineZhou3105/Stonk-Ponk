@@ -44,26 +44,16 @@ async function register(firstN, lastN, emailAdd, pass, securityQ, securityA) {
         })
     };
     await fetch(RegisterLink, requestOptions)
-        .then(response => response.json)
-        .then((response) => {
+        .then(response => {
             if (response.ok) { // if status code is 200
-                return true;
+                return response.json();
             } // if status code is not 200
-            return Promise.reject(response.json());
-        })
-        .catch((error) => {
-            Promise.resolve(error)
-                .then((e) => {
-                    alert(e.error);
-                });
+            return Promise.reject(response);
         });
 }
 
 async function logout(event) {
     event.preventDefault();
-
-    // localStorage.removeItem('currentUser');
-    // currentUserSubject.next(null);
     console.log("Initiating logout request...");
     const token = localStorage.getItem('token');
 
@@ -92,6 +82,4 @@ export const authentication = {
     login,
     register,
     logout,
-    // currentUser: currentUserSubject.asObservable(),
-    // get currentUserValue() { return currentUserSubject.value }
 };
