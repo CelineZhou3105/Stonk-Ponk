@@ -1,4 +1,5 @@
 import json
+import datetime 
 
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
@@ -48,9 +49,9 @@ def register(request):
                 , last_name=body["lastName"]
                 , security_question=body["securityQuestion"]
                 , security_answer=body["securityAnswer"])
-        portfolio = Portfolio.objects.create(email=body["email"])
         if user == None:
             return HttpResponseConflict()
+        portfolio = Portfolio.objects.create(email=body["email"], last_update=datetime.date.today())
     except:
         return HttpResponseBadRequest()
     return HttpResponse()
