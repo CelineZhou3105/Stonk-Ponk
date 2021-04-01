@@ -20,6 +20,8 @@ export const checkPassword = (pass, passConfirm) => {
         return false;
     }
     if (pass !== passConfirm) {
+        console.log(pass);
+        console.log(`confirm ${passConfirm}`);
         alert("Passwords does not match! Re-enter your password.");
         return false;
     }

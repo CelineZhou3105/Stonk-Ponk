@@ -31,8 +31,7 @@ const SignUp = () => {
     // handles user submitting the form
     const submitSignUpForm = (event) => {
         event.preventDefault();
-        console.log("User submitted Sign Up Form!!!");
-        if (checkPassword(pass)) {
+        if (checkPassword(pass, passConfirm)) {
             authentication.register(firstName, lastName, emailAdd, pass, securityQ, securityA)
                 .then(() => {
                     successfulSignUp();

@@ -39,6 +39,7 @@ Response
 '''
 @require_http_methods(["POST"])
 def register(request):
+    print(request.headers)
     try:
         body = json.loads(request.body.decode('utf-8'))
         user = User.objects.create_user(email=body["email"]

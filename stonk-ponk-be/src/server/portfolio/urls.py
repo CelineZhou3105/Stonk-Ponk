@@ -5,9 +5,9 @@ from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh
 from . import views
 
 urlpatterns = [
-    path('portfolio-edit', views.edit, name='portfolio-edit'),
-    path('portfolio-summary', views.summary, name='portfolio-summary'),
-    path('portfolio-details', views.details, name='portfolio-details'),
-    path('portfolio-best', views.best, name='portfolio-best'),
-    path('portfolio-worst', views.worst, name='portfolio-worst'),
+    path('edit', views.edit, name='portfolio-edit'),
+    path('summary', views.summary, name='portfolio-summary'),
+    path('details', views.details, name='portfolio-details'),
+    path('best', views.best, name='portfolio-best'),
+    path('worst', views.worst, name='portfolio-worst'),
 ]
