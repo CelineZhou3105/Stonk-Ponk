@@ -111,7 +111,35 @@ def summary(request):
     ]
 '''
 @require_http_methods(["GET"])
+# get 
+# 
 def best(request):
+    try:
+        token = request.headers["Authorization"]
+        payload = jwt_decode_handler(token)
+        length = payload["length"]
+        user = User.objects.get(id=payload["user_id"])
+        portfolio = Portfolio.objects.get(email=user.email)
+    
+        profit_margins = []
+        
+        for stockOwnership in StockOwnership.objects.filter(owner = portfolio):
+            profit_margins.append( 
+                {
+                    "name": str(stockOwnership.get_stock_name()),
+                    "ticker": str(stockOwnership.get_stock_ticker()),
+                    "price": stock_api.get_price(stockOwnership.get_stock_ticker),
+                    "profit_margin": stockOwnership.calc_profit_margin() 
+               })
+        
+        ret = {"stocks" : []}
+        ret["stocks"] = sorted(profit_margins, key = lambda so : so["profit_margin"])[(-1*length):]
+        
+        return HttpResponse(json.dumps(ret))  
+    except Exception as e:
+        return HttpResponseBadRequest("portfolio details bad request")
+    return HttpResponseBadRequest("portfolio details really bad request")
+            
     pass
 
 @require_http_methods(["GET"])
@@ -155,6 +183,3 @@ def edit(request):
         return HttpResponseBadRequest()
     return HttpResponse()
         
-
-
-

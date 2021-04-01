@@ -140,6 +140,12 @@ class StockOwnership(models.Model):
 
     def get_stock_ticker(self):
         return self.stock.ticker
+	
+	def get_profit(self):
+		return (self.volume*stock_api.get_price(self.get_stock_ticker)) - (self.volume * self.VWAP); 
+
+	def get_percentage_profit(self):
+		return (self.get_profit/(self.volume*self.VWAP)) * 100 
 
     
 
