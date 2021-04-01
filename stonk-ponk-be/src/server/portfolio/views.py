@@ -82,6 +82,7 @@ response
 
 @require_http_methods(["GET"])
 def summary(request):
+    # TODO change
     try:
         token = request.headers["Authorization"]
         
@@ -93,12 +94,22 @@ def summary(request):
         pValue = portfolio.get_value()
         pProfit = pValue - pInvestment
         pLastUpdate = str(portfolio.last_update)
-      
-        ret = { "value": pValue, "profit": pProfit, "last_update": pLastUpdate }
+
+        ownerships = list(portfolio.get_stock_ownerships())
+        ownerships.sort(reverse=True, key=lambda x : x.VWAP * x.volume)
+        ownerships = ownerships[:min(5,len(ownerships))] # get top 5
+        pKeyStocks = [ {"name": so.get_stock_name(),
+                        "ticker": so.get_stock_ticker(),
+                        "value": so.VWAP * so.volume}
+                        for so in ownerships]
+
+        ret = { "value": pValue, 
+                "profit": pProfit, 
+                "last_update": pLastUpdate,
+                "stocks": pKeyStocks }
 
         return HttpResponse(json.dumps(ret))
     except Exception as e:
-        print(e)
         return HttpResponseBadRequest()
     return HttpResponseBadRequest()
 
