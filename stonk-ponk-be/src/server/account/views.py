@@ -9,6 +9,7 @@ from rest_framework_jwt.utils import jwt_decode_handler
 import jwt.exceptions 
 
 from .models import User
+from portfolio.models import *
 
 @require_http_methods(["POST"])
 def index(request):
@@ -38,6 +39,7 @@ Response
 '''
 @require_http_methods(["POST"])
 def register(request):
+    print(request.headers)
     try:
         body = json.loads(request.body.decode('utf-8'))
         user = User.objects.create_user(email=body["email"]
@@ -46,7 +48,7 @@ def register(request):
                 , last_name=body["lastName"]
                 , security_question=body["securityQuestion"]
                 , security_answer=body["securityAnswer"])
-
+        portfolio = Portfolio.objects.create(email=body["email"])
         if user == None:
             return HttpResponseConflict()
     except:

@@ -1,7 +1,7 @@
 from django.db import models
-import uuid
 
-# Create your models here.
+import uuid
+import datetime
 
 def getPrice(trans):
     return trans.purchase_price
@@ -11,9 +11,10 @@ class Portfolio(models.Model) :
     email = models.EmailField(('email address'), unique=True)
     stocks = models.ManyToManyField("PortfolioStock", through = 'StockOwnership')
     
-    def add_stock(self, ticker_id, date, volume, price) :
+    def add_stock(self, ticker, date, volume, price) :
         # get this from market price
-        ownership, created = StockOwnership.objects.get_or_create(owner=self, stock=ticker_id)
+        stock = PortfolioStock.objects.get(ticker=ticker)
+        ownership, created = StockOwnership.objects.get_or_create(owner=self, stock=stock)
         ownership.VWAP = (ownership.VWAP * ownership.volume + price * volume) / (ownership.volume + volume)
         ownership.volume = ownership.volume + volume 
         ownership.save()
@@ -89,6 +90,32 @@ class StockOwnership(models.Model):
 
     VWAP = models.FloatField(default=0)
     volume = models.IntegerField(default=0)
+    first_purchase = models.DateField(null=True)
+            #blank=True)
+   
+    def recalculate(self):
+        tVol = 0
+        tVal = 0
+        minDate = datetime.date.today() 
+        trans = Transaction.objects.filter(stockOwnership=self)
+        for t in trans:
+            tVol += t.purchase_vol
+            tVal += t.purchase_price * t.purchase_vol
+            minDate = min(minDate, t.purchase_date)
+
+        self.volume = tVol
+        self.VWAP = tVal / tVol
+        self.first_purchase = minDate
+        self.save()
+
+    def getStockName(self):
+        return self.stock.ticker 
+
+    def getStockTicker(self):
+        return self.stock.ticker
+
+    
+
     
 class Transaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
