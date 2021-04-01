@@ -27,3 +27,5 @@ export const GetPortfolioWorstStocks = "http://localhost:8000/api/portfolio/wors
 
 // Stock API calls
 export const MarketsLink = "http://localhost:8000/api/stocks/markets";
+export const StockDetailLink = "http://localhost:8000/api/stocks/stock_detail";
+export const StockPriceLink = "http://localhost:8000/api/stocks/historical_prices";

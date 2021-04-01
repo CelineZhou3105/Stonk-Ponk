@@ -1,0 +1,21 @@
+PRE
+PRE
+{'language': 'en-US', 'region': 'US', 'quoteType': 'EQUITY', 'quoteSourceName': 'Nasdaq Real Time Price', 'triggerable': True, 'currency': 'USD', 'tradeable': False, 'exchange': 'NYQ', 'shortName': 'NIO Inc.', 'longName': 'NIO Limited', 'messageBoardId': 'finmb_311626862', 'exchangeTimezoneName': 'America/New_York', 'exchangeTimezoneShortName': 'EDT', 'gmtOffSetMilliseconds': -14400000, 'market': 'us_market', 'esgPopulated': False, 'marketState': 'PRE', 'regularMarketChange': 1.4300003, 'regularMarketChangePercent': 3.8082566, 'regularMarketTime': 1617220802, 'regularMarketPrice': 38.98, 'regularMarketDayHigh': 39.25, 'regularMarketDayRange': '37.45 - 39.25', 'regularMarketDayLow': 37.45, 'regularMarketVolume': 97678407, 'regularMarketPreviousClose': 37.55, 'bid': 0.0, 'ask': 0.0, 'bidSize': 9, 'askSize': 8, 'fullExchangeName': 'NYSE', 'financialCurrency': 'CNY', 'regularMarketOpen': 38.96, 'averageDailyVolume3Month': 110317358, 'averageDailyVolume10Day': 104542814, 'fiftyTwoWeekLowChange': 36.76, 'fiftyTwoWeekLowChangePercent': 16.558558, 'fiftyTwoWeekRange': '2.22 - 66.99', 'fiftyTwoWeekHighChange': -28.009998, 'fiftyTwoWeekHighChangePercent': -0.41812208, 'fiftyTwoWeekLow': 2.22, 'fiftyTwoWeekHigh': 66.99, 'dividendDate': 1462147200, 'earningsTimestamp': 1614605400, 'earningsTimestampStart': 1614605400, 'earningsTimestampEnd': 1614605400, 'epsTrailingTwelveMonths': -0.722, 'epsForward': -0.1, 'epsCurrentYear': -0.42, 'priceEpsCurrentYear': -92.809525, 'sharesOutstanding': 1558909952, 'bookValue': 2.909, 'fiftyDayAverage': 45.87, 'fiftyDayAverageChange': -6.8899994, 'fiftyDayAverageChangePercent': -0.1502071, 'twoHundredDayAverage': 42.297443, 'twoHundredDayAverageChange': -3.3174438, 'twoHundredDayAverageChangePercent': -0.07843131, 'marketCap': 60766310400, 'forwardPE': -389.8, 'priceToBook': 13.399794, 'sourceInterval': 15, 'exchangeDataDelayedBy': 0, 'prevName': 'NIO Inc.', 'nameChangeDate': '2021-04-01', 'firstTradeDateMilliseconds': 1536759000000, 'priceHint': 2, 'preMarketChange': 2.290001, 'preMarketChangePercent': 5.87481, 'preMarketTime': 1617268976, 'preMarketPrice': 41.27, 'displayName': 'NIO', 'symbol': 'NIO'}
+{"ticker": "NIO", "price": 38.97999954223633, "name": "NIO Inc.", "bid": 0.0, "ask": 0.0, "open": 38.96, "high": 39.25, "low": 37.45, "close": 37.55, "change": 1.4300003, "change_perc": 3.8082566, "market": "us_market", "exchange": "NYSE", "fifty_two_week_range": "2.22 - 66.99", "market_cap": "2.22 - 66.99"}
+21/01/2021
+31/03/2021
+                 open       high        low  ...   adjclose     volume  ticker
+2021-01-18  59.849998  62.169998  55.880001  ...  61.950001  302021200     NIO
+2021-01-25  64.050003  64.519997  55.150002  ...  57.000000  408091300     NIO
+2021-02-01  59.070000  59.200001  54.369999  ...  56.669998  317795500     NIO
+2021-02-08  57.080002  64.599998  56.180000  ...  59.849998  347232600     NIO
+2021-02-15  60.400002  62.139999  52.599998  ...  55.040001  224807300     NIO
+2021-02-22  54.180000  54.369999  41.660000  ...  45.779999  489693500     NIO
+2021-03-01  48.549999  50.419998  31.910000  ...  38.110001  832983300     NIO
+2021-03-08  36.970001  46.160000  34.900002  ...  45.500000  755776600     NIO
+2021-03-15  45.549999  46.290001  40.439999  ...  43.349998  422085200     NIO
+2021-03-22  44.070000  44.560001  34.000000  ...  36.130001  542832100     NIO
+2021-03-29  35.259998  37.959999  34.500000  ...  37.549999  189341700     NIO
+
+[11 rows x 7 columns]
+[{'date': '2021-01-18', 'price': 61.95000076293945}, {'date': '2021-01-25', 'price': 57.0}, {'date': '2021-02-01', 'price': 56.66999816894531}, {'date': '2021-02-08', 'price': 59.849998474121094}, {'date': '2021-02-15', 'price': 55.040000915527344}, {'date': '2021-02-22', 'price': 45.779998779296875}, {'date': '2021-03-01', 'price': 38.11000061035156}, {'date': '2021-03-08', 'price': 45.5}, {'date': '2021-03-15', 'price': 43.349998474121094}, {'date': '2021-03-22', 'price': 36.130001068115234}, {'date': '2021-03-29', 'price': 37.54999923706055}]
