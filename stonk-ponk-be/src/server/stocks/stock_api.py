@@ -34,7 +34,7 @@ def get_market_data(type, page_num):
         market_stock_dict['price'] = row['Price (Intraday)']
         market_stock_dict['change_perc'] = row['% Change']
 
-        prices = get_stock_prices(market_stock_dict['ticker'], 'd')
+        prices = get_stock_prices(market_stock_dict['ticker'], 'market')
         market_stock_dict['prev_week_prices'] = prices
 
         market_stocks_list.append(market_stock_dict)
@@ -68,6 +68,7 @@ def get_stock_data(ticker):
         stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
         
         return json.dumps(stock_dict)
+    
     except:
         return "Stock Not Found"
 
@@ -89,22 +90,29 @@ def get_quotes(ticker):
     except:
         return "Stock Not Found"
 
-#interval will be d, wk, mo, or y
+#interval will be market, last_week, last_month, last_six_months, last_year
 def get_stock_prices(ticker, interval_type):
     price_list = []
     
-    interval_string = str(1) + interval_type
+    
     end_date = date.today()
     start_date = end_date
 
-    if interval_type == 'd':  
+    if interval_type == 'market':  
         start_date = end_date - timedelta(days = 100)
+        interval_string = str(1) + "d"
     
-    elif interval_type == 'wk':
-        start_date = end_date - timedelta(weeks = 10)
+    elif interval_type == 'last_week':
+        start_date = end_date - timedelta(weeks = 1)
+        interval_string = str(1) + "d"
+    
+    elif interval_type == 'last_month':
+        start_date = end_date - relativedelta(months = 1)
+        interval_string = str(1) + "d"
 
-    elif interval_type == 'mo':
-        start_date = end_date - timedelta(months = 10)
+    elif interval_type == 'last_six_months':
+        start_date = end_date - relativedelta(months = 6)
+        interval_string = str(1) + "mo"
 
     elif interval_type == "y":
         start_date = end_date - relativedelta(months = 10*12)
@@ -121,6 +129,7 @@ def get_stock_prices(ticker, interval_type):
         
 
     return json.dumps(price_list)
+
 
 def get_historical_price(ticker, date):
     start_date = date.strftime("%d/%m/%Y")
