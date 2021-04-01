@@ -35,13 +35,11 @@ const SignUp = () => {
             authentication.register(firstName, lastName, emailAdd, pass, securityQ, securityA)
                 .then(() => {
                     successfulSignUp();
-                    console.log('success');
                 })
                 .catch((error) => {
                     Promise.resolve(error)
-                        .then((e) => {
-                            console.log(e);
-                            alert(`${e.status} ${e.statusText}`);
+                        .then((error) => {
+                            alert(`${error.status} ${error.statusText}`);
                         });
                 })
         }

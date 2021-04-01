@@ -120,7 +120,7 @@ def get_stock_prices(ticker, interval_type):
         price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
         
 
-    return price_list
+    return json.dumps(price_list)
 
 def get_historical_price(ticker, date):
     start_date = date.strftime("%d/%m/%Y")
