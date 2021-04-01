@@ -23,3 +23,4 @@ export const GetPortfolio = "http://localhost:8000/api/portfolio";
 
 // Stock API calls
 export const MarketsLink = "http://localhost:8000/api/stocks/markets";
+export const StockDetailLink = "http://localhost:8000/api/stocks/stock_detail";

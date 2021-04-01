@@ -1,6 +1,7 @@
 import { MarketsLink } from '../api-links/constants';
+import { StockDetailLink } from '../api-links/constants';
 
-export async function getMarketData(type, page_num) {
+async function getMarketData(type, page_num) {
     // TODO - Add page_num to the variables
     const requestBody = {
         type: type,
@@ -25,6 +26,28 @@ export async function getMarketData(type, page_num) {
 
 }
 
+async function getStockDetail(ticker) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            ticker: ticker,
+        })
+    };
+    return await fetch(StockDetailLink, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200
+                return Promise.resolve(response);
+            } // if status code is not 200
+            console.log('error');
+            return Promise.reject(response);
+        })
+}
+
 export const market = {
-    getMarketData
+    getMarketData,
+    getStockDetail
 }
