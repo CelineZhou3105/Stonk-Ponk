@@ -64,7 +64,7 @@ def get_stock_data(ticker):
         stock_dict['market'] = quotes['market']
         stock_dict['exchange'] = quotes['fullExchangeName']
 
-        stock_dict['52_day_range'] = quotes['fiftyTwoWeekRange']
+        stock_dict['fifty_two_week_range'] = quotes['fiftyTwoWeekRange']
         stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
         
         return json.dumps(stock_dict)
@@ -110,7 +110,8 @@ def get_stock_prices(ticker, interval_type):
         start_date = end_date - relativedelta(months = 10*12)
         interval_string = str(1) + "mo"
 
-    end_date = date.today().strftime("%d/%m/%Y")
+    end_date = end_date - timedelta(days = 1)
+    end_date = end_date.strftime("%d/%m/%Y")
     start_date = start_date.strftime("%d/%m/%Y")
 
     price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = interval_string)
