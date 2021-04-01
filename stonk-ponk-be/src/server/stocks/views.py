@@ -39,7 +39,7 @@ def stock_prices(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
 
-        responseData = get_stock_prices(body['ticker'], body['interval_type'])
+        responseData = stock_api.get_stock_prices(body['ticker'], body['interval_type'])
         
         return HttpResponse(responseData)
     
