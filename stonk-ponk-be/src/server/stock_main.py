@@ -9,6 +9,5 @@ def main():
     #print(si.get_market_data("most_active", 1))
     #print(si.get_stock_data('NFLX'))
     print(si.get_historical_price("NFLX", date))
-
 if __name__ == '__main__':
     main()

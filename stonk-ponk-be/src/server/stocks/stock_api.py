@@ -64,8 +64,6 @@ def get_stock_data(ticker):
 
         stock_dict['52_day_range'] = quotes['fiftyTwoWeekRange']
         stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
-
-        stock_dict['1_week_prices'] = get_stock_prices(ticker, 'd')
         
         return json.dumps(stock_dict)
     except:
