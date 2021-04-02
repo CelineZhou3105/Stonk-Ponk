@@ -98,7 +98,7 @@ function StockDetails() {
                 <p>Exchange: {exchange}</p>
                 <TableContainer>
                     <Table>
-                        {stats.map((value, index) => {
+                        {stats.map((value) => {
                             return (
                                 <TableRow>
                                     <TableCell variant="head">
