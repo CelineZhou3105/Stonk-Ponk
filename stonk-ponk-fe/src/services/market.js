@@ -50,7 +50,7 @@ async function getStockDetail(ticker) {
         })
 }
 
-async function getStockPrice(ticker, timeInterval) {
+async function getStockPrice(ticker, typeInterval) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -59,7 +59,7 @@ async function getStockPrice(ticker, timeInterval) {
         },
         body: JSON.stringify({
             ticker: ticker,
-            time_interval: timeInterval,
+            interval_type: typeInterval,
         })
     };
     return await fetch(StockPriceLink, requestOptions)
