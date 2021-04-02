@@ -64,40 +64,27 @@ function StockDetails() {
             })
     }, [id, setStats, setName, setTicker, setPrice, setMarketName, setExchange]);
 
-    useEffect(() => {
-        market.getStockPrice(id, 'd')
-            .then(response => response.json())
-            .then(json => {
-                console.log(json);
-            })
-            .catch((error) => {
-                Promise.resolve(error)
-                    .then((error) => {
-                        console.log(error)
-                        alert(`${error.status} ${error.statusText}`);
-                    });
-            })
-    }, [id]);
 
-    const [period, setPeriod] = useState('week');
+
+    const [period, setPeriod] = useState('last_week');
     const [tabValue, setTabValue] = React.useState(0);
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
         switch (newValue) {
             case 0:
-                setPeriod('week');
+                setPeriod('last_week');
                 break;
             case 1:
-                setPeriod('month');
+                setPeriod('last_month');
                 break;
             case 2:
-                setPeriod('6 months');
+                setPeriod('last_six_months');
                 break;
             case 3:
-                setPeriod('year');
+                setPeriod('last_year');
                 break;
             default:
-                setPeriod('week');
+                setPeriod('last_week');
                 break;
         }
     };
@@ -127,7 +114,7 @@ function StockDetails() {
                 </TableContainer>
                 <ChartContainer style={{ width: "100%" }}>
                     <GraphAndPeriodDiv>
-                        <StockDetailsChart period={period} />
+                        <StockDetailsChart period={period} id={id} />
                         <Tabs value={tabValue}
                             indicatorColor="primary"
                             textColor="primary"
