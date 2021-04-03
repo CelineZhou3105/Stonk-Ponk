@@ -8,6 +8,8 @@ import { ChartContainer, GraphAndPeriodDiv, PageContainer } from '../css/Div';
 import { useParams } from "react-router-dom";
 import { PageTitle } from '../css/Text';
 import { market } from '../services/market';
+import { getStockDetailTooltipText } from '../helpers/tooltipText';
+import { Tooltip } from '@material-ui/core';
 
 function StockDetails() {
 
@@ -101,9 +103,11 @@ function StockDetails() {
                         {stats.map((value) => {
                             return (
                                 <TableRow>
-                                    <TableCell variant="head">
-                                        {value.label}
-                                    </TableCell>
+                                    <Tooltip title={getStockDetailTooltipText(value.label)} placement="right">
+                                        <TableCell variant="head">
+                                            {value.label}
+                                        </TableCell>
+                                    </Tooltip>
                                     <TableCell>
                                         {value.value}
                                     </TableCell>
