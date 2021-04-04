@@ -1,6 +1,6 @@
 **/db.sqlite3
-src/server/account/migration
-src/server/portfolio/migration
+src/server/account/migrations
+src/server/portfolio/migrations
 virtual/*
 **/__pycache__/
 tags
