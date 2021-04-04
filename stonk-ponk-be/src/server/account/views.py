@@ -147,4 +147,52 @@ def update_account(request):
     payload = jwt_decode_handler(body["token"])
     user = User.objects.get(id=payload["user_id"])
 
+@require_http_methods(["POST"])
+def change_name(request):
+    first_name = None
+    last_name = None
+    r_email = None
+    try:
+        body = json.loads(request.body.decode("utf-8"))
+        r_email = body["email"]
 
+        user = User.objects.get(email = r_email)
+
+        first_name = body["first_name"]
+        user.change_first_name(first_name) 
+
+        last_name = body["last_name"] 
+        user.change_last_name(last_name)
+
+    except KeyError:
+        if r_email == None:
+            return HttpResponseBadRequest()
+        if first_name == None:
+            try:
+                last_name = body["last name"] 
+                user.change_last_name(last_name)
+                return HttpResponse()
+            except KeyError:
+                return HttpResponseBadRequest()
+        if last_name == None:
+            return HttpResponse()
+    except User.DoesNotExist:
+        return HttpResponseNotFound()
+    
+    return HttpResponse()
+             
+    '''
+    if first_name not empty
+        set first_name to first_name
+    if last_name not empty
+        set last_name to last_name
+    '''
+def change_login_credentials(request):
+    '''
+    if email not empty
+        set email to email 
+        logout
+    if username not empty
+        set username to username
+        logout
+    '''
