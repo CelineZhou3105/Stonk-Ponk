@@ -10,4 +10,6 @@ urlpatterns = [
     path('login', obtain_jwt_token),
     path('reset_password', views.reset_password, name='reset_password'),
     path('forgot_password', views.forgot_password, name='forgot_password'),
+    path('change_name' , views.change_name, name ='change_name'),
+    path('change_login_credentials', views.change_login_credentials, name = 'change_login_credentials') 
 ]
