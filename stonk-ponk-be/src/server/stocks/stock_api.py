@@ -34,7 +34,7 @@ def get_market_data(type, page_num):
         market_stock_dict['price'] = row['Price (Intraday)']
         market_stock_dict['change_perc'] = row['% Change']
 
-        prices = get_stock_prices(market_stock_dict['ticker'], 'd')
+        prices = get_stock_prices(market_stock_dict['ticker'], 'market')
         market_stock_dict['prev_week_prices'] = prices
 
         market_stocks_list.append(market_stock_dict)
@@ -46,7 +46,7 @@ def get_market_data(type, page_num):
 def get_stock_data(ticker):
     try:
         quotes = si.get_quote_data(ticker)
-        
+
         stock_dict = {}
         stock_dict['ticker'] = ticker
         stock_dict['price'] = get_price(ticker)
@@ -55,6 +55,8 @@ def get_stock_data(ticker):
         stock_dict['ask'] = quotes['ask']
         stock_dict['open'] = quotes['regularMarketOpen']
         stock_dict['high'] = quotes['regularMarketDayHigh']
+        stock_dict['low'] = quotes['regularMarketDayLow']
+
         stock_dict['close'] = quotes['regularMarketPreviousClose']
         stock_dict['change'] = quotes['regularMarketChange']
         stock_dict['change_perc'] = quotes['regularMarketChangePercent']
@@ -62,14 +64,13 @@ def get_stock_data(ticker):
         stock_dict['market'] = quotes['market']
         stock_dict['exchange'] = quotes['fullExchangeName']
 
-        stock_dict['52_day_range'] = quotes['fiftyTwoWeekRange']
+        stock_dict['fifty_two_week_range'] = quotes['fiftyTwoWeekRange']
         stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
 
-        stock_dict['1_week_prices'] = get_stock_prices(ticker, 'd')
-        
         return json.dumps(stock_dict)
+    
     except:
-        return "Stock Not Found"
+        raise Error("Stock Not Found")
 
 def get_price(ticker):
     try:
@@ -87,29 +88,37 @@ def get_quotes(ticker):
     try:
         return si.get_quote_table(ticker)
     except:
-        return "Stock Not Found"
+        raise Error("Stock Not Found")
 
-#interval will be d, wk, mo, or y
+#interval will be market, last_week, last_month, last_six_months, last_year
 def get_stock_prices(ticker, interval_type):
     price_list = []
     
-    interval_string = str(1) + interval_type
     end_date = date.today()
+    start_date = end_date
 
-    if interval_type == 'd':  
+    if interval_type == 'market':  
         start_date = end_date - timedelta(days = 100)
+        interval_string = str(1) + "d"
     
-    elif interval_type == 'wk':
-        start_date = end_date - timedelta(weeks = 10)
+    elif interval_type == 'last_week':
+        start_date = end_date - timedelta(weeks = 1)
+        interval_string = str(1) + "d"
+    
+    elif interval_type == 'last_month':
+        start_date = end_date - timedelta(weeks = 5)
+        interval_string = str(1) + "d"
 
-    elif interval_type == 'mo':
-        start_date = end_date - timedelta(months = 10)
+    elif interval_type == 'last_six_months':
+        start_date = end_date - timedelta(weeks = 6 * 5)
+        interval_string = str(1) + "d"
 
-    elif interval_type == "y":
-        start_date = end_date - relativedelta(months = 10*12)
-        interval_string = str(1) + "mo"
+    elif interval_type == "last_year":
+        start_date = end_date - timedelta(weeks = 12 * 5)
+        interval_string = str(1) + "d"
 
-    end_date = date.today().strftime("%d/%m/%Y")
+    end_date = end_date - timedelta(days = 1)
+    end_date = end_date.strftime("%d/%m/%Y")
     start_date = start_date.strftime("%d/%m/%Y")
 
     price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = interval_string)
@@ -118,7 +127,8 @@ def get_stock_prices(ticker, interval_type):
         price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
         
 
-    return price_list
+    return json.dumps(price_list)
+
 
 def get_historical_price(ticker, date):
     start_date = date.strftime("%d/%m/%Y")

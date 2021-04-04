@@ -26,6 +26,22 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import CreateModal from './CreateModal';
 
+import { portfolio } from '../services/portfolio';
+
+
+// TODO - REMOVE THIS IN PORTFOLIO PAGE
+const dummyPortfolioData = [
+    {date: "2021-01-01", price: 2.50},
+    {date: "2021-01-02", price: 5.50},
+    {date: "2021-01-03", price: 4.50},
+    {date: "2021-01-04", price: 7.50},
+    {date: "2021-01-05", price: 10.50},
+    {date: "2021-01-06", price: 12.50},
+    {date: "2021-01-07", price: 12.70},
+    {date: "2021-01-08", price: 13.50},
+    {date: "2021-01-09", price: 19.50},
+    {date: "2021-01-10", price: 19.50},
+]
 
 /**
  * StockTableHead - The header column of the table
@@ -101,7 +117,7 @@ const TableToolbar = (props) => {
                 </Typography>
             ) : (
                 <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                    Your Stocks
+                    Stocks
                 </Typography>
             )}
 
@@ -125,8 +141,8 @@ function StockTable(props) {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [editMode, setEditMode] = useState(false);
-    const { data, headings, place, setRows, pageDirection, setPageDirection, page, setPage } = props;
+    const [editMode, setEditMode ] = useState(false);
+    const { data, headings, place, setRows, setPageDirection, page, setPage } = props;
 
     console.log(data);
 
@@ -154,8 +170,7 @@ function StockTable(props) {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const onChange = (e, changedRow, changedColumn) => {
-        console.log(Date.parse(e.target.value));
-        const newValue = (changedColumn === 'last_purchased') ? Date.parse(e.target.value) / 1000 : e.target.value;
+        const newValue = (changedColumn === 'last_purchased') ? e.target.value : e.target.value;
 
         const newRows = data.map(row => {
             if (row.ticker === changedRow.ticker) {
@@ -169,14 +184,41 @@ function StockTable(props) {
 
     function saveChanges() {
         // TODO: Call the API to save changes
-        setEditMode(false);
-        console.log("Changes saved.");
-        setPreviousRows(data);
-        setSelected([]);
+        const token = localStorage.getItem('token');
+
+        const newPortfolio = {};
+        const newStocks = [];
+        const newStockMapping = {};
+
+        for (let i = 0; i < data.length; i++) {
+            let currentTicker = data[i].ticker;
+            if (!(currentTicker in newStockMapping)) {
+                newStockMapping[currentTicker] = newStocks.length;
+                newStocks.push({
+                    ticker: currentTicker,
+                    transactions: []
+                })
+            } 
+            newStocks[newStockMapping[currentTicker]].transactions.push({
+                date: data[i].first_purchase_date,
+                volume: data[i].volume,
+                price: data[i].vwap,
+            })
+        }
+        newPortfolio['stocks'] = newStocks;
+
+        portfolio.editPortfolio(token, newPortfolio).then(() => {
+            setEditMode(false);
+            console.log("Changes saved.");
+            setPreviousRows(data);
+            setSelected([]);
+        }).catch(error => {
+            console.log("???");
+            alert(error);
+        })
     }
 
     function cancelChanges() {
-        // TODO: Call the API to save changes
         setEditMode(false);
         console.log("Changes cancelled.");
         setRows(previousRows);
@@ -268,7 +310,7 @@ function StockTable(props) {
                                             hover
                                             role="checkbox"
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={row.ticker}
                                             onClick={(event) => handleClick(event, row.ticker)}
                                         >
                                             {editMode &&
@@ -283,37 +325,37 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart pricePoints={[]} />
+                                                <SummaryChart points={dummyPortfolioData} />
                                             </TableCell>
                                             {editMode ?
                                                 <>
-                                                    <CustomTableCell row={row} column='last_purchased' onChange={onChange}></CustomTableCell>
-                                                    <CustomTableCell row={row} column='purchase_price' onChange={onChange}></CustomTableCell>
-                                                    <CustomTableCell row={row} column='units_owned' onChange={onChange}></CustomTableCell>
+                                                    <CustomTableCell row={row} column='first_purchase_date' onChange={onChange}></CustomTableCell>
+                                                    <CustomTableCell row={row} column='vwap' onChange={onChange}></CustomTableCell>
+                                                    <CustomTableCell row={row} column='volume' onChange={onChange}></CustomTableCell>
                                                 </> :
                                                 <>
-                                                    <TableCell align="right">{formatDate(row.last_purchased)}</TableCell>
-                                                    <TableCell align="right">{row.purchase_price}</TableCell>
-                                                    <TableCell align="right">{row.units_owned}</TableCell>
+                                                    <TableCell align="right">{row.first_purchase_date}</TableCell>
+                                                    <TableCell align="right">{row.vwap}</TableCell>
+                                                    <TableCell align="right">{row.volume}</TableCell>
                                                 </>
                                             }
 
-                                            <TableCell align="right">{row.price}</TableCell>
-                                            <TableCell align="right">{(row.units_owned * row.price).toFixed(2)}</TableCell>
+                                            <TableCell align="right">{row.price.toFixed(2)}</TableCell> 
+                                            <TableCell align="right">{(row.volume * row.price).toFixed(2)}</TableCell>
                                         </TableRow> :
 
                                         <TableRow
                                             hover
                                             role="checkbox"
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={row.ticker}
                                         >
                                             <TableCell component="th" scope="row" padding="none">
                                                 <NormalText>{row.name}</NormalText>
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart points={[]} />
+                                                <SummaryChart points={JSON.parse(row.prev_week_prices)}/>
                                             </TableCell>
                                             <TableCell align="right">{row.price}</TableCell>
                                         </TableRow>
@@ -332,7 +374,17 @@ function StockTable(props) {
                     <AddCircleIcon />&nbsp;Add New Stock
                 </CustomButton>
             }
+            {place === 'portfolio' ? 
             <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={data.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={changePage}
+                onChangeRowsPerPage={changeRowsPerPage}
+            />
+            : <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={300}
@@ -353,6 +405,7 @@ function StockTable(props) {
                     }
                 }}
             />
+            }
             {createModalOpen &&
                 <CreateModal setVisibility={setCreateModalOpen} setRows={setRows} />
             }
@@ -409,8 +462,10 @@ function stableSort(array, comparator) {
  */
 const CustomTableCell = (props) => {
     const { row, column, onChange } = props;
-    const value = (column === 'last_purchased') ? formatDate(row[column]) : row[column];
-    const type = (column === 'last_purchased') ? 'date' : 'number';
+
+    const value = (column === 'first_purchase_date') ?row[column] : row[column];
+    console.log("value: ",value);
+    const type = (column === 'first_purchase_date') ? 'date' : 'number';
 
     return (
         <TableCell align="left">
@@ -425,26 +480,6 @@ const CustomTableCell = (props) => {
 };
 
 export default StockTable;
-
-
-/**
- * formatDate - converts a unix timestamp to a readable date
- * @param {number} date - number of seconds in Unix time  
- */
-function formatDate(date) {
-    var d = new Date(date * 1000),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}
-
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {

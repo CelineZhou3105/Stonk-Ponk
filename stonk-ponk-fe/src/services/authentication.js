@@ -46,10 +46,10 @@ async function register(firstN, lastN, emailAdd, pass, securityQ, securityA) {
     await fetch(RegisterLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
-                return response.json();
+                return Promise.resolve(response);
             } // if status code is not 200
             return Promise.reject(response);
-        });
+        })
 }
 
 async function logout(event) {

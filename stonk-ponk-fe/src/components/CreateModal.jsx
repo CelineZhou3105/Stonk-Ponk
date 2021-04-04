@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { ModalContainer, ModalContent} from '../css/Div';
-import { GenericForm, GenericSubmitButton, InputUnderlineDiv, ModalLabel, TextField } from '../css/Form';
+import { GenericForm, InputUnderlineDiv, ModalLabel, TextField } from '../css/Form';
 import { TextField as AutocompleteTextField } from '@material-ui/core';
-import { CloseButton } from '../css/Button';
-import { SubTitle } from '../css/Text';
+import { CloseButton, CustomButton } from '../css/Button';
+import { ColorText, SubText, SubTitle } from '../css/Text';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { market } from '../services/market';
 
 
 function CreateModal(props) {
@@ -15,40 +16,49 @@ function CreateModal(props) {
     const [purchasePrice, setPurchasePrice] = useState(0);
     const [unitsOwned, setUnitsOwned] = useState(1);
     const [purchaseDate, setPurchaseDate] = useState(Date.now());
-    const [selectedStock, setSelectedStock] = useState('');
-
-    //TODO - Get options from the backend
-    const options = [
-        { name: 'Company A', ticker: 'ABC', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf' },
-        { name: 'Company B', ticker: 'DEF', performance: 'graph', price: 300.42, sector: 'aus', type: 'etf' },
-        { name: 'Company C', ticker: 'GHI', performance: 'graph', price: 2061.92, sector: 'aus', type: 'etf' },
-        { name: 'Company D', ticker: 'JKL', performance: 'graph', price: 2061.92, sector: 'aus', type: 'stock' },
-    ];
+    const [selectedStock, setSelectedStock] = useState({name: '', ticker: ''});
+    const [input, setInput] = useState('');
+    const [error, setError] = useState(false);
+    const [stockOptions, setStockOptions] = useState([]);
 
     function createStockRow() {
         const newRow = {};
         newRow['name'] = selectedStock.name;
         newRow['ticker'] = selectedStock.ticker;
-        newRow['performance'] = 'graph';
-        newRow['price'] = selectedStock.price;
-        newRow['sector'] = selectedStock.sector;
-        newRow['type'] = selectedStock.type;
-        newRow['last_purchased'] = Date.parse(purchaseDate)/1000;
-        newRow['units_owned'] = unitsOwned;
-        newRow['purchase_price'] = purchasePrice;
-        newRow['original_contribution'] = purchasePrice * unitsOwned;
-
+        newRow['price'] = selectedStock.price; // current price, gotten from backend
+        newRow['first_purchase_date'] = purchaseDate;
+        newRow['volume'] = unitsOwned;
+        newRow['vwap'] = purchasePrice; // This is the price that they purchased at - will be recalculated TODO
         return newRow;
-    }
+    };
 
     function handleSubmit(event) {
-        //TODO - create the stock row, add it to the actual table rows 
         event.preventDefault();
         const newRow = createStockRow();
         setRows(rows => [...rows, newRow])
         setVisibility(false);
-    }
+    };
 
+    useEffect(() => {
+        let results = [];
+        setError(false);
+        market.getStockDetail(input)
+        .then(response => response.json())
+        .then(res => {
+            results.push(res);
+        })
+        .catch((e) => {
+            console.log('Could not find stock on US market.');
+        }).then(() => market.getStockDetail(input+".AX"))
+        .then(response => response.json())
+        .then(res => {
+            results.push(res);
+        }).catch((e) => {
+            console.log('Could not find stock on AUS market.');
+        }).finally(() => {
+            setStockOptions(results);
+        })
+    }, [input]);
 
     return(
         <ModalContainer>
@@ -57,31 +67,36 @@ function CreateModal(props) {
                     <CloseButton onClick={() => setVisibility(false)} >&times;</CloseButton>
                     <SubTitle>Add a new stock</SubTitle>
                     
-                    <ModalLabel htmlFor="search">Stock Name</ModalLabel>
+                    <ModalLabel htmlFor="search">Stock Ticker</ModalLabel>
+                    <SubText>Don't know the ticker? Find it on: </SubText>
                     <Autocomplete
-                        id="search"
-                        options={options}
+                        options={stockOptions}
                         getOptionLabel={(option) => option.name}
+                        onChange={(e, value) => setSelectedStock(value)}
                         style={{ width: '100%' }}
-                        onChange={(e, value) => { setSelectedStock(value)}}
-                        renderInput={(params) => <AutocompleteTextField {...params} label="Search..." variant="outlined" />}
+                        renderInput={(params) => <AutocompleteTextField {...params} label="Enter your ticker..." variant="outlined" />}
+                        onInputChange={(e, value) => { console.log("Setting input to: ", value); setInput(value); }}
+                        noOptionsText="No stocks found."
+                        filterOptions={x => x}
                     />
+                    {error &&
+                        <ColorText color="#e80000">Error, this stock does not exist.</ColorText>
+                    }
                     <InputUnderlineDiv width="100%" className="underline"/>
 
                     <ModalLabel htmlFor="purchase-data">Purchase Date</ModalLabel>
-                    <TextField id="purchase-data" type="date" defaultValue={purchaseDate} required onChange={(e) => { setPurchaseDate(e.target.value) }} />
+                    <TextField id="purchase-date" type="date" defaultValue={purchaseDate} required onChange={(e) => { setPurchaseDate(e.target.value) }} />
                     <InputUnderlineDiv width="100%" className="underline"/>
-
 
                     <ModalLabel htmlFor="purchase-price">Purchase Price</ModalLabel>
-                    <TextField id="purchase-price" type="text" defaultValue={purchasePrice} required onChange={(e) => { setPurchasePrice(e.target.value) }} />
+                    <TextField id="purchase-price" type="number" min={1} step="0.01" defaultValue={purchasePrice} required onChange={(e) => { setPurchasePrice(e.target.value) }} />
                     <InputUnderlineDiv width="100%" className="underline"/>
 
-                    <ModalLabel htmlFor="units-owned">Units Owned</ModalLabel>
+                    <ModalLabel htmlFor="units-owned">Units Bought</ModalLabel>
                     <TextField id="units-owned" type="number" min={1} defaultValue={unitsOwned} required onChange={(e) => { setUnitsOwned(e.target.value) }} />
                     <InputUnderlineDiv width="100%" className="underline"/>
 
-                    <GenericSubmitButton type="submit" value="Add Stock" aria-label="Button to login" />
+                    <CustomButton type="submit" margin="2em 0" value="Add Stock" aria-label="Button to add stock to portfolio">Add Stock</CustomButton>
                 </GenericForm>
             </ModalContent>
         </ModalContainer>

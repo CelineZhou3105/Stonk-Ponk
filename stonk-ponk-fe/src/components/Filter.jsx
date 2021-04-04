@@ -28,14 +28,6 @@ const sectorOptions = [
     { value: 'us', label: 'US' },
 ];
 
-// Filter for security type (ETFs, Shares)
-const securityTypeOption = [
-    { value: 'all', label: 'All' },
-    { value: 'stock', label: 'Stocks' },
-    { value: 'derivative', label: 'Deriviatives' },
-    { value: 'etf', label: 'ETFs' },
-];
-
 export function onSectorChange(event, stocks) {
     if (event.value === 'all') {
         return stocks;

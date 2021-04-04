@@ -45,7 +45,7 @@ export const SignUpSectionDiv = styled.div`
     justify-content: center;
     align-items: flex-start;
     width: 100%;
-    gap: ${props => props.gap ? props.gap: "0"};
+    gap: ${props => props.gap ? props.gap : "0"};
 `;
 
 export const FlexColumnCenterDiv = createFlexColumnDiv("center", "center", "50px");
@@ -155,6 +155,7 @@ export const ProfileModal = styled.div`
     right: 50px;
     background: white;
     width: 300px;
+    z-index: 9999;
 `;
 
 export const ProfilePhotoContainer = styled.div`
@@ -163,6 +164,7 @@ export const ProfilePhotoContainer = styled.div`
 
 export const ProfileModaItem = styled.div`
     padding: 30px 0;
+    cursor: pointer;
 
     &:hover {
         background-color: #9f22ff3f;
@@ -192,13 +194,15 @@ export const Container = styled.div`
     box-sizing: border-box;
     border-radius: 20px;
     display: flex;
-    flex-direction: ${props => props.flex_direction? props.flex_direction : "row"};
+    flex-direction: ${props => props.flex_direction ? props.flex_direction : "row"};
     flex: 1;
     margin-top: 1em;
     margin-bottom: 1em;
     box-shadow: 4px 4px 4px rgba(108, 108, 108, 0.25);
     padding: 0 1em;
+    justify-content: ${props => props.justify_content ? props.justify_content : "flex-start"};
     gap: ${props => props.gap ? props.gap : 0};
+    align-items: ${props => props.align_items ? props.align_items : 'flex-start'};
 `;
 export const PortfolioValueContainer = createFlexColumnDiv('center', 'center', '0');
 
