@@ -152,30 +152,23 @@ def change_name(request):
     first_name = None
     last_name = None
     r_email = None
-    try:
-        body = json.loads(request.body.decode("utf-8"))
-        r_email = body["email"]
 
-        user = User.objects.get(email = r_email)
+    body = json.loads(request.body.decode("utf-8"))
+    r_email = body["email"]
 
-        first_name = body["first_name"]
+    user = User.objects.get(email = r_email)
+
+    first_name = body["first_name"]
+    if (first_name != user.get_short_name()):
         user.change_first_name(first_name) 
 
-        last_name = body["last_name"] 
+    last_name = body["last_name"] 
+    if (last_name != user.get_last_name()):
         user.change_last_name(last_name)
 
     except KeyError:
         if r_email == None:
             return HttpResponseBadRequest()
-        if first_name == None:
-            try:
-                last_name = body["last name"] 
-                user.change_last_name(last_name)
-                return HttpResponse()
-            except KeyError:
-                return HttpResponseBadRequest()
-        if last_name == None:
-            return HttpResponse()
     except User.DoesNotExist:
         return HttpResponseNotFound()
     

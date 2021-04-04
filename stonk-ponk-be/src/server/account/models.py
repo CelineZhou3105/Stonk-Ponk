@@ -39,6 +39,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         '''
         return self.first_name
 
+    def get_last_name(self):
+        return self.last_name
+
     def email_user(self, subject, message, from_email=None, **kwargs):
         '''
         Sends an email to this User.
