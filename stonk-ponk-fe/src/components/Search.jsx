@@ -9,7 +9,7 @@ import { TextField } from '@material-ui/core';
  * @param {funtion} setResults - the setter for the useState of the data we're changing 
  */
 function Search(props) {
-    const {options, setResults} = props;
+    const { options, setResults } = props;
     const [searchItem, setSearchItem] = useState('');
 
     // TODO - Remove the hardcoding and add an API call.
@@ -22,7 +22,7 @@ function Search(props) {
         }
     };
 
-    return(
+    return (
         <>
             <Autocomplete
                 id="search"
@@ -30,7 +30,6 @@ function Search(props) {
                 getOptionLabel={(option) => option.name}
                 style={{ width: 300 }}
                 onChange={(e, value) => {
-                    console.log("changing value to ", value);
                     setSearchItem(value)
                 }}
                 renderInput={(params) => <TextField {...params} label="Search..." variant="outlined" />}
