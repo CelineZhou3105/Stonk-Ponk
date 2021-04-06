@@ -214,11 +214,11 @@ def change_login_credentials(request):
         old_password = body["old_password"]
         new_password = body["new_password"]
 
-#       if (user.check_password(old_password)):
+        # if (user.check_password(old_password)):
         user.set_password(new_password)
         user.save()
-#       else:
-#           return HttpResponseForbidden(json.dumps({"error": "bad password"}))
+        # else:
+        #     return HttpResponseForbidden(json.dumps({"error": "bad password"}))
 
         return HttpResponse()
     except Exception as e :
