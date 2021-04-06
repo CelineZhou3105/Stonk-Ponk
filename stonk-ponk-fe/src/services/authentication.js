@@ -1,4 +1,4 @@
-import { LoginLink, LogoutLink, RegisterLink } from '../api-links/constants';
+import { LoginLink, RegisterLink } from '../api-links/constants';
 
 async function login(event, email, password) {
     event.preventDefault();
@@ -51,35 +51,7 @@ async function register(firstN, lastN, emailAdd, pass, securityQ, securityA) {
             return Promise.reject(response);
         })
 }
-
-async function logout(event) {
-    event.preventDefault();
-    console.log("Initiating logout request...");
-    const token = localStorage.getItem('token');
-
-    await fetch(LogoutLink, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            token: token,
-        })
-    }).then((response) => {
-        if (response.status === 200) {
-            // Logged out successfully
-            console.log("Successfully logged out!");
-            localStorage.remove('token');
-        } else {
-            alert("An error occured.");
-        }
-    }).catch((error) => {
-        alert("Error: Couldn't initiate logout fetch: ", error);
-    });
-}
-
 export const authentication = {
     login,
     register,
-    logout,
 };
