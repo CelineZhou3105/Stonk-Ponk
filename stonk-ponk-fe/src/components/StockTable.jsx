@@ -28,20 +28,7 @@ import CreateModal from './CreateModal';
 
 import { portfolio } from '../services/portfolio';
 
-
-// TODO - REMOVE THIS IN PORTFOLIO PAGE
-const dummyPortfolioData = [
-    { date: "2021-01-01", price: 2.50 },
-    { date: "2021-01-02", price: 5.50 },
-    { date: "2021-01-03", price: 4.50 },
-    { date: "2021-01-04", price: 7.50 },
-    { date: "2021-01-05", price: 10.50 },
-    { date: "2021-01-06", price: 12.50 },
-    { date: "2021-01-07", price: 12.70 },
-    { date: "2021-01-08", price: 13.50 },
-    { date: "2021-01-09", price: 19.50 },
-    { date: "2021-01-10", price: 19.50 },
-]
+import PortfolioPricesChart from './PortfolioPricesChart';
 
 /**
  * StockTableHead - The header column of the table
@@ -103,7 +90,7 @@ function StockTableHead(props) {
  */
 const TableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected, handleDelete } = props;
+    const { numSelected, handleDelete, place } = props;
 
     return (
         <Toolbar
@@ -117,7 +104,7 @@ const TableToolbar = (props) => {
                 </Typography>
             ) : (
                 <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                    Stocks
+                    {place === 'portfolio' ? 'Your Stocks' : 'Most Active Stocks (Daily)'}
                 </Typography>
             )}
 
@@ -271,18 +258,16 @@ function StockTable(props) {
         <div>
             {(place === 'portfolio' || place === 'watchlist') &&
                 <RightAlignedButtonContainer>
-                    {!editMode &&
-                        <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon />&nbsp;Edit {place === 'portfolio' ? 'Portfolio' : 'Watchlist'}</CustomButton>
-                    }
-                    {editMode &&
-                        <>
-                            <CustomButton id="save-button" backgroundColor="#00AD30" hoverColor="#2de361" onClick={() => saveChanges()}>Save</CustomButton>
-                            <CustomButton id="cancel-button" backgroundColor="#e80000" hoverColor="#ff5757" onClick={() => cancelChanges()}>Cancel</CustomButton>
-                        </>
+                    {editMode ?
+                    <>
+                        <CustomButton id="save-button" backgroundColor="#00AD30" hoverColor="#2de361" onClick={() => saveChanges()}>Save</CustomButton>
+                        <CustomButton id="cancel-button" backgroundColor="#e80000" hoverColor="#ff5757" onClick={() => cancelChanges()}>Cancel</CustomButton>
+                    </>
+                    :   <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon />&nbsp;Edit {place === 'portfolio' ? 'Portfolio' : 'Watchlist'}</CustomButton>
                     }
                 </RightAlignedButtonContainer>
             }
-            <TableToolbar numSelected={selected.length} handleDelete={handleDelete}></TableToolbar>
+            <TableToolbar numSelected={selected.length} place={place} handleDelete={handleDelete}></TableToolbar>
             <TableContainer>
                 <Table
                     size="medium"
@@ -325,7 +310,7 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart points={dummyPortfolioData} />
+                                                <PortfolioPricesChart ticker={row.ticker} period="last_month"/>
                                             </TableCell>
                                             {editMode ?
                                                 <>
