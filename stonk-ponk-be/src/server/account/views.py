@@ -230,6 +230,5 @@ def get_user_details(request):
         ret = {"first_name" : str(user.first_name), "last_name" : str(user.last_name), "email" : str(user.email)}
         return HttpResponse(json.dumps(ret))
     except:
-        return HttpResponseBadRequest() 
+        return HttpResponseBadRequest(json.dumps({"eee": "EEEE"}) 
 
-    return HttpResponseBadRequest() 
