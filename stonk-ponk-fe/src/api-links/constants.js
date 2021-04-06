@@ -7,9 +7,10 @@ export const LogoutLink = "http://localhost:8000/api/account/logout";
 // Reset password flow
 export const ForgotPasswordLink = "http://localhost:8000/api/account/forgot_password";
 
-
+// Settings page
 export const ChangeNameLink = "http://localhost:8000/api/account/change_names";
 export const ChangeLoginCredentialsLink = "http://localhost:8000/api/account/change_login_credentials";
+export const GetUserDetailsLink = "http://localhost:8000/api/account/get_user_details";
 
 
 // Portfolio Information 

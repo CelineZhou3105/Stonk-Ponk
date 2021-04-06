@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, SettingsLabel } from '../css/Form';
 import { FlexRowLeftDiv, FlexColumnLeftDiv, PageContainer, LineDivider, SettingRowDiv, SettingEditRowDiv } from '../css/Div';
 import Navigation from './Navigation';
 import { EditButton } from '../css/Button';
 import { ProfilePhoto } from '../css/Image';
 import profile from '../images/blobfish.png';
-import { changeDetails } from '../services/changeDetails';
+import { settings } from '../services/settings';
 import { PageTitle } from '../css/Text';
 
 const Settings = () => {
@@ -16,24 +16,36 @@ const Settings = () => {
     const [lastName, setLastName] = useState('The Blobfish');
     const [emailAdd, setEmailAdd] = useState('ayowassup@itsurgirl.com');
     const [pass, setPass] = useState('hellothisisBobTheBlobf1sh!');
-    const [emailOld, setEmailOld] = useState(emailAdd);
 
     const [nameDisabled, setNameDisabled] = useState(true);
     const [credentialsDisabled, setCredentialsDisabled] = useState(true);
 
+    useEffect(() => {
+        settings.getUser()
+            .then(response => {
+                console.log(response);
+            })
+            .catch((error) => {
+                Promise.resolve(error)
+                    .then((error) => {
+                        alert(`${error.status} ${error.statusText}`);
+                    });
+            })
+    }, []);
+
     const EditName = () => {
         setNameDisabled(true);
-        changeDetails.changeName(firstName, lastName, emailAdd);
+        settings.changeName(firstName, lastName);
     }
 
     const EditLoginCredentials = () => {
         setCredentialsDisabled(true);
-        changeDetails.changeLoginCredentials(emailOld, emailAdd, pass);
+        settings.changeLoginCredentials(emailAdd, pass);
     }
 
     return (
         <div>
-            <Navigation />
+            <Navigation settings="true" />
             <PageContainer>
                 <PageTitle>Account Settings</PageTitle>
                 <FlexRowLeftDiv>
@@ -66,7 +78,6 @@ const Settings = () => {
                                 <EditButton aria-label="Save changes to names button" onClick={EditName}>Save</EditButton>
                                 <EditButton aria-label="Cancel changes to names button" onClick={() => setNameDisabled(true)}>Cancel</EditButton>
                             </SettingEditRowDiv>
-
                         }
                         {credentialsDisabled ?
                             <EditButton aria-label="Edit Login Credentials Button" onClick={() => setCredentialsDisabled(false)}>Edit Login Credentials</EditButton>
