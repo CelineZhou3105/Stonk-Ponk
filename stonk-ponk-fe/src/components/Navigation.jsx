@@ -52,7 +52,7 @@ function Navigation(props) {
                     <h2>Bobfish The Blobfish</h2>
                     <ProfileModaItem className="profile-modal-item" onClick={navigateToSettings}>Settings</ProfileModaItem>
                     <ProfileModaItem className="profile-modal-item">Contact Us</ProfileModaItem>
-                    <ProfileModaItem onClick={(e) => { logout(e) }} className="profile-modal-item">Logout</ProfileModaItem>
+                    <ProfileModaItem onClick={() => { logout() }} className="profile-modal-item">Logout</ProfileModaItem>
                 </ProfileModal>
             }
         </NavigationContainer>

@@ -12,9 +12,9 @@ const Settings = () => {
 
     // initialise variables
     // change this to get from backend
-    const [firstName, setFirstName] = useState('Bobfish');
-    const [lastName, setLastName] = useState('The Blobfish');
-    const [emailAdd, setEmailAdd] = useState('ayowassup@itsurgirl.com');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [emailAdd, setEmailAdd] = useState('');
     const [pass, setPass] = useState('hellothisisBobTheBlobf1sh!');
 
     const [nameDisabled, setNameDisabled] = useState(true);
@@ -22,8 +22,11 @@ const Settings = () => {
 
     useEffect(() => {
         settings.getUser()
-            .then(response => {
-                console.log(response);
+            .then(response => response.json())
+            .then(json => {
+                setFirstName(json.first_name);
+                setLastName(json.last_name);
+                setEmailAdd(json.email);
             })
             .catch((error) => {
                 Promise.resolve(error)
@@ -40,7 +43,7 @@ const Settings = () => {
 
     const EditLoginCredentials = () => {
         setCredentialsDisabled(true);
-        settings.changeLoginCredentials(emailAdd, pass);
+        settings.changeLoginCredentials(emailAdd, pass, pass);
     }
 
     return (
