@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navigation from './Navigation';
 
-// import { getPortfolio } from '../services/portfolio';
-
 import { FilterContainer, PageContainer, Container, PortfolioValueContainer, SectionRowDiv } from '../css/Div';
 import { SubText, SubTitle, NormalText, PageTitle, PortfolioValue, ColorText } from '../css/Text';
 
@@ -12,11 +10,12 @@ import Filter from './Filter';
 import { portfolio } from '../services/portfolio';
 
 import PortfolioChart from './PortfolioChart';
+import { CircularProgress } from '@material-ui/core';
 
 // Headings for each table column
 const tableHeadings = [
     { id: 'name', disablePadding: true, numeric: false, label: 'Name' },
-    { id: 'performance', disablePadding: false, numeric: false, label: 'Performance' },
+    { id: 'performance', disablePadding: false, numeric: false, label: 'Performance (Month)' },
     { id: 'date', disablePadding: true, numeric: true, label: 'Purchase Date' },
     { id: 'purchase_price', disablePadding: false, numeric: true, label: 'Purchase Price' },
     { id: 'units', disablePadding: false, numeric: false, label: 'Units Owned' },
@@ -36,41 +35,39 @@ function Portfolio() {
     const [portfolioStocks, setPortfolioStocks] = useState([]);
     const [page, setPage] = useState(0);
 
+    const token = localStorage.getItem('token');
+
     /* useEffect to get the summary for portfolio */
     useEffect(() => {
-        const token = localStorage.getItem('token');
         portfolio.getPortfolioSummary(token).then(response => {
             setChartData(response.stocks);
             setPortfolioValue(response.value.toFixed(2));
             setLastContribution(response.last_update);
             setProfit(response.profit);
-        });
-    }, []);
+        })
+    }, [token]);
+
 
     /* useEffect to get the entire portfolio stocks */
     useEffect(() => {
-        const token = localStorage.getItem('token');
         portfolio.getPortfolioDetails(token).then(response => {
             setPortfolioStocks(response.stocks);
         });
+    }, [token]);
 
-    }, []);
-
-    /* useEffect to get the best stocks for portfolio */
+    // /* useEffect to get the best stocks for portfolio */
     useEffect(() => {
-        const token = localStorage.getItem('token');
         portfolio.getPortfolioBest(token, 5).then(response => {
             setGainers(response.stocks);
         });
-    }, []);
+    }, [token]);
 
-    // /* useEffect to get the worst stocks for portfolio */
+    // // /* useEffect to get the worst stocks for portfolio */
     useEffect(() => {
-        const token = localStorage.getItem('token');
         portfolio.getPortfolioWorst(token, 5).then(response => {
             setLosers(response.stocks);
         });
-    }, []);
+    }, [token]);
 
     return (
         <div>
@@ -78,47 +75,58 @@ function Portfolio() {
             <PageContainer>
                 <PageTitle>Your Portfolio</PageTitle>
                 <Container align_items="center" justify_content="space-evenly">
-                    <PortfolioChart stockData={chartData} portfolioValue={portfolioValue} />
-                    <PortfolioValueContainer>
-                        <SubTitle>Portfolio Value</SubTitle>
-                        <PortfolioValue>A${portfolioValue}</PortfolioValue>
-                        <SubText color="#000000">
-                            {'TODO DAILY CHANGE '}
-                            <ColorText color="#00AD30">
-                                ({profit > 0 ? ('+TODO (DAILY CHANGE PERC)%') : ('TODO (DAILY CHANGE PERC)%')})
-                            </ColorText>
-                        </SubText>
-                        <SubText>
-                            Contributions: ${(portfolioValue - profit).toFixed(2)}
-                            <br />
-                            Last Investment: {new Date(lastContribution).toLocaleDateString()}
-                        </SubText>
-                    </PortfolioValueContainer>
+                    {chartData.length !== 0 ?
+                        <>
+                            <PortfolioChart stockData={chartData} portfolioValue={portfolioValue} />
+                            <PortfolioValueContainer>
+                                <SubTitle>Portfolio Value</SubTitle>
+                                <PortfolioValue>A${portfolioValue}</PortfolioValue>
+                                <SubText color="#000000">
+                                    {'TODO DAILY CHANGE '}
+                                    <ColorText color="#00AD30">
+                                        ({profit > 0 ? ('+TODO (DAILY CHANGE PERC)%') : ('TODO (DAILY CHANGE PERC)%')})
+                                    </ColorText>
+                                </SubText>
+                                <SubText>
+                                    Contributions: ${(portfolioValue - profit).toFixed(2)}
+                                    <br />
+                                    Last Investment: {new Date(lastContribution).toLocaleDateString()}
+                                </SubText>
+                            </PortfolioValueContainer>
+                        </>
+                        : <CircularProgress />
+                    }
                 </Container>
                 <SectionRowDiv>
                     <Container flex_direction="column">
                         <SubTitle>Best Performing Stocks</SubTitle>
                         <SubText>Based on profit margin.</SubText>
-                        {gainers.map((stock) => {
-                            return (
-                                <>
-                                    <NormalText>{stock.name}</NormalText>
-                                    <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
-                                </>
-                            )
-                        })}
+                        {gainers.length !== 0 ?
+                            gainers.map((stock) => {
+                                return (
+                                    <>
+                                        <NormalText>{stock.name}</NormalText>
+                                        <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
+                                    </>
+                                )
+                            })
+                            : <CircularProgress />
+                        }
                     </Container>
                     <Container flex_direction="column">
                         <SubTitle>Worst Performing Stocks</SubTitle>
                         <SubText>Based on profit margin.</SubText>
-                        {losers.map((stock) => {
-                            return (
-                                <>
-                                    <NormalText>{stock.name}</NormalText>
-                                    <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
-                                </>
-                            )
-                        })}
+                        {losers.length !== 0 ?
+                            losers.map((stock) => {
+                                return (
+                                    <>
+                                        <NormalText>{stock.name}</NormalText>
+                                        <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
+                                    </>
+                                )
+                            })
+                            : <CircularProgress />
+                        }
                     </Container>
                     <Container flex_direction="column">
                         <SubTitle>
@@ -132,7 +140,10 @@ function Portfolio() {
                 <FilterContainer>
                     <Filter setState={setPortfolioStocks} data={portfolioStocks}></Filter>
                 </FilterContainer>
-                <StockTable data={portfolioStocks} headings={tableHeadings} place="portfolio" setRows={setPortfolioStocks} page={page} setPage={setPage}></StockTable>
+                {portfolioStocks.length !== 0 ?
+                    <StockTable data={portfolioStocks} headings={tableHeadings} place="portfolio" setRows={setPortfolioStocks} page={page} setPage={setPage}></StockTable>
+                    : <CircularProgress></CircularProgress>
+                }
             </PageContainer>
         </div>
 
