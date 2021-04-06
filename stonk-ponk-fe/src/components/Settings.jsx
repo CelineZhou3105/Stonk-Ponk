@@ -45,7 +45,7 @@ const Settings = () => {
 
     return (
         <div>
-            <Navigation />
+            <Navigation settings="true" />
             <PageContainer>
                 <PageTitle>Account Settings</PageTitle>
                 <FlexRowLeftDiv>

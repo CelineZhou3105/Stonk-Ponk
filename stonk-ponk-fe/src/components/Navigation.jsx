@@ -11,7 +11,7 @@ import { LogoContainer, NavigationContainer, ProfileModaItem, ProfileModal, Prof
 import { DefaultLogo } from '../css/Logo';
 import { ProfilePhoto } from '../css/Image';
 
-function Navigation() {
+function Navigation(props) {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
 
     const navigateToSettings = () => {
@@ -38,7 +38,11 @@ function Navigation() {
                 <NavListItem><NavLink to="/education">Education</NavLink></NavListItem>
             </NavList>
             <ProfilePhotoContainer>
-                <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" onClick={() => setProfileModalOpen(!profileModalOpen)} />
+                {!props.settings ?
+                    <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" onClick={() => setProfileModalOpen(!profileModalOpen)} />
+                    :
+                    <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" style={{ border: "3px solid #9e22ff" }} onClick={() => setProfileModalOpen(!profileModalOpen)} />
+                }
             </ProfilePhotoContainer>
             {profileModalOpen &&
                 <ProfileModal>
