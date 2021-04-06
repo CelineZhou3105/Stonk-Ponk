@@ -19,3 +19,6 @@ Made the api for account login and registration and linked to backend database c
 
 Week 6
 Fixed bugs with login and register. Fixing miscellaneous bugs
+
+Week7
+Added portfolio routing, logic code and set up portfolio databases. Connected frontend with backend api for portfolios.
