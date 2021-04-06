@@ -227,7 +227,7 @@ def get_user_details(request):
         token = request.headers["Authorization"]
         payload = jwt_decode_handler(token)
         user = User.objects.get(id=payload["user_id"])
-        ret = {"first_name" : user.first_name, "last_name" : user.last_name, "email" : user.email}
+        ret = {"first_name" : str(user.first_name), "last_name" : str(user.last_name), "email" : str(user.email)}
         return HttpResponse(json.dumps(ret))
     except:
         return HttpResponseBadRequest() 
