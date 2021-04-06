@@ -1,7 +1,7 @@
 import json
 import datetime 
 
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotAllowed
 from django.views.decorators.http import require_http_methods
 
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
@@ -147,4 +147,94 @@ def update_account(request):
     payload = jwt_decode_handler(body["token"])
     user = User.objects.get(id=payload["user_id"])
 
+@require_http_methods(["PUT"])
+def change_name(request):
+    first_name = None
+    last_name = None
+    r_email = None
+    try:
+        token = request.headers["Authorization"]
+        payload = jwt_decode_handler(token)
+        user = User.objects.get(id=payload["user_id"])
 
+        body = json.loads(request.body.decode("utf-8"))
+
+        first_name = body["first_name"]
+        if (first_name != user.get_short_name()):
+            user.first_name = first_name
+            user.full_name = '%s %s' % (user.first_name, user.last_name)
+        last_name = body["last_name"]
+        if (last_name != user.get_last_name()):
+            user.last_name = last_name
+            user.full_name = '%s %s' % (user.first_name, user.last_name)
+
+    except KeyError:
+        if r_email == None:
+            return HttpResponseBadRequest()
+    except User.DoesNotExist:
+        return HttpResponseNotFound()
+    
+    user.save()
+    return HttpResponse()
+             
+    '''
+    if first_name not empty
+        set first_name to first_name
+    if last_name not empty
+        set last_name to last_name
+    '''
+@require_http_methods(["PUT"])
+def change_login_credentials(request):
+    try:
+
+        token = request.headers["Authorization"]
+        payload = jwt_decode_handler(token)
+        user = User.objects.get(id=payload["user_id"])
+
+        body = json.loads(request.body.decode("utf-8"))
+        
+        old_email = user.email   
+        new_email  = body["new_email"]
+        if (new_email != user.email):
+            
+            #TODO : check that email does not exist before setting new; if does exist, then send 409 Conflict with error message
+            try :
+                user_2 = User.objects.get(email = new_email) 
+                res = {"error": "account with this email already exists"} 
+                return HttpResponseNotAllowed(json.dumps(res)) 
+
+            except User.DoesNotExist:
+                user.email = new_email
+                user.save()
+
+                portfolio = Portfolio.objects.get(email = old_email)
+                portfolio.email = new_email
+                portfolio.save()
+
+        old_password = body["old_password"]
+        new_password = body["new_password"]
+
+        # if (user.check_password(old_password)):
+        user.set_password(new_password)
+        user.save()
+        # else:
+        #     return HttpResponseForbidden(json.dumps({"error": "bad password"}))
+
+        return HttpResponse()
+    except Exception as e :
+        pass
+    return HttpResponseBadRequest()
+
+@require_http_methods(["GET"])
+def get_user_details(request):
+    try:
+        token = request.headers["Authorization"]
+        payload = jwt_decode_handler(token)
+        user = User.objects.get(id=payload["user_id"])
+        ret = {"first_name" : str(user.first_name), "last_name" : str(user.last_name), "email" : str(user.email)}
+        return HttpResponse(json.dumps(ret))
+    except Exception as e :
+        print(e)
+        return HttpResponseBadRequest(json.dumps({"eee": "EEEE"})) 
+
+    return HttpResponseBadRequest() 
