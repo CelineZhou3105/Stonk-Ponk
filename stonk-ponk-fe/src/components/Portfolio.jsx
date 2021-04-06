@@ -26,13 +26,13 @@ const tableHeadings = [
 
 function Portfolio() {
 
-    const [chartData, setChartData] = useState([]);
+    const [chartData, setChartData] = useState('Loading');
     const [portfolioValue, setPortfolioValue] = useState(0);
     const [lastContribution, setLastContribution] = useState(0);
     const [profit, setProfit] = useState(0);
-    const [gainers, setGainers] = useState([]);
-    const [losers, setLosers] = useState([]);
-    const [portfolioStocks, setPortfolioStocks] = useState([]);
+    const [gainers, setGainers] = useState('Loading');
+    const [losers, setLosers] = useState('Loading');
+    const [portfolioStocks, setPortfolioStocks] = useState('Loading');
     const [page, setPage] = useState(0);
 
     const token = localStorage.getItem('token');
@@ -74,7 +74,7 @@ function Portfolio() {
             <Navigation />
             <PageContainer>
                 <PageTitle>Your Portfolio</PageTitle>
-                {(chartData.length > 0 && gainers.length > 0 && losers.length > 0 && portfolioStocks.length > 0) ?
+                {(chartData !== 'Loading' && gainers !== 'Loading' && losers !== 'Loading' && portfolioStocks !== 'Loading') ?
                     <>
                         <Container align_items="center" justify_content="space-evenly">
                             <PortfolioChart stockData={chartData} portfolioValue={portfolioValue} />
