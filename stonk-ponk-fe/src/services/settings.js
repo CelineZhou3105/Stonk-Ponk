@@ -1,7 +1,24 @@
-import { ChangeNameLink, ChangeLoginCredentialsLink } from '../api-links/constants';
+import { ChangeNameLink, ChangeLoginCredentialsLink, GetUserDetailsLink } from '../api-links/constants';
 import { authentication } from './authentication';
 
-async function changeName(firstN, lastN, email) {
+const getUser = async () => {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+    };
+    await fetch(GetUserDetailsLink, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200
+                return Promise.resolve(response);
+            } // if status code is not 200
+            return Promise.reject(response);
+        })
+}
+
+async function changeName(firstN, lastN) {
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -9,7 +26,6 @@ async function changeName(firstN, lastN, email) {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            email: email,
             first_name: firstN,
             last_name: lastN
         }),
@@ -32,7 +48,7 @@ async function changeName(firstN, lastN, email) {
         });
 }
 
-async function changeLoginCredentials(emailOld, emailNew, passwordNew) {
+async function changeLoginCredentials(emailNew, passwordNew) {
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -40,7 +56,6 @@ async function changeLoginCredentials(emailOld, emailNew, passwordNew) {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            email: emailOld,
             new_email: emailNew,
             new_password: passwordNew
         }),
@@ -67,7 +82,8 @@ async function changeLoginCredentials(emailOld, emailNew, passwordNew) {
 }
 
 
-export const changeDetails = {
+export const settings = {
+    getUser,
     changeName,
     changeLoginCredentials,
 };
