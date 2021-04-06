@@ -74,7 +74,7 @@ async function changeLoginCredentials(emailNew, passwordNew, passwordOld) {
         .then(() => {
             alert("You changed your login credentials! Please relog, logging out...");
             setTimeout(() => {
-                // authentication.logout();
+                authentication.logout();
             }, 3000);
         })
         .catch((error) => {
