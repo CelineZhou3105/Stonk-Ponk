@@ -41,6 +41,7 @@ export const FlexRowLeftDiv = createFlexRowDiv("flex-start", "auto", "auto");
 export const SettingRowDiv = createFlexRowDiv("space-between", "10px", "10px");
 
 export const SettingEditRowDiv = createFlexRowDiv("space-between", "0", "auto");
+export const FlexRowEndDiv = createFlexRowDiv("flex-end", "auto", "auto");
 
 export const SignUpSectionDiv = styled.div`
     display: flex;

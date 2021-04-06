@@ -31,16 +31,16 @@ import { portfolio } from '../services/portfolio';
 
 // TODO - REMOVE THIS IN PORTFOLIO PAGE
 const dummyPortfolioData = [
-    {date: "2021-01-01", price: 2.50},
-    {date: "2021-01-02", price: 5.50},
-    {date: "2021-01-03", price: 4.50},
-    {date: "2021-01-04", price: 7.50},
-    {date: "2021-01-05", price: 10.50},
-    {date: "2021-01-06", price: 12.50},
-    {date: "2021-01-07", price: 12.70},
-    {date: "2021-01-08", price: 13.50},
-    {date: "2021-01-09", price: 19.50},
-    {date: "2021-01-10", price: 19.50},
+    { date: "2021-01-01", price: 2.50 },
+    { date: "2021-01-02", price: 5.50 },
+    { date: "2021-01-03", price: 4.50 },
+    { date: "2021-01-04", price: 7.50 },
+    { date: "2021-01-05", price: 10.50 },
+    { date: "2021-01-06", price: 12.50 },
+    { date: "2021-01-07", price: 12.70 },
+    { date: "2021-01-08", price: 13.50 },
+    { date: "2021-01-09", price: 19.50 },
+    { date: "2021-01-10", price: 19.50 },
 ]
 
 /**
@@ -141,7 +141,7 @@ function StockTable(props) {
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [editMode, setEditMode ] = useState(false);
+    const [editMode, setEditMode] = useState(false);
     const { data, headings, place, setRows, setPageDirection, page, setPage } = props;
 
     console.log(data);
@@ -198,7 +198,7 @@ function StockTable(props) {
                     ticker: currentTicker,
                     transactions: []
                 })
-            } 
+            }
             newStocks[newStockMapping[currentTicker]].transactions.push({
                 date: data[i].first_purchase_date,
                 volume: data[i].volume,
@@ -269,10 +269,10 @@ function StockTable(props) {
 
     return (
         <div>
-            {place === 'portfolio' &&
+            {(place === 'portfolio' || place === 'watchlist') &&
                 <RightAlignedButtonContainer>
                     {!editMode &&
-                        <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon />&nbsp;Edit Portfolio</CustomButton>
+                        <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon />&nbsp;Edit {place === 'portfolio' ? 'Portfolio' : 'Watchlist'}</CustomButton>
                     }
                     {editMode &&
                         <>
@@ -340,7 +340,7 @@ function StockTable(props) {
                                                 </>
                                             }
 
-                                            <TableCell align="right">{row.price.toFixed(2)}</TableCell> 
+                                            <TableCell align="right">{row.price.toFixed(2)}</TableCell>
                                             <TableCell align="right">{(row.volume * row.price).toFixed(2)}</TableCell>
                                         </TableRow> :
 
@@ -355,7 +355,7 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart points={JSON.parse(row.prev_week_prices)}/>
+                                                <SummaryChart points={JSON.parse(row.prev_week_prices)} />
                                             </TableCell>
                                             <TableCell align="right">{row.price}</TableCell>
                                         </TableRow>
@@ -374,37 +374,37 @@ function StockTable(props) {
                     <AddCircleIcon />&nbsp;Add New Stock
                 </CustomButton>
             }
-            {place === 'portfolio' ? 
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={data.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={changePage}
-                onChangeRowsPerPage={changeRowsPerPage}
-            />
-            : <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={300}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={changePage}
-                onChangeRowsPerPage={changeRowsPerPage}
-                nextIconButtonProps={{
-                    onClick: () => {
-                        setPage(page => page + 1);
-                        setPageDirection('right')
-                    }
-                }}
-                backIconButtonProps={{
-                    onClick: () => {
-                        setPage(page => page - 1);
-                        setPageDirection('left');
-                    }
-                }}
-            />
+            {place === 'portfolio' ?
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={data.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={changePage}
+                    onChangeRowsPerPage={changeRowsPerPage}
+                />
+                : <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={300}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={changePage}
+                    onChangeRowsPerPage={changeRowsPerPage}
+                    nextIconButtonProps={{
+                        onClick: () => {
+                            setPage(page => page + 1);
+                            setPageDirection('right')
+                        }
+                    }}
+                    backIconButtonProps={{
+                        onClick: () => {
+                            setPage(page => page - 1);
+                            setPageDirection('left');
+                        }
+                    }}
+                />
             }
             {createModalOpen &&
                 <CreateModal setVisibility={setCreateModalOpen} setRows={setRows} />
@@ -463,8 +463,8 @@ function stableSort(array, comparator) {
 const CustomTableCell = (props) => {
     const { row, column, onChange } = props;
 
-    const value = (column === 'first_purchase_date') ?row[column] : row[column];
-    console.log("value: ",value);
+    const value = (column === 'first_purchase_date') ? row[column] : row[column];
+    console.log("value: ", value);
     const type = (column === 'first_purchase_date') ? 'date' : 'number';
 
     return (

@@ -53,7 +53,7 @@ function Portfolio() {
         portfolio.getPortfolioDetails(token).then(response => {
             setPortfolioStocks(response.stocks);
         });
-        
+
     }, []);
 
     /* useEffect to get the best stocks for portfolio */
@@ -90,44 +90,44 @@ function Portfolio() {
                         </SubText>
                         <SubText>
                             Contributions: ${(portfolioValue - profit).toFixed(2)}
-                            <br/>
+                            <br />
                             Last Investment: {new Date(lastContribution).toLocaleDateString()}
                         </SubText>
                     </PortfolioValueContainer>
                 </Container>
                 <SectionRowDiv>
-                        <Container flex_direction="column">
-                            <SubTitle>Best Performing Stocks</SubTitle>
-                            <SubText>Based on profit margin.</SubText>
-                            {gainers.map((stock) => {
-                                return(
-                                    <>
-                                        <NormalText>{stock.name}</NormalText>
-                                        <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
-                                    </>
-                                )
-                            })}
-                        </Container>
-                        <Container flex_direction="column">
-                            <SubTitle>Worst Performing Stocks</SubTitle>
-                            <SubText>Based on profit margin.</SubText>
-                            {losers.map((stock) => {
-                                return(
-                                    <>
-                                        <NormalText>{stock.name}</NormalText>
-                                        <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
-                                    </>
-                                )
-                            })}
-                        </Container>
-                        <Container flex_direction="column">
-                            <SubTitle>
-                                Suggestions:
+                    <Container flex_direction="column">
+                        <SubTitle>Best Performing Stocks</SubTitle>
+                        <SubText>Based on profit margin.</SubText>
+                        {gainers.map((stock) => {
+                            return (
+                                <>
+                                    <NormalText>{stock.name}</NormalText>
+                                    <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
+                                </>
+                            )
+                        })}
+                    </Container>
+                    <Container flex_direction="column">
+                        <SubTitle>Worst Performing Stocks</SubTitle>
+                        <SubText>Based on profit margin.</SubText>
+                        {losers.map((stock) => {
+                            return (
+                                <>
+                                    <NormalText>{stock.name}</NormalText>
+                                    <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
+                                </>
+                            )
+                        })}
+                    </Container>
+                    <Container flex_direction="column">
+                        <SubTitle>
+                            Suggestions:
                             </SubTitle>
-                            <NormalText>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                        <NormalText>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
                             </NormalText>
-                        </Container>
+                    </Container>
                 </SectionRowDiv>
                 <FilterContainer>
                     <Filter setState={setPortfolioStocks} data={portfolioStocks}></Filter>
@@ -135,7 +135,7 @@ function Portfolio() {
                 <StockTable data={portfolioStocks} headings={tableHeadings} place="portfolio" setRows={setPortfolioStocks} page={page} setPage={setPage}></StockTable>
             </PageContainer>
         </div>
-        
+
     )
 }
 
