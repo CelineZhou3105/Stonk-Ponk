@@ -1,7 +1,7 @@
-import { ChangeFirstNameLink, ChangeLastNameLink, ChangeEmailLink, ChangePasswordWithAuthLink } from '../api-links/constants';
+import { ChangeNameLink, ChangeLoginCredentialsLink } from '../api-links/constants';
 import { authentication } from './authentication';
 
-async function changeFirstName(firstN) {
+async function changeName(firstN, lastN, email) {
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -9,10 +9,12 @@ async function changeFirstName(firstN) {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            firstName: firstN
+            email: email,
+            first_name: firstN,
+            last_name: lastN
         }),
     };
-    await fetch(ChangeFirstNameLink, requestOptions)
+    await fetch(ChangeNameLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
                 return response.json();
@@ -20,7 +22,7 @@ async function changeFirstName(firstN) {
             return Promise.reject(response);
         })
         .then(() => {
-            alert("You changed your first name!");
+            alert("You changed your name!");
         })
         .catch((error) => {
             Promise.resolve(error)
@@ -30,7 +32,7 @@ async function changeFirstName(firstN) {
         });
 }
 
-async function changeLastName(lastN) {
+async function changeLoginCredentials(emailOld, emailNew, passwordNew) {
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -38,10 +40,12 @@ async function changeLastName(lastN) {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            lastName: lastN
+            email: emailOld,
+            new_email: emailNew,
+            new_password: passwordNew
         }),
     };
-    await fetch(ChangeLastNameLink, requestOptions)
+    await fetch(ChangeLoginCredentialsLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
                 return response.json();
@@ -49,36 +53,7 @@ async function changeLastName(lastN) {
             return Promise.reject(response);
         })
         .then(() => {
-            alert("You changed your last name!");
-        })
-        .catch((error) => {
-            Promise.resolve(error)
-                .then((e) => {
-                    alert(`${e.status} ${e.statusText}`);
-                });
-        });
-}
-
-async function changeEmail(emailAdd) {
-    const requestOptions = {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-            email: emailAdd
-        }),
-    };
-    await fetch(ChangeEmailLink, requestOptions)
-        .then(response => {
-            if (response.ok) { // if status code is 200
-                return response.json();
-            } // if status code is not 200
-            return Promise.reject(response);
-        })
-        .then(() => {
-            alert("You changed your email! Please relog, logging out...");
+            alert("You changed your login credentials! Please relog, logging out...");
             setTimeout(() => {
                 authentication.logout();
             }, 3000);
@@ -86,46 +61,13 @@ async function changeEmail(emailAdd) {
         .catch((error) => {
             Promise.resolve(error)
                 .then((e) => {
-                    alert(`${e.status} ${e.statusText}`);
+                    alert(`${e.status} ${e.statusText} ${e.message}`);
                 });
         });
 }
 
-async function changePassword(pass) {
-    const requestOptions = {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-            password: pass
-        }),
-    };
-    await fetch(ChangePasswordWithAuthLink, requestOptions)
-        .then(response => {
-            if (response.ok) { // if status code is 200
-                return response.json();
-            } // if status code is not 200
-            return Promise.reject(response);
-        })
-        .then(() => {
-            alert("You changed your password! Please relog, logging out...");
-            setTimeout(() => {
-                authentication.logout();
-            }, 3000);
-        })
-        .catch((error) => {
-            Promise.resolve(error)
-                .then((e) => {
-                    alert(`${e.status} ${e.statusText}`);
-                });
-        });
-}
 
 export const changeDetails = {
-    changeFirstName,
-    changeLastName,
-    changeEmail,
-    changePassword
+    changeName,
+    changeLoginCredentials,
 };
