@@ -43,7 +43,7 @@ async function register(firstN, lastN, emailAdd, pass, securityQ, securityA) {
             securityAnswer: securityA
         })
     };
-    await fetch(RegisterLink, requestOptions)
+    return await fetch(RegisterLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
                 return Promise.resolve(response);
