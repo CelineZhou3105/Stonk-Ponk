@@ -229,7 +229,8 @@ def get_user_details(request):
         user = User.objects.get(id=payload["user_id"])
         ret = {"first_name" : str(user.first_name), "last_name" : str(user.last_name), "email" : str(user.email)}
         return HttpResponse(json.dumps(ret))
-    except:
+    except Exception as e :
+        print e
         return HttpResponseBadRequest(json.dumps({"eee": "EEEE"})) 
 
     return HttpResponseBadRequest() 
