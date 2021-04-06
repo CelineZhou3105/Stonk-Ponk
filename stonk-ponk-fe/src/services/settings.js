@@ -1,5 +1,4 @@
 import { ChangeNameLink, ChangeLoginCredentialsLink, GetUserDetailsLink } from '../api-links/constants';
-import { authentication } from './authentication';
 
 const getUser = async () => {
     const requestOptions = {
@@ -51,6 +50,7 @@ async function changeName(firstN, lastN) {
 }
 
 async function changeLoginCredentials(emailNew, passwordNew, passwordOld) {
+
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -66,23 +66,11 @@ async function changeLoginCredentials(emailNew, passwordNew, passwordOld) {
     };
     return await fetch(ChangeLoginCredentialsLink, requestOptions)
         .then(response => {
-            if (response.ok) { // if status code is 200
+            if (response.ok) { // if status code is 200      
                 return response;
             } // if status code is not 200
             return Promise.reject(response);
         })
-        .then(() => {
-            alert("You changed your login credentials! Please relog, logging out...");
-            setTimeout(() => {
-                authentication.logout();
-            }, 3000);
-        })
-        .catch((error) => {
-            Promise.resolve(error)
-                .then((e) => {
-                    alert(`${e.status} ${e.statusText}`);
-                });
-        });
 }
 
 
