@@ -18,7 +18,7 @@ const Settings = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailAdd, setEmailAdd] = useState('');
-    const [pass, setPass] = useState('hellothisisBobTheBlobf1sh!');
+    const [pass, setPass] = useState('ASDqwe123!');
 
     const [nameDisabled, setNameDisabled] = useState(true);
     const [credentialsDisabled, setCredentialsDisabled] = useState(true);
