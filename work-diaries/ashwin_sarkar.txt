@@ -23,4 +23,12 @@ Started building the portfolio schema
 week6:
 quiet week. 
 
+week7:
+worked with kevin to get portfolio functionality working, largely for adding, removing and detailing stocks for front end display
+incorporated stock_api written by sampath to get stock information into portfolio 
+
+week8:
+worked on settings with celine to get a functioning settings page, allowing for first/last name changes as well as credential changes.
+DEMO'd 2 with team . Retro on friday 
+
 
