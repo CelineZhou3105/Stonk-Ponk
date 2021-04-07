@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react'
 import Chart from "react-google-charts";
 import { market } from '../services/market';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 /**
- * StockDetails Chart - Line graph displayed on each individual stock details page.
+ * PortfolioPricesChart - Line graph displayed on each individual stock details page.
  */
-const StockDetailsChart = ({ period, id }) => {
+const PortfolioPricesChart = ({ ticker, period }) => {
 
     const [data, setData] = useState([['date', 'price']]);
     useEffect(() => {
@@ -15,7 +16,7 @@ const StockDetailsChart = ({ period, id }) => {
 
     useEffect(() => {
         console.log(period);
-        market.getStockPrice(id, period)
+        market.getStockPrice(ticker, period)
             .then(response => response.json())
             .then(json => {
                 console.log(json);
@@ -32,30 +33,35 @@ const StockDetailsChart = ({ period, id }) => {
                         alert(`${error.status} ${error.statusText}`);
                     });
             })
-    }, [id, period]);
+    }, [ticker, period]);
 
     const options = {
         hAxis: {
-            title: "Period",
+            gridlines: {count: 0, color: '#FFF'},
+            textPosition: 'none',
         },
         vAxis: {
-            title: "Price",
-        },
+            gridlines: {count: 0, color: '#FFF'}, 
+            textPosition: 'none',
+          },
         legend: {
-            position: "none"
-        }
+            position: 'none'
+        },
+        series: {
+            0: { curveType: 'function' },
+        },
     }
 
     return (
         <Chart
-            width="1100px"
-            height="500px"
-            chartType="LineChart"
-            loader={<div>Loading Chart</div>}
+            width={350}
+            height={150}
+            chartType="LineChart" 
+            loader={<CircularProgress />}
             data={data}
             options={options}
         />
     )
 }
 
-export default StockDetailsChart;
+export default PortfolioPricesChart;

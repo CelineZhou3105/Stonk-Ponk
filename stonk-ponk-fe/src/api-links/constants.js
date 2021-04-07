@@ -7,19 +7,21 @@ export const LogoutLink = "http://localhost:8000/api/account/logout";
 // Reset password flow
 export const ForgotPasswordLink = "http://localhost:8000/api/account/forgot_password";
 
-// Change password while logged in
-export const ChangePasswordWithAuthLink = "http://localhost:8000/api/account/change-password-with-auth";
-
-export const ChangeFirstNameLink = "http://localhost:8000/api/account/change-first-name";
-
-export const ChangeLastNameLink = "http://localhost:8000/api/account/change-last-name";
-
-export const ChangeEmailLink = "http://localhost:8000/api/account/change-email";
+// Settings page
+export const ChangeNameLink = "http://localhost:8000/api/account/change_name";
+export const ChangeLoginCredentialsLink = "http://localhost:8000/api/account/change_login_credentials";
+export const GetUserDetailsLink = "http://localhost:8000/api/account/get_user_details";
 
 
 // Portfolio Information 
-export const EditPortfolio = "http://localhost:8000/api/portfolio/add-stock";
-export const GetPortfolio = "http://localhost:8000/api/portfolio";
+export const EditPortfolio = "http://localhost:8000/api/portfolio/edit";
+export const GetPortfolioSummary = "http://localhost:8000/api/portfolio/summary"; // Only for the pie chart, value, last accessed
+export const GetPortfolioDetails = "http://localhost:8000/api/portfolio/details"; // Actual stocks owned
+export const GetPortfolioBestStocks = "http://localhost:8000/api/portfolio/best";
+export const GetPortfolioWorstStocks = "http://localhost:8000/api/portfolio/worst";
+
 
 // Stock API calls
 export const MarketsLink = "http://localhost:8000/api/stocks/markets";
+export const StockDetailLink = "http://localhost:8000/api/stocks/stock_detail";
+export const StockPriceLink = "http://localhost:8000/api/stocks/historical_prices";

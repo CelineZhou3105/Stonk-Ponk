@@ -1,52 +1,92 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { CustomButton } from '../css/Button';
 import StockDetailsChart from './StockDetailsChart';
 import Navigation from './Navigation';
 import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
 import { ChartContainer, GraphAndPeriodDiv, PageContainer } from '../css/Div';
-
 import { useParams } from "react-router-dom";
 import { PageTitle } from '../css/Text';
+import { market } from '../services/market';
+import { getStockDetailTooltipText } from '../helpers/tooltipText';
+import { Tooltip } from '@material-ui/core';
 
 function StockDetails() {
 
-    // TODO - replace this with not dummy share data
     let { id } = useParams(); // gets the ticker of the share
 
-    const share = { name: 'Wesfarmers', ticker: 'WES', performance: 'graph', price: 590.48, sector: 'aus', type: 'etf' };
+    const [name, setName] = useState('');
+    const [ticker, setTicker] = useState('');
+    const [price, setPrice] = useState('');
+    const [marketName, setMarketName] = useState('');
+    const [exchange, setExchange] = useState('');
 
-    const stats = [
-        { label: 'Volume', value: 13923902 },
-        { label: 'Bid', value: 237.70 },
-        { label: 'Ask', value: 236.69 },
-        { label: 'High', value: 291.20 },
-        { label: 'Low', value: 238.94 },
-        { label: 'Open', value: 321.90 },
-        { label: 'Close', value: 340.00 },
-    ];
-    const [period, setPeriod] = useState('day');
+    const [stats, setStats] = useState([
+        { label: 'Bid', value: "N/A" },
+        { label: 'Ask', value: "N/A" },
+        { label: 'High', value: "N/A" },
+        { label: 'Low', value: "N/A" },
+        { label: 'Open', value: "N/A" },
+        { label: 'Close', value: "N/A" },
+        { label: 'Change', value: "N/A" },
+        { label: 'Change Percentage', value: "N/A" },
+        { label: '52 Week Range', value: "N/A" },
+        { label: 'Market Cap', value: "N/A" }
+    ]);
+
+    useEffect(() => {
+        market.getStockDetail(id)
+            .then(response => response.json())
+            .then(json => {
+                console.log(json);
+                setName(json.name);
+                setTicker(json.ticker);
+                setPrice(json.price);
+                setMarketName(json.market);
+                setExchange(json.exchange);
+                setStats([
+                    { label: 'Bid', value: json.bid },
+                    { label: 'Ask', value: json.ask },
+                    { label: 'High', value: json.high },
+                    { label: 'Low', value: json.low },
+                    { label: 'Open', value: json.open },
+                    { label: 'Close', value: json.close },
+                    { label: 'Change', value: json.change },
+                    { label: 'Change Percentage', value: json.change_perc },
+                    { label: '52 Week Range', value: json.fifty_two_week_range },
+                    { label: 'Market Cap', value: json.market_cap },
+                ]);
+            })
+            .catch((error) => {
+                Promise.resolve(error)
+                    .then((error) => {
+                        console.log(error)
+                        alert(`${error.status} ${error.statusText}`);
+                    });
+            })
+    }, [id, setStats, setName, setTicker, setPrice, setMarketName, setExchange]);
+
+
+
+    const [period, setPeriod] = useState('last_week');
     const [tabValue, setTabValue] = React.useState(0);
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
         switch (newValue) {
             case 0:
-                setPeriod('day');
+                setPeriod('last_week');
                 break;
             case 1:
-                setPeriod('week');
+                setPeriod('last_month');
                 break;
             case 2:
-                setPeriod('month');
+                setPeriod('last_six_months');
                 break;
             case 3:
-                setPeriod('6 months');
-                break;
-            case 4:
-                setPeriod('year');
+                setPeriod('last_year');
                 break;
             default:
-                setPeriod('day');
+                setPeriod('last_week');
                 break;
         }
     };
@@ -54,17 +94,20 @@ function StockDetails() {
         <div>
             <Navigation />
             <PageContainer>
-                <PageTitle>{share.name} <span>({share.ticker})</span></PageTitle>
-                <h1>${share.price}AUD</h1>
-                <p>Market: ASX (Australian Stocks Exchange)</p>
+                <PageTitle>{name} <span>({ticker})</span></PageTitle>
+                <h1>${parseFloat(price).toFixed(2)}USD</h1>
+                <p>Market: {marketName}</p>
+                <p>Exchange: {exchange}</p>
                 <TableContainer>
                     <Table>
-                        {stats.map((value, index) => {
+                        {stats.map((value) => {
                             return (
                                 <TableRow>
-                                    <TableCell variant="head">
-                                        {value.label}
-                                    </TableCell>
+                                    <Tooltip title={getStockDetailTooltipText(value.label)} placement="right">
+                                        <TableCell variant="head">
+                                            {value.label}
+                                        </TableCell>
+                                    </Tooltip>
                                     <TableCell>
                                         {value.value}
                                     </TableCell>
@@ -75,13 +118,12 @@ function StockDetails() {
                 </TableContainer>
                 <ChartContainer style={{ width: "100%" }}>
                     <GraphAndPeriodDiv>
-                        <StockDetailsChart period={period} />
+                        <StockDetailsChart period={period} id={id} />
                         <Tabs value={tabValue}
                             indicatorColor="primary"
                             textColor="primary"
                             onChange={handleChange}
                             aria-label="tabs to switch between different periods to view the graph with">
-                            <Tab label="Day" />
                             <Tab label="Week" />
                             <Tab label="Month" />
                             <Tab label="6 months" />
@@ -92,7 +134,7 @@ function StockDetails() {
                     <CustomButton>What if I sell now?</CustomButton>
                 </ChartContainer>
                 <div>
-                    <h1>News feed for {share.name}</h1>
+                    <h1>News feed for {name}</h1>
                 </div>
             </PageContainer>
         </div>

@@ -39,6 +39,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         '''
         return self.first_name
 
+    def get_last_name(self):
+        return self.last_name
+
     def email_user(self, subject, message, from_email=None, **kwargs):
         '''
         Sends an email to this User.
@@ -49,4 +52,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_security_answer(self):
         return str(self.security_answer)
     
+    def change_first_name(self, first_name):
+        self.first_name = first_name
+        self.full_name = '%s %s' % (self.first_name, self.last_name)
 
+    def change_last_name(self, last_name):
+        self.last_name = last_name
+        self.full_name = '%s %s' % (self.first_name, self.last_name)

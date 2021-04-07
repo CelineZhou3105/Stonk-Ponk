@@ -32,6 +32,9 @@ UI Consistency improvements for titles, buttons, divs
 Week 7
 Market page - hooking the FE to the BE for most active stocks, gainers and losers
 Graph designs
+Portfolio Page - working with BE to get the market data, editing and adding stocks now working
+Real time search results for searching stocks by ticker in 'add stock modal' when editing portfolio. 
+
 
 
 

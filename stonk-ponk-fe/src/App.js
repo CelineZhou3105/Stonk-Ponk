@@ -23,6 +23,7 @@ import FinancialInstruments from './components/education/FinancialInstruments';
 import StatisticsAndGraphs from './components/education/StatisticsAndGraphs';
 import PassiveVSActive from './components/education/PassiveVSActive';
 import StockDetails from './components/StockDetails';
+import Watchlist from './components/Watchlist';
 
 import Portfolio from './components/Portfolio';
 
@@ -39,13 +40,12 @@ function App() {
           <Route exact path="/sign-up" component={Signup} />
           <Route exact path="/sign-up-success" component={SignupSuccess} />
           <Route exact path="/forgot-password" component={PasswordReset} />
-
           <PrivateRoute exact path="/market" component={Market} />
           <PrivateRoute path='/stocks/:id' component={StockDetails} />
-
           <PrivateRoute exact path='/settings' component={Settings} />
           <PrivateRoute exact path='/portfolio' component={Portfolio} />
           <PrivateRoute exact path='/news' component={News} />
+          <PrivateRoute exact path='/watchlist' component={Watchlist} />
 
           {/*Education pages*/}
           <PrivateRoute exact path='/education' component={Education} />

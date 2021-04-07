@@ -1,4 +1,4 @@
-import { LoginLink, LogoutLink, RegisterLink } from '../api-links/constants';
+import { LoginLink, RegisterLink } from '../api-links/constants';
 
 async function login(event, email, password) {
     event.preventDefault();
@@ -43,55 +43,15 @@ async function register(firstN, lastN, emailAdd, pass, securityQ, securityA) {
             securityAnswer: securityA
         })
     };
-    await fetch(RegisterLink, requestOptions)
-        .then(response => response.json)
-        .then((response) => {
+    return await fetch(RegisterLink, requestOptions)
+        .then(response => {
             if (response.ok) { // if status code is 200
-                return true;
+                return Promise.resolve(response);
             } // if status code is not 200
-            return Promise.reject(response.json());
+            return Promise.reject(response);
         })
-        .catch((error) => {
-            Promise.resolve(error)
-                .then((e) => {
-                    alert(e.error);
-                });
-        });
 }
-
-async function logout(event) {
-    event.preventDefault();
-
-    // localStorage.removeItem('currentUser');
-    // currentUserSubject.next(null);
-    console.log("Initiating logout request...");
-    const token = localStorage.getItem('token');
-
-    await fetch(LogoutLink, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            token: token,
-        })
-    }).then((response) => {
-        if (response.status === 200) {
-            // Logged out successfully
-            console.log("Successfully logged out!");
-            localStorage.remove('token');
-        } else {
-            alert("An error occured.");
-        }
-    }).catch((error) => {
-        alert("Error: Couldn't initiate logout fetch: ", error);
-    });
-}
-
 export const authentication = {
     login,
     register,
-    logout,
-    // currentUser: currentUserSubject.asObservable(),
-    // get currentUserValue() { return currentUserSubject.value }
 };

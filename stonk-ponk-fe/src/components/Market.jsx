@@ -72,22 +72,24 @@ function Market() {
                 <SectionRowDiv>
                     <Container flex_direction="column">
                         <SubTitle>Top 10 Gainers</SubTitle>
+                        <SubText>Based on daily change.</SubText>
                         {gainers.map((stock) => {
                             return(
                                 <>
                                     <NormalText>{stock.name}</NormalText>
-                                    <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.change_perc}%)</ColorText></SubText>
+                                    <SubText>{stock.ticker}<ColorText color="#00AD30">{stock.change_perc > 0 ? `(+${stock.change_perc}%)`: `(${stock.change_perc}%)`}</ColorText></SubText>
                                 </>
                             )
                         })}
                     </Container>
                     <Container flex_direction="column">
                         <SubTitle>Top 10 Losers</SubTitle>
+                        <SubText>Based on daily change.</SubText>
                         {losers.map((stock) => {
                             return(
                                 <>
                                     <NormalText>{stock.name}</NormalText>
-                                    <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.change_perc}%)</ColorText></SubText>
+                                    <SubText>{stock.ticker}<ColorText color="#e80000">{stock.change_perc > 0 ? `(+${stock.change_perc}%)`: `(${stock.change_perc}%)`}</ColorText></SubText>
                                 </>
                             )
                         })}

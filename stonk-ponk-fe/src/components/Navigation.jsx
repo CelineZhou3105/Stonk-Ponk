@@ -11,9 +11,7 @@ import { LogoContainer, NavigationContainer, ProfileModaItem, ProfileModal, Prof
 import { DefaultLogo } from '../css/Logo';
 import { ProfilePhoto } from '../css/Image';
 
-import { authentication } from '../services/authentication';
-
-function Navigation() {
+function Navigation(props) {
     const [profileModalOpen, setProfileModalOpen] = useState(false);
 
     const navigateToSettings = () => {
@@ -21,7 +19,8 @@ function Navigation() {
     }
 
     function logout(event) {
-        authentication.logout(event);
+        // event.preventDefault();
+        localStorage.removeItem('token');
         history.push('/');
     }
 
@@ -39,7 +38,11 @@ function Navigation() {
                 <NavListItem><NavLink to="/education">Education</NavLink></NavListItem>
             </NavList>
             <ProfilePhotoContainer>
-                <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" onClick={() => setProfileModalOpen(!profileModalOpen)} />
+                {!props.settings ?
+                    <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" onClick={() => setProfileModalOpen(!profileModalOpen)} />
+                    :
+                    <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" style={{ border: "3px solid #9e22ff" }} onClick={() => setProfileModalOpen(!profileModalOpen)} />
+                }
             </ProfilePhotoContainer>
             {profileModalOpen &&
                 <ProfileModal>
@@ -49,7 +52,7 @@ function Navigation() {
                     <h2>Bobfish The Blobfish</h2>
                     <ProfileModaItem className="profile-modal-item" onClick={navigateToSettings}>Settings</ProfileModaItem>
                     <ProfileModaItem className="profile-modal-item">Contact Us</ProfileModaItem>
-                    <ProfileModaItem onClick={(e) => { logout(e) }} className="profile-modal-item">Logout</ProfileModaItem>
+                    <ProfileModaItem onClick={() => { logout() }} className="profile-modal-item">Logout</ProfileModaItem>
                 </ProfileModal>
             }
         </NavigationContainer>
