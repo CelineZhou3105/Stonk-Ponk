@@ -23,7 +23,14 @@ const FinancialInstruments = () => {
                         <CustomButton backgroundColor="#d6d6d6" color="#000000" hoverColor="#c2c2c2" aria-label="Navigate back to education page" onClick={navigateToEducation}>Back</CustomButton>
                     </FlexRowDiv>
                     <h1>Financial Instruments 101</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Orci dapibus ultrices in iaculis nunc sed augue lacus. Nulla malesuada pellentesque elit eget. Nulla porttitor massa id neque aliquam vestibulum morbi. Lorem donec massa sapien faucibus et molestie ac feugiat sed. Dolor sit amet consectetur adipiscing elit duis tristique. Mattis pellentesque id nibh tortor id aliquet lectus. Et netus et malesuada fames ac turpis egestas integer. Et netus et malesuada fames ac. Massa sapien faucibus et molestie. Sit amet volutpat consequat mauris nunc congue. Id neque aliquam vestibulum morbi blandit cursus risus at. Phasellus faucibus scelerisque eleifend donec. Nisi scelerisque eu ultrices vitae auctor eu. Nisi lacus sed viverra tellus in hac habitasse platea. Aliquam vestibulum morbi blandit cursus risus at. Sapien faucibus et molestie ac feugiat sed lectus. Condimentum mattis pellentesque id nibh.</p>
+                    <p>Financial instruments are assets that can be traded, or they can also be seen as packages of capital that may be traded. Most types of financial instruments provide efficient flow and transfer of capital all throughout the world's investors. These assets can be cash, a contractual right to deliver or receive cash or another type of financial instrument, or evidence of one's ownership of an entity.</p>
+                    <h2>Types of Financial Instruments</h2>
+                    <h3>Cash Instruments</h3>
+                    <p>The values of cash instruments are directly influenced and determined by the markets. These can be securities that are easily transferable.<br></br>
+                    Cash instruments may also be deposits and loans agreed upon by borrowers and lenders.</p>
+                    <h3> Derivative Instruments</h3>
+                    <p>The value and characteristics of derivative instruments are based on the vehicle’s underlying components, such as assets, interest rates, or indices.</p>
+                    <p>There can be over-the-counter (OTC) derivatives or exchange-traded derivatives. OTC is a market or process whereby securities–that are not listed on formal exchanges–are priced and traded.</p>
                 </FlexColumnLeftDiv>
             </PageContainer>
         </div>

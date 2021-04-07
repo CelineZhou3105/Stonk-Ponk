@@ -23,7 +23,16 @@ const PassiveVsActive = () => {
                         <CustomButton backgroundColor="#d6d6d6" color="#000000" hoverColor="#c2c2c2" aria-label="Navigate back to education page" onClick={navigateToEducation}>Back</CustomButton>
                     </FlexRowDiv>
                     <h1>Passive vs Active Investing</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Orci dapibus ultrices in iaculis nunc sed augue lacus. Nulla malesuada pellentesque elit eget. Nulla porttitor massa id neque aliquam vestibulum morbi. Lorem donec massa sapien faucibus et molestie ac feugiat sed. Dolor sit amet consectetur adipiscing elit duis tristique. Mattis pellentesque id nibh tortor id aliquet lectus. Et netus et malesuada fames ac turpis egestas integer. Et netus et malesuada fames ac. Massa sapien faucibus et molestie. Sit amet volutpat consequat mauris nunc congue. Id neque aliquam vestibulum morbi blandit cursus risus at. Phasellus faucibus scelerisque eleifend donec. Nisi scelerisque eu ultrices vitae auctor eu. Nisi lacus sed viverra tellus in hac habitasse platea. Aliquam vestibulum morbi blandit cursus risus at. Sapien faucibus et molestie ac feugiat sed lectus. Condimentum mattis pellentesque id nibh.</p>
+                    <h3>Active Investing</h3>
+                    <p>Active investing, as its name implies, takes a hands-on approach and requires that someone act in the role of a portfolio manager. The goal of active money management is to beat the stock market’s average returns and take full advantage of short-term price fluctuations. It involves a much deeper analysis and the expertise to know when to pivot into or out of a particular stock, bond, or any asset. A portfolio manager usually oversees a team of analysts who look at qualitative and quantitative factors, then gaze into their crystal balls to try to determine where and when that price will change.<br></br>
+                    Active investing requires confidence that whoever is investing the portfolio will know exactly the right time to buy or sell. Successful active investment management requires being right more often than wrong.</p>
+
+                    <h3>Passive Investing</h3>
+                    <p>If you’re a passive investor, you invest for the long haul. Passive investors limit the amount of buying and selling within their portfolios, making this a very cost-effective way to invest. The strategy requires a buy-and-hold mentality. That means resisting the temptation to react or anticipate the stock market’s every next move.</p>
+                    
+                    <h3> What is the Difference?</h3>
+                    <p>Active investors react to changes in market conditions and buy or sell based on latest results or news about a company. Active investors often invest in individual stocks and often seek to profit from the volatility in price of low cap stocks.</p>
+                    <p>Passive investors invest based on their expectation of long term growth. Passive investors often invest in more established stocks which have a mid-large market cap. They seek to diversify their investments by investing in ETF's covering an industry or index.</p>
                 </FlexColumnLeftDiv>
             </PageContainer>
         </div>
