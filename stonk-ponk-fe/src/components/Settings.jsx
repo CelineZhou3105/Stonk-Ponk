@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { TextField, SettingsLabel } from '../css/Form';
 import { FlexRowLeftDiv, FlexColumnLeftDiv, PageContainer, LineDivider, SettingRowDiv, SettingEditRowDiv } from '../css/Div';
 import Navigation from './Navigation';
@@ -10,12 +11,14 @@ import { PageTitle } from '../css/Text';
 
 const Settings = () => {
 
+    const history = useHistory();
+
     // initialise variables
     // change this to get from backend
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailAdd, setEmailAdd] = useState('');
-    const [pass, setPass] = useState('hellothisisBobTheBlobf1sh!');
+    const [pass, setPass] = useState('ASDqwe123!');
 
     const [nameDisabled, setNameDisabled] = useState(true);
     const [credentialsDisabled, setCredentialsDisabled] = useState(true);
@@ -43,7 +46,18 @@ const Settings = () => {
 
     const EditLoginCredentials = () => {
         setCredentialsDisabled(true);
-        settings.changeLoginCredentials(emailAdd, pass, pass);
+        settings.changeLoginCredentials(emailAdd, pass, pass).then(() => {
+            alert("You changed your login credentials! Please relog, logging out...");
+            setTimeout(() => {
+                localStorage.removeItem('token');
+                history.push('/');
+            }, 3000);
+        }).catch((error) => {
+            Promise.resolve(error)
+                .then((e) => {
+                    alert(`${e.status} ${e.statusText}`);
+                });
+        });
     }
 
     return (

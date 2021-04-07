@@ -1,9 +1,9 @@
 export const getStockDetailTooltipText = (label) => {
     switch (label) {
         case "Bid":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "Highest price people want to buy";
         case "Ask":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "Lowest price people want to sell";
         case "High":
             return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
         case "Low":
@@ -17,7 +17,7 @@ export const getStockDetailTooltipText = (label) => {
         case "Change Percentage":
             return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
         case "52 Week Range":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "The lowest and highest price over the last 52 weeks";
         case "Market Cap":
             return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
         default:

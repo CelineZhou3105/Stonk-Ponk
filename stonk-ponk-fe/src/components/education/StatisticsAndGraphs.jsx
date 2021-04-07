@@ -23,7 +23,10 @@ const StatisticsAndGraphs = () => {
                         <CustomButton backgroundColor="#d6d6d6" color="#000000" hoverColor="#c2c2c2" aria-label="Navigate back to education page" onClick={navigateToEducation}>Back</CustomButton>
                     </FlexRowDiv>
                     <h1>Statistics and Graphs</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Orci dapibus ultrices in iaculis nunc sed augue lacus. Nulla malesuada pellentesque elit eget. Nulla porttitor massa id neque aliquam vestibulum morbi. Lorem donec massa sapien faucibus et molestie ac feugiat sed. Dolor sit amet consectetur adipiscing elit duis tristique. Mattis pellentesque id nibh tortor id aliquet lectus. Et netus et malesuada fames ac turpis egestas integer. Et netus et malesuada fames ac. Massa sapien faucibus et molestie. Sit amet volutpat consequat mauris nunc congue. Id neque aliquam vestibulum morbi blandit cursus risus at. Phasellus faucibus scelerisque eleifend donec. Nisi scelerisque eu ultrices vitae auctor eu. Nisi lacus sed viverra tellus in hac habitasse platea. Aliquam vestibulum morbi blandit cursus risus at. Sapien faucibus et molestie ac feugiat sed lectus. Condimentum mattis pellentesque id nibh.</p>
+                    <p>Technical traders use a variety of stock charts to analyze market data in order to pinpoint optimum entry and exit points for their trades.</p>
+                    <p>For each secuirty on StonkPonk, you will have access to statistics such as the current Bid/Ask Rates, 52 week range, open and closing prices. All indicators have been given stock tips to help you determine how to make trades based on the statistic</p>
+                    <p>Each security page also displays the security's performance over the last week, month, six months and year. This will enable you to see the performance of the stock before making a trade.</p> 
+                    <p>An active investor may seek to make trade decisions based off a shorter horizon such as the last week or month, whereas a passive investor would also consider the last six months and last year tabs (perhaps even more) to make their trade decision.</p>
                 </FlexColumnLeftDiv>
             </PageContainer>
         </div>

@@ -26,13 +26,13 @@ const tableHeadings = [
 
 function Portfolio() {
 
-    const [chartData, setChartData] = useState([]);
+    const [chartData, setChartData] = useState('Loading');
     const [portfolioValue, setPortfolioValue] = useState(0);
     const [lastContribution, setLastContribution] = useState(0);
     const [profit, setProfit] = useState(0);
-    const [gainers, setGainers] = useState([]);
-    const [losers, setLosers] = useState([]);
-    const [portfolioStocks, setPortfolioStocks] = useState([]);
+    const [gainers, setGainers] = useState('Loading');
+    const [losers, setLosers] = useState('Loading');
+    const [portfolioStocks, setPortfolioStocks] = useState('Loading');
     const [page, setPage] = useState(0);
 
     const token = localStorage.getItem('token');
@@ -74,76 +74,69 @@ function Portfolio() {
             <Navigation />
             <PageContainer>
                 <PageTitle>Your Portfolio</PageTitle>
-                <Container align_items="center" justify_content="space-evenly">
-                    {chartData.length !== 0 ?
-                        <>
+                {(chartData !== 'Loading' && gainers !== 'Loading' && losers !== 'Loading' && portfolioStocks !== 'Loading') ?
+                    <>
+                        <Container align_items="center" justify_content="space-evenly">
                             <PortfolioChart stockData={chartData} portfolioValue={portfolioValue} />
                             <PortfolioValueContainer>
                                 <SubTitle>Portfolio Value</SubTitle>
                                 <PortfolioValue>A${portfolioValue}</PortfolioValue>
                                 <SubText color="#000000">
-                                    {'TODO DAILY CHANGE '}
-                                    <ColorText color="#00AD30">
-                                        ({profit > 0 ? ('+TODO (DAILY CHANGE PERC)%') : ('TODO (DAILY CHANGE PERC)%')})
-                                    </ColorText>
+                                    {/* {'TODO DAILY CHANGE '} */}
+                                    {/* <ColorText color="#00AD30">
+                                            ({profit > 0 ? ('+TODO (DAILY CHANGE PERC)%') : ('TODO (DAILY CHANGE PERC)%')})
+                                        </ColorText> */}
                                 </SubText>
                                 <SubText>
                                     Contributions: ${(portfolioValue - profit).toFixed(2)}
                                     <br />
-                                    Last Investment: {new Date(lastContribution).toLocaleDateString()}
+                                        Last Investment: {new Date(lastContribution).toLocaleDateString()}
                                 </SubText>
                             </PortfolioValueContainer>
-                        </>
-                        : <CircularProgress />
-                    }
-                </Container>
-                <SectionRowDiv>
-                    <Container flex_direction="column">
-                        <SubTitle>Best Performing Stocks</SubTitle>
-                        <SubText>Based on profit margin.</SubText>
-                        {gainers.length !== 0 ?
-                            gainers.map((stock) => {
-                                return (
-                                    <>
-                                        <NormalText>{stock.name}</NormalText>
-                                        <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
-                                    </>
-                                )
-                            })
-                            : <CircularProgress />
-                        }
-                    </Container>
-                    <Container flex_direction="column">
-                        <SubTitle>Worst Performing Stocks</SubTitle>
-                        <SubText>Based on profit margin.</SubText>
-                        {losers.length !== 0 ?
-                            losers.map((stock) => {
-                                return (
-                                    <>
-                                        <NormalText>{stock.name}</NormalText>
-                                        <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
-                                    </>
-                                )
-                            })
-                            : <CircularProgress />
-                        }
-                    </Container>
-                    <Container flex_direction="column">
-                        <SubTitle>
-                            Suggestions:
-                            </SubTitle>
-                        <NormalText>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                            </NormalText>
-                    </Container>
-                </SectionRowDiv>
-                <FilterContainer>
-                    <Filter setState={setPortfolioStocks} data={portfolioStocks}></Filter>
-                </FilterContainer>
-                {portfolioStocks.length !== 0 ?
-                    <StockTable data={portfolioStocks} headings={tableHeadings} place="portfolio" setRows={setPortfolioStocks} page={page} setPage={setPage}></StockTable>
-                    : <CircularProgress></CircularProgress>
+                        </Container>
+                        <SectionRowDiv>
+                            <Container flex_direction="column">
+                                <SubTitle>Best Performing Stocks</SubTitle>
+                                <SubText>Based on profit margin.</SubText>
+                                {gainers.map((stock) => {
+                                    return (
+                                        <>
+                                            <NormalText>{stock.name}</NormalText>
+                                            <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
+                                        </>
+                                    )
+                                })}
+                            </Container>
+                            <Container flex_direction="column">
+                                <SubTitle>Worst Performing Stocks</SubTitle>
+                                <SubText>Based on profit margin.</SubText>
+                                {losers.map((stock) => {
+                                    return (
+                                        <>
+                                            <NormalText>{stock.name}</NormalText>
+                                            <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
+                                        </>
+                                    )
+                                })}
+                            </Container>
+                            <Container flex_direction="column">
+                                <SubTitle>
+                                    Suggestions:
+                                    </SubTitle>
+                                <NormalText>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                                    </NormalText>
+                            </Container>
+                        </SectionRowDiv>
+                        <FilterContainer>
+                            <Filter setState={setPortfolioStocks} data={portfolioStocks}></Filter>
+                        </FilterContainer>
+
+                        <StockTable data={portfolioStocks} headings={tableHeadings} place="portfolio" setRows={setPortfolioStocks} page={page} setPage={setPage}></StockTable>
+                    </>
+                    : <CircularProgress />
                 }
+
             </PageContainer>
         </div>
 

@@ -19,7 +19,7 @@ function Navigation(props) {
     }
 
     function logout(event) {
-        event.preventDefault();
+        // event.preventDefault();
         localStorage.removeItem('token');
         history.push('/');
     }
