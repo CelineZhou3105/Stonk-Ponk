@@ -5,3 +5,4 @@ djangorestframework==3.12.2
 djangorestframework-jwt==1.11.0
 pandas==1.2.3
 yahoo-fin==0.8.7
+googlenews==1.5.7
