@@ -29,4 +29,4 @@ def get_news(ticker):
             
         return json.dumps(news_articles)
     except:
-        raise Error("News Error")
+        raise Exception("News Error")
