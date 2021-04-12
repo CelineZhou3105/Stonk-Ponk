@@ -16,9 +16,17 @@ def get_news(ticker):
         googlenews = GoogleNews(period='7d')
         googlenews.search(stock_data['name'])
         result = json.dumps(googlenews.result())
+        
+        news_articles = []
         for item in result:
-            item.pop('datetime')
+            news_article = {}
+            news_article['title'] = item['title']
+            news_article['media'] = item['media']
+            news_article['date'] = item['date']
+            news_article['description'] = item['desc']
+            news_article['link'] = item['link']
+            news_articles.append(news_article)
             
-        return result
+        return json.dumps(news_articles)
     except:
         raise Error("News Error")
