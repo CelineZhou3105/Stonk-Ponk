@@ -106,15 +106,15 @@ def get_stock_prices(ticker, interval_type):
         interval_string = str(1) + "d"
     
     elif interval_type == 'last_month':
-        start_date = end_date - timedelta(weeks = 5)
+        start_date = end_date - timedelta(days = 5*7)
         interval_string = str(1) + "d"
 
     elif interval_type == 'last_six_months':
-        start_date = end_date - timedelta(weeks = 6 * 5)
+        start_date = end_date - timedelta(days = 7*6 * 5)
         interval_string = str(1) + "d"
 
     elif interval_type == "last_year":
-        start_date = end_date - timedelta(weeks = 12 * 5)
+        start_date = end_date - timedelta(days = 7 * 12 * 5)
         interval_string = str(1) + "d"
 
     end_date = end_date - timedelta(days = 1)
