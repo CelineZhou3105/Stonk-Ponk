@@ -14,8 +14,8 @@ def get_news(ticker):
     
     try:
         googlenews = GoogleNews(period='7d')
-        googlenews.search(stock_data['name'])
-        result = json.dumps(googlenews.result())
+        googlenews.search(ticker)
+        result = googlenews.result()
         
         news_articles = []
         for item in result:
