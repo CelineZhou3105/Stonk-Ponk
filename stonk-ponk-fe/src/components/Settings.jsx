@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { TextField, SettingsLabel } from '../css/Form';
-import { FlexRowLeftDiv, FlexColumnLeftDiv, PageContainer, LineDivider, SettingRowDiv, SettingEditRowDiv } from '../css/Div';
+import { FlexRowLeftDiv, FlexColumnLeftDiv, PageContainer, LineDivider, SettingRowDiv, SettingEditRowDiv, SettingFieldDiv, ModalContainer, ModalContent } from '../css/Div';
 import Navigation from './Navigation';
-import { EditButton } from '../css/Button';
+import { EditButton, SaveButton, CancelButton, CloseButton } from '../css/Button';
 import { ProfilePhoto } from '../css/Image';
 import profile from '../images/blobfish.png';
 import { settings } from '../services/settings';
@@ -18,36 +18,45 @@ const Settings = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailAdd, setEmailAdd] = useState('');
-    const [pass, setPass] = useState('ASDqwe123!');
+    const [pass, setPass] = useState('');
+    const [passOld, setPassOld] = useState('');
+
+    const [oldFirstName, setOldFirstName] = useState('');
+    const [oldLastName, setOldLastName] = useState('');
+    const [oldEmail, setOldEmail] = useState('');
 
     const [nameDisabled, setNameDisabled] = useState(true);
-    const [credentialsDisabled, setCredentialsDisabled] = useState(true);
+    const [emailDisabled, setEmailDisabled] = useState(true);
+    const [modalDisabled, setModalDisabled] = useState(true);
 
     useEffect(() => {
-        settings.getUser()
-            .then(response => response.json())
-            .then(json => {
-                setFirstName(json.first_name);
-                setLastName(json.last_name);
-                setEmailAdd(json.email);
-            })
-            .catch((error) => {
-                Promise.resolve(error)
-                    .then((error) => {
-                        alert(`${error.status} ${error.statusText}`);
-                    });
-            })
+        // settings.getUser()
+        //     .then(response => response.json())
+        //     .then(json => {
+        //         setFirstName(json.first_name);
+        //         setLastName(json.last_name);
+        //         setEmailAdd(json.email);
+        //     })
+        //     .catch((error) => {
+        //         Promise.resolve(error)
+        //             .then((error) => {
+        //                 alert(`${error.status} ${error.statusText}`);
+        //             });
+        //     })
     }, []);
 
     const EditName = () => {
         setNameDisabled(true);
+        setOldFirstName(firstName);
+        setOldLastName(lastName);
         settings.changeName(firstName, lastName);
     }
 
-    const EditLoginCredentials = () => {
-        setCredentialsDisabled(true);
-        settings.changeLoginCredentials(emailAdd, pass, pass).then(() => {
-            alert("You changed your login credentials! Please relog, logging out...");
+    const EditEmail = () => {
+        setEmailDisabled(true);
+        setOldEmail(emailAdd);
+        settings.changeEmail(emailAdd).then(() => {
+            alert("You changed your login credentials! Please relog, logging out in 3 seconds...");
             setTimeout(() => {
                 localStorage.removeItem('token');
                 history.push('/');
@@ -60,49 +69,86 @@ const Settings = () => {
         });
     }
 
+    const ChangePassword = () => {
+        settings.changePassword(emailAdd).then(() => {
+            alert("You changed your login credentials! Please relog, logging out in 3 seconds...");
+            setTimeout(() => {
+                localStorage.removeItem('token');
+                history.push('/');
+            }, 3000);
+        }).catch((error) => {
+            Promise.resolve(error)
+                .then((e) => {
+                    alert(`${e.status} ${e.statusText}`);
+                });
+        });
+    }
+
+    const CancelName = () => {
+        setFirstName(oldFirstName);
+        setLastName(oldLastName);
+        setNameDisabled(true);
+    }
+
+    const CancelEmail = () => {
+        setEmailAdd(oldEmail);
+        setEmailDisabled(true);
+    }
     return (
         <div>
             <Navigation settings="true" />
             <PageContainer>
                 <PageTitle>Account Settings</PageTitle>
                 <FlexRowLeftDiv>
-                    <ProfilePhoto src={profile} alt="Your profile picture" style={{ width: "10%", height: "10%", marginRight: "40px" }} />
-                    <SettingRowDiv style={{ width: "20%" }}>
-                        <FlexColumnLeftDiv style={{ width: "30%", fontWeight: "bold" }}>
-                            <SettingsLabel htmlFor="firstName">First Name</SettingsLabel>
-                            <SettingsLabel htmlFor="lastName">Last Name</SettingsLabel>
-                        </FlexColumnLeftDiv>
-                        <FlexColumnLeftDiv >
-                            <TextField type="text" id="firstName" value={firstName} disabled={nameDisabled} onChange={(e) => setFirstName(e.target.value)} />
-                            <TextField type="text" id="lastName" value={lastName} disabled={nameDisabled} onChange={(e) => setLastName(e.target.value)} />
-                        </FlexColumnLeftDiv>
-                    </SettingRowDiv>
-                    <SettingRowDiv style={{ width: "20%" }}>
-                        <FlexColumnLeftDiv style={{ width: "30%", fontWeight: "bold" }}>
-                            <SettingsLabel htmlFor="emailAdd">Email</SettingsLabel>
-                            <SettingsLabel htmlFor="pass">Password</SettingsLabel>
-                        </FlexColumnLeftDiv>
-                        <FlexColumnLeftDiv>
-                            <TextField type="text" id="emailAdd" value={emailAdd} disabled={credentialsDisabled} onChange={(e) => setEmailAdd(e.target.value)} />
-                            <TextField type="password" id="pass" value={pass} disabled={credentialsDisabled} onChange={(e) => setPass(e.target.value)} />
-                        </FlexColumnLeftDiv>
-                    </SettingRowDiv>
+                    <ProfilePhoto src={profile} alt="Your profile picture" style={{ width: "13%", height: "10%" }} />
                     <FlexColumnLeftDiv>
-                        {nameDisabled ?
-                            <EditButton aria-label="Edit Name Button" onClick={() => setNameDisabled(false)}>Edit Name</EditButton>
-                            :
-                            <SettingEditRowDiv>
-                                <EditButton aria-label="Save changes to names button" onClick={EditName}>Save</EditButton>
-                                <EditButton aria-label="Cancel changes to names button" onClick={() => setNameDisabled(true)}>Cancel</EditButton>
-                            </SettingEditRowDiv>
-                        }
-                        {credentialsDisabled ?
-                            <EditButton aria-label="Edit Login Credentials Button" onClick={() => setCredentialsDisabled(false)}>Edit Login Credentials</EditButton>
-                            :
-                            <SettingEditRowDiv>
-                                <EditButton aria-label="Save changes to credentials button" onClick={EditLoginCredentials}>Save</EditButton>
-                                <EditButton aria-label="Cancel changes to credentials button" onClick={() => setCredentialsDisabled(true)}>Cancel</EditButton>
-                            </SettingEditRowDiv>
+                        <SettingRowDiv style={{ width: "40%", height: "80px", fontWeight: "bold" }}>
+                            <SettingFieldDiv>
+                                <SettingsLabel htmlFor="firstName">First Name</SettingsLabel>
+                                <TextField type="text" id="firstName" value={firstName} disabled={nameDisabled} onChange={(e) => setFirstName(e.target.value)} />
+                            </SettingFieldDiv>
+                            <SettingFieldDiv>
+                                <SettingsLabel htmlFor="lastName">Last Name</SettingsLabel>
+                                <TextField type="text" id="lastName" value={lastName} disabled={nameDisabled} onChange={(e) => setLastName(e.target.value)} />
+                            </SettingFieldDiv>
+                            <SettingFieldDiv>
+                                {nameDisabled ?
+                                    <EditButton aria-label="Edit Name Button" onClick={() => setNameDisabled(false)}>Edit Name</EditButton>
+                                    :
+                                    <SettingEditRowDiv>
+                                        <SaveButton aria-label="Save changes to names button" onClick={EditName}>Save</SaveButton>
+                                        <CancelButton aria-label="Cancel changes to names button" onClick={CancelName}>Cancel</CancelButton>
+                                    </SettingEditRowDiv>
+                                }
+                            </SettingFieldDiv>
+
+                        </SettingRowDiv>
+                        <SettingRowDiv style={{ width: "26%", height: "80px", fontWeight: "bold" }}>
+                            <SettingFieldDiv>
+                                <SettingsLabel htmlFor="emailAdd">Email</SettingsLabel>
+                                <TextField type="text" id="emailAdd" value={emailAdd} disabled={emailDisabled} onChange={(e) => setEmailAdd(e.target.value)} />
+                            </SettingFieldDiv>
+                            <SettingFieldDiv>
+                                {emailDisabled ?
+                                    <EditButton aria-label="Edit Email Button" onClick={() => setEmailDisabled(false)}>Edit Email</EditButton>
+                                    :
+                                    <SettingEditRowDiv>
+                                        <SaveButton aria-label="Save changes to Email button" onClick={EditEmail}>Save</SaveButton>
+                                        <CancelButton aria-label="Cancel changes to Email button" onClick={CancelEmail}>Cancel</CancelButton>
+                                    </SettingEditRowDiv>
+                                }
+                            </SettingFieldDiv>
+                        </SettingRowDiv>
+                        <SettingRowDiv>
+                            <EditButton aria-label="Edit password Button" onClick={() => setModalDisabled(false)}>Edit Password</EditButton>
+                        </SettingRowDiv>
+                        {!modalDisabled &&
+                            <ModalContainer>
+                                <ModalContent>
+                                    <CloseButton onClick={() => setModalDisabled(true)}>&times;</CloseButton>
+
+                                </ModalContent>
+                            </ModalContainer>
                         }
                     </FlexColumnLeftDiv>
                 </FlexRowLeftDiv>
