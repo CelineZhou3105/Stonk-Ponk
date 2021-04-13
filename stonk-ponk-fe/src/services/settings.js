@@ -1,4 +1,4 @@
-import { ChangeNameLink, ChangeLoginCredentialsLink, GetUserDetailsLink } from '../api-links/constants';
+import { ChangeNameLink, ChangeEmailLink, ChangePasswordWithAuthLink, GetUserDetailsLink } from '../api-links/constants';
 
 const getUser = async () => {
     const requestOptions = {
@@ -18,7 +18,7 @@ const getUser = async () => {
         })
 }
 
-async function changeName(firstN, lastN) {
+const changeName = async (firstN, lastN) => {
     const requestOptions = {
         method: 'PUT',
         headers: {
@@ -49,7 +49,7 @@ async function changeName(firstN, lastN) {
         });
 }
 
-async function changeLoginCredentials(emailNew, passwordNew, passwordOld) {
+const changeEmail = async (emailNew) => {
 
     const requestOptions = {
         method: 'PUT',
@@ -60,11 +60,31 @@ async function changeLoginCredentials(emailNew, passwordNew, passwordOld) {
         },
         body: JSON.stringify({
             new_email: emailNew,
+        }),
+    };
+    return await fetch(ChangeEmailLink, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200      
+                return response;
+            } // if status code is not 200
+            return Promise.reject(response);
+        })
+}
+
+const changePassword = async (passwordNew, passwordOld) => {
+    const requestOptions = {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
             new_password: passwordNew,
             old_password: passwordOld,
         }),
     };
-    return await fetch(ChangeLoginCredentialsLink, requestOptions)
+    return await fetch(ChangePasswordWithAuthLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200      
                 return response;
@@ -77,5 +97,6 @@ async function changeLoginCredentials(emailNew, passwordNew, passwordOld) {
 export const settings = {
     getUser,
     changeName,
-    changeLoginCredentials,
+    changeEmail,
+    changePassword,
 };
