@@ -28,3 +28,4 @@ export const StockPriceLink = "http://localhost:8000/api/stocks/historical_price
 
 // Stock News API calls
 export const StockNewsLink = "http://localhost:8000/api/news/get_news";
+export const MarketNewsLink = "http://localhost:8000/api/news/get_market_news";
