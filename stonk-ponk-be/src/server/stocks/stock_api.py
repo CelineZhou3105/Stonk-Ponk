@@ -10,6 +10,16 @@ def get_market_status():
     print(market_status)
     return market_status
 
+def get_most_active():
+    market_stocks = si.get_day_most_active()
+     market_stocks = market_stocks.iloc[start_index:end_index]
+    market_stocks_list = []
+
+    for index, row in market_stocks.iterrows():
+        market_stocks_list.append(row['Symbol'])
+    
+    return market_stocks_list
+
 # types: losers, gainers, most_active
 def get_market_data(type, page_num):
     if type == "losers":
@@ -106,15 +116,15 @@ def get_stock_prices(ticker, interval_type):
         interval_string = str(1) + "d"
     
     elif interval_type == 'last_month':
-        start_date = end_date - timedelta(days = 5*7)
+        start_date = end_date - timedelta(days = 30)
         interval_string = str(1) + "d"
 
     elif interval_type == 'last_six_months':
-        start_date = end_date - timedelta(days = 7*6 * 5)
+        start_date = end_date - timedelta(days = 180)
         interval_string = str(1) + "d"
 
     elif interval_type == "last_year":
-        start_date = end_date - timedelta(days = 7 * 12 * 5)
+        start_date = end_date - timedelta(days = 360)
         interval_string = str(1) + "d"
 
     end_date = end_date - timedelta(days = 1)

@@ -30,3 +30,19 @@ def get_news(ticker):
         return json.dumps(news_articles)
     except:
         raise Exception("News Error")
+
+def get_market_news():
+    try:
+        stock_data = stock_api.get_most_active()
+
+        market_news = []
+        
+        for stock in stock_data:
+            market_news.append(get_news(stock))
+        
+        return json.dumps(market_news)
+
+    
+    except:
+        raise Exception("Most Active Stocks Not Found")
+    
