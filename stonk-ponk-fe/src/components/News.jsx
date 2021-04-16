@@ -1,92 +1,208 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Navigation from './Navigation';
-import { Container, NewsContainer, PageContainer } from "../css/Div";
+import { Container, FlexRowDiv, NewsContainer, PageContainer } from "../css/Div";
 import { Link, NormalText, PageTitle, SubText } from "../css/Text";
 
-function News() {
-    // TODO - get articles from BE
+import { TextField as AutocompleteTextField } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
-    // const newsResponse = getNews().then(res => {
-    //     return res.articles;
-    // })
-    // console.log(newsResponse);
+import { market } from '../services/market';
+
+import { getNews, getMarketNews } from '../services/news';
+
+import Pagination from '@material-ui/lab/Pagination';
+
+function News() {
+    // User input into the search bar
+    const [input, setInput] = useState(null); 
+    const lastAUSPromise = useRef();
+    const lastUSPromise = useRef();
+    const lastPromise = useRef();
+
+    // Aborter for cancelling previous API calls
+    const lastAbortController = useRef();
+
+    // Options in the search bar
+    const [stockOptions, setStockOptions] = useState([]);
+    const [selectedStock, setSelectedStock] = useState('');
+    const [articles, setArticles] = useState(null);
+    const [articlesShown, setArticlesShown] = useState([]);
+    const [pageNum, setPageNum] = useState(1);
+    const [pages, setPages] = useState(0);
+
+    function getNewsForStock() {
+        console.log("Finding news for ", selectedStock);
+        getNews(selectedStock.ticker).then(response => {
+            console.log(response);
+            setArticles(response);
+            if (response.length > 10) {
+                setArticlesShown(response.slice(0, 10));
+                setPages(Math.floor(response.length /10));
+
+            } else {
+                setArticlesShown(response);
+                setPages(1);
+            }
+            setPageNum(1);
+            renderArticles(pageNum - 1);
+        })
+    }
+
+    // useEffect(() => {
+    //     const currentUSPromise = market.getStockDetail(input);
+    //     // store the promise to the ref
+    //     lastUSPromise.current = currentUSPromise;
+
+    //     currentUSPromise
+    //     .then(response => response.json())
+    //     .then(res => {
+    //         if (currentUSPromise === lastUSPromise.current) {
+    //             console.log("Setting stock options to have US stock", res);
+    //             setStockOptions(currStocks => [...currStocks, res]);
+    //         }
+    //     }).catch((e) => {
+    //         console.log('Could not find stock on US market');
+    //     }).finally(() => {
+    //         console.log("RESULTS AFTER US", stockOptions);
+    //     })
+    // }, [input])
+
+    useEffect(() => {
+        if (lastAbortController.current) {
+            lastAbortController.current.abort();
+        }
+
+        // Create new AbortController for the new request and store it in the ref
+        const currentAbortController = new AbortController();
+        lastAbortController.current = currentAbortController;
+
+        const currentPromise = market.checkTickerExists(input, currentAbortController)
+        .then(response => response.json())
+        .then(res => {
+            setStockOptions(currStocks => [...currStocks,res]);
+        }).catch((e) => {
+            console.log('Could not find stock on US market');
+        })
+    }, [input])
+
+    // useEffect(() => {
+    //     setStockOptions([]);
+    //     const currentAUSPromise =  market.getStockDetail(input+".AX");
+    //     lastAUSPromise.current = currentAUSPromise;
+
+    //     currentAUSPromise
+    //     .then(response => response.json())
+    //     .then(res => {
+    //         if (currentAUSPromise === lastAUSPromise.current) {
+    //             console.log("Setting stock options to have", res);
+    //             setStockOptions(currStocks => [...currStocks, res]);
+    //         }
+    //     }).catch((e) => {
+    //         console.log('Could not find stock on AUS market');
+    //     }).finally(()=> {
+    //         console.log("RESULTS:", stockOptions);
+    //     })
+    // }, [input])
+
+    function renderArticles (page) {
+        const start = page * 10;
+        const end = page * 10 + 10;
+        
+        const newArticles = articles.slice(start, end);
+        setArticlesShown(newArticles); 
+    }
+    
+
+    // Get market news after the person clears the search bar, otherwise get news for the stock
+    const handleInputChange = (event, value, reason) => {
+        if (reason === "clear" ||  value === '') {
+            // Set it back to market news
+            setArticles([]);
+            getTopStocksNews();
+        } else {
+            console.log("Getting results for...", value);
+            setInput(value);
+        }
+    }
+
+    // Runs once after initial render to populate news page
+    useEffect(() => {
+        getTopStocksNews();
+    }, [])
+
+    // Function to get the news for the market
+    const getTopStocksNews = () => {
+        getMarketNews()
+        .then(response => {
+            setArticles(response);
+            if (response.length > 10) {
+                setArticlesShown(response.slice(0, 10));
+                setPages(Math.floor(response.length /10));
+
+            } else {
+                setArticlesShown(response);
+                setPages(1);
+            }
+        }).catch(() => {
+            alert("Error with getting market news");
+        });
+    }
+
+    // Function to handle page changes
+    const handlePageChange = (event, value) => {
+        setPageNum(value);
+        renderArticles(pageNum - 1);
+    };
+
     return (
         <>
             <Navigation />
             <PageContainer>
                 <PageTitle>News</PageTitle>
-                <Container flex_direction="column" gap="1em">
-                    {articles.map(article => {
-                        return (
-                            <NewsContainer>
-                                <img src={article.urlToImage} alt=""></img>
-                                <div>
-                                    <NormalText><Link color="black" href={article.url} target="_blank">{article.title}</Link></NormalText>
-                                    <SubText>{article.description}</SubText>
-                                </div>
-                            </NewsContainer>
-                        );
-                    })
-                    }
-                </Container>
+                <Autocomplete
+                    options={stockOptions}
+                    getOptionLabel={(option) => option.name}
+                    onChange={(e, value) => { setSelectedStock(value); } }
+                    style={{ width: '100%' }}
+                    renderInput={(params) => <AutocompleteTextField {...params} label="Enter your ticker..." variant="outlined" />}
+                    onInputChange={(e, value, reason) => { 
+                        console.log("Setting input to: ", value); 
+                        handleInputChange(e, value, reason);
+                    }}
+                    noOptionsText="No stocks found."
+                    filterOptions={x => x}
+                />
+                {input === null 
+                    ? <PageTitle>Market News for Most Active Stocks</PageTitle>
+                    : <PageTitle>Market News for {input}</PageTitle>
+                }
+                {articles && articles.length === 0 &&
+                    <div>No search results.</div>
+                }
+                {articles && articles.length > 0 
+                    ? <Container flex_direction="column" gap="1em">
+                        {articlesShown.map(article => {
+                            return (
+                                <NewsContainer>
+                                    <div>
+                                        <NormalText>{article.media}: <Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
+                                        <SubText>{article.date}</SubText>
+                                        <SubText>{article.description}</SubText>
+                                    </div>
+                                </NewsContainer>
+                            );
+                        })
+                        }
+                        <FlexRowDiv>
+                            Page: {pageNum}
+                            <Pagination count={pages} page={pageNum} onChange={handlePageChange}/>
+                        </FlexRowDiv>
+                    </Container>
+                : <div>Loading...</div>
+                }
             </PageContainer>
         </>
     )
 }
-
-const articles = [
-    {
-        "source": {
-            "id": null,
-            "name": "The Guardian"
-        },
-        "author": "Guardian staff reporter",
-        "title": "Much-feared asteroid Apophis won't hit Earth for at least 100 years, Nasa says - The Guardian",
-        "description": "Chunk of space rock was once the ‘poster child for hazardous asteroids’ but it will be a while before humans need to worry about it again",
-        "url": "https://amp.theguardian.com/science/2021/mar/27/much-feared-asteroid-apophis-wont-hit-earth-for-at-least-100-years-nasa-says",
-        "urlToImage": "https://i.guim.co.uk/img/media/cef0035443a43a81f92dc661cd8c0ae18ab63ff8/505_404_3056_1834/master/3056.jpg?width=620&quality=45&auto=format&fit=max&dpr=2&s=264fe5d1f016ee433f83dcc18be4c058",
-        "publishedAt": "2021-03-27T03:30:00Z",
-        "content": "AsteroidsChunk of space rock was once the poster child for hazardous asteroids but it will be a while before humans need to worry about it again\r\nSat 27 Mar 2021 03.30 GMT\r\nNasa has given Earth the a… [+2620 chars]"
-    },
-    {
-        "source": {
-            "id": "usa-today",
-            "name": "USA Today"
-        },
-        "author": "Analis Bailey",
-        "title": "NCAA clears up issue of outdoor walks after Louisville women's basketball coach raises question - USA TODAY",
-        "description": "Louisville coach Jeff Walz said his team was told outdoor walks were no longer allowed, but the NCAA sent updated communication to teams Friday.",
-        "url": "https://www.usatoday.com/story/sports/ncaaw/tourney/2021/03/26/louisville-jeff-walz-no-outdoor-walks-ncaa-tournament-sweet-16/7019854002/",
-        "urlToImage": "https://www.gannett-cdn.com/presto/2021/03/26/USAT/7e9fa6ab-3344-45c0-b1e1-61a4e4dd421f-USATSI_15687809.jpg?crop=2737,1540,x0,y0&width=1600&height=800&fit=bounds",
-        "publishedAt": "2021-03-27T02:51:31Z",
-        "content": "Sports Pulse: Going through the biggest matchups in the Sweet 16\r\nUSA TODAY\r\nThe Louisville women’s basketball team will be allowed to walk outdoors again – after a misunderstanding and updated guida… [+3630 chars]"
-    },
-    {
-        "source": {
-            "id": null,
-            "name": "KSL.com"
-        },
-        "author": "Lauren Mascarenhas, CNN",
-        "title": "Study says COVID-19 vaccines provide protection for pregnant and lactating women — and their newborns - KSL.com",
-        "description": "The Pfizer/BioNTech and Moderna Covid-19 vaccines are effective in pregnant and lactating women, who can pass protective antibodies to newborns, according to research published Thursday in the American Journal of Obstetrics and Gynecology.",
-        "url": "https://www.ksl.com/article/50133652/study-says-covid-19-vaccines-provide-protection-for-pregnant-and-lactating-women--and-their-newborns",
-        "urlToImage": "https://img.ksl.com/slc/2816/281649/28164988.jpg?filter=ksl/responsive_story_lg",
-        "publishedAt": "2021-03-27T02:41:13Z",
-        "content": "ATLANTA (CNN) The Pfizer/BioNTech and Moderna COVID-19 vaccines are effective in pregnant and lactating women, who can pass protective antibodies to newborns, according to research published Thursday… [+4022 chars]"
-    },
-    {
-        "source": {
-            "id": null,
-            "name": "The Guardian"
-        },
-        "author": "Guardian staff reporter",
-        "title": "Joe Biden invites 40 world leaders to virtual summit on climate crisis - The Guardian",
-        "description": "Xi Jinping and Vladimir Putin among invitees as US heralds return to forefront of climate fight",
-        "url": "https://amp.theguardian.com/us-news/2021/mar/26/joe-biden-climate-change-virtual-summit",
-        "urlToImage": "https://i.guim.co.uk/img/media/e6c958c526157d1a10e5316775bc12cbe46cc82b/0_136_6000_3600/master/6000.jpg?width=620&quality=45&auto=format&fit=max&dpr=2&s=61355a4449aa650fd6b2d00a3cc30fc4",
-        "publishedAt": "2021-03-27T02:09:00Z",
-        "content": "Joe BidenXi Jinping and Vladimir Putin among invitees as US heralds return to forefront of climate fight\r\nSat 27 Mar 2021 02.09 GMT\r\nJoe Biden has invited 40 world leaders to a virtual summit on the … [+3263 chars]"
-    }
-];
 
 export default News;

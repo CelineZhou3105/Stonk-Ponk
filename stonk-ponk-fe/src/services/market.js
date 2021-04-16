@@ -38,8 +38,9 @@ async function getStockDetail(ticker) {
         },
         body: JSON.stringify({
             ticker: ticker,
-        })
+        }),
     };
+
     return await fetch(StockDetailLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
@@ -62,6 +63,7 @@ async function getStockPrice(ticker, typeInterval) {
             interval_type: typeInterval,
         })
     };
+
     return await fetch(StockPriceLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
@@ -72,7 +74,34 @@ async function getStockPrice(ticker, typeInterval) {
         })
 }
 
+async function checkTickerExists(ticker, abortController) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            ticker: ticker,
+        })
+    };
+
+    if (abortController) {
+        requestOptions['signal'] = abortController;
+    }
+
+    return await fetch(, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200
+                return Promise.resolve(response);
+            } // if status code is not 200
+            console.log('error');
+            return Promise.reject(response);
+        })
+}
+
 export const market = {
+    checkTickerExists,
     getMarketData,
     getStockDetail,
     getStockPrice

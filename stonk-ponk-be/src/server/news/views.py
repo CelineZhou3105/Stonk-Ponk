@@ -17,9 +17,13 @@ def get_stock_news(request):
     body = json.loads(request.body.decode('utf-8'))
     print(body)
     responseData = news_api.get_news(body['ticker'])
-    return HttpResponse(responseData)
+
+    for article in responseData:
+        article.pop('datetime')
+        
+    return HttpResponse(json.dumps(responseData))
 
 @require_http_methods(["POST", "GET"])
 def get_market_news(request):
     responseData = news_api.get_market_news()
-    return HttpResponse(responseData)
+    return HttpResponse(json.dumps(responseData))
