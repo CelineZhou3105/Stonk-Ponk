@@ -9,20 +9,38 @@ pd.set_option("display.max_rows", None, "display.max_columns", None)
 
 def get_yf_news(ticker):
     try:
-        news.get_yf_rss(ticker)
+        news_articles = news.get_yf_rss(ticker)
+        news_articles = news_articles[:5]
+
+        return_articles = []
+
+        for article in news_articles:
+            news_dict = {}
+            news_dict['ticker'] = ticker
+            news_dict['summary'] = article['summary'][:100]
+            news_dict['link'] = article['link']
+            news_dict['published'] = article['published']
+            news_dict['title'] = article['title']
+            return_articles.append(news_dict)
+        
+        return return_articles
     except:
         raise Exception("News Error")
 
 def get_yf_market_news():
     try:
-        stock_data = stock_api.get_most_active(0,5)
+        stock_data = stock_api.get_most_active(0,10)
 
         market_news = []
         
         for stock in stock_data:
-            market_news.append(get_yf_news(stock))
+            articles = get_yf_news(stock)
+            articles = articles[:2]
+            for article in articles:
+                market_news.append(article)
         
-        return json.dumps(market_news)
+        print(len(market_news))
+        return market_news
 
     
     except:
