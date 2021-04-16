@@ -61,10 +61,10 @@ function Login() {
                 <GenericForm onSubmit={(e) => authentication.login(e, email, pass).then(
                     response => {
                         localStorage.setItem('token', response.token);
-			            history.push('/market');
+			history.push('/market');
                     },
                     response => {
-                        alert("Error, couldn't login");
+			    alert("Error, couldn't login");
                     }
                 )}>
                     <CompanyName>Stonk Ponk</CompanyName>
