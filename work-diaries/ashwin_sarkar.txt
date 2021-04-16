@@ -31,4 +31,5 @@ week8:
 worked on settings with celine to get a functioning settings page, allowing for first/last name changes as well as credential changes.
 DEMO'd 2 with team . Retro on friday 
 
-
+week9:
+Finished up project, did multiple watchlists for a user and hooked up with frontend and team. 
