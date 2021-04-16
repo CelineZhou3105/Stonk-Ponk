@@ -103,7 +103,7 @@ function StockDetails() {
 
     const handlePageChange = (event, value) => {
         setPageNum(value);
-        renderArticles(pageNum);
+        renderArticles(value - 1);
     };
 
     const [period, setPeriod] = useState('last_week');

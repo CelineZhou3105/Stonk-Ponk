@@ -54,7 +54,7 @@ function News() {
                 setPages(1);
             }
             setPageNum(1);
-            renderArticles(pageNum - 1);
+            renderArticles(0);
         })
     }
 
@@ -112,6 +112,8 @@ function News() {
         .then(response => {
             setArticles(response);
             if (response.length > 10) {
+                const newArticles = response.slice(0, 10);
+                console.log(newArticles);
                 setArticlesShown(response.slice(0, 10));
                 setPages(Math.floor(response.length /10));
 
@@ -127,7 +129,7 @@ function News() {
     // Function to handle page changes
     const handlePageChange = (event, value) => {
         setPageNum(value);
-        renderArticles(pageNum - 1);
+        renderArticles(value - 1);
     };
 
     return (
@@ -165,9 +167,9 @@ function News() {
                             return (
                                 <NewsContainer>
                                     <div>
-                                        <NormalText>{article.media}: <Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
-                                        <SubText>{article.date}</SubText>
-                                        <SubText>{article.description}</SubText>
+                                        <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
+                                        <SubText>{article.published}</SubText>
+                                        <SubText>{article.summary}</SubText>
                                     </div>
                                 </NewsContainer>
                             );
