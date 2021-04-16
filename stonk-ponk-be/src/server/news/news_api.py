@@ -13,7 +13,7 @@ def get_news(ticker):
         raise Exception("Stock Not Found")
     
     try:
-        googlenews = GoogleNews(period='7d')
+        googlenews = GoogleNews(period='3d')
         googlenews.search(ticker)
         result = googlenews.result()
         
@@ -33,7 +33,7 @@ def get_news(ticker):
 
 def get_market_news():
     try:
-        stock_data = stock_api.get_most_active()
+        stock_data = stock_api.get_most_active(0,5)
 
         market_news = []
         

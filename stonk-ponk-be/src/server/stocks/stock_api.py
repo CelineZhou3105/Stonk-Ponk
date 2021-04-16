@@ -10,9 +10,9 @@ def get_market_status():
     print(market_status)
     return market_status
 
-def get_most_active():
+def get_most_active(start_index, end_index):
     market_stocks = si.get_day_most_active()
-     market_stocks = market_stocks.iloc[start_index:end_index]
+    market_stocks = market_stocks.iloc[start_index:end_index]
     market_stocks_list = []
 
     for index, row in market_stocks.iterrows():
