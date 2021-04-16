@@ -4,6 +4,7 @@ import yahoo_fin.stock_info as si
 import json
 from datetime import date, datetime, timedelta
 from dateutil.relativedelta import relativedelta
+import arrow
 
 def get_market_status():
     market_status = si.get_market_status()
@@ -104,34 +105,42 @@ def get_quotes(ticker):
 def get_stock_prices(ticker, interval_type):
     price_list = []
     
-    end_date = date.today()
-    start_date = end_date
+    end_date = arrow.utcnow()
+
+    end_dat = arrow.utcnow()
+    
+    print(end_dat.format('YYYY-MM-DD'))
+    
+    start_dat = end_dat.shift(days=-7)
+    
+    print(start_dat.format('YYYY-MM-DD'))
 
     if interval_type == 'market':  
-        start_date = end_date - timedelta(days = 100)
+        start_date = end_date.shift(days=-100)
         interval_string = str(1) + "d"
     
     elif interval_type == 'last_week':
-        start_date = end_date - timedelta(days = 7)
-        interval_string = str(1) + "d"
+        start_date = end_date.shift(days=-14)
+        interval_string = str(1) + "wk"
     
     elif interval_type == 'last_month':
-        start_date = end_date - timedelta(days = 30)
+        start_date = end_date.shift(days=-30)
         interval_string = str(1) + "d"
 
     elif interval_type == 'last_six_months':
-        start_date = end_date - timedelta(days = 180)
+        start_date = end_date.shift(days=-180)
         interval_string = str(1) + "d"
 
     elif interval_type == "last_year":
-        start_date = end_date - timedelta(days = 360)
+        start_date = end_date.shift(days=-365)
         interval_string = str(1) + "d"
 
-    end_date = end_date - timedelta(days = 1)
-    end_date = end_date.strftime("%d/%m/%Y")
-    start_date = start_date.strftime("%d/%m/%Y")
+    end_date_string = str(end_date.format('DD-MM-YYYY'))
+    print(end_date_string)
+    start_date_string = str(start_date.format('DD-MM-YYYY'))
+    print(start_date_string)
 
-    price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = interval_string)
+    price_data = si.get_data(ticker, start_date = start_date_string, interval = interval_string)
 
     for index, row in price_data.iterrows():
         price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
