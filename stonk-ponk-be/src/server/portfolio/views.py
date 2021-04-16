@@ -182,6 +182,7 @@ response
 @require_token
 def edit(request):
     try:
+        body = json.loads(request.body.decode('utf-8'))
         user = get_user(request)
         portfolio = Portfolio.objects.get(email=user.email)
 
