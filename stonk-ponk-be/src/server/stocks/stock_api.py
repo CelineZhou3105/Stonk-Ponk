@@ -155,7 +155,6 @@ def get_historical_price(ticker, date):
 
 def check_stock(ticker):
     try:
-        print(ticker)
         quotes = si.get_quote_data(ticker)
         stock_dict = {}
         stock_dict['ticker'] = ticker
