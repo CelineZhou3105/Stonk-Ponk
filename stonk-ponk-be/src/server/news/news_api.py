@@ -5,7 +5,6 @@ import pandas as pd
 import requests
 import json
 import requests
-import datetime
 pd.set_option("display.max_rows", None, "display.max_columns", None)
 
 
@@ -21,7 +20,7 @@ def get_yf_news(ticker):
             news_dict['ticker'] = ticker
             news_dict['summary'] = article['summary'][:100]
             news_dict['link'] = article['link']
-            news_dict['published'] = article['published']
+            news_dict['published'] = article['published'][:16]
             news_dict['title'] = article['title']
             return_articles.append(news_dict)
         
