@@ -16,7 +16,7 @@ import jwt.exceptions
 def get_stock_news(request):
     body = json.loads(request.body.decode('utf-8'))
     print(body)
-    responseData = news_api.get_news(body['ticker'])
+    responseData = news_api.get_yf_news(body['ticker'])
     return HttpResponse(json.dumps(responseData))
 
 @require_http_methods(["POST", "GET"])
