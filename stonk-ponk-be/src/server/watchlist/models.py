@@ -1,8 +1,10 @@
 from django.db import models
+from account.models import User
 
 class Watchlist(models.Model):
     # id is implied
-    user_id = models.IntegerField()
+     
+    user = models.ForeignKey(User, on_delete = models.CASCADE) 
     name = models.CharField(max_length=30)
 
     def add_stock(self, ticker):
@@ -16,6 +18,9 @@ class Watchlist(models.Model):
             # could not find stock ie stock is already deleted
             pass
 
+#in future this will be an intermediary class with references to:
+#Watchlist
+#Stock
 class StockWatch(models.Model):
     ticker = models.CharField(max_length=10)
-    watchlist = models.IntegerField()
+    watchlist = models.ForeignKey(Watchlist, on_delete = models.CASCADE) 
