@@ -10,7 +10,7 @@ from rest_framework_jwt.utils import jwt_decode_handler
 import jwt.exceptions 
 
 from account.models import User
-from .models import Portfolio, PortfolioStock, StockOwnership, Transaction
+from portfolio.models import Portfolio, PortfolioStock, StockOwnership, Transaction
 from stocks import stock_api
 from watchlist.models import Watchlist, StockWatch
 
@@ -38,9 +38,8 @@ def delete_watchlist(request):
     watchlist_id = body["watchlist_id"]
 
     try:
-    watchlist_to_delete = Watchlists.objects.get(id = watchlist_id, user = user) 
-    watchlist_to_delete.delete()
-
+        watchlist_to_delete = Watchlists.objects.get(id = watchlist_id, user = user) 
+        watchlist_to_delete.delete()
     except Watchlist.DoesNotExist:
         return HttpResponseNotFound()
     
@@ -82,7 +81,7 @@ def remove_stock_from_watchlist(request):
 
     return HttpResponse()    
 
-@require_http_methods(["GET"]):
+@require_http_methods(["GET"])
 def get_watchlists(request):
     #get all watchlists associated with a user 
    
@@ -96,7 +95,7 @@ def get_watchlists(request):
 
     return HttpResponse(json.dumps(ret))
 
-@require_http_methods(["GET"]):
+@require_http_methods(["GET"])
 def get_watchlist_stocks(request):
     #given a watchlist id, return json array of stocks with relevant information
     
@@ -111,4 +110,5 @@ def get_watchlist_stocks(request):
     ret = {"stocks" : []}
     for stock in StockWatch.objects.filter(watchlist = watchlist):
         #append stock info here
-         
+         pass
+    return HttpResponse()
