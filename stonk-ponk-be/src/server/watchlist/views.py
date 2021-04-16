@@ -28,7 +28,7 @@ def create_watchlist(request):
 
     return HttpResponse()
 
-@require_http_methods(["POST"])
+@require_http_methods(["DELETE"])
 def delete_watchlist(request):
     token = request.headers["Authorization"]
     payload = jwt_decode_handler(token)
@@ -64,7 +64,7 @@ def add_stock_to_watchlist(request):
     
     return HttpResponse()    
 
-@require_http_methods(["POST"])
+@require_http_methods(["DELETE"])
 def remove_stock_from_watchlist(request):
     token = request.headers["Authorization"]
     payload = jwt_decode_handler(token)
@@ -106,7 +106,9 @@ def get_watchlist_stocks(request):
     
     body = json.loads(request.body.decode("utf-8"))
     ticker = body["ticker"]
-    watchlist = body["watchlist_id"]
+    watchlist = Watchlist.objects.get(id = body["watchlist_id"])
 
     ret = {"stocks" : []}
-    for stock in StockWatch.objects.filter(watchlist = 
+    for stock in StockWatch.objects.filter(watchlist = watchlist):
+        #append stock info here
+         
