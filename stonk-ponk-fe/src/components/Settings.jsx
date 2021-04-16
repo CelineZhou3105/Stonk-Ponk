@@ -80,8 +80,7 @@ const Settings = () => {
         }).catch((error) => {
             Promise.resolve(error)
                 .then((e) => {
-                    console.log(e);
-                    alert(`${e.status} ${e.statusText} ${e.error}`);
+                    alert(`${e.status} ${e.statusText}`);
                 });
         });
     }
