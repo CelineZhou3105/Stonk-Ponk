@@ -52,6 +52,14 @@ export const SettingFieldDiv = styled.div`
     padding: 10px;
 `;
 
+export const SettingModalDiv = styled.div`
+    ${FlexColumn}
+    justify-content: center;
+    align-items: flex-start;
+    width: 60%;
+    font-weight: bold;
+`;
+
 export const SignUpSectionDiv = styled.div`
     display: flex;
     flex-direction: ${props => props.row ? "row" : "column"};

@@ -28,6 +28,8 @@ export const Label = createLabel("100%", "0", "5%");
 
 export const SettingsLabel = createLabel("30%", "20%", "20%");
 
+export const SettingsModalLabel = createLabel("30%", "5%", "5%");
+
 
 function createTextField(width) {
     return styled.input`

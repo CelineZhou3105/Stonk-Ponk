@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { TextField, SettingsLabel } from '../css/Form';
-import { FlexRowLeftDiv, FlexColumnLeftDiv, PageContainer, LineDivider, SettingRowDiv, SettingEditRowDiv, SettingFieldDiv, ModalContainer, ModalContent } from '../css/Div';
+import { TextField, SettingsLabel, SettingsModalLabel } from '../css/Form';
+import { FlexRowLeftDiv, FlexColumnLeftDiv, PageContainer, LineDivider, SettingRowDiv, SettingEditRowDiv, SettingFieldDiv, ModalContainer, ModalContent, SettingModalDiv, FlexColumnCenterDiv } from '../css/Div';
 import Navigation from './Navigation';
 import { EditButton, SaveButton, CancelButton, CloseButton } from '../css/Button';
 import { ProfilePhoto } from '../css/Image';
@@ -18,7 +18,7 @@ const Settings = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailAdd, setEmailAdd] = useState('');
-    const [pass, setPass] = useState('');
+    const [passNew, setPassNew] = useState('');
     const [passOld, setPassOld] = useState('');
 
     const [oldFirstName, setOldFirstName] = useState('');
@@ -30,19 +30,19 @@ const Settings = () => {
     const [modalDisabled, setModalDisabled] = useState(true);
 
     useEffect(() => {
-        // settings.getUser()
-        //     .then(response => response.json())
-        //     .then(json => {
-        //         setFirstName(json.first_name);
-        //         setLastName(json.last_name);
-        //         setEmailAdd(json.email);
-        //     })
-        //     .catch((error) => {
-        //         Promise.resolve(error)
-        //             .then((error) => {
-        //                 alert(`${error.status} ${error.statusText}`);
-        //             });
-        //     })
+        settings.getUser()
+            .then(response => response.json())
+            .then(json => {
+                setFirstName(json.first_name);
+                setLastName(json.last_name);
+                setEmailAdd(json.email);
+            })
+            .catch((error) => {
+                Promise.resolve(error)
+                    .then((error) => {
+                        alert(`${error.status} ${error.statusText}`);
+                    });
+            })
     }, []);
 
     const EditName = () => {
@@ -93,6 +93,10 @@ const Settings = () => {
     const CancelEmail = () => {
         setEmailAdd(oldEmail);
         setEmailDisabled(true);
+    }
+
+    const SavePassword = () => {
+
     }
     return (
         <div>
@@ -146,7 +150,15 @@ const Settings = () => {
                             <ModalContainer>
                                 <ModalContent>
                                     <CloseButton onClick={() => setModalDisabled(true)}>&times;</CloseButton>
-
+                                    <FlexColumnCenterDiv>
+                                        <SettingModalDiv>
+                                            <SettingsModalLabel htmlFor="passOld">Old Password</SettingsModalLabel>
+                                            <TextField type="password" id="passOld" value={passOld} onChange={(e) => setPassOld(e.target.value)}></TextField>
+                                            <SettingsModalLabel htmlFor="passNew">New Password</SettingsModalLabel>
+                                            <TextField type="password" id="passNew" value={passNew} onChange={(e) => setPassNew(e.target.value)}></TextField>
+                                        </SettingModalDiv>
+                                        <EditButton aria-label="Save password button" onClick={SavePassword} style={{marginTop: "8%"}}>Save Password</EditButton>
+                                    </FlexColumnCenterDiv>
                                 </ModalContent>
                             </ModalContainer>
                         }
