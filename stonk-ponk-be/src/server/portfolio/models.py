@@ -5,6 +5,7 @@ from stocks import stock_api
 import uuid
 import datetime
 import json
+import math
 
 class Portfolio(models.Model) :
     email = models.EmailField(('email address'), unique=True)
@@ -111,21 +112,50 @@ class Portfolio(models.Model) :
     
     def get_health(self):
         #will get out of 100 points for all 3 and this function will return them in a dict
-        div_points = calc_diversification()
+        diversification_score = self.calc_diversification()
+        #profit_score = 
         #calc_profit
         #calc_benchmark
         #health_dict = {}
         health_dict['diversification'] = div_points
         return health_dict
     
-    def calc_diversification(self):
-        return 100
+    def calc_diversification_score(self):
         #gets weightage of stocks 
         #checks asset allocations
         #we calculate portfolio beta which is the portfolio's volatility in relation to the overall market
-        
-        
 
+        total_beta = 0 # beta * volume
+        total_value= 0 # sum of all the volume used in calcuating the beta
+        for so in self.get_stock_ownerships():
+            ticker = so.stock.ticker
+            stats = stock_api.get_stats(ticker)
+            beta = None
+            for index, df in stats.iterrows():
+                if df["Attribute"] == "Beta (5Y Monthly)":
+                    beta = df["Value"] 
+                    break
+            if beta != None:
+                value = so.volume * stock_api.get_price(ticker)
+                total_beta += float(beta) * value
+                total_value+= value
+
+        if total_value == 0:
+            return 0
+
+        value_weighted_beta = total_beta / total_value
+
+        # normal distribution around 1 scaled to 100
+        return math.e**(-(value_weighted_beta-1)**2) * 100
+
+    def calc_profit_score(self):
+        # go through all the transactions and purchase the same amount
+        profit_portfolio = self.get_value() - self.get_investment() 
+        for so in self.get_stock_ownerships():
+            for trans in Transaction.objects.filter(stockPortfolio=so):
+                price_dict = get_historical_price("^GSPC", trans.purchase_date)
+                midprice = price_dict["low"] + price_dict["high"]
+                
 class PortfolioStock(models.Model):
     ticker = models.CharField(max_length = 20)
 

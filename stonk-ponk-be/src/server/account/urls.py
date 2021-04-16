@@ -9,6 +9,7 @@ urlpatterns = [
     path('login', obtain_jwt_token),
     path('forgot_password', views.forgot_password, name='forgot_password'),
     path('change_name' , views.change_name, name ='change_name'),
-    path('change_login_credentials', views.change_login_credentials, name = 'change_login_credentials'),
+    path('change_email', views.change_email, name = 'change_email'),
+    path('change_password_with_auth', views.change_password_with_auth, name = 'change_password_with_auth'),
     path('get_user_details', views.get_user_details, name = 'get_user_details')
 ]
