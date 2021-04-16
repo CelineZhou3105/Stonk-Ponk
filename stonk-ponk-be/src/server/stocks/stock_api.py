@@ -173,7 +173,7 @@ def check_stocks(ticker):
     
     asx_ticker = str(ticker + ".AX")
     if check_stock(asx_ticker):
-        stock_list.append(check_stock(ticker))
+        stock_list.append(check_stock(asx_ticker))
     
     return stock_list
 
