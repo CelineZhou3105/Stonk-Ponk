@@ -4,12 +4,15 @@ import { CustomButton } from '../css/Button';
 import StockDetailsChart from './StockDetailsChart';
 import Navigation from './Navigation';
 import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
-import { ChartContainer, GraphAndPeriodDiv, PageContainer } from '../css/Div';
+import { Container, ChartContainer, GraphAndPeriodDiv, NewsContainer, PageContainer, FlexRowDiv } from '../css/Div';
+import { Link, NormalText, SubText } from '../css/Text';
 import { useParams } from "react-router-dom";
 import { PageTitle } from '../css/Text';
 import { market } from '../services/market';
 import { getStockDetailTooltipText } from '../helpers/tooltipText';
 import { Tooltip } from '@material-ui/core';
+import { getNews } from '../services/news';
+import Pagination from '@material-ui/lab/Pagination';
 
 function StockDetails() {
 
@@ -20,6 +23,12 @@ function StockDetails() {
     const [price, setPrice] = useState('');
     const [marketName, setMarketName] = useState('');
     const [exchange, setExchange] = useState('');
+
+    // News related variables
+    const [articles, setArticles] = useState(null);
+    const [articlesShown, setArticlesShown] = useState([]);
+    const [pageNum, setPageNum] = useState(1);
+    const [pages, setPages] = useState(0);
 
     const [stats, setStats] = useState([
         { label: 'Bid', value: "N/A" },
@@ -66,7 +75,36 @@ function StockDetails() {
             })
     }, [id, setStats, setName, setTicker, setPrice, setMarketName, setExchange]);
 
+    useEffect(() => {
+        if (ticker !== '') {
+            getNews(ticker)
+            .then(response => {
+                setArticles(response);
+                if (response.length > 10) {
+                    setArticlesShown(response.slice(0, 10));
+                    setPages(Math.floor(response.length / 10));
+                } else {
+                    setArticlesShown(response);
+                    setPages(1);
+                }
+            }).catch(() => {
+                alert("Error with getting stock details news");
+            });
+        }
+    }, [ticker]);
 
+    function renderArticles (page) {
+        const start = page * 10;
+        const end = page * 10 + 10;
+        
+        const newArticles = articles.slice(start, end);
+        setArticlesShown(newArticles); 
+    }
+
+    const handlePageChange = (event, value) => {
+        setPageNum(value);
+        renderArticles(value - 1);
+    };
 
     const [period, setPeriod] = useState('last_week');
     const [tabValue, setTabValue] = React.useState(0);
@@ -136,6 +174,32 @@ function StockDetails() {
                 <div>
                     <h1>News feed for {name}</h1>
                 </div>
+                {articles && articles.length === 0 &&
+                    <div>No search results.</div>
+                }
+                {articles && articles.length > 0 &&
+                <Container flex_direction="column" gap="1em">
+                    {articlesShown.map(article => {
+                        return (
+                            <NewsContainer>
+                                <div>
+                                    <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
+                                    <SubText>{article.published}</SubText>
+                                    <SubText>{article.summary}...</SubText>
+                                </div>
+                            </NewsContainer>
+                        );
+                    })
+                    }
+                    <FlexRowDiv>
+                        Page: {pageNum}
+                        <Pagination count={pages} page={pageNum} onChange={handlePageChange}/>
+                    </FlexRowDiv>    
+                </Container>
+                }
+                {articles === null &&
+                    <div>Loading...</div>
+                }
             </PageContainer>
         </div>
     )

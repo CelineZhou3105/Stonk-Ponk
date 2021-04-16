@@ -138,10 +138,7 @@ def change_name(request):
     last_name = None
     r_email = None
     try:
-        token = request.headers["Authorization"]
-        payload = jwt_decode_handler(token)
-        user = User.objects.get(id=payload["user_id"])
-
+        user = get_user(request)
         body = json.loads(request.body.decode("utf-8"))
 
         first_name = body["first_name"]
@@ -171,9 +168,8 @@ def change_name(request):
 
 @require_http_methods(["PUT"])
 @require_token
-def change_login_credentials(request):
-    try:
-
+def change_email(request):
+    try: 
         body = json.loads(request.body.decode("utf-8"))
         user = get_user(request)
 
@@ -195,19 +191,27 @@ def change_login_credentials(request):
                 portfolio.email = new_email
                 portfolio.save()
 
+
+        return HttpResponse()
+    except:
+        return HttpResponseBadRequest()
+
+@require_http_methods(["PUT"])
+@require_token
+def change_password_with_auth(request):
+        body = json.loads(request.body.decode("utf-8"))
+        user = get_user(request)
+
         old_password = body["old_password"]
         new_password = body["new_password"]
 
-        # if (user.check_password(old_password)):
-        user.set_password(new_password)
-        user.save()
-        # else:
-        #     return HttpResponseForbidden(json.dumps({"error": "bad password"}))
+        if (user.check_password(old_password)):
+            user.set_password(new_password)
+            user.save()
+        else:
+            return HttpResponseForbidden(json.dumps({"error": "incorrect password"}))
 
         return HttpResponse()
-    except Exception as e :
-        pass
-    return HttpResponseBadRequest()
 
 @require_http_methods(["GET"])
 @require_token
