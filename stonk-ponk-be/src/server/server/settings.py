@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'account',
     'stocks',
-    'portfolio'
+    'portfolio',
+    'watchlist'
 ]
 
 MIDDLEWARE = [
