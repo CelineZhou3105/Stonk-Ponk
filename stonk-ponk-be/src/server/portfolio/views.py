@@ -111,6 +111,7 @@ def summary(request):
 
         return HttpResponse(json.dumps(ret))
     except Exception as e:
+        print(e)
         return HttpResponseBadRequest()
     return HttpResponseBadRequest()
 

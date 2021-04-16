@@ -1,7 +1,8 @@
 import { 
     MarketsLink, 
     StockDetailLink, 
-    StockPriceLink
+    StockPriceLink,
+    StockCheckLink
 } from '../api-links/constants';
 
 export async function getMarketData(type, page_num) {
@@ -38,8 +39,9 @@ async function getStockDetail(ticker) {
         },
         body: JSON.stringify({
             ticker: ticker,
-        })
+        }),
     };
+
     return await fetch(StockDetailLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
@@ -62,6 +64,7 @@ async function getStockPrice(ticker, typeInterval) {
             interval_type: typeInterval,
         })
     };
+
     return await fetch(StockPriceLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
@@ -72,7 +75,34 @@ async function getStockPrice(ticker, typeInterval) {
         })
 }
 
+async function checkTickerExists(ticker, abortController) {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            ticker: ticker,
+        })
+    };
+
+    if (abortController) {
+        requestOptions['signal'] = abortController.signal;
+    }
+
+    return await fetch(StockCheckLink, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200
+                return Promise.resolve(response);
+            } // if status code is not 200
+            console.log('error');
+            return Promise.reject(response);
+        })
+}
+
 export const market = {
+    checkTickerExists,
     getMarketData,
     getStockDetail,
     getStockPrice
