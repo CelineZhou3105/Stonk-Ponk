@@ -1,0 +1,261 @@
+import styled, { css } from 'styled-components';
+
+export const FlexCenter = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const FlexRow = css`
+    display: flex;
+`;
+
+export const FlexColumn = css`
+    display: flex;
+    flex-direction: column;
+`;
+
+function createFlexRowDiv(justifyContent, margin, padding) {
+    return styled.div`
+        ${FlexRow};
+        justify-content: ${justifyContent};
+        align-items: center;
+        margin: ${margin};
+        padding: ${padding};
+    `;
+}
+
+function createFlexColumnDiv(justifyContent, alignItem, margin) {
+    return styled.div`
+        ${FlexColumn};
+        justify-content: ${justifyContent};
+        align-items: ${alignItem};
+        margin: ${margin};
+    `;
+}
+
+export const FlexRowDiv = createFlexRowDiv("space-between", "auto", "auto");
+
+export const FlexRowLeftDiv = createFlexRowDiv("flex-start", "auto", "auto");
+
+export const SettingRowDiv = createFlexRowDiv("space-between", "10px", "10px");
+
+export const SettingEditRowDiv = createFlexRowDiv("space-between", "0", "auto");
+export const FlexRowEndDiv = createFlexRowDiv("flex-end", "auto", "auto");
+
+export const SignUpSectionDiv = styled.div`
+    display: flex;
+    flex-direction: ${props => props.row ? "row" : "column"};
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    gap: ${props => props.gap ? props.gap : "0"};
+`;
+
+export const FlexColumnCenterDiv = createFlexColumnDiv("center", "center", "50px");
+
+export const FlexColumnLeftDiv = createFlexColumnDiv("center", "flex-start", "2%");
+
+function createLineDivider(width) {
+    return styled.div`
+        height: 1px;
+        width: ${width};
+        background-color: #7B7B7B;
+        margin: 10px;
+    `;
+}
+export const LineDivider = createLineDivider("100%");
+
+/* Particles.js */
+export const ParticleContainer = styled.div`
+    background-color: #401363;
+    position: ${props => props.login ? "relative" : "absolute"};
+    z-index: ${props => props.login ? "auto" : "-10"};
+    width: 100%;
+    height: 100%;
+    flex: ${props => props.login ? "3" : "0"};
+`;
+
+/* Password Reset Page */
+export const LogoContainer = createFlexRowDiv('center', '0px');
+
+export const PasswordResetPageContainer = styled.div`
+    ${FlexRow};
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+`;
+
+export const SignUpPageContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    /* ${FlexRow};
+    justify-content: center;
+    align-items: center; */
+`;
+export const FormContainer = styled.div`
+    width: 100%;
+    text-align: center;
+`;
+export const PasswordResetBackground = styled.div`
+    ${FlexCenter}
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 10px 10px rgba(0, 0, 0, 0.5);
+    width: 50%;
+    height: auto;
+    border-radius: 20px;
+    padding: 30px;
+    margin: 50px auto;
+`;
+
+/* Login Page */
+export const LoginPageContainer = styled.div` 
+    ${FlexRow}
+    height: 100%;
+    width: 100%;
+    align-items: center;
+`;
+
+export const LoginFormContainer = styled.div` 
+    ${FlexColumn}
+    flex: 2;
+    text-align: center;
+`;
+
+export const LinkContainer = styled.div`
+    display: flex;
+    justify-content: ${props => {
+        if (props.left) {
+            return "flex-start"
+        } else if (props.right) {
+            return "flex-end"
+        } else {
+            return "center"
+        }
+    }};
+    align-items: center;
+    width: 100%;
+    padding: 10px 0px;
+`;
+
+
+/* Navigation */
+export const NavigationContainer = styled.div` 
+    ${FlexRow}
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0,0,0,.0975);
+`;
+
+export const ProfileModal = styled.div`
+    text-align: center;
+    float:right;
+    border: grey solid 1px;
+    border-radius: 10px;
+    position: absolute;
+    top: 120px;
+    right: 50px;
+    background: white;
+    width: 300px;
+    z-index: 9999;
+`;
+
+export const ProfilePhotoContainer = styled.div`
+    padding: 30px;
+`;
+
+export const ProfileModaItem = styled.div`
+    padding: 30px 0;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #9f22ff3f;
+        transition: background-color 1s;
+    }
+`;
+
+/* Market Filters */
+export const FilterContainer = styled.div`
+    ${FlexRow};
+    justify-content: flex-end;
+    align-items: center;
+    margin: 30px;
+    gap: 1em;
+`
+
+
+/* Stock Details Page*/
+export const ChartContainer = createFlexRowDiv('space-evenly', '30px');
+export const StockDetailsContainer = createFlexColumnDiv('center', 'center', '100px');
+export const GraphAndPeriodDiv = createFlexColumnDiv("center", "center", "10px");
+
+/* Portfolio Page */
+export const Container = styled.div`
+    background: rgba(158, 34, 255, 0.02);
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: ${props => props.flex_direction ? props.flex_direction : "row"};
+    flex: 1;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    box-shadow: 4px 4px 4px rgba(108, 108, 108, 0.25);
+    padding: 0 1em;
+    justify-content: ${props => props.justify_content ? props.justify_content : "flex-start"};
+    gap: ${props => props.gap ? props.gap : 0};
+    align-items: ${props => props.align_items ? props.align_items : 'flex-start'};
+`;
+export const PortfolioValueContainer = createFlexColumnDiv('center', 'center', '0');
+
+export const PageContainer = styled.div` 
+    margin: 3em;
+`;
+
+export const SectionRowDiv = styled.div`
+    ${FlexRow}
+    gap: 1em;
+`;
+
+export const RightAlignedButtonContainer = styled.div` 
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1em;
+`;
+
+/* Create Modal */
+export const ModalContainer = styled.div` 
+    position: fixed;
+    z-index: 1; 
+    padding-top: 100px; 
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4);
+`
+
+export const ModalContent = styled.div` 
+    background-color: #e7e7e7;
+    margin: auto;
+    padding: 20px;
+    width: 50%;
+    border-radius: 20px;
+`;
+
+export const NewsContainer = styled.div`
+    display:flex;
+    align-items: center;
+    gap: 1em;
+    border-bottom: 1px solid #7B7B7B;
+    padding: 20px;
+
+    & > img {
+        width: 150px;
+        height: fit-content;
+    }
+`

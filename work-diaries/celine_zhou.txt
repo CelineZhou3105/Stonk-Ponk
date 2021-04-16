@@ -20,7 +20,3 @@ Week 5
 Connected frontend and backend through meetings.
 Adjusted tickets and practiced demoing.
 Worked on tickets in the current sprint.
-
-
-Week 6
-Worked on tickets in the current sprint.

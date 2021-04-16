@@ -11,3 +11,30 @@ Creating tickets for the backlog + sprint backlog
 Week 3
 UI Flow diagrams for further pages (market, summary, profile, stock details)
 Estimating user stories and split them between sprints
+
+
+Week 4
+Login page and JWT token handling for authentication
+Market page - material ui tables for the data display, google charts for graphs
+Several meetings with backend team to figure out API schema and bug fixes.
+
+Week 5
+Presented demo A.
+Facilitated retrospective and submitted corresponding report.
+
+Week 6
+Portfolio Page - filtering, pie graph for portfolio makeup, value calculations.
+Refactoring Filter component, Search components, and StockTable components into their own files.
+Market wide News Page
+Hooking up the FE to the BE for Market Data and Portfolio Data
+UI Consistency improvements for titles, buttons, divs
+
+Week 7
+Market page - hooking the FE to the BE for most active stocks, gainers and losers
+Graph designs
+Portfolio Page - working with BE to get the market data, editing and adding stocks now working
+Real time search results for searching stocks by ticker in 'add stock modal' when editing portfolio. 
+
+
+
+

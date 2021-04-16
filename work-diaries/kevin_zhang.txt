@@ -13,3 +13,12 @@ Cleaned up user stories.
 Estimated SP.
 Begun designing API.
 
+Week4
+Added django routing
+Made the api for account login and registration and linked to backend database calls
+
+Week 6
+Fixed bugs with login and register. Fixing miscellaneous bugs
+
+Week7
+Added portfolio routing, logic code and set up portfolio databases. Connected frontend with backend api for portfolios.
