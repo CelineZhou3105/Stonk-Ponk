@@ -70,7 +70,7 @@ const Settings = () => {
     }
 
     const ChangePassword = () => {
-        settings.changePassword(emailAdd).then(() => {
+        settings.changePassword(passNew, passOld).then(() => {
             alert("You changed your login credentials! Please relog, logging out in 3 seconds...");
             setTimeout(() => {
                 localStorage.removeItem('token');
@@ -93,10 +93,6 @@ const Settings = () => {
     const CancelEmail = () => {
         setEmailAdd(oldEmail);
         setEmailDisabled(true);
-    }
-
-    const SavePassword = () => {
-
     }
     return (
         <div>
@@ -157,7 +153,7 @@ const Settings = () => {
                                             <SettingsModalLabel htmlFor="passNew">New Password</SettingsModalLabel>
                                             <TextField type="password" id="passNew" value={passNew} onChange={(e) => setPassNew(e.target.value)}></TextField>
                                         </SettingModalDiv>
-                                        <EditButton aria-label="Save password button" onClick={SavePassword} style={{marginTop: "8%"}}>Save Password</EditButton>
+                                        <EditButton aria-label="Save password button" onClick={ChangePassword} style={{marginTop: "8%"}}>Save Password</EditButton>
                                     </FlexColumnCenterDiv>
                                 </ModalContent>
                             </ModalContainer>
