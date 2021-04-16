@@ -5,21 +5,21 @@ export const getStockDetailTooltipText = (label) => {
         case "Ask":
             return "Lowest price people want to sell";
         case "High":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "The highest price the stock was traded today";
         case "Low":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "The lowest price the stock was traded today";
         case "Open":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "The opening price of the stock today";
         case "Close":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "The closing price of the stock on the last trading day";
         case "Change":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "The $ change in stock price from the last trading day";
         case "Change Percentage":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "The % change in stock price from the last trading day";
         case "52 Week Range":
             return "The lowest and highest price over the last 52 weeks";
         case "Market Cap":
-            return "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
+            return "The total dollar market value of a company's outstanding shares of stock";
         default:
             return "";
     }
