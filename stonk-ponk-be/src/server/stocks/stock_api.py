@@ -151,3 +151,30 @@ def get_historical_price(ticker, date):
         price_dict['high'] = row['high']
 
     return price_dict
+
+def check_stock(ticker):
+    try:
+        print(ticker)
+        quotes = si.get_quote_data(ticker)
+        stock_dict = {}
+        stock_dict['ticker'] = ticker
+        stock_dict['name'] = quotes['shortName']
+        return stock_dict    
+    
+    except:
+        return False
+        
+    
+    return stock_list
+
+def check_stocks(ticker):
+    stock_list = []
+    if check_stock(ticker):
+        stock_list.append(check_stock(ticker))
+    
+    asx_ticker = str(ticker + ".AX")
+    if check_stock(asx_ticker):
+        stock_list.append(check_stock(ticker))
+    
+    return stock_list
+

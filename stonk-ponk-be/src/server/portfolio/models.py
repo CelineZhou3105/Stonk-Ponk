@@ -108,6 +108,23 @@ class Portfolio(models.Model) :
             except:
                 print("LOG: ERROR: could not process {} in get_investment".format(so.get_stock_ticker()))
         return tVal
+    
+    def get_health(self):
+        #will get out of 100 points for all 3 and this function will return them in a dict
+        div_points = calc_diversification()
+        #calc_profit
+        #calc_benchmark
+        #health_dict = {}
+        health_dict['diversification'] = div_points
+        return health_dict
+    
+    def calc_diversification(self):
+        return 100
+        #gets weightage of stocks 
+        #checks asset allocations
+        #we calculate portfolio beta which is the portfolio's volatility in relation to the overall market
+        
+        
 
 class PortfolioStock(models.Model):
     ticker = models.CharField(max_length = 20)

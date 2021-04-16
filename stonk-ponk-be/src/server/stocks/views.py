@@ -45,3 +45,15 @@ def stock_prices(request):
     
     except:
         return HttpResponseBadRequest("Stock Not Found")
+
+@require_http_methods(["POST", "GET"])
+def check_stocks(request):
+    try:
+        body = json.loads(request.body.decode('utf-8'))
+
+        responseData = stock_api.check_stocks(body['ticker'])
+        
+        return HttpResponse(json.dumps(responseData))
+    
+    except:
+        return HttpResponseBadRequest("Stock Not Found")
