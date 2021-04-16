@@ -8,6 +8,7 @@ import { ProfilePhoto } from '../css/Image';
 import profile from '../images/blobfish.png';
 import { settings } from '../services/settings';
 import { PageTitle } from '../css/Text';
+import { checkPassword } from '../helpers/helpers';
 
 const Settings = () => {
 
@@ -79,7 +80,8 @@ const Settings = () => {
         }).catch((error) => {
             Promise.resolve(error)
                 .then((e) => {
-                    alert(`${e.status} ${e.statusText}`);
+                    console.log(e);
+                    alert(`${e.status} ${e.statusText} ${e.error}`);
                 });
         });
     }
