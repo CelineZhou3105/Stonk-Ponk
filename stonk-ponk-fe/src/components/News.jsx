@@ -1,38 +1,48 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import Navigation from './Navigation';
-import { Container, FlexRowDiv, NewsContainer, PageContainer } from "../css/Div";
-import { Link, NormalText, PageTitle, SubText } from "../css/Text";
+
+import { market } from '../services/market';
+import { getMarketNews, getNews } from '../services/news';
+
+import { 
+    Container,
+    FlexRowDiv,
+    NewsContainer,
+    PageContainer 
+} from "../css/Div";
+import {
+    Link,
+    NormalText,
+    PageTitle,
+    SubText
+} from "../css/Text";
 
 import { TextField as AutocompleteTextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
-import { market } from '../services/market';
-
-import { getNews, getMarketNews } from '../services/news';
-
 import Pagination from '@material-ui/lab/Pagination';
 
 function News() {
     // User input into the search bar
     const [input, setInput] = useState(null); 
-    const lastAUSPromise = useRef();
-    const lastUSPromise = useRef();
-    const lastPromise = useRef();
 
     // Aborter for cancelling previous API calls
     const lastAbortController = useRef();
 
-    // Options in the search bar
+    // Options for stocks in the search bar
     const [stockOptions, setStockOptions] = useState([]);
-    const [selectedStock, setSelectedStock] = useState('');
+
+    // News articles
     const [articles, setArticles] = useState(null);
     const [articlesShown, setArticlesShown] = useState([]);
     const [pageNum, setPageNum] = useState(1);
     const [pages, setPages] = useState(0);
 
-    function getNewsForStock() {
+    // Gets the news for an individual stock once the user has selected a stock
+    function getNewsForStock(selectedStock) {
+        setArticles(null);
         console.log("Finding news for ", selectedStock);
-        getNews(selectedStock.ticker).then(response => {
+        getNews(selectedStock).then(response => {
             console.log(response);
             setArticles(response);
             if (response.length > 10) {
@@ -48,61 +58,28 @@ function News() {
         })
     }
 
-    // useEffect(() => {
-    //     const currentUSPromise = market.getStockDetail(input);
-    //     // store the promise to the ref
-    //     lastUSPromise.current = currentUSPromise;
-
-    //     currentUSPromise
-    //     .then(response => response.json())
-    //     .then(res => {
-    //         if (currentUSPromise === lastUSPromise.current) {
-    //             console.log("Setting stock options to have US stock", res);
-    //             setStockOptions(currStocks => [...currStocks, res]);
-    //         }
-    //     }).catch((e) => {
-    //         console.log('Could not find stock on US market');
-    //     }).finally(() => {
-    //         console.log("RESULTS AFTER US", stockOptions);
-    //     })
-    // }, [input])
-
+    // Makes an API call to retrieve search results when user has entered a ticker
     useEffect(() => {
-        if (lastAbortController.current) {
-            lastAbortController.current.abort();
+        if (input !== null) {
+            if (lastAbortController.current) {
+                lastAbortController.current.abort();
+            }
+            // Create new AbortController for the new request and store it in the ref
+            const currentAbortController = new AbortController();
+            lastAbortController.current = currentAbortController;
+
+            const currentPromise = market.checkTickerExists(input, currentAbortController)
+            .then(response => response.json())
+            
+            currentPromise
+            .then(res => {
+                console.log(res);
+                setStockOptions(res);
+            }).catch((e) => {
+                console.log('Error: ', e, 'input: ', input);
+            })
         }
-
-        // Create new AbortController for the new request and store it in the ref
-        const currentAbortController = new AbortController();
-        lastAbortController.current = currentAbortController;
-
-        const currentPromise = market.checkTickerExists(input, currentAbortController)
-        .then(response => response.json())
-        .then(res => {
-            setStockOptions(currStocks => [...currStocks,res]);
-        }).catch((e) => {
-            console.log('Could not find stock on US market');
-        })
     }, [input])
-
-    // useEffect(() => {
-    //     setStockOptions([]);
-    //     const currentAUSPromise =  market.getStockDetail(input+".AX");
-    //     lastAUSPromise.current = currentAUSPromise;
-
-    //     currentAUSPromise
-    //     .then(response => response.json())
-    //     .then(res => {
-    //         if (currentAUSPromise === lastAUSPromise.current) {
-    //             console.log("Setting stock options to have", res);
-    //             setStockOptions(currStocks => [...currStocks, res]);
-    //         }
-    //     }).catch((e) => {
-    //         console.log('Could not find stock on AUS market');
-    //     }).finally(()=> {
-    //         console.log("RESULTS:", stockOptions);
-    //     })
-    // }, [input])
 
     function renderArticles (page) {
         const start = page * 10;
@@ -112,7 +89,6 @@ function News() {
         setArticlesShown(newArticles); 
     }
     
-
     // Get market news after the person clears the search bar, otherwise get news for the stock
     const handleInputChange = (event, value, reason) => {
         if (reason === "clear" ||  value === '') {
@@ -130,7 +106,7 @@ function News() {
         getTopStocksNews();
     }, [])
 
-    // Function to get the news for the market
+    // Function to get the news for the most active stocks
     const getTopStocksNews = () => {
         getMarketNews()
         .then(response => {
@@ -162,7 +138,11 @@ function News() {
                 <Autocomplete
                     options={stockOptions}
                     getOptionLabel={(option) => option.name}
-                    onChange={(e, value) => { setSelectedStock(value); } }
+                    onChange={(e, value) => { 
+                        if (value !== null) {
+                            getNewsForStock(value.ticker);
+                        }
+                    }}
                     style={{ width: '100%' }}
                     renderInput={(params) => <AutocompleteTextField {...params} label="Enter your ticker..." variant="outlined" />}
                     onInputChange={(e, value, reason) => { 
@@ -179,8 +159,8 @@ function News() {
                 {articles && articles.length === 0 &&
                     <div>No search results.</div>
                 }
-                {articles && articles.length > 0 
-                    ? <Container flex_direction="column" gap="1em">
+                {articles && articles.length > 0 &&
+                    <Container flex_direction="column" gap="1em">
                         {articlesShown.map(article => {
                             return (
                                 <NewsContainer>
@@ -198,7 +178,9 @@ function News() {
                             <Pagination count={pages} page={pageNum} onChange={handlePageChange}/>
                         </FlexRowDiv>
                     </Container>
-                : <div>Loading...</div>
+                }
+                {articles === null &&
+                    <div>Loading...</div>
                 }
             </PageContainer>
         </>

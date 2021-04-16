@@ -1,7 +1,8 @@
 import { 
     MarketsLink, 
     StockDetailLink, 
-    StockPriceLink
+    StockPriceLink,
+    StockCheckLink
 } from '../api-links/constants';
 
 export async function getMarketData(type, page_num) {
@@ -87,10 +88,10 @@ async function checkTickerExists(ticker, abortController) {
     };
 
     if (abortController) {
-        requestOptions['signal'] = abortController;
+        requestOptions['signal'] = abortController.signal;
     }
 
-    return await fetch(, requestOptions)
+    return await fetch(StockCheckLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
                 return Promise.resolve(response);
