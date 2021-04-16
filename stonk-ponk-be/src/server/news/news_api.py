@@ -13,7 +13,7 @@ def get_yf_news(ticker):
     except:
         raise Exception("News Error")
 
-def get_yf_market_news(ticker):
+def get_yf_market_news():
     try:
         stock_data = stock_api.get_most_active(0,5)
 
