@@ -22,7 +22,8 @@ async function login(event, email, password) {
                     return Promise.resolve(res);
                 })
             } else {
-                return Promise.reject(response.json());
+                return Promise.reject();
+                //return Promise.reject(response.json());
             }
         });
 }
