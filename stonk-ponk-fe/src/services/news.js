@@ -5,6 +5,8 @@
 
 import { MarketNewsLink, StockNewsLink } from '../api-links/constants';
 
+const token = localStorage.getItem('token');
+
 export async function getNews(ticker) {
     const body = {
         ticker: ticker,
@@ -15,17 +17,23 @@ export async function getNews(ticker) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': token,
         },
         body: JSON.stringify(body)
     };
 
     return await fetch(`${StockNewsLink}`, requestOptions)
-    .then(response => response.json())    
-    .then((news) => {
-        return Promise.resolve(news);
-    }).catch((error) => {
-        console.log("Could not fetch news.", error);
-        return Promise.reject(error);
+    .then(response => {
+        if (response.status === 200) {
+            return response.json().then(res => {
+                return Promise.resolve(res);
+            })
+        } else if (response.status === 403) {
+            return Promise.reject("Expired token");
+        } else {
+            console.log("Could not fetch news.", response);
+            return Promise.reject("Could not fetch news on your stock. Please try again.");
+        }
     })
 }
 
@@ -39,15 +47,21 @@ export async function getMarketNews() {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': token,
         },
     }
     return await fetch(`${MarketNewsLink}`, requestOptions)
-        .then((response) => response.json())
-        .then(marketNews => {
-            console.log("MARKET NEWS:", marketNews);
-            return Promise.resolve(marketNews);
-        }).catch(error => {
-            console.log("Could not fetch market news", error);
-            return Promise.reject(error);
-        })
+    .then(response => {
+        if (response.status === 200) {
+            return response.json().then(news => {
+                console.log("MARKET NEWS:", news); // TODO - remove this console log
+                return Promise.resolve(news);
+            })
+        } else if (response.status === 403) {
+            return Promise.reject("Expired token");
+        } else {
+            console.log("Could not fetch news.", response);
+            return Promise.reject("Could not get market news. Please refresh.");
+        }
+    })
 }

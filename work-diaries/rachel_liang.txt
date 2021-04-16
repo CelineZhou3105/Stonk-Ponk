@@ -41,9 +41,12 @@ Retro B facilitation and report
 Organised a Demo B preparation meeting
 
 Week 9
-Finishing Up News Pages
-Bug Fixes across the website
-Turns out there is another use case for tokens that we did not originally factor - refreshing tokens between sessions. Will be taking on a separate ticket to handle this. 
+Finishing Up News Pages.
+Bug Fixes across the website.
+Error handling - Implemented error banners across our news, settings, portfolio, market pages.
+Turns out there is another use case for tokens that we did not originally factor - refreshing tokens between sessions. 
+Working on separate ticket to handle expiration of tokens - user is now automatically logged out when a token is expired.
+Portfolio Health section - display the health of the portfolio to the user.
 
 
 

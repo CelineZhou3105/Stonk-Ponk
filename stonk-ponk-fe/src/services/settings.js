@@ -14,7 +14,11 @@ const getUser = async () => {
             if (response.ok) { // if status code is 200
                 return Promise.resolve(response);
             } // if status code is not 200
-            return Promise.reject(response);
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject(response);
+            }
         })
 }
 
@@ -36,7 +40,11 @@ async function changeName(firstN, lastN) {
             if (response.ok) { // if status code is 200
                 return response;
             } // if status code is not 200
-            return Promise.reject(response);
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject(response);
+            }
         })
         .then(() => {
             alert("You changed your name!");
@@ -68,8 +76,11 @@ async function changeLoginCredentials(emailNew, passwordNew, passwordOld) {
         .then(response => {
             if (response.ok) { // if status code is 200      
                 return response;
-            } // if status code is not 200
-            return Promise.reject(response);
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
+            } else {
+                return Promise.reject(response);
+            }
         })
 }
 

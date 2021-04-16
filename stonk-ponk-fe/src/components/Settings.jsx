@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import { settings } from '../services/settings';
 import { TextField, SettingsLabel } from '../css/Form';
 import { FlexRowLeftDiv, FlexColumnLeftDiv, PageContainer, LineDivider, SettingRowDiv, SettingEditRowDiv } from '../css/Div';
 import Navigation from './Navigation';
 import { EditButton } from '../css/Button';
 import { ProfilePhoto } from '../css/Image';
 import profile from '../images/blobfish.png';
-import { settings } from '../services/settings';
 import { PageTitle } from '../css/Text';
+
+import Alert from '@material-ui/lab/Alert';
 
 const Settings = () => {
 
@@ -23,6 +26,27 @@ const Settings = () => {
     const [nameDisabled, setNameDisabled] = useState(true);
     const [credentialsDisabled, setCredentialsDisabled] = useState(true);
 
+    // Tracks when errors occurs - for showing error banners to the user
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+
+    // Upon successful change of credentials - for showing success banner to user
+    const [success, setSuccess] = useState(false);
+
+    // Handle errors when they are returned by the fetch calls
+    const handleError = useCallback((error) => {
+        setError(true);
+        if (error === "Expired token") {
+            setErrorMsg("Your session has expired. Logging out...");
+            setTimeout(() => {
+                localStorage.removeItem('token');
+                history.push('/');
+            }, 3000);
+        } else {
+            setErrorMsg(error);
+        }
+    }, [history]);
+
     useEffect(() => {
         settings.getUser()
             .then(response => response.json())
@@ -32,12 +56,9 @@ const Settings = () => {
                 setEmailAdd(json.email);
             })
             .catch((error) => {
-                Promise.resolve(error)
-                    .then((error) => {
-                        alert(`${error.status} ${error.statusText}`);
-                    });
+                handleError(error);
             })
-    }, []);
+    }, [handleError]);
 
     const EditName = () => {
         setNameDisabled(true);
@@ -47,22 +68,29 @@ const Settings = () => {
     const EditLoginCredentials = () => {
         setCredentialsDisabled(true);
         settings.changeLoginCredentials(emailAdd, pass, pass).then(() => {
-            alert("You changed your login credentials! Please relog, logging out...");
+            setSuccess(true);
             setTimeout(() => {
                 localStorage.removeItem('token');
                 history.push('/');
             }, 3000);
         }).catch((error) => {
-            Promise.resolve(error)
-                .then((e) => {
-                    alert(`${e.status} ${e.statusText}`);
-                });
+            handleError(error);
         });
     }
 
     return (
         <div>
             <Navigation settings="true" />
+            {success && (
+                <Alert variant="filled" severity="success">
+                    You changed your login credentials! Please log in again. Logging out...
+                </Alert>
+            )}
+            {error && (
+                <Alert variant="filled" severity="error">
+                    {errorMsg}
+                </Alert>
+            )}
             <PageContainer>
                 <PageTitle>Account Settings</PageTitle>
                 <FlexRowLeftDiv>

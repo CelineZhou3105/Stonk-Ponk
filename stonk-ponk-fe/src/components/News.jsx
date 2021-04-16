@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Navigation from './Navigation';
 
@@ -7,9 +8,10 @@ import { getMarketNews, getNews } from '../services/news';
 
 import { 
     Container,
-    FlexRowDiv,
+    FlexRowLeftDiv,
     NewsContainer,
-    PageContainer 
+    PageContainer, 
+    SectionRowDiv
 } from "../css/Div";
 import {
     Link,
@@ -21,6 +23,9 @@ import {
 import { TextField as AutocompleteTextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Pagination from '@material-ui/lab/Pagination';
+import Alert from '@material-ui/lab/Alert';
+import { CircularProgress } from '@material-ui/core';
+
 
 function News() {
     // User input into the search bar
@@ -38,6 +43,26 @@ function News() {
     const [pageNum, setPageNum] = useState(1);
     const [pages, setPages] = useState(0);
 
+    const history = useHistory();
+
+    // Tracks when errors occurs - for showing error banners to the user
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+
+    // Handle errors when they are returned by the fetch calls
+    const handleError = useCallback((error) => {
+        setError(true);
+        if (error === "Expired token") {
+            setErrorMsg("Your session has expired. Logging out...");
+            setTimeout(() => {
+                localStorage.removeItem('token');
+                history.push('/');
+            }, 3000);
+        } else {
+            setErrorMsg(error);
+        }
+    }, [history]);
+
     // Gets the news for an individual stock once the user has selected a stock
     function getNewsForStock(selectedStock) {
         setArticles(null);
@@ -54,6 +79,8 @@ function News() {
                 setPages(1);
             }
             setPageNum(1);
+        }).catch(error => {
+            handleError(error);
         })
     }
 
@@ -74,11 +101,11 @@ function News() {
             .then(res => {
                 console.log(res);
                 setStockOptions(res);
-            }).catch((e) => {
-                console.log('Error: ', e, 'input: ', input);
+            }).catch(error => {
+                // Do nothing - this means there are no search results, which is normal
             })
         }
-    }, [input])
+    }, [input, handleError])
 
     function renderArticles (page) {
         const start = page * 10;
@@ -101,13 +128,8 @@ function News() {
         }
     }
 
-    // Runs once after initial render to populate news page
-    useEffect(() => {
-        getTopStocksNews();
-    }, [])
-
     // Function to get the news for the most active stocks
-    const getTopStocksNews = () => {
+    const getTopStocksNews = useCallback(() => {
         getMarketNews()
         .then(response => {
             setArticles(response);
@@ -121,10 +143,10 @@ function News() {
                 setArticlesShown(response);
                 setPages(1);
             }
-        }).catch(() => {
-            alert("Error with getting market news");
+        }).catch((error) => {
+            handleError(error);
         });
-    }
+    }, [handleError]);
 
     // Function to handle page changes
     const handlePageChange = (event, value) => {
@@ -132,9 +154,19 @@ function News() {
         renderArticles(value - 1);
     };
 
+    // Runs once after initial render to populate news page
+    useEffect(() => {
+        getTopStocksNews();
+    }, [getTopStocksNews])
+
     return (
         <>
             <Navigation />
+            {error && (
+                <Alert variant="filled" severity="error">
+                    {errorMsg}
+                </Alert>
+            )}
             <PageContainer>
                 <PageTitle>News</PageTitle>
                 <Autocomplete
@@ -163,9 +195,9 @@ function News() {
                 }
                 {articles && articles.length > 0 &&
                     <Container flex_direction="column" gap="1em">
-                        {articlesShown.map(article => {
+                        {articlesShown.map((article, index) => {
                             return (
-                                <NewsContainer>
+                                <NewsContainer key={index}>
                                     <div>
                                         <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
                                         <SubText>{article.published}</SubText>
@@ -175,14 +207,17 @@ function News() {
                             );
                         })
                         }
-                        <FlexRowDiv>
+                        <FlexRowLeftDiv>
                             Page: {pageNum}
                             <Pagination count={pages} page={pageNum} onChange={handlePageChange}/>
-                        </FlexRowDiv>
+                        </FlexRowLeftDiv>
                     </Container>
                 }
                 {articles === null &&
-                    <div>Loading...</div>
+                    <SectionRowDiv>
+                        <CircularProgress />
+                        Loading...
+                    </SectionRowDiv>
                 }
             </PageContainer>
         </>

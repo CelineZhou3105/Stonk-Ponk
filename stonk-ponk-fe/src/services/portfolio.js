@@ -6,11 +6,13 @@ import {
     GetPortfolioDetails
 } from '../api-links/constants';
 
+const token = localStorage.getItem('token');
+
 /**
- * getPortfolioSummary - sends a request to get the user's portfolio summary (pie chart, )
- * @param {string} token - token of the logged in user
+ * getPortfolioSummary - sends a request to get the user's portfolio summary (pie chart, value, percentage change)
+ * @returns - An array of stocks owned by the user, the cumulative value of their portfolio, percentage change of the portfolio
  */
-export async function getPortfolioSummary(token) {
+export async function getPortfolioSummary() {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -26,20 +28,19 @@ export async function getPortfolioSummary(token) {
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
             } else {
-                response.json().then(res => {
-                    return Promise.reject(res.message);
-                })
-                
+                return Promise.reject("An error occured while getting your portfolio summary. Please refresh");
             }
         });
 }
 
 /**
  * getPortfolioDetails - sends a request to get the user's portfolio stocks
- * @param {string} token - token of the logged in user
+ * @returns - returns more details on the stocks of the portfolio (price, purchase date, units owned)
  */
-export async function getPortfolioDetails(token) {
+export async function getPortfolioDetails() {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -55,21 +56,20 @@ export async function getPortfolioDetails(token) {
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
             } else {
-                response.json().then(res => {
-                    return Promise.reject(res.message);
-                })
-                
+                return Promise.reject("An error occured while getting your portfolio details. Please refresh");
             }
         });
 }
 
 /**
  * editPortfolio - sends a request to save the user's portfolio new state
- * @param {string} token - token of the logged in user
  * @param {Array} data - list of stocks in the portfolio 
+ * @returns - nothing.
  */
-export async function editPortfolio(token, data) {
+export async function editPortfolio(data) {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -85,19 +85,20 @@ export async function editPortfolio(token, data) {
             if (response.status === 200) {
                 console.log("Successful edit. Response: ", response);
                 return Promise.resolve();
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
             } else {
-                return Promise.reject();
-
+                return Promise.reject("An error occured while editing your portfolio. Please retry.");
             }
         });
 }
 
 /**
  * getPortfolioBest - sends a request to get the user's best stocks
- * @param {string} token - token of the logged in user
  * @param {number} num_stocks - the number of stocks to return
+ * @returns - an array of the user's best performing stocks (by profit)
  */
-export async function getPortfolioBest(token, num_stocks) {
+export async function getPortfolioBest(num_stocks) {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -114,21 +115,20 @@ export async function getPortfolioBest(token, num_stocks) {
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
             } else {
-                return response.json().then(res => {
-                    return Promise.reject(res.message);
-                })
-                
+                return Promise.reject("An error occured while getting your best stocks. Please refresh");
             }
         });
 }
 
 /**
  * getPortfolioWorst - sends a request to get the user's worst stocks
- * @param {string} token - token of the logged in user
  * @param {number} num_stocks - the number of stocks to return
+ * @returns - An array of the user's worst performing stocks (by loss)
  */
-export async function getPortfolioWorst(token, num_stocks) {
+export async function getPortfolioWorst(num_stocks) {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -145,11 +145,10 @@ export async function getPortfolioWorst(token, num_stocks) {
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
             } else {
-                return response.json().then(res => {
-                    return Promise.reject(res.message);
-                })
-                
+                return Promise.reject("An error occured while getting your worst stocks. Please refresh.");
             }
         });
 }
