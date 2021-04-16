@@ -104,6 +104,7 @@ def get_quotes(ticker):
 #interval will be market, last_week, last_month, last_six_months, last_year
 def get_stock_prices(ticker, interval_type):
     price_list = []
+    print('ticker', ticker, 'interval_type', interval_type)
     
     end_date = arrow.utcnow()
 

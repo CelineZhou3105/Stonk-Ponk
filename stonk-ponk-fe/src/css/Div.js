@@ -252,10 +252,6 @@ export const NewsContainer = styled.div`
     align-items: center;
     gap: 1em;
     border-bottom: 1px solid #7B7B7B;
-    padding: 20px;
-
-    & > img {
-        width: 150px;
-        height: fit-content;
-    }
+    margin: 20px 0;
+    width: 100%;
 `

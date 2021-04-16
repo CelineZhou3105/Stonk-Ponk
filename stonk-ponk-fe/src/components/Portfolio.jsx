@@ -23,7 +23,6 @@ const tableHeadings = [
     { id: 'value', disablePadding: false, numeric: true, label: 'Total Value' },
 ];
 
-
 function Portfolio() {
 
     const [chartData, setChartData] = useState('Loading');
@@ -46,7 +45,6 @@ function Portfolio() {
             setProfit(response.profit);
         })
     }, [token]);
-
 
     /* useEffect to get the entire portfolio stocks */
     useEffect(() => {
@@ -125,7 +123,7 @@ function Portfolio() {
                                     </SubTitle>
                                 <NormalText>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                    </NormalText>
+                                </NormalText>
                             </Container>
                         </SectionRowDiv>
                         <FilterContainer>
@@ -136,7 +134,6 @@ function Portfolio() {
                     </>
                     : <CircularProgress />
                 }
-
             </PageContainer>
         </div>
 
