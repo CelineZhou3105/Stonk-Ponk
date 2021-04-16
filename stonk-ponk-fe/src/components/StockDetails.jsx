@@ -4,7 +4,7 @@ import { CustomButton } from '../css/Button';
 import StockDetailsChart from './StockDetailsChart';
 import Navigation from './Navigation';
 import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
-import { Container, ChartContainer, GraphAndPeriodDiv, NewsContainer, PageContainer } from '../css/Div';
+import { Container, ChartContainer, GraphAndPeriodDiv, NewsContainer, PageContainer, FlexRowDiv } from '../css/Div';
 import { Link, NormalText, SubText } from '../css/Text';
 import { useParams } from "react-router-dom";
 import { PageTitle } from '../css/Text';
@@ -25,9 +25,9 @@ function StockDetails() {
     const [exchange, setExchange] = useState('');
 
     // News related variables
-    const [articles, setArticles] = useState([]);
+    const [articles, setArticles] = useState(null);
     const [articlesShown, setArticlesShown] = useState([]);
-    const [pageNum, setPageNum] = useState(0);
+    const [pageNum, setPageNum] = useState(1);
     const [pages, setPages] = useState(0);
 
     const [stats, setStats] = useState([
@@ -174,29 +174,32 @@ function StockDetails() {
                 <div>
                     <h1>News feed for {name}</h1>
                 </div>
+                {articles && articles.length === 0 &&
+                    <div>No search results.</div>
+                }
+                {articles && articles.length > 0 &&
                 <Container flex_direction="column" gap="1em">
-                    
                     {articlesShown.map(article => {
                         return (
                             <NewsContainer>
                                 <div>
-                                    <NormalText>{article.media}: <Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
-                                    <SubText>{article.date}</SubText>
-                                    <SubText>{article.description}</SubText>
+                                    <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
+                                    <SubText>{article.published}</SubText>
+                                    <SubText>{article.summary}...</SubText>
                                 </div>
                             </NewsContainer>
                         );
                     })
                     }
-                    { articles.length > 10 &&
-                        (<>
-                            Page: {pageNum}
-                            <Pagination count={pages} page={pageNum} onChange={handlePageChange}/>
-                        </>
-                    )}
-                    
-                    
+                    <FlexRowDiv>
+                        Page: {pageNum}
+                        <Pagination count={pages} page={pageNum} onChange={handlePageChange}/>
+                    </FlexRowDiv>    
                 </Container>
+                }
+                {articles === null &&
+                    <div>Loading...</div>
+                }
             </PageContainer>
         </div>
     )

@@ -54,7 +54,6 @@ function News() {
                 setPages(1);
             }
             setPageNum(1);
-            renderArticles(0);
         })
     }
 
@@ -93,7 +92,8 @@ function News() {
     const handleInputChange = (event, value, reason) => {
         if (reason === "clear" ||  value === '') {
             // Set it back to market news
-            setArticles([]);
+            setArticles(null);
+            setInput(null);
             getTopStocksNews();
         } else {
             console.log("Getting results for...", value);
@@ -169,7 +169,7 @@ function News() {
                                     <div>
                                         <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
                                         <SubText>{article.published}</SubText>
-                                        <SubText>{article.summary}</SubText>
+                                        <SubText>{article.summary}...</SubText>
                                     </div>
                                 </NewsContainer>
                             );
