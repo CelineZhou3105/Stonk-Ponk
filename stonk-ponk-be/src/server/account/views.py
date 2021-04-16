@@ -138,7 +138,7 @@ def change_name(request):
     last_name = None
     r_email = None
     try:
-	user = get_user(request)
+        user = get_user(request)
         body = json.loads(request.body.decode("utf-8"))
 
         first_name = body["first_name"]
