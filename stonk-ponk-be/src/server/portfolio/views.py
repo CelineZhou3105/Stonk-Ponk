@@ -10,6 +10,7 @@ import jwt.exceptions
 from account.models import User
 from .models import Portfolio, PortfolioStock, StockOwnership, Transaction
 from stocks import stock_api
+from account.auth import require_token, get_user
 
 '''
 request
@@ -32,13 +33,12 @@ response
 '''
 
 @require_http_methods(["GET"])
+@require_token
 def details(request):
     # TODO also give time series
     # current price
     try:
-        token = request.headers["Authorization"]
-        payload = jwt_decode_handler(token)
-        user = User.objects.get(id=payload["user_id"])
+        user = get_user(request)
         portfolio = Portfolio.objects.get(email=user.email)
         holdings = portfolio.get_stock_ownerships()
 
@@ -84,13 +84,11 @@ response
 '''
 
 @require_http_methods(["GET"])
+@require_token
 def summary(request):
     # TODO change %
     try:
-        token = request.headers["Authorization"]
-        
-        payload = jwt_decode_handler(token)
-        user = User.objects.get(id=payload["user_id"])
+        user = get_user(request)
         portfolio = Portfolio.objects.get(email=user.email)
 
         pInvestment = portfolio.get_investment()
@@ -126,10 +124,12 @@ def summary(request):
 '''
 
 @require_http_methods(["GET"])
+@require_token
 def best(request):
     return rank(request, True)    
 
 @require_http_methods(["GET"])
+@require_token
 def worst(request):
     return rank(request, False)    
 
@@ -137,10 +137,7 @@ def rank(request, reverse=True):
     try:
         n = int(request.GET.get("n"))
 
-        token = request.headers["Authorization"]
-        payload = jwt_decode_handler(token)
-
-        user = User.objects.get(id=payload["user_id"])
+        user = get_user(request)
         portfolio = Portfolio.objects.get(email=user.email)
 
         profit_margins = []
@@ -182,13 +179,12 @@ response
     code from http
 '''
 @require_http_methods(["POST"])
+@require_token
 def edit(request):
     try:
-        body = json.loads(request.body.decode('utf-8'))
-        token = request.headers["Authorization"]
-        payload = jwt_decode_handler(token)
-        user = User.objects.get(id=payload["user_id"])
+        user = get_user(request)
         portfolio = Portfolio.objects.get(email=user.email)
+
         for so in portfolio.get_stock_ownerships():
             so.delete()
 

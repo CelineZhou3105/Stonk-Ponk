@@ -5,18 +5,13 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadReque
 from django.views.decorators.http import require_http_methods
 
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
-from rest_framework_jwt.utils import jwt_decode_handler
+from rest_framework_jwt.utils import jwt_decode_handler, jwt_payload_handler, jwt_encode_handler
 
 import jwt.exceptions 
 
-from .models import User
 from portfolio.models import *
-
-@require_http_methods(["POST"])
-def index(request):
-    body = json.loads(request.body.decode('utf-8'))
-    print(jwt_decode_handler(body["token"]))
-    return HttpResponse()
+from .models import User
+from .auth import require_token, get_user
 
 class HttpResponseConflict(HttpResponse):
     status_code = 409
@@ -40,14 +35,12 @@ Response
 '''
 @require_http_methods(["POST"])
 def register(request):
-    print(request.headers)
     try:
         body = json.loads(request.body.decode('utf-8'))
         user = User.objects.create_user(email=body["email"]
                 , password=body["password"]
                 , first_name=body["firstName"]
-                , last_name=body["lastName"]
-                , security_question=body["securityQuestion"]
+                , last_name=body["lastName"] , security_question=body["securityQuestion"]
                 , security_answer=body["securityAnswer"])
         if user == None:
             return HttpResponseConflict()
@@ -57,30 +50,32 @@ def register(request):
     return HttpResponse()
 
 '''
-API call to /api/account/reset_password
+API call to /api/account/register
 Request
-    token -> JWT token
-    new_password -> str
+    email -> str
+    password -> str
 
 Response
     200 - success
     400 - bad request
-
 '''
 @require_http_methods(["POST"])
-def reset_password(request):
-    body = json.loads(request.body.decode("utf-8"))
+def login(request):
     try:
-        payload = jwt_decode_handler(body["token"])
-        user = User.objects.get(id=payload["user_id"])
-        user.set_password(body["new_password"])
-        user.save()
-    except InvalidSignatureError:
-        return HttpResponseForbidden()
+        body = json.loads(request.body.decode('utf-8'))
+        email = body["email"]
+        password = body["password"]
+        user = User.objects.get(email=email)
+
+        if not user.check_password(password):
+            return HttpResponseForbidden()
+
+        payload = jwt_payload_handler(user)
+        res = { 'token': jwt_encode_handler(payload) }
+        return HttpResponse(json.dumps(res))
     except:
         return HttpResponseBadRequest()
     return HttpResponse()
-
 '''
 API call to /api/account/forgot_password
 Request
@@ -136,18 +131,8 @@ def forgot_password(request):
         return HttpResponseBadRequest()
     return HttpResponse()
 
-@require_http_methods(["POST"])
-def update_account(request):
-    '''
-    take the token
-    match the token with the account
-    disable the token
-    '''
-    body = json.loads(request.body.decode("utf-8"))
-    payload = jwt_decode_handler(body["token"])
-    user = User.objects.get(id=payload["user_id"])
-
 @require_http_methods(["PUT"])
+@require_token
 def change_name(request):
     first_name = None
     last_name = None
@@ -183,16 +168,15 @@ def change_name(request):
     if last_name not empty
         set last_name to last_name
     '''
+
 @require_http_methods(["PUT"])
+@require_token
 def change_login_credentials(request):
     try:
 
-        token = request.headers["Authorization"]
-        payload = jwt_decode_handler(token)
-        user = User.objects.get(id=payload["user_id"])
-
         body = json.loads(request.body.decode("utf-8"))
-        
+        user = get_user(request)
+
         old_email = user.email   
         new_email  = body["new_email"]
         if (new_email != user.email):
@@ -226,15 +210,16 @@ def change_login_credentials(request):
     return HttpResponseBadRequest()
 
 @require_http_methods(["GET"])
+@require_token
 def get_user_details(request):
     try:
-        token = request.headers["Authorization"]
-        payload = jwt_decode_handler(token)
-        user = User.objects.get(id=payload["user_id"])
-        ret = {"first_name" : str(user.first_name), "last_name" : str(user.last_name), "email" : str(user.email)}
+        user = get_user(request)
+        ret = {"first_name" : str(user.first_name), 
+                "last_name" : str(user.last_name), 
+                "email" : str(user.email)}
         return HttpResponse(json.dumps(ret))
     except Exception as e :
-        print(e)
         return HttpResponseBadRequest(json.dumps({"eee": "EEEE"})) 
 
     return HttpResponseBadRequest() 
+
