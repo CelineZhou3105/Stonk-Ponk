@@ -21,5 +21,5 @@ def get_stock_news(request):
 
 @require_http_methods(["POST", "GET"])
 def get_market_news(request):
-    responseData = news_api.get_market_news()
+    responseData = news_api.get_yf_market_news()
     return HttpResponse(responseData)
