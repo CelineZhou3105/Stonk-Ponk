@@ -255,7 +255,7 @@ function StockTable(props) {
     const [createModalOpen, setCreateModalOpen] = useState(false);
 
     return (
-        <div>
+        <div style={{width: "98%"}}>
             {(place === 'portfolio' || place === 'watchlist') &&
                 <RightAlignedButtonContainer>
                     {editMode ?
