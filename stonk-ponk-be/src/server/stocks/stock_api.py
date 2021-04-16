@@ -107,14 +107,6 @@ def get_stock_prices(ticker, interval_type):
     
     end_date = arrow.utcnow()
 
-    end_dat = arrow.utcnow()
-    
-    print(end_dat.format('YYYY-MM-DD'))
-    
-    start_dat = end_dat.shift(days=-7)
-    
-    print(start_dat.format('YYYY-MM-DD'))
-
     if interval_type == 'market':  
         start_date = end_date.shift(days=-100)
         interval_string = str(1) + "d"
@@ -135,12 +127,11 @@ def get_stock_prices(ticker, interval_type):
         start_date = end_date.shift(days=-365)
         interval_string = str(1) + "d"
 
-    end_date_string = str(end_date.format('DD-MM-YYYY'))
-    print(end_date_string)
-    start_date_string = str(start_date.format('DD-MM-YYYY'))
-    print(start_date_string)
+    end_date_string = str(end_date.format('MM-DD-YYYY'))
 
-    price_data = si.get_data(ticker, start_date = start_date_string, interval = interval_string)
+    start_date_string = str(start_date.format('MM-DD-YYYY'))
+
+    price_data = si.get_data(ticker, start_date = start_date_string, end_date = end_date_string, interval = interval_string)
 
     for index, row in price_data.iterrows():
         price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
