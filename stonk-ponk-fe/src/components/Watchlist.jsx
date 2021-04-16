@@ -21,7 +21,14 @@ const Watchlist = () => {
         watchlist.getWatchlistName()
         .then(response => response.json())
         .then(json => {
+            console.log(json);
             setWatchlistNames([...watchlistNames, json]);
+        })
+        .catch((error) => {
+            Promise.resolve(error)
+            .then((error) => {
+                alert(`${error.status} ${error.statusText}`);
+            })
         })
     },[])
 
