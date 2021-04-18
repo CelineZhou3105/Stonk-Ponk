@@ -43,6 +43,23 @@ export const SettingRowDiv = createFlexRowDiv("space-between", "10px", "10px");
 export const SettingEditRowDiv = createFlexRowDiv("space-between", "0", "auto");
 export const FlexRowEndDiv = createFlexRowDiv("flex-end", "auto", "auto");
 
+export const SettingFieldDiv = styled.div`
+    ${FlexRow};
+    width: 1000px;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+`;
+
+export const SettingModalDiv = styled.div`
+    ${FlexColumn}
+    justify-content: center;
+    align-items: flex-start;
+    width: 60%;
+    font-weight: bold;
+`;
+
 export const SignUpSectionDiv = styled.div`
     display: flex;
     flex-direction: ${props => props.row ? "row" : "column"};
