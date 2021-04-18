@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import { ModalContainer, ModalContent} from '../css/Div';
-import { GenericForm, InputUnderlineDiv, ModalLabel, TextField } from '../css/Form';
+import React, {useEffect, useRef, useState} from 'react';
+import { ModalContainer, ModalContent, RightAlignedButtonContainer} from '../css/Div';
+import { CreateModalForm, InputUnderlineDiv, ModalLabel, TextField } from '../css/Form';
 import { TextField as AutocompleteTextField } from '@material-ui/core';
 import { CloseButton, CustomButton } from '../css/Button';
-import { ColorText, SubText, SubTitle } from '../css/Text';
+import { ColorText, Link, SubText, SubTitle } from '../css/Text';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { market } from '../services/market';
 
@@ -18,8 +18,17 @@ function CreateModal(props) {
     const [purchaseDate, setPurchaseDate] = useState(Date.now());
     const [selectedStock, setSelectedStock] = useState({name: '', ticker: ''});
     const [input, setInput] = useState('');
-    const [error, setError] = useState(false);
     const [stockOptions, setStockOptions] = useState([]);
+
+    // For errors
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+
+    // Aborter for cancelling previous API calls
+    const lastAbortController = useRef();
+
+    // Selected stock on the menu
+    const [stockTicker, setStockTicker] = useState('');
 
     function createStockRow() {
         const newRow = {};
@@ -34,57 +43,94 @@ function CreateModal(props) {
 
     function handleSubmit(event) {
         event.preventDefault();
+        
+        // Check that the date is not a weekend
+        const day = new Date(purchaseDate).getUTCDay();
+        console.log("DAY", day);
+        if([6,0].includes(day)) {
+            setError(true);
+            setErrorMsg('Cannot enter weekends as they are not valid trading days.')
+            return;
+        }
         const newRow = createStockRow();
         setRows(rows => [...rows, newRow])
         setVisibility(false);
     };
 
+    // Makes an API call to retrieve search results when user has entered a ticker
     useEffect(() => {
-        let results = [];
-        setError(false);
-        market.getStockDetail(input)
+        if (input !== null) {
+            if (lastAbortController.current) {
+                lastAbortController.current.abort();
+            }
+            // Create new AbortController for the new request and store it in the ref
+            const currentAbortController = new AbortController();
+            lastAbortController.current = currentAbortController;
+
+            const currentPromise = market.checkTickerExists(input, currentAbortController)
+            .then(response => response.json())
+            
+            currentPromise
+            .then(res => {
+                console.log(res);
+                setStockOptions(res);
+            }).catch(error => {
+                // Do nothing - this means there are no search results, which is normal
+            })
+        }
+    }, [input])
+
+    // Gets the rest of the details of the stock selected
+    useEffect(() => {
+        market.getStockDetail(stockTicker)
         .then(response => response.json())
         .then(res => {
-            results.push(res);
+            setSelectedStock(res);
+        }).catch(() => {
+            console.log("No stock with that ticker");
         })
-        .catch((e) => {
-            console.log('Could not find stock on US market.');
-        }).then(() => market.getStockDetail(input+".AX"))
-        .then(response => response.json())
-        .then(res => {
-            results.push(res);
-        }).catch((e) => {
-            console.log('Could not find stock on AUS market.');
-        }).finally(() => {
-            setStockOptions(results);
-        })
-    }, [input]);
+    }, [stockTicker])
+
+    // Do nothing if the person clears the search bar, otherwise get news for the stock
+    const handleInputChange = (event, value, reason) => {
+        if (reason === "clear" ||  value === '') {
+            // Set it back to market news
+            setSelectedStock(null);
+            setInput(null);
+        } else {
+            console.log("Getting results for...", value);
+            setInput(value);
+        }
+    }
 
     return(
         <ModalContainer>
             <ModalContent>
-                <GenericForm onSubmit={(event) => handleSubmit(event)}>
+                <RightAlignedButtonContainer>
                     <CloseButton onClick={() => setVisibility(false)} >&times;</CloseButton>
+                </RightAlignedButtonContainer>
+                <CreateModalForm onSubmit={(event) => handleSubmit(event)}>
+                    
                     <SubTitle>Add a new stock</SubTitle>
                     
                     <ModalLabel htmlFor="search">Stock Ticker</ModalLabel>
-                    <SubText>Don't know the ticker? Find it on: </SubText>
+                    <SubText>Don't know the ticker? Find it on: <Link href="https://www.marketwatch.com/tools/quotes/lookup.asp">Market Watch</Link></SubText>
                     <Autocomplete
                         options={stockOptions}
                         getOptionLabel={(option) => option.name}
-                        onChange={(e, value) => setSelectedStock(value)}
+                        onChange={(e, value) => { setStockTicker(value.ticker)}}
                         style={{ width: '100%' }}
                         renderInput={(params) => <AutocompleteTextField {...params} label="Enter your ticker..." variant="outlined" />}
-                        onInputChange={(e, value) => { console.log("Setting input to: ", value); setInput(value); }}
+                        onInputChange={(e, value, reason) => { 
+                            console.log("Setting input to: ", value); 
+                            handleInputChange(e, value, reason);
+                        }}
                         noOptionsText="No stocks found."
                         filterOptions={x => x}
                     />
-                    {error &&
-                        <ColorText color="#e80000">Error, this stock does not exist.</ColorText>
-                    }
                     <InputUnderlineDiv width="100%" className="underline"/>
 
-                    <ModalLabel htmlFor="purchase-data">Purchase Date</ModalLabel>
+                    <ModalLabel htmlFor="purchase-date">Purchase Date</ModalLabel>
                     <TextField id="purchase-date" type="date" defaultValue={purchaseDate} required onChange={(e) => { setPurchaseDate(e.target.value) }} />
                     <InputUnderlineDiv width="100%" className="underline"/>
 
@@ -96,8 +142,11 @@ function CreateModal(props) {
                     <TextField id="units-owned" type="number" min={1} defaultValue={unitsOwned} required onChange={(e) => { setUnitsOwned(e.target.value) }} />
                     <InputUnderlineDiv width="100%" className="underline"/>
 
-                    <CustomButton type="submit" margin="2em 0" value="Add Stock" aria-label="Button to add stock to portfolio">Add Stock</CustomButton>
-                </GenericForm>
+                    <CustomButton type="submit" margin="2em auto" value="Add Stock" aria-label="Button to add stock to portfolio">Add Stock</CustomButton>
+                </CreateModalForm>
+                {error && (
+                    <ColorText color="red">{errorMsg}</ColorText>
+                )}
             </ModalContent>
         </ModalContainer>
         

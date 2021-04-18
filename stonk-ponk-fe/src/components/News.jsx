@@ -169,6 +169,7 @@ function News() {
             )}
             <PageContainer>
                 <PageTitle>News</PageTitle>
+                <SubText>Don't know the ticker? Find it on: <Link href="https://www.marketwatch.com/tools/quotes/lookup.asp">Market Watch</Link></SubText>
                 <Autocomplete
                     options={stockOptions}
                     getOptionLabel={(option) => option.name}

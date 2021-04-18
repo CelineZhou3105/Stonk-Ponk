@@ -222,6 +222,7 @@ function StockTable(props) {
     const handleClick = (event, ticker) => {
         const selectedIndex = selected.indexOf(ticker);
         let newSelected = [];
+        
 
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, ticker);
@@ -236,7 +237,9 @@ function StockTable(props) {
             );
         }
 
-        setSelected(newSelected);
+        if (editMode) {
+            setSelected(newSelected);
+        }
     };
 
     const handleDelete = () => {
@@ -264,7 +267,9 @@ function StockTable(props) {
                     }
                 </RightAlignedButtonContainer>
             }
-            <TableToolbar numSelected={selected.length} place={place} handleDelete={handleDelete}></TableToolbar>
+            {(place === 'portfolio') && (editMode === true) && (
+                <TableToolbar numSelected={selected.length} place={place} handleDelete={handleDelete}></TableToolbar>
+            )}
             <TableContainer>
                 <Table
                     size="medium"
