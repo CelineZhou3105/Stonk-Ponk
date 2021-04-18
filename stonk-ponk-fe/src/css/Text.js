@@ -65,6 +65,12 @@ export const SubText = styled.p`
     display: ${props => props.inline ? 'inline ': 'block'};
 `;
 
+export const PortfolioHealthText = styled.p`
+    color: '#7B7B7B';
+    font-size: 14px;
+    margin: 0;
+`;
+
 export const SubTitle = styled.p`
     font-size: 20px;
     margin: 1em auto;

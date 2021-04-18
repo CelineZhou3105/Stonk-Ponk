@@ -170,9 +170,6 @@ function StockTable(props) {
     };
 
     function saveChanges() {
-        // TODO: Call the API to save changes
-        const token = localStorage.getItem('token');
-
         const newPortfolio = {};
         const newStocks = [];
         const newStockMapping = {};
@@ -194,7 +191,7 @@ function StockTable(props) {
         }
         newPortfolio['stocks'] = newStocks;
 
-        portfolio.editPortfolio(token, newPortfolio).then(() => {
+        portfolio.editPortfolio(newPortfolio).then(() => {
             setEditMode(false);
             console.log("Changes saved.");
             setPreviousRows(data);

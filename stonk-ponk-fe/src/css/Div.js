@@ -226,7 +226,11 @@ export const Container = styled.div`
     align-items: ${props => props.align_items ? props.align_items : 'flex-start'};
 `;
 export const PortfolioValueContainer = createFlexColumnDiv('center', 'center', '0');
-
+export const PortfolioHealthContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: 0 2em;
+`;
 export const PageContainer = styled.div` 
     margin: 3em;
 `;
