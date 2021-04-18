@@ -189,7 +189,7 @@ def edit(request):
 
         for so in portfolio.get_stock_ownerships():
             so.delete()
-
+        #print(body)
         for s in body["stocks"]:
             ticker = s["ticker"]
             for t in s["transactions"]:
@@ -199,6 +199,7 @@ def edit(request):
             so.recalculate()
     except Exception as e:
         print(e)
+        raise e
         return HttpResponseBadRequest()
     return HttpResponse()
 

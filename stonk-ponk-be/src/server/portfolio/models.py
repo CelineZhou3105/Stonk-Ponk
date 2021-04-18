@@ -167,32 +167,63 @@ class Portfolio(models.Model) :
         if len(self.get_stock_ownerships()) == 0:
             return 0
 
-        total_risk = 0
-        total_value= 0 
+        market_ticker = "^GSPC"
+        intervalType = 'last_six_months'
 
+        portfolio_values = self.get_historical_value(intervalType)
+        market_prices = json.loads(stock_api.get_stock_prices(market_ticker, intervalType))
+
+        portfolio_changes = []
+        market_changes = []
+
+        for i in range(1, len(portfolio_values)):
+            portfolio_changes.append(portfolio_values[i]/portfolio_values[i-1]-1)
+
+        for i in range(1, len(market_prices)):
+            market_changes.append(market_prices[i]['price']/market_prices[i-1]['price']-1)
+        
+        portfolio_volatility = statistics.stdev(portfolio_changes)
+        market_volatility = statistics.stdev(market_changes)
+        adjusted_volatility = portfolio_volatility / market_volatility - 1
+        # normal distribution around 1 scaled to 100
+        print(portfolio_volatility)
+        print(market_volatility)
+        return math.e**(-(adjusted_volatility**2)) * 100
+
+    def get_historical_value(self, intervalType):
+        stock_prices = [] # list of list
+        stock_volume = [] # list
+        
+        dates = set()
         for so in self.get_stock_ownerships():
             ticker = so.stock.ticker
             prices = json.loads(stock_api.get_stock_prices(ticker, 'last_six_months'))
-            changes = []
-            for i in range(1, len(prices)):
-                changes.append(prices[i]['price']/prices[i-1]['price']-1)
+            for e in prices:
+                dates.add(e['date'])
+            stock_prices.append(prices)
+            stock_volume.append(so.volume)
 
-            value = so.volume * stock_api.get_price(ticker)
-            total_risk += statistics.stdev(changes) * value
-            total_value+= value
+        # iteration through set is not in order so we convert to sorted list
+        dates = list(dates)
+        dates.sort()
 
-        prices = json.loads(stock_api.get_stock_prices('SPY', 'last_six_months'))
-        changes = []
-        for i in range(1, len(prices)):
-            #print(prices[i]['date'])
-            changes.append(prices[i]['price']/prices[i-1]['price']-1)
+        # populate missing dates
+        for prices in stock_prices:
+            i = 0
+            prev_price = prices[0]['price']
+            for d in dates:
+                if d != prices[i]['date']:
+                    prices[i] = { 'date': d, 'price': prev_price }
+                else:
+                    prev_price = prices[i]['price']
+                i += 1
 
-        market_risk = statistics.stdev(changes) * 100
-        value_weighted_risk = total_risk / total_value * 100
-        #print(market_risk) 
-        #print(value_weighted_risk) 
-        # normal distribution around 1 scaled to 100
-        return math.e**(-(value_weighted_risk-market_risk)**2) * 100
+        portfolio_values = [0] * len(dates)
+        for i in range(0, len(stock_prices)):
+            for j in range(0, len(dates)):
+                portfolio_values[j] += stock_prices[i][j]['price'] * stock_volume[i]
+
+        return portfolio_values
 
 class PortfolioStock(models.Model):
     ticker = models.CharField(max_length = 20)
