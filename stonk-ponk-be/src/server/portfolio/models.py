@@ -6,6 +6,7 @@ import uuid
 import datetime
 import json
 import math
+import statistics
 
 class Portfolio(models.Model) :
     email = models.EmailField(('email address'), unique=True)
@@ -110,38 +111,28 @@ class Portfolio(models.Model) :
                 print("LOG: ERROR: could not process {} in get_investment".format(so.get_stock_ticker()))
         return tVal
     
-    def get_health(self):
-        #will get out of 100 points for all 3 and this function will return them in a dict
-        diversification_score = self.calc_diversification()
-        #profit_score = 
-        #calc_profit
-        #calc_benchmark
-        #health_dict = {}
-        health_dict['diversification'] = div_points
-        return health_dict
-    
     def calc_diversification_score(self):
         #gets weightage of stocks 
         #checks asset allocations
         #we calculate portfolio beta which is the portfolio's volatility in relation to the overall market
+
+        if len(self.get_stock_ownerships()) == 0:
+            return 0
 
         total_beta = 0 # beta * volume
         total_value= 0 # sum of all the volume used in calcuating the beta
         for so in self.get_stock_ownerships():
             ticker = so.stock.ticker
             stats = stock_api.get_stats(ticker)
-            beta = None
+            beta = 0
             for index, df in stats.iterrows():
                 if df["Attribute"] == "Beta (5Y Monthly)":
-                    beta = df["Value"] 
+                    beta = float(df["Value"])
                     break
             if beta != None:
                 value = so.volume * stock_api.get_price(ticker)
-                total_beta += float(beta) * value
+                total_beta += beta * value
                 total_value+= value
-
-        if total_value == 0:
-            return 0
 
         value_weighted_beta = total_beta / total_value
 
@@ -151,11 +142,58 @@ class Portfolio(models.Model) :
     def calc_profit_score(self):
         # go through all the transactions and purchase the same amount
         profit_portfolio = self.get_value() - self.get_investment() 
+        profit_investment= 0
+        
+        market_ticker = "^GSPC"
+        market_index_price = stock_api.get_price(market_ticker)
+
         for so in self.get_stock_ownerships():
-            for trans in Transaction.objects.filter(stockPortfolio=so):
-                price_dict = get_historical_price("^GSPC", trans.purchase_date)
-                midprice = price_dict["low"] + price_dict["high"]
-                
+            for trans in Transaction.objects.filter(stockOwnership=so):
+                price_dict = stock_api.get_historical_price(market_ticker, trans.purchase_date)
+                mid_price = price_dict["low"] + price_dict["high"]
+                profit_investment += (market_index_price - mid_price) * trans.purchase_vol
+
+        if profit_investment == 0:
+            return 0
+
+        profit_normalised = profit_portfolio / profit_investment - 1
+
+        return (math.atan(0.1*profit_normalised+1)/math.pi*2+1)*50
+
+    def calc_volatility_score(self):
+        # go through all the risk in the portfolio
+        # do a weighted average
+        # compare that with the risk of the market ie ^SPY
+        if len(self.get_stock_ownerships()) == 0:
+            return 0
+
+        total_risk = 0
+        total_value= 0 
+
+        for so in self.get_stock_ownerships():
+            ticker = so.stock.ticker
+            prices = json.loads(stock_api.get_stock_prices(ticker, 'last_six_months'))
+            changes = []
+            for i in range(1, len(prices)):
+                changes.append(prices[i]['price']/prices[i-1]['price']-1)
+
+            value = so.volume * stock_api.get_price(ticker)
+            total_risk += statistics.stdev(changes) * value
+            total_value+= value
+
+        prices = json.loads(stock_api.get_stock_prices('SPY', 'last_six_months'))
+        changes = []
+        for i in range(1, len(prices)):
+            #print(prices[i]['date'])
+            changes.append(prices[i]['price']/prices[i-1]['price']-1)
+
+        market_risk = statistics.stdev(changes) * 100
+        value_weighted_risk = total_risk / total_value * 100
+        #print(market_risk) 
+        #print(value_weighted_risk) 
+        # normal distribution around 1 scaled to 100
+        return math.e**(-(value_weighted_risk-market_risk)**2) * 100
+
 class PortfolioStock(models.Model):
     ticker = models.CharField(max_length = 20)
 

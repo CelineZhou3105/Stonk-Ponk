@@ -10,4 +10,5 @@ urlpatterns = [
     path('details', views.details, name='portfolio-details'),
     path('best', views.best, name='portfolio-best'),
     path('worst', views.worst, name='portfolio-worst'),
+    path('metrics', views.metrics, name='portfolio-metrics'),
 ]

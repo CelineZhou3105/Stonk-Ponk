@@ -143,7 +143,7 @@ def get_stock_prices(ticker, interval_type):
 
 def get_historical_price(ticker, date):
     start_date = date.strftime("%m/%d/%Y")
-    end_date = date.strftime("%m/%d/%Y")
+    end_date = (date+timedelta(days=1)).strftime("%m/%d/%Y")
     price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = "1d")
 
     price_dict = {}
