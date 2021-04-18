@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ModalContainer, ModalContent, RightAlignedButtonContainer } from '../css/Div';
+import { ModalContainer, ModalContent } from '../css/Div';
 import { CreateModalForm, InputUnderlineDiv, ModalLabel, TextField } from '../css/Form';
 import { TextField as AutocompleteTextField } from '@material-ui/core';
 import { CloseButton, CustomButton } from '../css/Button';
@@ -32,6 +32,7 @@ function CreateModal(props) {
 
     function createStockRow() {
         const newRow = {};
+        console.log(selectedStock);
         newRow['name'] = selectedStock.name;
         newRow['ticker'] = selectedStock.ticker;
         newRow['price'] = selectedStock.price; // current price, gotten from backend
@@ -47,14 +48,15 @@ function CreateModal(props) {
 
     function handleSubmit(event) {
         event.preventDefault();
-
-        // Check that the date is not a weekend
-        const day = new Date(purchaseDate).getUTCDay();
-        console.log("DAY", day);
-        if ([6, 0].includes(day)) {
-            setError(true);
-            setErrorMsg('Cannot enter weekends as they are not valid trading days.')
-            return;
+        if (place === 'portfolio') {
+            // Check that the date is not a weekend
+            const day = new Date(purchaseDate).getUTCDay();
+            console.log("DAY", day);
+            if ([6, 0].includes(day)) {
+                setError(true);
+                setErrorMsg('Cannot enter weekends as they are not valid trading days.')
+                return;
+            }
         }
         const newRow = createStockRow();
         setRows(rows => [...rows, newRow]);
@@ -115,7 +117,7 @@ function CreateModal(props) {
                     <SubTitle>Add a new stock</SubTitle>
 
                     <ModalLabel htmlFor="search">Stock Ticker</ModalLabel>
-                    <SubText>Don't know the ticker? Find it on: <Link href="https://www.marketwatch.com/tools/quotes/lookup.asp">Market Watch</Link></SubText>
+                    <SubText>Don't know the ticker? Find it on: <Link href="https://www.marketwatch.com/tools/quotes/lookup.asp" target="_blank">Market Watch</Link></SubText>
                     <Autocomplete
                         options={stockOptions}
                         getOptionLabel={(option) => option.name}
@@ -131,11 +133,12 @@ function CreateModal(props) {
                     />
                     <InputUnderlineDiv width="100%" className="underline" />
 
-                    <ModalLabel htmlFor="purchase-date">Purchase Date</ModalLabel>
-                    <TextField id="purchase-date" type="date" defaultValue={purchaseDate} required onChange={(e) => { setPurchaseDate(e.target.value) }} />
-                    <InputUnderlineDiv width="100%" className="underline" />
+
                     {place === "portfolio" &&
                         <>
+                            <ModalLabel htmlFor="purchase-date">Purchase Date</ModalLabel>
+                            <TextField id="purchase-date" type="date" defaultValue={purchaseDate} required onChange={(e) => { setPurchaseDate(e.target.value) }} />
+                            <InputUnderlineDiv width="100%" className="underline" />
                             <ModalLabel htmlFor="purchase-price">Purchase Price</ModalLabel>
                             <TextField id="purchase-price" type="number" min={1} step="0.01" defaultValue={purchasePrice} required onChange={(e) => { setPurchasePrice(e.target.value) }} />
                             <InputUnderlineDiv width="100%" className="underline" />

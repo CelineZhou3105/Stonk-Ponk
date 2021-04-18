@@ -78,7 +78,7 @@ const deleteWatchlist = async (id) => {
         })
 }
 
-const addStockToWatchlist = async (id, ticker) => {
+const addStockToWatchlist = async (id, tickers) => {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -88,7 +88,7 @@ const addStockToWatchlist = async (id, ticker) => {
         },
         body: JSON.stringify({
             watchlist_id: id,
-            ticker: ticker,
+            tickers: tickers,
         }),
     };
     return await fetch(AddStockToWatchlistLink, requestOptions)
@@ -100,7 +100,7 @@ const addStockToWatchlist = async (id, ticker) => {
         })
 }
 
-const removeStockFromWatchlist = async (id, ticker) => {
+const removeStockFromWatchlist = async (id, tickers) => {
     const requestOptions = {
         method: 'DELETE',
         headers: {
@@ -110,7 +110,7 @@ const removeStockFromWatchlist = async (id, ticker) => {
         },
         body: JSON.stringify({
             watchlist_id: id,
-            ticker: ticker,
+            tickers: tickers,
         }),
     };
     return await fetch(RemoveStockFromWatchlistLink, requestOptions)

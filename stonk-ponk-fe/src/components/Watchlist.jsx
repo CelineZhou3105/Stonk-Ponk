@@ -16,7 +16,7 @@ const headings = [
 
 const Watchlist = () => {
     const [watchlistId, setWatchlistId] = useState(-1);
-    const [watchlistNames, setWatchlistNames] = useState([{ name: 'Select Watchlist' }]);
+    const [watchlistNames, setWatchlistNames] = useState([{ label: 'Select Watchlist' }]);
 
     useEffect(() => {
         watchlist.getWatchlistName()
@@ -34,8 +34,8 @@ const Watchlist = () => {
     }, [setWatchlistNames, watchlistNames])
 
     // hardcoded for now
-    const [currentWatchlist, setCurrentWatchlist] = useState('Big tech companies');
-    const [watchlistData, setWatchlistData] = useState([{ name: "NiSource Inc", ticker: "ni", price: 25.6200008392334 }]);
+    const [currentWatchlist, setCurrentWatchlist] = useState(watchlistNames[0].label);
+    const [watchlistData, setWatchlistData] = useState([]);
     const [page, setPage] = useState(0);
 
     return (
@@ -48,7 +48,7 @@ const Watchlist = () => {
                 </FlexRowDiv>
                 <FlexRowEndDiv>
                     <SubText style={{ marginRight: "10px" }}>Watchlist:</SubText>
-                    <Select styles={customStyles} options={watchlistNames} defaultValue={watchlistNames[0]} aria-label="Drop down to select to view different watchlists" onChange={(e) => setCurrentWatchlist(e.name)} />
+                    <Select styles={customStyles} options={watchlistNames} defaultValue={watchlistNames[0]} aria-label="Drop down to select to view different watchlists" onChange={(e) => setCurrentWatchlist(e.label)} />
                 </FlexRowEndDiv>
                 <Container flex_direction="column" gap="1em" justify_content="center" align_items="center" style={{ padding: "20px" }}>
                     <FlexRowDiv style={{ width: "100%" }}>
