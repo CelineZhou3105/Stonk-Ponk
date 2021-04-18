@@ -28,8 +28,8 @@ function PortfolioChart(props) {
     return(
         empty ? <NormalText>There are no stocks in your portfolio. Add some now!</NormalText>
         :(<Chart
-            width={'500px'}
-            height={'300px'}
+            width={'400px'}
+            height={'auto'}
             chartType="PieChart"
             loader={<CircularProgress />}
             data={data}

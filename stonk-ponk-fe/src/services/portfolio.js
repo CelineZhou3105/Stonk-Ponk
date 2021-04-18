@@ -3,7 +3,8 @@ import {
     GetPortfolioSummary,
     GetPortfolioBestStocks,
     GetPortfolioWorstStocks,
-    GetPortfolioDetails
+    GetPortfolioDetails,
+    GetPortfolioHealth
 } from '../api-links/constants';
 
 
@@ -113,7 +114,6 @@ export async function getPortfolioBest(num_stocks) {
             'Authorization': token,
         },
     };
-
     return await fetch(GetPortfolioBestStocks + "?n=" + num_stocks, requestOptions)
         .then(response => {
             if (response.status === 200) {
@@ -145,7 +145,6 @@ export async function getPortfolioWorst(num_stocks) {
             'Authorization': token,
         },
     };
-
     return await fetch(GetPortfolioWorstStocks + "?n=" + num_stocks, requestOptions)
         .then(response => {
             if (response.status === 200) {
@@ -161,10 +160,41 @@ export async function getPortfolioWorst(num_stocks) {
         });
 }
 
+/**
+ * getPortfolioHealth - gets the user's portfolio health 
+ * @returns - Returns a user's beta score, profitability score, volatility score
+ */
+export async function getPortfolioHealth() {
+    const token = localStorage.getItem('token');
+
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': token,
+        },
+    };
+    return await fetch(GetPortfolioHealth, requestOptions)
+        .then(response => {
+            if (response.status === 200) {
+                console.log("Portfolio health successfully retrieved.");
+                return response.json().then(res => {
+                    return Promise.resolve(res);
+                })
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
+            } else {
+                return Promise.reject("An error occured while getting your portfolio health. Please refresh.");
+            }
+        });
+}
+
 export const portfolio = {
     getPortfolioBest,
     getPortfolioDetails,
     getPortfolioSummary,
     getPortfolioWorst,
+    getPortfolioHealth,
     editPortfolio
 }

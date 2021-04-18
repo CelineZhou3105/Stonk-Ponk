@@ -66,6 +66,13 @@ export const SignUpBtn = styled.input`
     ${FlexCenter}
 `;
 
+export const CreateModalForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
+`;
+
 /* Generic elements */
 export const GenericForm = styled.form`
     ${FlexCenter}

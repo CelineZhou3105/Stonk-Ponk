@@ -20,7 +20,7 @@ export const GetPortfolioSummary = "http://localhost:8000/api/portfolio/summary"
 export const GetPortfolioDetails = "http://localhost:8000/api/portfolio/details"; // Actual stocks owned
 export const GetPortfolioBestStocks = "http://localhost:8000/api/portfolio/best";
 export const GetPortfolioWorstStocks = "http://localhost:8000/api/portfolio/worst";
-
+export const GetPortfolioHealth = "http://localhost:8000/api/portfolio/metrics";
 
 // Stock API calls
 export const MarketsLink = "http://localhost:8000/api/stocks/markets";

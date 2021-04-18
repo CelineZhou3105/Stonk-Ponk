@@ -63,6 +63,7 @@ function Navigation(props) {
                     <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" style={{ border: "3px solid #9e22ff" }} onClick={() => setProfileModalOpen(!profileModalOpen)} />
                 }
             </ProfilePhotoContainer>
+            
             {profileModalOpen &&
                 <ProfileModal>
                     <ProfilePhotoContainer>

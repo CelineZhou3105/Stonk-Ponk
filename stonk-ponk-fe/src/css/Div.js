@@ -94,7 +94,17 @@ export const ParticleContainer = styled.div`
 `;
 
 /* Password Reset Page */
-export const LogoContainer = createFlexRowDiv('center', '0px');
+export const LogoContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    margin: 0;
+    align-items: center;
+
+    @media (max-width: 500px) {
+        order: 1;
+    }
+`;
 
 export const PasswordResetPageContainer = styled.div`
     ${FlexRow};
@@ -164,6 +174,13 @@ export const NavigationContainer = styled.div`
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid rgba(0,0,0,.0975);
+    background-color: #af28ff;
+    color: white;
+    box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+
+    @media (max-width: 1280px) {
+        flex-direction: column;
+    }
 `;
 
 export const ProfileModal = styled.div`
@@ -175,12 +192,22 @@ export const ProfileModal = styled.div`
     top: 120px;
     right: 50px;
     background: white;
+    color: #000;
     width: 300px;
     z-index: 9999;
+
+    @media (max-width: 1280px) {
+        top: 200px;
+        right: auto;
+    }
 `;
 
 export const ProfilePhotoContainer = styled.div`
     padding: 30px;
+
+    @media (max-width: 500px) {
+        order: 2;
+    }
 `;
 
 export const ProfileModaItem = styled.div`
@@ -224,9 +251,31 @@ export const Container = styled.div`
     justify-content: ${props => props.justify_content ? props.justify_content : "flex-start"};
     gap: ${props => props.gap ? props.gap : 0};
     align-items: ${props => props.align_items ? props.align_items : 'flex-start'};
-`;
-export const PortfolioValueContainer = createFlexColumnDiv('center', 'center', '0');
 
+    @media (max-width: 800px) {
+        flex-direction: column;
+        padding: 1em;
+    }
+`;
+
+export const PortfolioValueContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    @media (max-width: 800px) {
+        align-items: flex-start;
+    }
+`;
+
+export const PortfolioHealthContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: 0 2em;
+    width: 100%;
+`;
 export const PageContainer = styled.div` 
     margin: 3em;
 `;
@@ -234,6 +283,11 @@ export const PageContainer = styled.div`
 export const SectionRowDiv = styled.div`
     ${FlexRow}
     gap: 1em;
+
+    @media (max-width: 700px) {
+        flex-direction: column;
+        gap: 0em;
+    }
 `;
 
 export const RightAlignedButtonContainer = styled.div` 
@@ -276,3 +330,17 @@ export const NewsContainer = styled.div`
 export const WatchlistTable = styled.div`
     width: 98%;
 `;
+
+/* Education page elements */
+export const EducationTileGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1em;
+
+    @media (max-width: 850px) {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+
+    @media (max-width: 700px) {
+        grid-template-columns: 1fr; 
+    }

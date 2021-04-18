@@ -5,8 +5,6 @@ import {
     StockCheckLink
 } from '../api-links/constants';
 
-const token = localStorage.getItem('token');
-
 /**
  * getMarketData - gets financial data of the best, worst and most active stocks on the market
  * @param {string} type - type of data you want to query for (can be 'most_active', 'losers', 'gainers')
@@ -14,6 +12,7 @@ const token = localStorage.getItem('token');
  * @return - 10 most active stocks, losers or gainers
  */
 export async function getMarketData(type, page_num) {
+    const token = localStorage.getItem('token');
     const requestBody = {
         type: type,
         page_num: page_num,
@@ -46,6 +45,7 @@ export async function getMarketData(type, page_num) {
  * @returns - an object containing details of the stock (name, ticker, open, bid, call, price)
  */
 async function getStockDetail(ticker) {
+    const token = localStorage.getItem('token');
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -79,6 +79,7 @@ async function getStockDetail(ticker) {
  * @return - An array containing a series of objects with date, and the associated price on that date
  */
 async function getStockPrice(ticker, typeInterval) {
+    const token = localStorage.getItem('token');
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -112,6 +113,7 @@ async function getStockPrice(ticker, typeInterval) {
  * @param {AbortController} abortController - (optional) an abortController object which aborts the network call (optional)
  */
 async function checkTickerExists(ticker, abortController) {
+    const token = localStorage.getItem('token');
     const requestOptions = {
         method: 'POST',
         headers: {

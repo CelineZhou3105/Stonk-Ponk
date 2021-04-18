@@ -5,13 +5,11 @@
 
 import { MarketNewsLink, StockNewsLink } from '../api-links/constants';
 
-const token = localStorage.getItem('token');
-
 export async function getNews(ticker) {
+    const token = localStorage.getItem('token');
     const body = {
         ticker: ticker,
     }
-
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -42,6 +40,7 @@ export async function getNews(ticker) {
  * @returns List of lists, where each list represets articles for one of the most active stocks
  */
 export async function getMarketNews() {
+    const token = localStorage.getItem('token');
     const requestOptions = {
         method: 'GET',
         headers: {
