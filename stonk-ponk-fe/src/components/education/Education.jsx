@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { FlexColumnCenterDiv, FlexRowDiv, PageContainer, EducationTileGrid } from '../../css/Div';
+import { PageContainer, EducationTileGrid } from '../../css/Div';
 import { EducationTile } from '../../css/Button';
 import Navigation from '../Navigation';
 import market from '../../images/stock-market.png';
