@@ -18,6 +18,10 @@ export const LinkText = styled.a`
 /* Navigation Bar */
 export const NavList = styled.ul`
     padding: 0; 
+
+    @media (max-width: 1280px) {
+        order: 3;
+    }
 `;
 
 
@@ -34,11 +38,11 @@ export const NavListItem = styled.li`
 
     & > a {
         text-decoration: none;
-        color: #000000;
+        color: #FFF;
     }
 
     & > a:after {
-        background: none repeat scroll 0 0 #9e22ff;
+        background: none repeat scroll 0 0 #FFF;
         bottom: 0;
         content: "";
         display: block;
@@ -50,11 +54,15 @@ export const NavListItem = styled.li`
     }
 
     & .active {
-        border-bottom: 2px solid #9e22ff;
+        border-bottom: 2px solid #FFF;
     }
 
     & .active:after {
         height: 0px;
+    }
+
+    @media (max-width: 500px) {
+        padding: 0.5em;
     }
 `;
 
@@ -74,6 +82,10 @@ export const PortfolioHealthText = styled.p`
 export const SubTitle = styled.p`
     font-size: 20px;
     margin: 1em auto;
+
+    @media (max-width: 800px) {
+        margin: 0;
+    }
 `;
 
 export const PortfolioValue = styled.p`

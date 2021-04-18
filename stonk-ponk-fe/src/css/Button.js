@@ -52,6 +52,7 @@ export const EducationTile = styled.button`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
 `;
 
 /* SearchButton - used to trigger the search functionality */

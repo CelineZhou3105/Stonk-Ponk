@@ -19,10 +19,10 @@ const tableHeadings = [
     { id: 'name', disablePadding: true, numeric: false, label: 'Name' },
     { id: 'performance', disablePadding: false, numeric: false, label: 'Performance (Month)' },
     { id: 'date', disablePadding: true, numeric: true, label: 'Purchase Date' },
-    { id: 'purchase_price', disablePadding: false, numeric: true, label: 'Purchase Price' },
+    { id: 'purchase_price', disablePadding: false, numeric: true, label: 'Purchase Price (USD)' },
     { id: 'units', disablePadding: false, numeric: false, label: 'Units Owned' },
-    { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price' },
-    { id: 'value', disablePadding: false, numeric: true, label: 'Total Value' },
+    { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price (USD)' },
+    { id: 'value', disablePadding: false, numeric: true, label: 'Total Value (USD)' },
 ];
 
 function Portfolio() {

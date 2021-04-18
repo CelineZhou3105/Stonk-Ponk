@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { FlexColumnCenterDiv, FlexRowDiv, PageContainer } from '../../css/Div';
+import { FlexColumnCenterDiv, FlexRowDiv, PageContainer, EducationTileGrid } from '../../css/Div';
 import { EducationTile } from '../../css/Button';
 import Navigation from '../Navigation';
 import market from '../../images/stock-market.png';
@@ -25,8 +25,7 @@ const Education = () => {
             <Navigation />
             <PageContainer>
                 <PageTitle>Education</PageTitle>
-                <FlexColumnCenterDiv>
-                    <FlexRowDiv>
+                    <EducationTileGrid>
                         <EducationTile aria-label="Navigate to what is the stock market page" onClick={() => navigateToSite("what-is-the-stock-market")}>
                             <EducationIcon src={market} alt="icon for what is the stock market" />
                             What is the Stock Market?
@@ -39,8 +38,6 @@ const Education = () => {
                             <EducationIcon src={invest} alt="icon for why invest" />
                             Why Invest?
                         </EducationTile>
-                    </FlexRowDiv>
-                    <FlexRowDiv>
                         <EducationTile aria-label="Navigate to financial instruments 101 page" onClick={() => navigateToSite("financial-instruments-101")}>
                             <EducationIcon src={instrument} alt="icon for financial instruments 101" />
                             Financial Instruments 101
@@ -53,8 +50,7 @@ const Education = () => {
                             <EducationIcon src={fund} alt="icon for passive vs active investing" />
                             Passive vs Active Investing
                         </EducationTile>
-                    </FlexRowDiv>
-                </FlexColumnCenterDiv>
+                    </EducationTileGrid>
             </PageContainer>
         </div>
     );

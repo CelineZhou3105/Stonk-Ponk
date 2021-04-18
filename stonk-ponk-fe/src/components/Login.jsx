@@ -16,12 +16,15 @@ import { authentication } from '../services/authentication';
 import { Redirect } from 'react-router-dom';
 import { CustomButton } from '../css/Button';
 
+import Alert from '@material-ui/lab/Alert';
+
 function Login() {
     const history = useHistory();
 
     // Form values
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+    const [error, setError] = useState(false);
 
     if (localStorage.getItem("token")) {
         history.push('/market');
@@ -55,18 +58,22 @@ function Login() {
                 />
             </ParticleContainer>
             <LoginFormContainer>
+                {error &&
+                    <Alert variant="filled" severity="error">
+                        Could not log in. Please try again.
+                    </Alert>
+                }
                 <LogoContainer>
                     <DefaultLogo src={logo} alt="Stonk Ponk Logo" />
                 </LogoContainer>
-                <GenericForm onSubmit={(e) => authentication.login(e, email, pass).then(
-                    response => {
+                <GenericForm onSubmit={(e) => authentication.login(e, email, pass)
+                    .then(response => {
                         localStorage.setItem('token', response.token);
-			history.push('/market');
-                    },
-                    response => {
-			    alert("Error, couldn't login");
-                    }
-                )}>
+			            history.push('/market');
+                    }).catch(e => {
+                        setError(true);
+                    })
+                }>
                     <CompanyName>Stonk Ponk</CompanyName>
                     <Label htmlFor="username">Username</Label>
                     <TextField id="username" type="text" required onChange={(e) => { setEmail(e.target.value) }} />
