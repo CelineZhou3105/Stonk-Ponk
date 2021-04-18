@@ -160,6 +160,7 @@ def rank(request, reverse=True):
         
         return HttpResponse(json.dumps(ret))  
     except Exception as e:
+        raise e
         return HttpResponseBadRequest("portfolio best bad request")
     return HttpResponseBadRequest("portfolio best really bad request")
 

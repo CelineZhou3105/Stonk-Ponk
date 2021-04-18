@@ -337,7 +337,7 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart points={JSON.parse(row.prev_week_prices)} />
+                                                <SummaryChart points={row.prev_week_prices} />
                                             </TableCell>
                                             <TableCell align="right">{row.price}</TableCell>
                                         </TableRow>

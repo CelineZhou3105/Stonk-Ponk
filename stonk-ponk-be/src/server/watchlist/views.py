@@ -23,9 +23,9 @@ def create_watchlist(request):
     name = body["watchlist_name"] 
 
     # how do we want to handle things that have been aleady created?
-    Watchlist.objects.create(user = user, name = name) 
-
-    return HttpResponse()
+    wl = Watchlist.objects.create(user = user, name = name) 
+    responseData = { "watchlist_id": wl.id }
+    return HttpResponse(json.dumps(responseData))
 
 @require_http_methods(["DELETE"])
 @require_token
@@ -36,45 +36,30 @@ def delete_watchlist(request):
     watchlist_id = body["watchlist_id"]
 
     try:
-        watchlist_to_delete = Watchlists.objects.get(id = watchlist_id, user = user) 
-        watchlist_to_delete.delete()
+        wl = Watchlist.objects.get(id = watchlist_id, user = user) 
+        if wl.user != user:
+            return HttpResponseBadRequest("you naughty naughty")
+        print(wl)
+        wl.delete()
     except Watchlist.DoesNotExist:
         return HttpResponseNotFound()
     
-    return HttpResponse()    
+    return HttpResponse() 
 
 @require_http_methods(["POST"])
 @require_token
-def add_stock_to_watchlist(request):
+def save_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
 
-    ticker = body["ticker"]
     watchlist = body["watchlist_id"]
     
     try:
         wl = Watchlist.objects.get(id = watchlist, user = user)
-        wl.add_stock(ticker)
+        wl.save_stocks(set(body["tickers"]))
     except Watchlist.DoesNotExist:
         return HttpResponseNotFound() 
     
-    return HttpResponse()    
-
-@require_http_methods(["DELETE"])
-@require_token
-def remove_stock_from_watchlist(request):
-    body = json.loads(request.body.decode("utf-8"))
-    user = get_user(request)
-
-    ticker = body["ticker"]
-    watchlist = body["watchlist_id"]
-
-    try:
-        wl = Watchlist.objects.get(id = watchlist, user = user)
-        wl.del_stock(ticker)
-    except Watchlist.DoesNotExist:
-        return HttpResponseNotFound() 
-
     return HttpResponse()    
 
 @require_http_methods(["GET"])
@@ -101,7 +86,7 @@ def get_watchlist_stocks(request):
     if watchlist.user != user:
         return HttpResponseBadRequest("you naughty naughty")
 
-    ret = {"stocks" : []}
+    ret = {"tickers" : []}
     for stock in StockWatch.objects.filter(watchlist = watchlist):
         pass
 

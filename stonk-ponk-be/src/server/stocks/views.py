@@ -21,16 +21,13 @@ def markets(request):
     
     return HttpResponse(responseData)
 
-
 @require_http_methods(["POST", "GET"])
 def stock_data(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
         responseData = stock_api.get_stock_data(body['ticker'])
-        for e in responseData:
-            e['date'] = e['date'].strftime("%Y-%m-%d")
+
         return HttpResponse(json.dumps(responseData))
-    
     except:
         return HttpResponseBadRequest("Stock Not Found")
 
@@ -38,11 +35,9 @@ def stock_data(request):
 def stock_prices(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
-
         responseData = stock_api.get_stock_prices(body['ticker'], body['interval_type'])
         
-        return HttpResponse(responseData)
-    
+        return HttpResponse(json.dumps(responseData))
     except:
         return HttpResponseBadRequest("Stock Not Found")
 
@@ -50,10 +45,8 @@ def stock_prices(request):
 def check_stocks(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
-
         responseData = stock_api.check_stocks(body['ticker'])
         
         return HttpResponse(json.dumps(responseData))
-    
     except:
         return HttpResponseBadRequest("Stock Not Found")

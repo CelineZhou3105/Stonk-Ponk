@@ -251,7 +251,7 @@ class StockOwnership(models.Model):
         self.save()
 
     def get_stock_name(self):
-        return json.loads(stock_api.get_stock_data(self.stock.ticker))['name']
+        return stock_api.get_stock_data(self.stock.ticker)['name']
 
     def get_stock_ticker(self):
         return self.stock.ticker

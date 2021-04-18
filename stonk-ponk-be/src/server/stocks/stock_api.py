@@ -78,7 +78,7 @@ def get_stock_data(ticker):
         stock_dict['fifty_two_week_range'] = quotes['fiftyTwoWeekRange']
         stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
 
-        return json.dumps(stock_dict)
+        return stock_dict
     
     except:
         raise Error("Stock Not Found")
@@ -136,9 +136,8 @@ def get_stock_prices(ticker, interval_type):
 
     for index, row in price_data.iterrows():
         index.to_pydatetime()
+        index = index.strftime("%Y-%m-%d")
         price_list.append({'date': index, 'price': row['close']})
-        #price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
-        
 
     return price_list
 
