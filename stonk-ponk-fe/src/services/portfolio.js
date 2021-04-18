@@ -7,7 +7,6 @@ import {
     GetPortfolioHealth
 } from '../api-links/constants';
 
-const token = localStorage.getItem('token');
 
 /**
  * getPortfolioSummary - sends a request to get the user's portfolio summary (pie chart, value, percentage change)
@@ -19,7 +18,7 @@ export async function getPortfolioSummary() {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': token,
+            'Authorization': localStorage.getItem('token'),
         },
     };
     return await fetch(GetPortfolioSummary + '?n=5', requestOptions)
@@ -47,7 +46,7 @@ export async function getPortfolioDetails() {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': token,
+            'Authorization': localStorage.getItem('token'),
         },
     };
     return await fetch(GetPortfolioDetails, requestOptions)
@@ -76,7 +75,7 @@ export async function editPortfolio(data) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': token,
+            'Authorization': localStorage.getItem('token'),
         },
         body: JSON.stringify(data)
     };
@@ -105,7 +104,7 @@ export async function getPortfolioBest(num_stocks) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': token,
+            'Authorization': localStorage.getItem('token'),
         },
     };
     return await fetch(GetPortfolioBestStocks + "?n=" + num_stocks, requestOptions)
@@ -134,7 +133,7 @@ export async function getPortfolioWorst(num_stocks) {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': token,
+            'Authorization': localStorage.getItem('token'),
         },
     };
     return await fetch(GetPortfolioWorstStocks + "?n=" + num_stocks, requestOptions)
@@ -162,7 +161,7 @@ export async function getPortfolioHealth() {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': token,
+            'Authorization': localStorage.getItem('token'),
         },
     };
     return await fetch(GetPortfolioHealth, requestOptions)
