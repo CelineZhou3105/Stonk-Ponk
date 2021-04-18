@@ -1,18 +1,18 @@
-import { 
-    EditPortfolio, 
-    GetPortfolioSummary, 
-    GetPortfolioBestStocks, 
-    GetPortfolioWorstStocks, 
+import {
+    EditPortfolio,
+    GetPortfolioSummary,
+    GetPortfolioBestStocks,
+    GetPortfolioWorstStocks,
     GetPortfolioDetails
 } from '../api-links/constants';
 
-const token = localStorage.getItem('token');
 
 /**
  * getPortfolioSummary - sends a request to get the user's portfolio summary (pie chart, value, percentage change)
  * @returns - An array of stocks owned by the user, the cumulative value of their portfolio, percentage change of the portfolio
  */
 export async function getPortfolioSummary() {
+    const token = localStorage.getItem('token');
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -41,6 +41,8 @@ export async function getPortfolioSummary() {
  * @returns - returns more details on the stocks of the portfolio (price, purchase date, units owned)
  */
 export async function getPortfolioDetails() {
+    const token = localStorage.getItem('token');
+
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -70,6 +72,8 @@ export async function getPortfolioDetails() {
  * @returns - nothing.
  */
 export async function editPortfolio(data) {
+    const token = localStorage.getItem('token');
+
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -99,6 +103,8 @@ export async function editPortfolio(data) {
  * @returns - an array of the user's best performing stocks (by profit)
  */
 export async function getPortfolioBest(num_stocks) {
+    const token = localStorage.getItem('token');
+
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -129,6 +135,8 @@ export async function getPortfolioBest(num_stocks) {
  * @returns - An array of the user's worst performing stocks (by loss)
  */
 export async function getPortfolioWorst(num_stocks) {
+    const token = localStorage.getItem('token');
+
     const requestOptions = {
         method: 'GET',
         headers: {

@@ -25,10 +25,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import CreateModal from './CreateModal';
-
 import { portfolio } from '../services/portfolio';
-
 import PortfolioPricesChart from './PortfolioPricesChart';
+import { watchlist } from '../services/watchlist';
 
 /**
  * StockTableHead - The header column of the table
@@ -129,7 +128,7 @@ function StockTable(props) {
     const [orderBy, setOrderBy] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [editMode, setEditMode] = useState(false);
-    const { data, headings, place, setRows, setPageDirection, page, setPage } = props;
+    const { data, headings, place, setRows, setPageDirection, page, setPage, watchlistId } = props;
 
     console.log(data);
 
@@ -157,52 +156,68 @@ function StockTable(props) {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const onChange = (e, changedRow, changedColumn) => {
-        const newValue = (changedColumn === 'last_purchased') ? e.target.value : e.target.value;
+        if (place === 'portfolio') {
+            const newValue = (changedColumn === 'last_purchased') ? e.target.value : e.target.value;
 
-        const newRows = data.map(row => {
-            if (row.ticker === changedRow.ticker) {
-                return { ...row, [changedColumn]: newValue };
-            } else {
-                return { ...row };
-            }
-        })
-        setRows(newRows);
+            const newRows = data.map(row => {
+                if (row.ticker === changedRow.ticker) {
+                    return { ...row, [changedColumn]: newValue };
+                } else {
+                    return { ...row };
+                }
+            })
+            setRows(newRows);
+        }
     };
 
-    function saveChanges() {
+    const saveChanges = () => {
         // TODO: Call the API to save changes
         const token = localStorage.getItem('token');
 
-        const newPortfolio = {};
-        const newStocks = [];
-        const newStockMapping = {};
+        if (place === 'portfolio') {
+            const newPortfolio = {};
+            const newStocks = [];
+            const newStockMapping = {};
 
-        for (let i = 0; i < data.length; i++) {
-            let currentTicker = data[i].ticker;
-            if (!(currentTicker in newStockMapping)) {
-                newStockMapping[currentTicker] = newStocks.length;
-                newStocks.push({
-                    ticker: currentTicker,
-                    transactions: []
+            for (let i = 0; i < data.length; i++) {
+                let currentTicker = data[i].ticker;
+                if (!(currentTicker in newStockMapping)) {
+                    newStockMapping[currentTicker] = newStocks.length;
+                    newStocks.push({
+                        ticker: currentTicker,
+                        transactions: []
+                    })
+                }
+                newStocks[newStockMapping[currentTicker]].transactions.push({
+                    date: data[i].first_purchase_date,
+                    volume: data[i].volume,
+                    price: data[i].vwap,
                 })
             }
-            newStocks[newStockMapping[currentTicker]].transactions.push({
-                date: data[i].first_purchase_date,
-                volume: data[i].volume,
-                price: data[i].vwap,
-            })
-        }
-        newPortfolio['stocks'] = newStocks;
+            newPortfolio['stocks'] = newStocks;
 
-        portfolio.editPortfolio(token, newPortfolio).then(() => {
-            setEditMode(false);
-            console.log("Changes saved.");
-            setPreviousRows(data);
-            setSelected([]);
-        }).catch(error => {
-            console.log("???");
-            alert(error);
-        })
+            portfolio.editPortfolio(token, newPortfolio).then(() => {
+                setEditMode(false);
+                console.log("Changes saved.");
+                setPreviousRows(data);
+                setSelected([]);
+            }).catch(error => {
+                console.log("???");
+                alert(error);
+            })
+        } else if (place === 'watchlist') {
+            watchlist.addStockToWatchlist(watchlistId, data)
+                .then(() => {
+                    alert('Added stocks to watchlist!');
+                })
+                .catch((error) => {
+                    Promise.resolve(error)
+                        .then((e) => {
+                            alert(`${e.status} ${e.statusText}`)
+                        })
+                })
+        }
+
     }
 
     function cancelChanges() {
@@ -259,11 +274,11 @@ function StockTable(props) {
             {(place === 'portfolio' || place === 'watchlist') &&
                 <RightAlignedButtonContainer>
                     {editMode ?
-                    <>
-                        <CustomButton id="save-button" backgroundColor="#00AD30" hoverColor="#2de361" onClick={() => saveChanges()}>Save</CustomButton>
-                        <CustomButton id="cancel-button" backgroundColor="#e80000" hoverColor="#ff5757" onClick={() => cancelChanges()}>Cancel</CustomButton>
-                    </>
-                    :   <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon />&nbsp;Edit {place === 'portfolio' ? 'Portfolio' : 'Watchlist'}</CustomButton>
+                        <>
+                            <CustomButton id="save-button" backgroundColor="#00AD30" hoverColor="#2de361" onClick={() => saveChanges()}>Save</CustomButton>
+                            <CustomButton id="cancel-button" backgroundColor="#e80000" hoverColor="#ff5757" onClick={() => cancelChanges()}>Cancel</CustomButton>
+                        </>
+                        : <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon />&nbsp;Edit {place === 'portfolio' ? 'Portfolio' : 'Watchlist'}</CustomButton>
                     }
                 </RightAlignedButtonContainer>
             }
@@ -310,7 +325,7 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <PortfolioPricesChart ticker={row.ticker} period="last_month"/>
+                                                <PortfolioPricesChart ticker={row.ticker} period="last_month" />
                                             </TableCell>
                                             {editMode ?
                                                 <>
@@ -327,8 +342,8 @@ function StockTable(props) {
 
                                             <TableCell align="right">{row.price.toFixed(2)}</TableCell>
                                             <TableCell align="right">{(row.volume * row.price).toFixed(2)}</TableCell>
-                                        </TableRow> :
-
+                                        </TableRow>
+                                        :
                                         <TableRow
                                             hover
                                             role="checkbox"
@@ -392,7 +407,7 @@ function StockTable(props) {
                 />
             }
             {createModalOpen &&
-                <CreateModal setVisibility={setCreateModalOpen} setRows={setRows} />
+                <CreateModal setVisibility={setCreateModalOpen} setRows={setRows} place={place} />
             }
         </div>
     )

@@ -272,3 +272,7 @@ export const NewsContainer = styled.div`
     margin: 20px 0;
     width: 100%;
 `
+
+export const WatchlistTable = styled.div`
+    width: 98%;
+`;

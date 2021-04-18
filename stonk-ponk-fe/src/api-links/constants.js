@@ -31,3 +31,11 @@ export const StockCheckLink = "http://localhost:8000/api/stocks/get_stock_name";
 // Stock News API calls
 export const StockNewsLink = "http://localhost:8000/api/news/get_news";
 export const MarketNewsLink = "http://localhost:8000/api/news/get_market_news";
+
+// Watchlist API calls
+export const GetWatchlistNameLink = "http://localhost:8000/api/watchlist/get_watchlists";
+export const CreateWatchlistLink = "http://localhost:8000/api/watchlist/create_watchlist";
+export const DeleteWatchlistLink = "http://localhost:8000/api/watchlist/delete_watchlist";
+export const GetWatchlistStockLink = "http://localhost:8000/api/watchlist/get_watchlist_stocks";
+export const AddStockToWatchlistLink = "http://localhost:8000/api/watchlist/add_stock_to_watchlist";
+export const RemoveStockFromWatchlistLink = "http://localhost:8000/api/watchlist/remove_stock_from_watchlist";

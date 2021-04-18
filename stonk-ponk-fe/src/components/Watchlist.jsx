@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from './Navigation';
-import { Container, PageContainer, FlexRowDiv, FlexRowEndDiv } from "../css/Div";
+import { Container, PageContainer, FlexRowDiv, FlexRowEndDiv, WatchlistTable } from "../css/Div";
 import { PageTitle, SubTitle, SubText } from "../css/Text";
 import { CustomButton } from '../css/Button';
 import Select from 'react-select';
@@ -15,6 +15,7 @@ const headings = [
 ];
 
 const Watchlist = () => {
+    const [watchlistId, setWatchlistId] = useState(-1);
     const [watchlistNames, setWatchlistNames] = useState([{ name: 'Select Watchlist' }]);
 
     useEffect(() => {
@@ -30,11 +31,11 @@ const Watchlist = () => {
                         alert(`${error.status} ${error.statusText}`);
                     })
             })
-    }, [])
+    }, [setWatchlistNames, watchlistNames])
 
     // hardcoded for now
     const [currentWatchlist, setCurrentWatchlist] = useState('Big tech companies');
-    const [watchlistData, setWatchlistData] = useState([]);
+    const [watchlistData, setWatchlistData] = useState([{ name: "NiSource Inc", ticker: "ni", price: 25.6200008392334 }]);
     const [page, setPage] = useState(0);
 
     return (
@@ -56,7 +57,9 @@ const Watchlist = () => {
                             <CustomButton backgroundColor="#44BCFF" hoverColor="#68c7fc" style={{ marginRight: "10px" }}>What if I owned this?</CustomButton>
                         </FlexRowDiv>
                     </FlexRowDiv>
-                    <StockTable style={{ width: "100%" }} data={watchlistData} headings={headings} place="watchlist" setRows={setWatchlistData} page={page} setPage={setPage}></StockTable>
+                    <WatchlistTable>
+                        <StockTable data={watchlistData} headings={headings} place="watchlist" setRows={setWatchlistData} page={page} setPage={setPage} watchlistId={watchlistId}></StockTable>
+                    </WatchlistTable>
                 </Container>
             </PageContainer>
         </>
