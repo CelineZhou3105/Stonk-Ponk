@@ -10,31 +10,29 @@ from rest_framework_jwt.utils import jwt_decode_handler
 import jwt.exceptions 
 
 from account.models import User
+from account.auth import require_token, get_user
 from portfolio.models import Portfolio, PortfolioStock, StockOwnership, Transaction
 from stocks import stock_api
 from watchlist.models import Watchlist, StockWatch
 
 @require_http_methods(["POST"])
+@require_token
 def create_watchlist(request):
-    token = request.headers["Authorization"]
-    payload = jwt_decode_handler(token)
-    user = User.objects.get(id=payload["user_id"])
-
     body = json.loads(request.body.decode("utf-8"))
-    r_email = body["email"]
-    watchlist_name = body["watchlist_name"] 
+    user = get_user(request)
+    name = body["watchlist_name"] 
 
-    Watchlist.objects.create(user = user, name = watchlist_name) 
+    # how do we want to handle things that have been aleady created?
+    Watchlist.objects.create(user = user, name = name) 
 
     return HttpResponse()
 
 @require_http_methods(["DELETE"])
+@require_token
 def delete_watchlist(request):
-    token = request.headers["Authorization"]
-    payload = jwt_decode_handler(token)
-    user = User.objects.get(id=payload["user_id"])
-
     body = json.loads(request.body.decode("utf-8"))
+    user = get_user(request)
+
     watchlist_id = body["watchlist_id"]
 
     try:
@@ -46,12 +44,11 @@ def delete_watchlist(request):
     return HttpResponse()    
 
 @require_http_methods(["POST"])
+@require_token
 def add_stock_to_watchlist(request):
-    token = request.headers["Authorization"]
-    payload = jwt_decode_handler(token)
-    user = User.objects.get(id=payload["user_id"])
-    
     body = json.loads(request.body.decode("utf-8"))
+    user = get_user(request)
+
     ticker = body["ticker"]
     watchlist = body["watchlist_id"]
     
@@ -64,12 +61,11 @@ def add_stock_to_watchlist(request):
     return HttpResponse()    
 
 @require_http_methods(["DELETE"])
+@require_token
 def remove_stock_from_watchlist(request):
-    token = request.headers["Authorization"]
-    payload = jwt_decode_handler(token)
-    user = User.objects.get(id=payload["user_id"])
-    
     body = json.loads(request.body.decode("utf-8"))
+    user = get_user(request)
+
     ticker = body["ticker"]
     watchlist = body["watchlist_id"]
 
@@ -82,33 +78,31 @@ def remove_stock_from_watchlist(request):
     return HttpResponse()    
 
 @require_http_methods(["GET"])
+@require_token
 def get_watchlists(request):
     #get all watchlists associated with a user 
-   
-    token = request.headers["Authorization"]
-    payload = jwt_decode_handler(token)
-    user = User.objects.get(id=payload["user_id"])
-
+    user = get_user(request)
     ret = {"watchlists" : []}
+
     for wl in Watchlist.objects.filter(user = user):
         ret["watchlists"].append({"id" : wl.id, "name" : wl.name})
 
     return HttpResponse(json.dumps(ret))
 
 @require_http_methods(["GET"])
+@require_token
 def get_watchlist_stocks(request):
     #given a watchlist id, return json array of stocks with relevant information
     
-    token = request.headers["Authorization"]
-    payload = jwt_decode_handler(token)
-    user = User.objects.get(id=payload["user_id"])
-    
     body = json.loads(request.body.decode("utf-8"))
-    ticker = body["ticker"]
+    user = get_user(request)
+   
     watchlist = Watchlist.objects.get(id = body["watchlist_id"])
+    if watchlist.user != user:
+        return HttpResponseBadRequest("you naughty naughty")
 
     ret = {"stocks" : []}
     for stock in StockWatch.objects.filter(watchlist = watchlist):
-        #append stock info here
-         pass
-    return HttpResponse()
+        pass
+
+    return HttpResponse(json.dumps(ret))

@@ -5,6 +5,6 @@ urlpatterns = [
     path('stocks/', include('stocks.urls')),
     path('portfolio/', include('portfolio.urls')),
     path('news/', include('news.urls')),
-    #path('watchlist/', include('watchlist.urls'))
+    path('watchlist/', include('watchlist.urls')),
 ]    
 

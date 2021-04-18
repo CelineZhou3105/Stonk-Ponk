@@ -17,7 +17,6 @@ import jwt.exceptions
 @require_http_methods(["POST", "GET"])
 def markets(request):
     body = json.loads(request.body.decode('utf-8'))
-    print(body)
     responseData = stock_api.get_market_data(body['type'], body['page_num'])
     
     return HttpResponse(responseData)
@@ -28,8 +27,9 @@ def stock_data(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
         responseData = stock_api.get_stock_data(body['ticker'])
-
-        return HttpResponse(responseData)
+        for e in responseData:
+            e['date'] = e['date'].strftime("%Y-%m-%d")
+        return HttpResponse(json.dumps(responseData))
     
     except:
         return HttpResponseBadRequest("Stock Not Found")

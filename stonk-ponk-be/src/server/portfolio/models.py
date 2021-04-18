@@ -171,7 +171,7 @@ class Portfolio(models.Model) :
         intervalType = 'last_six_months'
 
         portfolio_values = self.get_historical_value(intervalType)
-        market_prices = json.loads(stock_api.get_stock_prices(market_ticker, intervalType))
+        market_prices = stock_api.get_stock_prices(market_ticker, intervalType)
 
         portfolio_changes = []
         market_changes = []
@@ -186,8 +186,6 @@ class Portfolio(models.Model) :
         market_volatility = statistics.stdev(market_changes)
         adjusted_volatility = portfolio_volatility / market_volatility - 1
         # normal distribution around 1 scaled to 100
-        print(portfolio_volatility)
-        print(market_volatility)
         return math.e**(-(adjusted_volatility**2)) * 100
 
     def get_historical_value(self, intervalType):
@@ -197,7 +195,7 @@ class Portfolio(models.Model) :
         dates = set()
         for so in self.get_stock_ownerships():
             ticker = so.stock.ticker
-            prices = json.loads(stock_api.get_stock_prices(ticker, 'last_six_months'))
+            prices = stock_api.get_stock_prices(ticker, 'last_six_months')
             for e in prices:
                 dates.add(e['date'])
             stock_prices.append(prices)
@@ -213,7 +211,7 @@ class Portfolio(models.Model) :
             prev_price = prices[0]['price']
             for d in dates:
                 if d != prices[i]['date']:
-                    prices[i] = { 'date': d, 'price': prev_price }
+                    prices.insert(i, { 'date': d, 'price': prev_price })
                 else:
                     prev_price = prices[i]['price']
                 i += 1

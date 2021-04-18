@@ -135,10 +135,12 @@ def get_stock_prices(ticker, interval_type):
     price_data = si.get_data(ticker, start_date = start_date_string, end_date = end_date_string, interval = interval_string)
 
     for index, row in price_data.iterrows():
-        price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
+        index.to_pydatetime()
+        price_list.append({'date': index, 'price': row['close']})
+        #price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
         
 
-    return json.dumps(price_list)
+    return price_list
 
 
 def get_historical_price(ticker, date):
