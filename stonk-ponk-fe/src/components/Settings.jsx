@@ -21,6 +21,7 @@ const Settings = () => {
     const [emailAdd, setEmailAdd] = useState('');
     const [passNew, setPassNew] = useState('');
     const [passOld, setPassOld] = useState('');
+    const [passConfirm, setPassConfirm] = useState('');
 
     const [oldFirstName, setOldFirstName] = useState('');
     const [oldLastName, setOldLastName] = useState('');
@@ -71,18 +72,24 @@ const Settings = () => {
     }
 
     const ChangePassword = () => {
-        settings.changePassword(passNew, passOld).then(() => {
-            alert("You changed your login credentials! Please relog, logging out in 3 seconds...");
-            setTimeout(() => {
-                localStorage.removeItem('token');
-                history.push('/');
-            }, 3000);
-        }).catch((error) => {
-            Promise.resolve(error)
-                .then((e) => {
-                    alert(`${e.status} ${e.statusText}`);
-                });
-        });
+        if (checkPassword(passNew, passConfirm)) {
+            settings.changePassword(passNew, passOld).then(() => {
+                alert("You changed your login credentials! Please relog, logging out in 3 seconds...");
+                setTimeout(() => {
+                    localStorage.removeItem('token');
+                    history.push('/');
+                }, 3000);
+            }).catch((error) => {
+                Promise.resolve(error)
+                    .then((e) => {
+                        if (e.status === 403) {
+                            alert(`Old password incorrect. Please re-enter your password.`);
+                        } else {
+                            alert(`${e.status} ${e.statusText}`);
+                        }
+                    });
+            });
+        }
     }
 
     const CancelName = () => {
@@ -150,11 +157,13 @@ const Settings = () => {
                                     <FlexColumnCenterDiv>
                                         <SettingModalDiv>
                                             <SettingsModalLabel htmlFor="passOld">Old Password</SettingsModalLabel>
-                                            <TextField type="password" id="passOld" value={passOld} onChange={(e) => setPassOld(e.target.value)}></TextField>
+                                            <TextField type="password" id="passOld" value={passOld} required onChange={(e) => setPassOld(e.target.value)}></TextField>
                                             <SettingsModalLabel htmlFor="passNew">New Password</SettingsModalLabel>
-                                            <TextField type="password" id="passNew" value={passNew} onChange={(e) => setPassNew(e.target.value)}></TextField>
+                                            <TextField type="password" id="passNew" value={passNew} required onChange={(e) => setPassNew(e.target.value)}></TextField>
+                                            <SettingsModalLabel htmlFor="passConfirm">Confirm Password</SettingsModalLabel>
+                                            <TextField type="password" id="passConfirm" value={passConfirm} required onChange={(e) => setPassConfirm(e.target.value)}></TextField>
                                         </SettingModalDiv>
-                                        <EditButton aria-label="Save password button" onClick={ChangePassword} style={{marginTop: "8%"}}>Save Password</EditButton>
+                                        <EditButton aria-label="Save password button" onClick={ChangePassword} style={{ marginTop: "8%" }}>Save Password</EditButton>
                                     </FlexColumnCenterDiv>
                                 </ModalContent>
                             </ModalContainer>
