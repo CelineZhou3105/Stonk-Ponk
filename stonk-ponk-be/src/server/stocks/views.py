@@ -38,7 +38,7 @@ def stock_data(request):
 def stock_prices(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
-        print('Here')
+
         responseData = stock_api.get_stock_prices(body['ticker'], body['interval_type'])
         
         return HttpResponse(responseData)
