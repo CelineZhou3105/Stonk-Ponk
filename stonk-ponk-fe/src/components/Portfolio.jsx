@@ -13,6 +13,7 @@ import { CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import ProgressBar from 'react-animated-progress-bar';
+import { Tooltip } from '@material-ui/core';
 
 // Headings for each table column
 const tableHeadings = [
@@ -139,11 +140,13 @@ function Portfolio() {
                                         ({profit > 0 ? ('+TODO (DAILY CHANGE PERC)%') : ('TODO (DAILY CHANGE PERC)%')})
                                     </ColorText> */}
                             </SubText>
+                            <Tooltip title={"Contributions - How much you have invested Last Investment - Last time you invested"} placement="right">
                             <SubText>
                                 Contributions: ${(portfolioValue - profit).toFixed(2)}
                                 <br />
-                                    Last Investment: {new Date(lastContribution).toLocaleDateString()}
+                                Last Investment: {new Date(lastContribution).toLocaleDateString()}
                             </SubText>
+                            </Tooltip>
                         </PortfolioValueContainer>
                         <PortfolioHealthContainer>
                             <SubTitle>Portfolio Health</SubTitle>
@@ -207,7 +210,7 @@ function Portfolio() {
                                 return (
                                     <>
                                         <NormalText>{stock.name}</NormalText>
-                                        <SubText>{stock.ticker}<ColorText color="#00AD30">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
+                                        <SubText>{stock.ticker}<ColorText color="#00AD30">({stock.profit_margin > 0 ? '+' : ''}{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
                                     </>
                                 )
                             })}
@@ -223,7 +226,7 @@ function Portfolio() {
                                     return (
                                         <>
                                             <NormalText>{stock.name}</NormalText>
-                                            <SubText>{stock.ticker}<ColorText color="#e80000">(+{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
+                                            <SubText>{stock.ticker}<ColorText color="#e80000">({stock.profit_margin > 0 ? '+' : ''}{stock.profit_margin.toFixed(2)}%)</ColorText></SubText>
                                         </>
                                     )
                                 })}
