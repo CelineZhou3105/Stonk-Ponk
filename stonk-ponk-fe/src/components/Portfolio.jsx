@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Navigation from './Navigation';
 
 import { PageContainer, Container, PortfolioHealthContainer, PortfolioValueContainer, SectionRowDiv } from '../css/Div';
-import { SubText, SubTitle, NormalText, PageTitle, PortfolioValue, ColorText, PortfolioHealthText } from '../css/Text';
+import { PortfolioSuggestionSubText, PortfolioSuggestionTitle, SubText, SubTitle, NormalText, PageTitle, PortfolioValue, ColorText, PortfolioHealthText } from '../css/Text';
 
 import StockTable from './StockTable';
 
@@ -37,6 +37,7 @@ function Portfolio() {
     const [portfolioStocks, setPortfolioStocks] = useState('Loading');
     const [page, setPage] = useState(0);
     const [health, setHealth] = useState('Loading');
+    const [suggestions, setSuggestions] = useState('Loading');
 
     // Tracks whether there are errors, shows a banner if there is
     const [error, setError] = useState(false);
@@ -101,8 +102,9 @@ function Portfolio() {
     /* useEffect to get the health for portfolio */
     useEffect(() => {
         portfolio.getPortfolioHealth().then(response => {
-            console.log(response.scores);
+            console.log(response);
             setHealth(response.scores);
+            setSuggestions(response.suggestions);
         }).catch(error => {
             handleError(error);
         });
@@ -187,7 +189,7 @@ function Portfolio() {
                                         defColor={progressColours}
                                     />
                                     <Tooltip title={`Measures how much your portfolio's value shifts in proportion to changes in the S&P500 (market)`} placement='right'>
-                                        <PortfolioHealthText>Profit Score</PortfolioHealthText>
+                                        <PortfolioHealthText>Volatility Score</PortfolioHealthText>
                                     </Tooltip>
                                     <ProgressBar
                                         width="100%"
@@ -250,11 +252,14 @@ function Portfolio() {
                             </Container>
                             <Container flex_direction="column">
                                 <SubTitle>
-                                    Suggestions:
-                                    </SubTitle>
-                                <NormalText>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                                </NormalText>
+                                    Suggestions
+                                </SubTitle>
+                                <PortfolioSuggestionTitle>Beta Score</PortfolioSuggestionTitle>
+                                <PortfolioSuggestionSubText>{suggestions[0]}</PortfolioSuggestionSubText>
+                                <PortfolioSuggestionTitle>Profit Score</PortfolioSuggestionTitle>
+                                <PortfolioSuggestionSubText>{suggestions[1]}</PortfolioSuggestionSubText>
+                                <PortfolioSuggestionTitle>Volatility Score</PortfolioSuggestionTitle>
+                                <PortfolioSuggestionSubText>{suggestions[2]}</PortfolioSuggestionSubText>
                             </Container>
                         </>
                     )}
