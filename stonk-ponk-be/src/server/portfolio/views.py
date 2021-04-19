@@ -9,7 +9,8 @@ import jwt.exceptions
 
 from account.models import User
 from .models import Portfolio, PortfolioStock, StockOwnership, Transaction
-from stocks import stock_api
+#from stocks import stock_api
+from api_interface.stock_api_interface import StockApiInterface as stock_api
 from account.auth import require_token, get_user
 
 '''
@@ -221,12 +222,21 @@ def metrics(request):
     try:
         user = get_user(request)
         portfolio = Portfolio.objects.get(email=user.email)
+
         scores = {}
         scores["beta_score"] = round(portfolio.calc_diversification_score())
         scores["profit_score"] = round(portfolio.calc_profit_score())
         scores["volatility_score"] = round(portfolio.calc_volatility_score())
-        return HttpResponse(json.dumps({"scores": scores}))
-    except Exception as e:
-        raise e
+
+        suggestions = get_suggestions(scores)
+
+        responseData = {"scores": scores, "suggestions": suggestions}
+
+        return HttpResponse(json.dumps(responseData))
+    except:
         pass
     return HttpResponseBadRequest()
+
+def get_suggestions(scores):
+    beta_score = scores["beta_score"]
+    pass

@@ -1,6 +1,7 @@
 from django.db import models
 
-from stocks import stock_api
+#from stocks import stock_api
+from api_interface.stock_api_interface import StockApiInterface as stock_api
 
 import uuid
 import datetime
