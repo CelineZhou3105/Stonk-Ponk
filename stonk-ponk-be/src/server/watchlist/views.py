@@ -24,7 +24,7 @@ def create_watchlist(request):
 
     # how do we want to handle things that have been aleady created?
     wl = Watchlist.objects.create(user = user, name = name) 
-    responseData = { "watchlist_id": wl.id, "label": wl.name}
+    responseData = { "id": wl.id, "label": wl.name}
     return HttpResponse(json.dumps(responseData))
 
 @require_http_methods(["DELETE"])
@@ -33,13 +33,13 @@ def delete_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
 
-    watchlist_id = body["watchlist_id"]
+    watchlist_id = body["id"]
 
     try:
         wl = Watchlist.objects.get(id = watchlist_id, user = user) 
         if wl.user != user:
             return HttpResponseBadRequest("you naughty naughty")
-        print(wl)
+
         wl.delete()
     except Watchlist.DoesNotExist:
         return HttpResponseNotFound()
@@ -52,7 +52,7 @@ def save_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
 
-    watchlist = body["watchlist_id"]
+    watchlist = body["id"]
     
     try:
         wl = Watchlist.objects.get(id = watchlist, user = user)
