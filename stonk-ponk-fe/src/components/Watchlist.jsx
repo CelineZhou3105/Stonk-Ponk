@@ -57,10 +57,18 @@ const Watchlist = () => {
 
     const viewWatchlist = (label) => {
         setCurrentWatchlist(label);
-
+        watchlist.getWatchlistStocks()
+            .then((response) => response.json())
+            .then(json => {
+                setWatchlistData(json);
+            })
+            .catch((error) => {
+                Promise.resolve(error)
+                    .then((error) => {
+                        alert(`${error.status} ${error.statusText}`);
+                    })
+            })
     }
-
-
     return (
         <>
             <Navigation />
