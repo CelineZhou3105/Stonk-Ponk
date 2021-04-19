@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from './Navigation';
-import { Container, PageContainer, FlexRowDiv, FlexRowEndDiv, WatchlistTable } from "../css/Div";
+import { Container, PageContainer, FlexRowDiv, FlexRowEndDiv, WatchlistTable, ModalContainer, ModalContent, FlexColumnCenterDiv, SettingModalDiv } from "../css/Div";
 import { PageTitle, SubTitle, SubText } from "../css/Text";
-import { CustomButton } from '../css/Button';
+import { CustomButton, CloseButton } from '../css/Button';
+import { TextField, SettingsModalLabel } from '../css/Form';
 import Select from 'react-select';
 import { customStyles } from '../helpers/styles';
 import StockTable from './StockTable';
@@ -17,6 +18,12 @@ const headings = [
 const Watchlist = () => {
     const [watchlistId, setWatchlistId] = useState(-1);
     const [watchlistNames, setWatchlistNames] = useState([{ label: 'Select Watchlist' }]);
+    const [newWatchlist, setNewWatchlist] = useState('');
+    const [modalDisabled, setModalDisabled] = useState(true);
+
+    const [currentWatchlist, setCurrentWatchlist] = useState(watchlistNames[0].label);
+    const [watchlistData, setWatchlistData] = useState([]);
+    const [page, setPage] = useState(0);
 
     useEffect(() => {
         // watchlist.getWatchlistName()
@@ -33,22 +40,60 @@ const Watchlist = () => {
         //     })
     }, [setWatchlistNames, watchlistNames])
 
-    // hardcoded for now
-    const [currentWatchlist, setCurrentWatchlist] = useState(watchlistNames[0].label);
-    const [watchlistData, setWatchlistData] = useState([]);
-    const [page, setPage] = useState(0);
+    const addNewWatchlist = () => {
+        setWatchlistNames([...watchlistNames, { label: newWatchlist }]);
+        watchlist.createWatchlist(newWatchlist)
+            .then(() => {
+                console.log('Added new watchlist');
+                setModalDisabled(true);
+            })
+            .catch((error) => {
+                Promise.resolve(error)
+                    .then((error) => {
+                        alert(`${error.status} ${error.statusText}`);
+                    })
+            })
+    }
 
+    const viewWatchlist = (label) => {
+        setCurrentWatchlist(label);
+        watchlist.getWatchlistStocks()
+            .then((response) => response.json())
+            .then(json => {
+                setWatchlistData(json);
+            })
+            .catch((error) => {
+                Promise.resolve(error)
+                    .then((error) => {
+                        alert(`${error.status} ${error.statusText}`);
+                    })
+            })
+    }
     return (
         <>
             <Navigation />
             <PageContainer>
                 <FlexRowDiv>
                     <PageTitle>Watchlist</PageTitle>
-                    <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa">Add New Watchlist</CustomButton>
+                    <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setModalDisabled(false)}>Add New Watchlist</CustomButton>
+                    {!modalDisabled &&
+                        <ModalContainer>
+                            <ModalContent>
+                                <CloseButton onClick={() => setModalDisabled(true)} >&times;</CloseButton>
+                                <FlexColumnCenterDiv>
+                                    <SettingModalDiv>
+                                        <SettingsModalLabel htmlFor="newWatchlist">Watchlist Name</SettingsModalLabel>
+                                        <TextField type="text" id="newWatchlist" value={newWatchlist} required onChange={(e) => setNewWatchlist(e.target.value)}></TextField>
+                                    </SettingModalDiv>
+                                    <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={addNewWatchlist} style={{ marginTop: "8%" }}>Add</CustomButton>
+                                </FlexColumnCenterDiv>
+                            </ModalContent>
+                        </ModalContainer>
+                    }
                 </FlexRowDiv>
                 <FlexRowEndDiv>
                     <SubText style={{ marginRight: "10px" }}>Watchlist:</SubText>
-                    <Select styles={customStyles} options={watchlistNames} defaultValue={watchlistNames[0]} aria-label="Drop down to select to view different watchlists" onChange={(e) => setCurrentWatchlist(e.label)} />
+                    <Select styles={customStyles} options={watchlistNames} defaultValue={watchlistNames[0]} aria-label="Drop down to select to view different watchlists" onChange={(e) => viewWatchlist(e.label)} />
                 </FlexRowEndDiv>
                 <Container flex_direction="column" gap="1em" justify_content="center" align_items="center" style={{ padding: "20px" }}>
                     <FlexRowDiv style={{ width: "100%" }}>
