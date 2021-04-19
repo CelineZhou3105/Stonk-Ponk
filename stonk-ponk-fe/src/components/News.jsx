@@ -10,6 +10,7 @@ import {
     Container,
     FlexRowLeftDiv,
     NewsContainer,
+    NewsTitleContainer,
     PageContainer, 
     SectionRowDiv
 } from "../css/Div";
@@ -24,7 +25,7 @@ import { TextField as AutocompleteTextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Pagination from '@material-ui/lab/Pagination';
 import Alert from '@material-ui/lab/Alert';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, Chip } from '@material-ui/core';
 
 
 function News() {
@@ -200,7 +201,10 @@ function News() {
                             return (
                                 <NewsContainer key={index}>
                                     <div>
-                                        <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
+                                        <NewsTitleContainer>
+                                            <Chip color="primary" size="small" label={article.ticker}/>
+                                            <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
+                                        </NewsTitleContainer>
                                         <SubText>{article.published}</SubText>
                                         <SubText>{article.summary}...</SubText>
                                     </div>

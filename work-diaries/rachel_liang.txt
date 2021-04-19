@@ -48,6 +48,12 @@ Turns out there is another use case for tokens that we did not originally factor
 Working on separate ticket to handle expiration of tokens - user is now automatically logged out when a token is expired.
 Portfolio Health section - display the health of the portfolio to the user.
 
+Week 10
+Added tooltips & suggestions to the portfolio page. 
+Added a glossary section into the education page.
+Bug fixes for stock table.
+Moving our 'what if I buy/sell now' functionality to the portfolio page.
+
 
 
 

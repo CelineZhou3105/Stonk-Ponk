@@ -11,6 +11,7 @@ import graph from '../../images/diagram.png';
 import fund from '../../images/funds.png';
 import { EducationIcon } from '../../css/Image';
 import { PageTitle } from '../../css/Text';
+import { Glossary } from './Glossary';
 
 const Education = () => {
     // navigate back to sign in
@@ -51,6 +52,7 @@ const Education = () => {
                             Passive vs Active Investing
                         </EducationTile>
                     </EducationTileGrid>
+                    <Glossary />
             </PageContainer>
         </div>
     );

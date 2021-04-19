@@ -66,14 +66,24 @@ function StockTableHead(props) {
                             padding={cell.disablePadding ? 'none' : 'default'}
                             sortDirection={orderBy === cell.id ? order : false}
                         >
-                            {cell.id === "performance" ? (cell.label) : (
-                                <TableSortLabel
-                                    active={orderBy === cell.id}
-                                    direction={orderBy === cell.id ? order : 'asc'}
-                                    onClick={createSortHandler(cell.id)}
-                                >
-                                    {cell.label}
-                                </TableSortLabel>)
+                            {cell.id === "performance" 
+                                ? <Tooltip title='A graph showing the historical prices of the stock.' placement='bottom-start'>
+                                    <span>{cell.label}</span>
+                                </Tooltip>
+                                : (
+                                    <TableSortLabel
+                                        active={orderBy === cell.id}
+                                        direction={orderBy === cell.id ? order : 'asc'}
+                                        onClick={createSortHandler(cell.id)}
+                                    >
+                                        {cell.id === 'value' ? 
+                                            <Tooltip title='Total value is equal to #units owned * current market price' placement="bottom-end">
+                                                <span>{cell.label}</span>
+                                            </Tooltip>
+                                            : cell.label
+                                        }
+                                    </TableSortLabel>
+                                )  
                             }
                         </TableCell>
                     )

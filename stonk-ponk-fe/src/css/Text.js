@@ -71,6 +71,7 @@ export const SubText = styled.p`
     color: ${ props => props.color ? props.color : '#7B7B7B' };
     font-size: 14px;
     display: ${props => props.inline ? 'inline ': 'block'};
+    margin: ${props => props.margin ? props.margin : ''};
 `;
 
 export const PortfolioHealthText = styled.p`

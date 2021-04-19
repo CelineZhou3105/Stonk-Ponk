@@ -11,11 +11,12 @@ import { market } from '../services/market';
 
 import Alert from '@material-ui/lab/Alert';
 import { CircularProgress } from '@material-ui/core';
+import { Tooltip } from '@material-ui/core';
 
 // Headings for each table column
 const headings = [
     { id: 'name', disablePadding: true, numeric: false, label: 'Name' },
-    { id: 'performance', disablePadding: false, numeric: false, label: 'Performance' },
+    { id: 'performance', disablePadding: false, numeric: false, label: 'Performance (100 Days)' },
     { id: 'price', disablePadding: false, numeric: true, label: 'Current Price' },
 ];
 
@@ -103,7 +104,12 @@ function Market() {
                     {gainers !== 'Loading' && (
                         <Container flex_direction="column">
                             <SubTitle>Top 10 Gainers</SubTitle>
-                            <SubText>Based on daily change.</SubText>
+                            <Tooltip 
+                                title='The top 10 stocks whose prices changes the most in the past day.'
+                                placement="right"
+                            >
+                                <SubText margin="0 0 1em 0">*Based on daily change.</SubText>
+                            </Tooltip>
                             {gainers.map((stock, index) => {
                                 return(
                                     <div key={index}>
@@ -118,7 +124,12 @@ function Market() {
                     {losers !== 'Loading' && (
                         <Container flex_direction="column">
                             <SubTitle>Top 10 Losers</SubTitle>
-                            <SubText>Based on daily change.</SubText>
+                            <Tooltip 
+                                title='The 10 worst stocks whose prices changed the most in the past day.'
+                                placement="right"
+                            >
+                                <SubText margin="0 0 1em 0">*Based on daily change.</SubText>
+                            </Tooltip>
                             {losers.map((stock, index) => {
                                 return(
                                     <div key={index}>
