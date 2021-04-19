@@ -98,6 +98,18 @@ export const PortfolioHealthText = styled.p`
     margin: 0;
 `;
 
+export const PortfolioSuggestionTitle = styled.p`
+    color: '#7B7B7B';
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 0;
+`;
+
+export const PortfolioSuggestionSubText = styled.p`
+    color: '#7B7B7B';
+    font-size: 14px;
+`;
+
 export const SubTitle = styled.p`
     font-size: 20px;
     margin: 1em auto;
