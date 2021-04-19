@@ -25,8 +25,6 @@ def load_suggestions():
 
 def get_suggestions(s_type, score):
     try:
-        print(thresholds)
-        print(suggestions)
         for threshold in thresholds[s_type]:
             if threshold >= score:
                 return suggestions[s_type][threshold]
