@@ -24,7 +24,7 @@ def create_watchlist(request):
 
     # how do we want to handle things that have been aleady created?
     wl = Watchlist.objects.create(user = user, name = name) 
-    responseData = { "watchlist_id": wl.id }
+    responseData = { "watchlist_id": wl.id, "label": wl.name}
     return HttpResponse(json.dumps(responseData))
 
 @require_http_methods(["DELETE"])
@@ -70,7 +70,7 @@ def get_watchlists(request):
     ret = {"watchlists" : []}
 
     for wl in Watchlist.objects.filter(user = user):
-        ret["watchlists"].append({"id" : wl.id, "name" : wl.name})
+        ret["watchlists"].append({"id" : wl.id, "label" : wl.name})
 
     return HttpResponse(json.dumps(ret))
 
@@ -78,16 +78,12 @@ def get_watchlists(request):
 @require_token
 def get_watchlist_stocks(request):
     #given a watchlist id, return json array of stocks with relevant information
-    
-    body = json.loads(request.body.decode("utf-8"))
+    wid = int(request.GET.get("id"))
     user = get_user(request)
    
-    watchlist = Watchlist.objects.get(id = body["watchlist_id"])
+    watchlist = Watchlist.objects.get(id = wid)
     if watchlist.user != user:
         return HttpResponseBadRequest("you naughty naughty")
-
-    ret = {"tickers" : []}
-    for stock in StockWatch.objects.filter(watchlist = watchlist):
-        pass
-
+    tickers = [sw.ticker for sw in list(StockWatch.objects.filter(watchlist = watchlist))]
+    ret = {"tickers" : tickers}
     return HttpResponse(json.dumps(ret))
