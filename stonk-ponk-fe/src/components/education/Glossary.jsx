@@ -11,7 +11,13 @@ const glossary = [
     { word: 'Open', definition: 'The price at which a security first trades upon the opening of an exchange on a trading day'},
     { word: 'Bid', definition: 'represents the highest price someone is willing to pay for a share'},
     { word: 'Ask', definition: 'The minimum price that a seller is willing to take for a share of stock or other security'},
-    { word: 'Ask', definition: 'The minimum price that a seller is willing to take for a share of stock or other security'},
+    { word: 'High', definition: 'The highest price a stock was traded on an exchange on a trading day'},
+    { word: 'Low', definition: 'The lowest price a stock was traded on an exchange on a trading day'},
+    { word: 'Close', definition: 'The closing price of a traded stock on an exchange on a trading day'},
+    { word: 'Change', definition: 'The difference between the current price and the last trade of the previous day'},
+    { word: 'Market Cap', definition: 'How much a company is worth as determined by the stock market'},
+    { word: 'Portfolio', definition: 'Compilation of individual stocks that you own'},
+    { word: 'Watchlist', definition: 'A list of securities selected for special surveillance'},
     { word: 'Performance', definition: "The measurement of a stock's ability to increase or decrease the wealth of its shareholders"}
 ]
 
