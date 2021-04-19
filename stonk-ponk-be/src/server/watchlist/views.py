@@ -38,8 +38,10 @@ def delete_watchlist(request):
     watchlist_id = body["watchlist_id"]
 
     try:
-        watchlist_to_delete = Watchlists.objects.get(id = watchlist_id, user = user) 
-        watchlist_to_delete.delete()
+        wl = Watchlist.objects.get(id = watchlist_id, user = user) 
+        if wl.user != user:
+            return HttpResponseBadRequest("you naughty naughty")
+        wl.delete()
     except Watchlist.DoesNotExist:
         return HttpResponseNotFound()
     
@@ -91,24 +93,19 @@ def get_watchlists(request):
 
     ret = {"watchlists" : []}
     for wl in Watchlist.objects.filter(user = user):
-        ret["watchlists"].append({"id" : wl.id, "name" : wl.name})
+        ret["watchlists"].append({"id" : wl.id, "label" : wl.name})
 
     return HttpResponse(json.dumps(ret))
 
 @require_http_methods(["GET"])
 def get_watchlist_stocks(request):
     #given a watchlist id, return json array of stocks with relevant information
-    
-    token = request.headers["Authorization"]
-    payload = jwt_decode_handler(token)
-    user = User.objects.get(id=payload["user_id"])
-    
-    body = json.loads(request.body.decode("utf-8"))
-    ticker = body["ticker"]
-    watchlist = Watchlist.objects.get(id = body["watchlist_id"])
-
-    ret = {"stocks" : []}
-    for stock in StockWatch.objects.filter(watchlist = watchlist):
-        #append stock info here
-         pass
-    return HttpResponse()
+    wid = int(request.GET.get("id"))
+    user = get_user(request)
+   
+    watchlist = Watchlist.objects.get(id = wid)
+    if watchlist.user != user:
+        return HttpResponseBadRequest("you naughty naughty")
+    tickers = [sw.ticker for sw in list(StockWatch.objects.filter(watchlist = watchlist))]
+    ret = {"tickers" : tickers}
+    return HttpResponse(json.dumps(ret))
