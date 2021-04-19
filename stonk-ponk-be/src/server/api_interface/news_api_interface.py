@@ -36,7 +36,6 @@ class NewsApiInterface:
             try:
                 print(api_dict['name'])
                 api = NewsApiInterface.news_api_map[api_dict['name']]
-                print(api.get_market_news())
                 return api.get_market_news()
             except:
                 continue

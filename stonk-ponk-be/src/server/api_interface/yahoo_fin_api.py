@@ -22,12 +22,8 @@ class YfApi():
         market_stocks = self.api.get_day_most_active()
         self.num_calls += 1
         market_stocks = market_stocks.iloc[start_index:end_index]
-        market_stocks_list = []
-
-        for index, row in market_stocks.iterrows():
-            market_stocks_list.append(row['Symbol'])
-    
-        return market_stocks_list
+        
+        return market_stocks
 
     # types: losers, gainers, most_active
     def get_market_data(self, type, page_num):

@@ -6,11 +6,13 @@ import { GlossaryContainer } from '../../css/Div';
 import { SubText, SubTitle } from '../../css/Text';
 
 const glossary = [
-    { word: 'Ticker', definition: 'Blah'},
-    { word: 'ASX', definition: 'Blah'},
-    { word: 'Open', definition: 'Blah'},
-    { word: 'Bid', definition: 'Blah'},
-    { word: 'Call', definition: 'Blah'}
+    { word: 'Ticker', definition: 'Or stock symbol is a unique series of letters assigned to a security for trading purposes'},
+    { word: 'ASX', definition: 'Australian Stock Exchange'},
+    { word: 'Open', definition: 'The price at which a security first trades upon the opening of an exchange on a trading day'},
+    { word: 'Bid', definition: 'represents the highest price someone is willing to pay for a share'},
+    { word: 'Ask', definition: 'The minimum price that a seller is willing to take for a share of stock or other security'},
+    { word: 'Ask', definition: 'The minimum price that a seller is willing to take for a share of stock or other security'},
+    { word: 'Performance', definition: "The measurement of a stock's ability to increase or decrease the wealth of its shareholders"}
 ]
 
 const useStyles = makeStyles((theme) => ({

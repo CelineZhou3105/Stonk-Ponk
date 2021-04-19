@@ -37,8 +37,8 @@ class YfNewsApi():
 
             market_news = []
         
-            for stock in stock_data:
-                articles = self.get_news(stock)
+            for index, row in stock_data.iterrows():
+                articles = self.get_news(row['Symbol'])
                 articles = articles[:2]
             
                 for article in articles:
