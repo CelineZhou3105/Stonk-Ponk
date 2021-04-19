@@ -9,7 +9,8 @@ import jwt.exceptions
 
 from account.models import User
 from .models import Portfolio, PortfolioStock, StockOwnership, Transaction
-from stocks import stock_api
+#from stocks import stock_api
+from api_interface.stock_api_interface import StockApiInterface as stock_api
 from account.auth import require_token, get_user
 
 '''
