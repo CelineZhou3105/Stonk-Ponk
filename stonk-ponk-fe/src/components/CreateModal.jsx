@@ -16,10 +16,10 @@ function CreateModal(props) {
     const [purchasePrice, setPurchasePrice] = useState(0);
     const [unitsOwned, setUnitsOwned] = useState(1);
     const [purchaseDate, setPurchaseDate] = useState(Date.now());
-    const [selectedStock, setSelectedStock] = useState({ name: '', ticker: '' });
+    const [selectedStock, setSelectedStock] = useState({ name: '', ticker: '', price: '0' });
     const [input, setInput] = useState('');
     const [stockOptions, setStockOptions] = useState([]);
-
+    const [addButtonDisabled, setAddButtonDisabled] = useState(true);
     // For errors
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
@@ -88,13 +88,16 @@ function CreateModal(props) {
 
     // Gets the rest of the details of the stock selected
     useEffect(() => {
-        market.getStockDetail(stockTicker)
-            .then(response => response.json())
-            .then(res => {
-                setSelectedStock(res);
-            }).catch(() => {
-                console.log("No stock with that ticker");
-            })
+        if (stockTicker.length > 0) {
+            market.getStockDetail(stockTicker)
+                .then(response => response.json())
+                .then(res => {
+                    setSelectedStock(res);
+                    setAddButtonDisabled(false);
+                }).catch(() => {
+                    console.log("No stock with that ticker");
+                })
+        }
     }, [stockTicker])
 
     // Do nothing if the person clears the search bar, otherwise get news for the stock
@@ -148,7 +151,7 @@ function CreateModal(props) {
                             <InputUnderlineDiv width="100%" className="underline" />
                         </>
                     }
-                    <CustomButton type="submit" margin="2em auto" value="Add Stock" aria-label="Button to add stock">Add Stock</CustomButton>
+                    <CustomButton type="submit" margin="2em auto" value="Add Stock" aria-label="Button to add stock" disabled={addButtonDisabled}>Add Stock</CustomButton>
                 </CreateModalForm>
                 {error && (
                     <ColorText color="red">{errorMsg}</ColorText>

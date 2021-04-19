@@ -336,7 +336,8 @@ export const EducationTileGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1em;
-
+    margin-left: 20%;
+    margin-right: 20%;
     @media (max-width: 850px) {
         grid-template-columns: repeat(2, 1fr); 
     }

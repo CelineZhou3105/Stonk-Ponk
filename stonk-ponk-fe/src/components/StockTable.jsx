@@ -375,7 +375,7 @@ function StockTable(props) {
                                                         <NormalText>{row.name}</NormalText>
                                                         <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                                     </TableCell>
-                                                    <TableCell align="center">
+                                                    <TableCell align="right">
                                                         <PortfolioPricesChart ticker={row.ticker} period="last_month" />
                                                     </TableCell>
                                                     <TableCell align="right">{row.price.toFixed(2)}</TableCell>
