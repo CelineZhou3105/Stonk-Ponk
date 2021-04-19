@@ -97,3 +97,13 @@ export const CustomButton = styled.button`
         background-color: ${props => props.hoverColor ? props.hoverColor : '#b55cfa'};
     }
 `;
+
+/* Navigation */
+export const MenuButtonContainer = styled.button`
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    background-color: #af28ff;
+    border: none;
+    cursor: pointer;
+`;

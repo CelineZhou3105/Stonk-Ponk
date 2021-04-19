@@ -177,10 +177,6 @@ export const NavigationContainer = styled.div`
     background-color: #af28ff;
     color: white;
     box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
-
-    @media (max-width: 1280px) {
-        flex-direction: column;
-    }
 `;
 
 export const ProfileModal = styled.div`
@@ -218,6 +214,45 @@ export const ProfileModaItem = styled.div`
         background-color: #9f22ff3f;
         transition: background-color 1s;
     }
+`;
+
+export const MenuContainer = styled.div`
+    display: none;
+    flex-direction: column;
+    justify-content: left;
+    width: 100px;
+    background-color: #af28ff;
+
+    @media (max-width: 1280px) {
+        display: flex;
+    }
+`;
+
+export const SideBar = styled.div`
+    height: 100%; 
+    width: ${props => props.open ? '250px': 0}; 
+    position: fixed; 
+    z-index: 1; 
+    right: 0; 
+    top: 0;
+    background-color: #af28ff; 
+    overflow-x: hidden; 
+    padding-top: 60px;
+    transition: 0.5s; 
+    box-shadow: -4px -4px 4px rgba(0,0,0,0.2);
+
+    & > .closeBtn {
+        position: absolute;
+        top: 10px;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+`;
+
+export const PhotoMenuContainer = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
 /* Market Filters */
