@@ -1,0 +1,20 @@
+{
+	"beta": {
+		"50": "Your portfolio has significantly greater risk than the market (S&P 500). This suggests that your portfolio may be significantly under diversified (has too few stocks or is only invested within a few sectors). This may also mean that your portfolio is composed of more low cap stocks as rather than medium or large market cap stocks.",
+		"80": "Your portfolio has greater risk than the market (S&P 500). This suggests that your portfolio may be under diversified (has too few stocks or is invested within a few sectors). This may also mean that your portfolio is composed of more low and medium cap stocks as rather than large market cap stocks.",
+		"100": "Your portfolio holds a similar level of risk as the market (S&P 500). This suggests that your portfolio may be well diversified or hold stocks whose combined performance largely mirrors that of the market. This may also mean that your portfolio is composed of more large cap stocks rather than medium or low cap stocks."
+	},
+	"profit": {
+		"49": "Your portfolio position is at a loss. This means that, on average, the stocks in your portfolio have dropped in value compared to when you bought them. Your portfolio has returned less on investment than it would have if you had purchased into the S&P500 (Market) , at each purchase point.",
+		"50": "Your portfolio has broken even. This means that your portfolio value is the same as the total cost of each stock bought. However, your portfolio has returned less on investment than it would have if you had purchased into the S&P500 (Market), at each purchase point.",
+		"74": "Your portfolio is at a profit. This means that your portfolio value is greater than total cost of each stock bought. However, your portfolio has returned less on investment than it would have if you had purchased into the S&P500 (Market) , at each purchase point.",
+		"75": "Your portfolio is at a profit. This means that your portfolio value is greater than total cost of each stock bought. Your portfolio has returned on investment, the exact same amount than it would have if had purchased into the S&P500 (Market), at each purchase point.",
+		"100": "Your portfolio is at a profit. This means that your portfolio value is greater than total cost of each stock bought. Your portfolio has returned more on investment than it would have if had purchased into the S&P500 (Market), at each purchase point."
+	},
+	"volatility": {
+		"50": "Your portfolio is highly volatile. This means that your portfolio value is likely to change at a significantly higher rate in proportion to changes in the market (S&P 500).",
+		"80": "Your portfolio is volatile. This means that your portfolio value is likely to change at a higher rate in proportion to changes in the market (S&P 500).",
+		"99": "Your portfolio is fairly stable. This means that your portfolio value is likely to change proportionally to changes in the market (S&P 500).",
+		"100": "Your portfolio is very stable. This means that your portfolio value changes exactly in proportion to changes in the market (S&P 500)."
+	}
+}
