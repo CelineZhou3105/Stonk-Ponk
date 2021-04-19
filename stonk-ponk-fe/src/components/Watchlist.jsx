@@ -17,7 +17,7 @@ const headings = [
 
 const Watchlist = () => {
     const [watchlistId, setWatchlistId] = useState(-1);
-    const [watchlistNames, setWatchlistNames] = useState([{ label: 'Select Watchlist' }]);
+    const [watchlistNames, setWatchlistNames] = useState([{ id: -1, label: 'Select Watchlist' }]);
     const [newWatchlist, setNewWatchlist] = useState('');
     const [modalDisabled, setModalDisabled] = useState(true);
 
@@ -26,25 +26,29 @@ const Watchlist = () => {
     const [page, setPage] = useState(0);
 
     useEffect(() => {
-        // watchlist.getWatchlistName()
-        //     .then(response => response.json())
-        //     .then(json => {
-        //         console.log(json);
-        //         setWatchlistNames([...watchlistNames, json]);
-        //     })
-        //     .catch((error) => {
-        //         Promise.resolve(error)
-        //             .then((error) => {
-        //                 alert(`${error.status} ${error.statusText}`);
-        //             })
-        //     })
-    }, [setWatchlistNames, watchlistNames])
-
+        watchlist.getWatchlistName()
+            .then(response => response.json())
+            .then(json => {
+                console.log(json);
+                if (json.watchlists.length !== watchlistNames.length - 1) {
+                    setWatchlistNames(watchlistNames => watchlistNames.concat(json.watchlists));
+                }
+            })
+            .catch((error) => {
+                Promise.resolve(error)
+                    .then((error) => {
+                        alert(`${error.status} ${error.statusText}`);
+                    })
+            })
+    }, [])
+    console.log(watchlistNames);
     const addNewWatchlist = () => {
-        setWatchlistNames([...watchlistNames, { label: newWatchlist }]);
         watchlist.createWatchlist(newWatchlist)
-            .then(() => {
+            .then((response) => response.json())
+            .then(json => {
                 console.log('Added new watchlist');
+                console.log(json);
+                setWatchlistNames(watchlistNames => watchlistNames.concat(json));
                 setModalDisabled(true);
             })
             .catch((error) => {
@@ -55,12 +59,15 @@ const Watchlist = () => {
             })
     }
 
-    const viewWatchlist = (label) => {
-        setCurrentWatchlist(label);
-        watchlist.getWatchlistStocks()
+    const viewWatchlist = (watchlistLabel) => {
+        setCurrentWatchlist(watchlistLabel);
+        const id = watchlistNames.find((item) => item.label === watchlistLabel);
+        setWatchlistId(id.id);
+        watchlist.getWatchlistStocks(id.id)
             .then((response) => response.json())
             .then(json => {
-                setWatchlistData(json);
+                console.log(json);
+                // setWatchlistData(json);
             })
             .catch((error) => {
                 Promise.resolve(error)
@@ -108,7 +115,7 @@ const Watchlist = () => {
                 </Container>
             </PageContainer>
         </>
-    )
+    );
 }
 
 export default Watchlist;

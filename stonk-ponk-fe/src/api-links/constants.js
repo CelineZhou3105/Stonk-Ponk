@@ -37,5 +37,4 @@ export const GetWatchlistNameLink = "http://localhost:8000/api/watchlist/get_wat
 export const CreateWatchlistLink = "http://localhost:8000/api/watchlist/create_watchlist";
 export const DeleteWatchlistLink = "http://localhost:8000/api/watchlist/delete_watchlist";
 export const GetWatchlistStockLink = "http://localhost:8000/api/watchlist/get_watchlist_stocks";
-export const AddStockToWatchlistLink = "http://localhost:8000/api/watchlist/add_stock_to_watchlist";
-export const RemoveStockFromWatchlistLink = "http://localhost:8000/api/watchlist/remove_stock_from_watchlist";
+export const UpdateWatchlistLink = "http://localhost:8000/api/watchlist/save_watchlist";

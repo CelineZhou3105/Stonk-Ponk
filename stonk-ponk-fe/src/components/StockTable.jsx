@@ -207,9 +207,9 @@ function StockTable(props) {
                 alert(error);
             })
         } else if (place === 'watchlist') {
-            watchlist.addStockToWatchlist(watchlistId, data)
+            watchlist.updateStockToWatchlist(watchlistId, data)
                 .then(() => {
-                    alert('Added stocks to watchlist!');
+                    console.log('updated stocks to watchlist!');
                 })
                 .catch((error) => {
                     Promise.resolve(error)

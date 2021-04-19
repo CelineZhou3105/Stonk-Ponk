@@ -1,4 +1,4 @@
-import { GetWatchlistNameLink, CreateWatchlistLink, DeleteWatchlistLink, GetWatchlistStockLink, AddStockToWatchlistLink, RemoveStockFromWatchlistLink } from '../api-links/constants';
+import { GetWatchlistNameLink, CreateWatchlistLink, DeleteWatchlistLink, GetWatchlistStockLink, UpdateWatchlistLink } from '../api-links/constants';
 
 const getWatchlistName = async () => {
     const requestOptions = {
@@ -18,7 +18,7 @@ const getWatchlistName = async () => {
         })
 }
 
-const getWatchlistStocks = async () => {
+const getWatchlistStocks = async (id) => {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -27,7 +27,7 @@ const getWatchlistStocks = async () => {
             'Authorization': `${localStorage.getItem('token')}`,
         },
     };
-    return await fetch(GetWatchlistStockLink, requestOptions)
+    return await fetch(`${GetWatchlistStockLink}?id=${id}`, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
                 return Promise.resolve(response);
@@ -45,7 +45,7 @@ const createWatchlist = async (watchlistName) => {
             'Authorization': `${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            name: watchlistName,
+            watchlist_name: watchlistName,
         }),
     };
     return await fetch(CreateWatchlistLink, requestOptions)
@@ -66,7 +66,7 @@ const deleteWatchlist = async (id) => {
             'Authorization': `${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            watchlist_id: id,
+            id: id,
         }),
     };
     return await fetch(DeleteWatchlistLink, requestOptions)
@@ -78,7 +78,7 @@ const deleteWatchlist = async (id) => {
         })
 }
 
-const addStockToWatchlist = async (id, tickers) => {
+const updateStockToWatchlist = async (id, tickers) => {
     const requestOptions = {
         method: 'POST',
         headers: {
@@ -87,33 +87,11 @@ const addStockToWatchlist = async (id, tickers) => {
             'Authorization': `${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            watchlist_id: id,
+            id: id,
             tickers: tickers,
         }),
     };
-    return await fetch(AddStockToWatchlistLink, requestOptions)
-        .then(response => {
-            if (response.ok) { // if status code is 200
-                return response;
-            } // if status code is not 200
-            return Promise.reject(response);
-        })
-}
-
-const removeStockFromWatchlist = async (id, tickers) => {
-    const requestOptions = {
-        method: 'DELETE',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-            watchlist_id: id,
-            tickers: tickers,
-        }),
-    };
-    return await fetch(RemoveStockFromWatchlistLink, requestOptions)
+    return await fetch(UpdateWatchlistLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
                 return response;
@@ -127,6 +105,5 @@ export const watchlist = {
     getWatchlistStocks,
     createWatchlist,
     deleteWatchlist,
-    addStockToWatchlist,
-    removeStockFromWatchlist,
+    updateStockToWatchlist,
 };
