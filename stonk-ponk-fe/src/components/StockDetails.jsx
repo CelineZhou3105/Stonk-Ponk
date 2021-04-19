@@ -4,13 +4,13 @@ import { CustomButton } from '../css/Button';
 import StockDetailsChart from './StockDetailsChart';
 import Navigation from './Navigation';
 import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
-import { Container, ChartContainer, GraphAndPeriodDiv, NewsContainer, PageContainer, FlexRowDiv } from '../css/Div';
+import { Container, ChartContainer, GraphAndPeriodDiv, NewsContainer, NewsTitleContainer, PageContainer, FlexRowDiv } from '../css/Div';
 import { Link, NormalText, SubText } from '../css/Text';
 import { useParams } from "react-router-dom";
 import { PageTitle } from '../css/Text';
 import { market } from '../services/market';
 import { getStockDetailTooltipText } from '../helpers/tooltipText';
-import { Tooltip } from '@material-ui/core';
+import { Tooltip, Chip } from '@material-ui/core';
 import { getNews } from '../services/news';
 import Pagination from '@material-ui/lab/Pagination';
 
@@ -183,7 +183,10 @@ function StockDetails() {
                         return (
                             <NewsContainer>
                                 <div>
-                                    <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
+                                    <NewsTitleContainer>
+                                        <Chip color="primary" size="small" label={article.ticker}/>
+                                        <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
+                                    </NewsTitleContainer>
                                     <SubText>{article.published}</SubText>
                                     <SubText>{article.summary}...</SubText>
                                 </div>

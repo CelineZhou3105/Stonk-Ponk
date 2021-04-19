@@ -1,13 +1,10 @@
 from django.db import models
 
-#from stocks import stock_api
 from api_interface.stock_api_interface import StockApiInterface as stock_api
 
 import uuid
 import datetime
 import json
-import math
-import statistics
 
 class Portfolio(models.Model) :
     email = models.EmailField(('email address'), unique=True)
@@ -112,14 +109,7 @@ class Portfolio(models.Model) :
                 print("LOG: ERROR: could not process {} in get_investment".format(so.get_stock_ticker()))
         return tVal
     
-    def calc_diversification_score(self):
-        #gets weightage of stocks 
-        #checks asset allocations
-        #we calculate portfolio beta which is the portfolio's volatility in relation to the overall market
-
-        if len(self.get_stock_ownerships()) == 0:
-            return 0
-
+    def get_beta(self):
         total_beta = 0 # beta * volume
         total_value= 0 # sum of all the volume used in calcuating the beta
         for so in self.get_stock_ownerships():
@@ -136,15 +126,13 @@ class Portfolio(models.Model) :
                 total_value+= value
 
         value_weighted_beta = total_beta / total_value
+        return value_weighted_beta
 
-        # normal distribution around 1 scaled to 100
-        return math.e**(-(value_weighted_beta-1)**2) * 100
-
-    def calc_profit_score(self):
-        # go through all the transactions and purchase the same amount
-        profit_portfolio = self.get_value() - self.get_investment() 
-        profit_investment= 0
-        
+    '''
+    Instead of investing the portfolio stocks, what would have been the profit if we invested with the market index instead
+    '''
+    def get_hypothetical_market_profit(self):
+        profit = 0
         market_ticker = "^GSPC"
         market_index_price = stock_api.get_price(market_ticker)
 
@@ -152,51 +140,21 @@ class Portfolio(models.Model) :
             for trans in Transaction.objects.filter(stockOwnership=so):
                 price_dict = stock_api.get_historical_price(market_ticker, trans.purchase_date)
                 mid_price = price_dict["low"] + price_dict["high"]
-                profit_investment += (market_index_price - mid_price) * trans.purchase_vol
+                profit += (market_index_price - mid_price) * trans.purchase_vol
 
-        if profit_investment == 0:
-            return 0
+        return profit 
 
-        profit_normalised = profit_portfolio / profit_investment - 1
-
-        return (math.atan(0.1*profit_normalised+1)/math.pi*2+1)*50
-
-    def calc_volatility_score(self):
-        # go through all the risk in the portfolio
-        # do a weighted average
-        # compare that with the risk of the market ie ^SPY
-        if len(self.get_stock_ownerships()) == 0:
-            return 0
-
-        market_ticker = "^GSPC"
-        intervalType = 'last_six_months'
-
-        portfolio_values = self.get_historical_value(intervalType)
-        market_prices = stock_api.get_stock_prices(market_ticker, intervalType)
-
-        portfolio_changes = []
-        market_changes = []
-
-        for i in range(1, len(portfolio_values)):
-            portfolio_changes.append(portfolio_values[i]/portfolio_values[i-1]-1)
-
-        for i in range(1, len(market_prices)):
-            market_changes.append(market_prices[i]['price']/market_prices[i-1]['price']-1)
-        
-        portfolio_volatility = statistics.stdev(portfolio_changes)
-        market_volatility = statistics.stdev(market_changes)
-        adjusted_volatility = portfolio_volatility / market_volatility - 1
-        # normal distribution around 1 scaled to 100
-        return math.e**(-(adjusted_volatility**2)) * 100
-
-    def get_historical_value(self, intervalType):
+    '''
+    gets the price history of the current portfolio over the interval
+    '''
+    def get_historical_value(self, interval_type):
         stock_prices = [] # list of list
         stock_volume = [] # list
         
         dates = set()
         for so in self.get_stock_ownerships():
             ticker = so.stock.ticker
-            prices = stock_api.get_stock_prices(ticker, 'last_six_months')
+            prices = stock_api.get_stock_prices(ticker, interval_type)
             for e in prices:
                 dates.add(e['date'])
             stock_prices.append(prices)
@@ -211,7 +169,7 @@ class Portfolio(models.Model) :
             i = 0
             prev_price = prices[0]['price']
             for d in dates:
-                if d != prices[i]['date']:
+                if len(prices) <= i or d != prices[i]['date']:
                     prices.insert(i, { 'date': d, 'price': prev_price })
                 else:
                     prev_price = prices[i]['price']

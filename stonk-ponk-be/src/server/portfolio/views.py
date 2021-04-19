@@ -3,15 +3,13 @@ import json
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
 
-from rest_framework_jwt.utils import jwt_decode_handler
-
-import jwt.exceptions 
-
 from account.models import User
-from .models import Portfolio, PortfolioStock, StockOwnership, Transaction
-#from stocks import stock_api
 from api_interface.stock_api_interface import StockApiInterface as stock_api
 from account.auth import require_token, get_user
+
+from .metrics import calc_diversification_score, calc_profit_score, calc_volatility_score
+from .suggestions import get_suggestions
+from .models import Portfolio, PortfolioStock, StockOwnership, Transaction
 
 '''
 request
@@ -224,19 +222,32 @@ def metrics(request):
         portfolio = Portfolio.objects.get(email=user.email)
 
         scores = {}
-        scores["beta_score"] = round(portfolio.calc_diversification_score())
-        scores["profit_score"] = round(portfolio.calc_profit_score())
-        scores["volatility_score"] = round(portfolio.calc_volatility_score())
+        scores["beta_score"] = round(calc_diversification_score(portfolio))
+        scores["profit_score"] = round(calc_profit_score(portfolio))
+        scores["volatility_score"] = round(calc_volatility_score(portfolio))
 
-        suggestions = get_suggestions(scores)
+        suggestions = []
+
+        suggestions.append(get_suggestions("beta", scores["beta_score"]))
+        suggestions.append(get_suggestions("profit", scores["profit_score"]))
+        suggestions.append(get_suggestions("volatility", scores["volatility_score"]))
 
         responseData = {"scores": scores, "suggestions": suggestions}
 
         return HttpResponse(json.dumps(responseData))
-    except:
+    except Exception as e:
         pass
     return HttpResponseBadRequest()
 
-def get_suggestions(scores):
-    beta_score = scores["beta_score"]
-    pass
+
+         
+    
+
+    
+    
+
+
+
+
+
+

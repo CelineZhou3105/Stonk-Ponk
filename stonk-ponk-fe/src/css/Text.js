@@ -20,7 +20,15 @@ export const NavList = styled.ul`
     padding: 0; 
 
     @media (max-width: 1280px) {
-        order: 3;
+        display: none;
+    }
+`;
+
+export const CollapsedNavList = styled.ul`
+    padding: 0; 
+
+    & > a {
+        text-decoration: none;
     }
 `;
 
@@ -63,6 +71,16 @@ export const NavListItem = styled.li`
 
     @media (max-width: 500px) {
         padding: 0.5em;
+    }
+`;
+
+export const CollapsedNavItem = styled.li`
+    display: block;
+    padding: 20px;
+    color: #FFF;
+
+    &:hover {
+        background-color: #c869ff;
     }
 `;
 
