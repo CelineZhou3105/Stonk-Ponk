@@ -20,7 +20,7 @@ def markets(request):
     body = json.loads(request.body.decode('utf-8'))
     responseData = stock_api.get_market_data(body['type'], body['page_num'])
     
-    return HttpResponse(responseData)
+    return HttpResponse(json.dumps(responseData))
 
 @require_http_methods(["POST", "GET"])
 def stock_data(request):

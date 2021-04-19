@@ -66,7 +66,7 @@ class YfApi():
 
             market_stocks_list.append(market_stock_dict)
 
-        return json.dumps(market_stocks_list)
+        return market_stocks_list
 
     #gets data for individual stocks
     #returns: stock name, price, bid, ask, high, low, open, close, change in price, market
@@ -94,8 +94,7 @@ class YfApi():
             stock_dict['fifty_two_week_range'] = quotes['fiftyTwoWeekRange']
             stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
 
-            print(stock_dict)
-            return json.dumps(stock_dict)
+            return stock_dict
     
         except:
             raise Error("Stock Not Found")
@@ -154,28 +153,23 @@ class YfApi():
 
         price_data = self.api.get_data(ticker, start_date = start_date_string, end_date = end_date_string, interval = interval_string)
         self.num_calls += 1
-    
+
         for index, row in price_data.iterrows():
-            price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
+            index.to_pydatetime()
+            index = index.strftime("%Y-%m-%d")
+            price_list.append({'date': index, 'price': row['close']})
         
-
-        return json.dumps(price_list)
-
+        return price_list
 
     def get_historical_price(self, ticker, date):
         start_date = date.strftime("%m/%d/%Y")
-        
-        end_date = date.strftime("%m/%d/%Y")
-        
-        price_data = self.api.get_data(ticker, start_date = start_date, end_date = end_date, interval = "1d")
-        self.num_calls += 1
-        
+        end_date = (date+timedelta(days=1)).strftime("%m/%d/%Y")
+        price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = "1d")
+
         price_dict = {}
-        
         for index, row in price_data.iterrows():
             price_dict['low'] = row['low']
             price_dict['high'] = row['high']
-
         return price_dict
 
     def check_stock(self, ticker):
