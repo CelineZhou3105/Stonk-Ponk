@@ -18,11 +18,9 @@ import jwt.exceptions
 @require_http_methods(["POST", "GET"])
 def markets(request):
     body = json.loads(request.body.decode('utf-8'))
-    print(body)
     responseData = stock_api.get_market_data(body['type'], body['page_num'])
     
     return HttpResponse(responseData)
-
 
 @require_http_methods(["POST", "GET"])
 def stock_data(request):
@@ -30,8 +28,7 @@ def stock_data(request):
         body = json.loads(request.body.decode('utf-8'))
         responseData = stock_api.get_stock_data(body['ticker'])
 
-        return HttpResponse(responseData)
-    
+        return HttpResponse(json.dumps(responseData))
     except:
         return HttpResponseBadRequest("Stock Not Found")
 
@@ -39,11 +36,9 @@ def stock_data(request):
 def stock_prices(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
-        print('Here')
         responseData = stock_api.get_stock_prices(body['ticker'], body['interval_type'])
         
-        return HttpResponse(responseData)
-    
+        return HttpResponse(json.dumps(responseData))
     except:
         return HttpResponseBadRequest("Stock Not Found")
 
@@ -51,10 +46,8 @@ def stock_prices(request):
 def check_stocks(request):
     try:
         body = json.loads(request.body.decode('utf-8'))
-
         responseData = stock_api.check_stocks(body['ticker'])
         
         return HttpResponse(json.dumps(responseData))
-    
     except:
         return HttpResponseBadRequest("Stock Not Found")

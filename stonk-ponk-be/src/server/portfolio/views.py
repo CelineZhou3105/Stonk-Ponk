@@ -161,6 +161,7 @@ def rank(request, reverse=True):
         
         return HttpResponse(json.dumps(ret))  
     except Exception as e:
+        raise e
         return HttpResponseBadRequest("portfolio best bad request")
     return HttpResponseBadRequest("portfolio best really bad request")
 
@@ -190,7 +191,7 @@ def edit(request):
 
         for so in portfolio.get_stock_ownerships():
             so.delete()
-
+        #print(body)
         for s in body["stocks"]:
             ticker = s["ticker"]
             for t in s["transactions"]:
@@ -200,6 +201,33 @@ def edit(request):
             so.recalculate()
     except Exception as e:
         print(e)
+        raise e
         return HttpResponseBadRequest()
     return HttpResponse()
-        
+
+'''
+request
+    empty as token is in header
+
+response
+    {
+        beta_score : <number>,
+        profit_score : <number>,
+        volatility_score : <number>
+    }
+'''
+@require_http_methods(["GET"])
+@require_token
+def metrics(request):
+    try:
+        user = get_user(request)
+        portfolio = Portfolio.objects.get(email=user.email)
+        scores = {}
+        scores["beta_score"] = round(portfolio.calc_diversification_score())
+        scores["profit_score"] = round(portfolio.calc_profit_score())
+        scores["volatility_score"] = round(portfolio.calc_volatility_score())
+        return HttpResponse(json.dumps({"scores": scores}))
+    except Exception as e:
+        raise e
+        pass
+    return HttpResponseBadRequest()

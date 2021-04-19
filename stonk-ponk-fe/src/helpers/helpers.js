@@ -15,7 +15,7 @@ export const checkPassword = (pass, passConfirm) => {
         alert("Password must include at least 1 number.");
         return false;
     }
-    if (pass.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]+/) === null) {
+    if (pass.match(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/) === null) {
         alert("Password must include at least 1 special character.");
         return false;
     }

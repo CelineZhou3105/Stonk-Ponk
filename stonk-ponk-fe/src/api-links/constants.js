@@ -9,7 +9,8 @@ export const ForgotPasswordLink = "http://localhost:8000/api/account/forgot_pass
 
 // Settings page
 export const ChangeNameLink = "http://localhost:8000/api/account/change_name";
-export const ChangeLoginCredentialsLink = "http://localhost:8000/api/account/change_login_credentials";
+export const ChangeEmailLink = "http://localhost:8000/api/account/change_email";
+export const ChangePasswordWithAuthLink = "http://localhost:8000/api/account/change_password_with_auth";
 export const GetUserDetailsLink = "http://localhost:8000/api/account/get_user_details";
 
 
@@ -19,7 +20,7 @@ export const GetPortfolioSummary = "http://localhost:8000/api/portfolio/summary"
 export const GetPortfolioDetails = "http://localhost:8000/api/portfolio/details"; // Actual stocks owned
 export const GetPortfolioBestStocks = "http://localhost:8000/api/portfolio/best";
 export const GetPortfolioWorstStocks = "http://localhost:8000/api/portfolio/worst";
-
+export const GetPortfolioHealth = "http://localhost:8000/api/portfolio/metrics";
 
 // Stock API calls
 export const MarketsLink = "http://localhost:8000/api/stocks/markets";

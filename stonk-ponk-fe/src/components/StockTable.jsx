@@ -170,9 +170,6 @@ function StockTable(props) {
     };
 
     function saveChanges() {
-        // TODO: Call the API to save changes
-        const token = localStorage.getItem('token');
-
         const newPortfolio = {};
         const newStocks = [];
         const newStockMapping = {};
@@ -194,7 +191,7 @@ function StockTable(props) {
         }
         newPortfolio['stocks'] = newStocks;
 
-        portfolio.editPortfolio(token, newPortfolio).then(() => {
+        portfolio.editPortfolio(newPortfolio).then(() => {
             setEditMode(false);
             console.log("Changes saved.");
             setPreviousRows(data);
@@ -225,6 +222,7 @@ function StockTable(props) {
     const handleClick = (event, ticker) => {
         const selectedIndex = selected.indexOf(ticker);
         let newSelected = [];
+        
 
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, ticker);
@@ -239,7 +237,9 @@ function StockTable(props) {
             );
         }
 
-        setSelected(newSelected);
+        if (editMode) {
+            setSelected(newSelected);
+        }
     };
 
     const handleDelete = () => {
@@ -267,7 +267,9 @@ function StockTable(props) {
                     }
                 </RightAlignedButtonContainer>
             }
-            <TableToolbar numSelected={selected.length} place={place} handleDelete={handleDelete}></TableToolbar>
+            {(place === 'portfolio') && (editMode === true) && (
+                <TableToolbar numSelected={selected.length} place={place} handleDelete={handleDelete}></TableToolbar>
+            )}
             <TableContainer>
                 <Table
                     size="medium"
@@ -340,7 +342,7 @@ function StockTable(props) {
                                                 <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <SummaryChart points={JSON.parse(row.prev_week_prices)} />
+                                                <SummaryChart points={row.prev_week_prices} />
                                             </TableCell>
                                             <TableCell align="right">{row.price}</TableCell>
                                         </TableRow>

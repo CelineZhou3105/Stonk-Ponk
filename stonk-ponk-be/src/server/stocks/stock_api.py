@@ -78,7 +78,7 @@ def get_stock_data(ticker):
         stock_dict['fifty_two_week_range'] = quotes['fiftyTwoWeekRange']
         stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
 
-        return json.dumps(stock_dict)
+        return stock_dict
     
     except:
         raise Error("Stock Not Found")
@@ -135,15 +135,16 @@ def get_stock_prices(ticker, interval_type):
     price_data = si.get_data(ticker, start_date = start_date_string, end_date = end_date_string, interval = interval_string)
 
     for index, row in price_data.iterrows():
-        price_list.append({'date': str(index).strip(" 0:"), 'price': row['close']})
-        
+        index.to_pydatetime()
+        index = index.strftime("%Y-%m-%d")
+        price_list.append({'date': index, 'price': row['close']})
 
-    return json.dumps(price_list)
+    return price_list
 
 
 def get_historical_price(ticker, date):
     start_date = date.strftime("%m/%d/%Y")
-    end_date = date.strftime("%m/%d/%Y")
+    end_date = (date+timedelta(days=1)).strftime("%m/%d/%Y")
     price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = "1d")
 
     price_dict = {}

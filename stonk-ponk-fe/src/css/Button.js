@@ -20,6 +20,28 @@ export const EditButton = styled.button`
     margin: 5px;
 `;
 
+// Save changes on the settings page
+export const SaveButton = styled.button`
+    ${ButtonStyle}
+    background-color: #2de361;
+    padding: 15px;
+    margin: 5px;
+    &:hover {
+        background-color: #61e888;
+    }
+`;
+
+// Cancel changes on the settings page
+export const CancelButton = styled.button`
+    ${ButtonStyle}
+    background-color: #ff5757;
+    padding: 15px;
+    margin: 5px;
+    &:hover {
+        background-color: #fa7a7a;
+    }
+`;
+
 /* Education Tile - for each button on the education page */
 export const EducationTile = styled.button`
     ${ButtonStyle}
@@ -30,6 +52,7 @@ export const EducationTile = styled.button`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
 `;
 
 /* SearchButton - used to trigger the search functionality */
@@ -61,7 +84,7 @@ export const CustomButton = styled.button`
     border-radius: 5px;
     font-size: 16px;
     background-color: ${props => props.backgroundColor ? props.backgroundColor : '#9e22ff'};
-    color: ${props => props.color ? props.color: 'white'};
+    color: ${props => props.color ? props.color : 'white'};
     padding: 15px;
     transition: background-color 0.5s;
     width: 200px;

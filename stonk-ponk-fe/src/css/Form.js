@@ -26,7 +26,9 @@ function createLabel(width, marginBottom, marginTop) {
 
 export const Label = createLabel("100%", "0", "5%");
 
-export const SettingsLabel = createLabel("100%", "20%", "20%");
+export const SettingsLabel = createLabel("30%", "20%", "20%");
+
+export const SettingsModalLabel = createLabel("30%", "5%", "5%");
 
 
 function createTextField(width) {
@@ -62,6 +64,13 @@ export const SignUpBtn = styled.input`
     width: 15%;
     margin: 20px;
     ${FlexCenter}
+`;
+
+export const CreateModalForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
 `;
 
 /* Generic elements */
