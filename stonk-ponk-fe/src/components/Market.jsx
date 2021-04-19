@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Navigation from './Navigation';
 import { Container, FilterContainer, SectionRowDiv, PageContainer } from '../css/Div';
 import { ColorText, NormalText, PageTitle, SubText, SubTitle } from '../css/Text';
-import Search from './Search';
 
 import StockTable from './StockTable';
 
@@ -12,6 +11,8 @@ import { market } from '../services/market';
 import Alert from '@material-ui/lab/Alert';
 import { CircularProgress } from '@material-ui/core';
 import { Tooltip } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { TextField as AutocompleteTextField } from '@material-ui/core';
 
 // Headings for each table column
 const headings = [
@@ -22,7 +23,6 @@ const headings = [
 
 function Market() {
     // Component will rerender upon filtering the rows
-    const [marketData, setMarketData] = useState([]);
     const [rows, setRows] = useState([]);
     const [page, setPage] = useState(0);
     const [pageDirection, setPageDirection] = useState('right');
@@ -34,6 +34,49 @@ function Market() {
     // Tracks whether there are errors - used for showing a banner to the user
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState(''); 
+
+    // User input into the search bar
+    const [input, setInput] = useState(null); 
+
+    // Options for stocks in the search bar
+    const [stockOptions, setStockOptions] = useState([]);
+
+    // Aborter for cancelling previous API calls
+    const lastAbortController = useRef();
+
+    // Makes an API call to retrieve search results when user has entered a ticker
+    useEffect(() => {
+        if (input !== null) {
+            if (lastAbortController.current) {
+                lastAbortController.current.abort();
+            }
+            // Create new AbortController for the new request and store it in the ref
+            const currentAbortController = new AbortController();
+            lastAbortController.current = currentAbortController;
+
+            const currentPromise = market.checkTickerExists(input, currentAbortController)
+            .then(response => response.json())
+            
+            currentPromise
+            .then(res => {
+                console.log(res);
+                setStockOptions(res);
+            }).catch(error => {
+                // Do nothing - this means there are no search results, which is normal
+            })
+        }
+    }, [input])
+
+    // Get market news after the person clears the search bar, otherwise get news for the stock
+    const handleInputChange = (event, value, reason) => {
+        if (reason === "clear" ||  value === '') {
+            // Set it back to market news
+            setInput(null);
+        } else {
+            console.log("Getting results for...", value);
+            setInput(value);
+        }
+    }
 
     // Handle errors when they are returned by the fetch calls
     const handleError = useCallback((error) => {
@@ -56,7 +99,6 @@ function Market() {
             market.getMarketData('most_active', page).then(response => {
                 console.log(response);
                 setRows(rows => rows.concat(response));
-                setMarketData(response);
             }).catch(error => {
                 handleError(error);
             });
@@ -92,7 +134,23 @@ function Market() {
             <PageContainer>
                 <PageTitle>Market</PageTitle>
                 <FilterContainer>
-                    <Search setResults={setRows} options={marketData} ></Search>
+                    <Autocomplete
+                        style={{ width: 300 }}
+                        options={stockOptions}
+                        getOptionLabel={(option) => option.name}
+                        onChange={(e, value) => { 
+                            if (value !== null) {
+                                history.push(`/stocks/${value.ticker}`);
+                            }
+                        }}
+                        renderInput={(params) => <AutocompleteTextField {...params} label="Search for a particular stock..." variant="outlined" />}
+                        onInputChange={(e, value, reason) => { 
+                            console.log("Setting input to: ", value); 
+                            handleInputChange(e, value, reason);
+                        }}
+                        noOptionsText="No stocks found."
+                        filterOptions={x => x}
+                    />
                 </FilterContainer>
                 {(gainers === 'Loading' || losers === 'Loading') &&
                     <CircularProgress />

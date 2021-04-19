@@ -105,6 +105,13 @@ export const PortfolioSuggestionTitle = styled.p`
     margin-bottom: 0;
 `;
 
+export const ModalSuggestionTitle = styled.p`
+    color: '#7B7B7B';
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 0;
+`;
+
 export const PortfolioSuggestionSubText = styled.p`
     color: '#7B7B7B';
     font-size: 14px;

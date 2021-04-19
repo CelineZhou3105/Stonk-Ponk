@@ -1,19 +1,34 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Navigation from './Navigation';
 
-import { PageContainer, Container, PortfolioHealthContainer, PortfolioValueContainer, SectionRowDiv } from '../css/Div';
-import { PortfolioSuggestionSubText, PortfolioSuggestionTitle, SubText, SubTitle, NormalText, PageTitle, PortfolioValue, ColorText, PortfolioHealthText } from '../css/Text';
+import { ModalContainer, ModalContent, PageContainer, Container, PortfolioHealthContainer, PortfolioValueContainer, SectionRowDiv, LeftButtonContainer, ModalStocksContainer } from '../css/Div';
+import { 
+    PortfolioSuggestionSubText,
+    PortfolioSuggestionTitle,
+    SubText,
+    SubTitle,
+    NormalText,
+    PageTitle, 
+    PortfolioValue,
+    ColorText,
+    PortfolioHealthText,
+    ModalSuggestionTitle
+} from '../css/Text';
 
 import StockTable from './StockTable';
+import { CustomButton, CloseButton } from '../css/Button';
+
 
 import { portfolio } from '../services/portfolio';
 
 import PortfolioChart from './PortfolioChart';
-import { CircularProgress } from '@material-ui/core';
+import { Chip, CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
 import ProgressBar from 'react-animated-progress-bar';
 import { Tooltip } from '@material-ui/core';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 // Headings for each table column
 const tableHeadings = [
@@ -25,6 +40,33 @@ const tableHeadings = [
     { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price (AUD)' },
     { id: 'value', disablePadding: false, numeric: true, label: 'Total Value (AUD)' },
 ];
+
+// Suggestions based on your portfolio makeup
+const noStocksSuggestion = `
+After you make your first purchase and add it to Stonk Ponk, you will have an active Portfolio!
+This means that you will have a Portfolio value which will vary based on stock price movements. 
+Your portfolio will also be eligible to receive personalized portfolio health calculations and suggestions.`
+
+const stocksSuggestion = `
+Every time you purchase shares in a stock your portfolio value will be increased to reflect the addition of the new shares. 
+If you purchase shares of a stock that you do not currently own, it will reduce the % stake of your existing stocks in the portfolio make up.
+If you purchase shares of a stock that you currently own, the % stake of that stock in your portfolio make up will increase. The purchase price will be updated to be the weighted average price of your purchases. This calculation will be based on the volume of shares that have been bought in each instance. 
+Depending on the type of stocks that you purchase your portfolio’s risk, profit, and volatility will be impacted. The portfolio health section will be updated after each purchase to reflect these changes.
+`
+const sellNoStocksSuggestion =`You have no stocks that you own. You cannot sell shares of stocks that you do not own!`
+
+const sellStocksSuggestion =`Under the New Business Tax System (Capital Gains Tax) Act 1999, Capital Gains Tax is payable on all profits made when you sell shares of a stock.`
+
+const lessThanOneYearSuggestion = `If you sell these stocks, you will have to pay full taxation on any profits made. 
+This is because you are selling the shares after holding them for less than 12 months. these shares are not eligible for a Capital Gains Tax exemption.`
+
+const moreThanOneYearSuggestion = `If you sell shares of these stocks, you are eligible for a 50% discount on your capital gains tax. 
+This is because you have held them for longer than 12 months.`
+
+const sellStocksSuggestionEnd = `Every time you sell shares in a stock your portfolio value will be decreased to reflect the removal of these shares. 
+When you sell shares of a stock that you currently own, the % stake of that stock in your portfolio make up will decrease (or be completely removed if you sell all owned shares). 
+Depending on the type of stocks that you sell, your portfolio’s risk, profit, and volatility will be impacted. The portfolio health section will be updated after each sale to reflect these changes.`
+
 
 function Portfolio() {
 
@@ -42,6 +84,10 @@ function Portfolio() {
     // Tracks whether there are errors, shows a banner if there is
     const [error, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
+
+    // Tracks the modals
+    const [buyNow, setBuyNow] = useState(false);
+    const [sellNow, setSellNow] = useState(false);
 
     const history = useHistory();
 
@@ -115,6 +161,36 @@ function Portfolio() {
         fair: '#f58b00',
         good: '#f5c800',
         excellent: '#0cac64',
+    }
+
+    function getOldStocks() {
+        const oldStocks = portfolioStocks.filter(stock => {
+            const purchaseDate = new Date(stock.first_purchase_date);
+            const diffTime = Date.now() - purchaseDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays >= 365) {
+                return true;
+            } else {
+                return false;
+            }
+        })
+        return oldStocks;
+    }
+
+    function getYoungStocks() {
+        const newStocks = portfolioStocks.filter(stock => {
+            const purchaseDate = new Date(stock.first_purchase_date);
+            const diffTime = Date.now() - purchaseDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays < 365) {
+                return true;
+            } else {
+                return false;
+            }
+        })
+        return newStocks;
     }
 
     return (
@@ -263,12 +339,66 @@ function Portfolio() {
                             </Container>
                         </>
                     )}
-                    
-                    
                 </SectionRowDiv>
+                
+                
                 {portfolioStocks !== 'Loading' && (
-                    <StockTable data={portfolioStocks} headings={tableHeadings} place="portfolio" setRows={setPortfolioStocks} page={page} setPage={setPage}></StockTable>
+                    <>
+                        <LeftButtonContainer>
+                            <CustomButton onClick={() => setBuyNow(true)}><ShoppingCartIcon />What if I buy now?</CustomButton>
+                            <CustomButton onClick={() => setSellNow(true)}><AttachMoneyIcon />What if I sell now?</CustomButton>
+                        </LeftButtonContainer>
+                        <StockTable data={portfolioStocks} headings={tableHeadings} place="portfolio" setRows={setPortfolioStocks} page={page} setPage={setPage}></StockTable>
+                    </>
                 )}
+
+                {buyNow &&
+                    <ModalContainer>
+                        <ModalContent>
+                            <CloseButton onClick={() => setBuyNow(false)} >&times;</CloseButton>
+                            <PageTitle>What if I buy now?<ShoppingCartIcon/></PageTitle>
+                            {portfolioStocks.length === 0 
+                                ? noStocksSuggestion
+                                : stocksSuggestion
+                            }   
+                        </ModalContent>
+                    </ModalContainer>
+                }
+                {sellNow &&
+                    <ModalContainer>
+                        <ModalContent height="700px">
+                            <CloseButton onClick={() => setSellNow(false)} >&times;</CloseButton>
+                            <PageTitle>What if I sell now?<AttachMoneyIcon/></PageTitle>
+                            
+                            {sellStocksSuggestion}
+                            {portfolioStocks.length === 0 && sellNoStocksSuggestion} 
+                            {portfolioStocks.length > 0 && getOldStocks().length > 0 && (
+                                <>
+                                    <ModalSuggestionTitle>Stocks held for more than one year</ModalSuggestionTitle>
+                                    {lessThanOneYearSuggestion}
+                                    <ModalStocksContainer>
+                                    {getOldStocks().map(stock => {
+                                        return (<Chip color="primary" label={stock.name} />)
+                                    })}
+                                    </ModalStocksContainer>
+                                </>
+                            )} 
+                            {portfolioStocks.length > 0 && getYoungStocks().length > 0 && (
+                                <>
+                                    <ModalSuggestionTitle>Stocks held for less than one year</ModalSuggestionTitle>
+                                    {moreThanOneYearSuggestion}
+                                    <ModalStocksContainer>
+                                        {getYoungStocks().map(stock => {
+                                            return (<Chip color="primary" label={stock.name} />);
+                                        })}
+                                    </ModalStocksContainer>
+                                </>
+                            )}
+                            <ModalSuggestionTitle>Changes to your portfolio health</ModalSuggestionTitle>
+                            {sellStocksSuggestionEnd} 
+                        </ModalContent>
+                    </ModalContainer>
+                }
                 
             </PageContainer>
         </div>

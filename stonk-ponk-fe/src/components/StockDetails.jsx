@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { CustomButton } from '../css/Button';
 import StockDetailsChart from './StockDetailsChart';
 import Navigation from './Navigation';
 import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
@@ -168,8 +167,6 @@ function StockDetails() {
                             <Tab label="Year" />
                         </Tabs>
                     </GraphAndPeriodDiv>
-                    <CustomButton>What if I buy now?</CustomButton>
-                    <CustomButton>What if I sell now?</CustomButton>
                 </ChartContainer>
                 <div>
                     <h1>News feed for {name}</h1>

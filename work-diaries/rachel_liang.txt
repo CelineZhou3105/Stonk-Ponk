@@ -52,8 +52,9 @@ Week 10
 Added tooltips & suggestions to the portfolio page. 
 Added a glossary section into the education page.
 Bug fixes for stock table.
-Moving our 'what if I buy/sell now' functionality to the portfolio page.
-
+Moving our 'what if I buy/sell now' functionality to the portfolio page + adding modals.
+Changing the search bar in the Market page to accomodate API calls, and taking users straight to the stock details page.
+Creating a responsive/collapsible navigation bar.
 
 
 

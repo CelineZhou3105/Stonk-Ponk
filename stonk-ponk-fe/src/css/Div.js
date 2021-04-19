@@ -348,9 +348,26 @@ export const ModalContainer = styled.div`
 export const ModalContent = styled.div` 
     background-color: #e7e7e7;
     margin: auto;
-    padding: 20px;
-    width: 50%;
+    padding: 40px;
+    width: 40%;
     border-radius: 20px;
+    line-height: 1.5;
+    height: ${props => props.height ? props.height : ''};
+    overflow: scroll;
+
+    &::-webkit-scrollbar { 
+        background: none;
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb { 
+        background: grey;
+        border-radius: 20px;
+    }
+
+    &::-webkit-scrollbar-track-piece { 
+        border-radius: 20px;
+    }
 `;
 
 export const NewsContainer = styled.div`
@@ -385,4 +402,21 @@ export const EducationTileGrid = styled.div`
 
 export const GlossaryContainer = styled.div`
     padding: 2em 0;
+`;
+
+/* Portfolio What if I buy now Container */
+export const LeftButtonContainer = styled.div`
+    display: flex;
+    gap: 1em;
+    position: relative;
+    top: 55px;
+    width: min-content;
+`;
+
+export const ModalStocksContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: flex-start;
+    padding: 1em 0;
 `;
