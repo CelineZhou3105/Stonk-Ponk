@@ -247,7 +247,7 @@ export const Container = styled.div`
     margin-top: 1em;
     margin-bottom: 1em;
     box-shadow: 4px 4px 4px rgba(108, 108, 108, 0.25);
-    padding: 0 1em;
+    padding: 0.5em 1em;
     justify-content: ${props => props.justify_content ? props.justify_content : "flex-start"};
     gap: ${props => props.gap ? props.gap : 0};
     align-items: ${props => props.align_items ? props.align_items : 'flex-start'};
@@ -323,9 +323,15 @@ export const NewsContainer = styled.div`
     align-items: center;
     gap: 1em;
     border-bottom: 1px solid #7B7B7B;
-    margin: 20px 0;
+    margin-bottom: 0.5em;
     width: 100%;
 `
+
+export const NewsTitleContainer = styled.div`
+    ${FlexRow}
+    gap: 1em;
+    align-items: center;
+`;
 
 /* Education page elements */
 export const EducationTileGrid = styled.div`
@@ -340,4 +346,8 @@ export const EducationTileGrid = styled.div`
     @media (max-width: 700px) {
         grid-template-columns: 1fr; 
     }
+`;
+
+export const GlossaryContainer = styled.div`
+    padding: 2em 0;
 `;

@@ -20,10 +20,10 @@ const tableHeadings = [
     { id: 'name', disablePadding: true, numeric: false, label: 'Name' },
     { id: 'performance', disablePadding: false, numeric: false, label: 'Performance (Month)' },
     { id: 'date', disablePadding: true, numeric: true, label: 'Purchase Date' },
-    { id: 'purchase_price', disablePadding: false, numeric: true, label: 'Purchase Price (USD)' },
+    { id: 'purchase_price', disablePadding: false, numeric: true, label: 'Purchase Price (AUD)' },
     { id: 'units', disablePadding: false, numeric: false, label: 'Units Owned' },
-    { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price (USD)' },
-    { id: 'value', disablePadding: false, numeric: true, label: 'Total Value (USD)' },
+    { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price (AUD)' },
+    { id: 'value', disablePadding: false, numeric: true, label: 'Total Value (AUD)' },
 ];
 
 function Portfolio() {
@@ -133,19 +133,20 @@ function Portfolio() {
                         <PortfolioChart stockData={chartData} portfolioValue={portfolioValue} />
                         <PortfolioValueContainer>
                             <SubTitle>Portfolio Value</SubTitle>
-                            <PortfolioValue>A${portfolioValue}</PortfolioValue>
+                            <Tooltip title='This is the current value of the portfolio after all US stocks have been converted to AUD' placement="bottom">
+                                <PortfolioValue>A${portfolioValue}</PortfolioValue>
+                            </Tooltip>
                             <SubText color="#000000">
                                 {/* {'TODO DAILY CHANGE '} */}
                                 {/* <ColorText color="#00AD30">
                                         ({profit > 0 ? ('+TODO (DAILY CHANGE PERC)%') : ('TODO (DAILY CHANGE PERC)%')})
                                     </ColorText> */}
                             </SubText>
-                            <Tooltip title={"Contributions - How much you have invested Last Investment - Last time you invested"} placement="right">
-                            <SubText>
-                                Contributions: ${(portfolioValue - profit).toFixed(2)}
-                                <br />
-                                Last Investment: {new Date(lastContribution).toLocaleDateString()}
-                            </SubText>
+                            <Tooltip title={`Contributions - How much you have invested into your portfolio.`} placement="right">
+                                <SubText margin="0">Contributions: ${(portfolioValue - profit).toFixed(2)}</SubText>
+                            </Tooltip>
+                            <Tooltip title={`Last Investment - Last time you made an investment.`} placement="right">
+                                <SubText margin="0 0 1em 0">Last Investment: {new Date(lastContribution).toLocaleDateString()}</SubText>
                             </Tooltip>
                         </PortfolioValueContainer>
                         <PortfolioHealthContainer>
@@ -153,7 +154,9 @@ function Portfolio() {
                             <SubText>This section describes your portfolio health.</SubText>
                             {health !== 'Loading' ? 
                                 <>
-                                    <PortfolioHealthText>Beta Score</PortfolioHealthText>
+                                    <Tooltip title='Measures the diversification of your portfolio in comparison to the S&P500 (market)' placement='right'>
+                                        <PortfolioHealthText>Beta Score</PortfolioHealthText>
+                                    </Tooltip>
                                     <ProgressBar
                                         width="100%"
                                         height="10px"
@@ -167,7 +170,9 @@ function Portfolio() {
                                         trackBorderColor="grey"
                                         defColor={progressColours}
                                     />
-                                    <PortfolioHealthText>Profit Score</PortfolioHealthText>
+                                    <Tooltip title={`Measures the profitability of your portfolio in comparison to the S&P500 (market)`} placement='right'>
+                                        <PortfolioHealthText>Profit Score</PortfolioHealthText>
+                                    </Tooltip>
                                     <ProgressBar
                                         width="100%"
                                         height="10px"
@@ -181,7 +186,9 @@ function Portfolio() {
                                         trackBorderColor="grey"
                                         defColor={progressColours}
                                     />
-                                    <PortfolioHealthText>Volatility Score</PortfolioHealthText>
+                                    <Tooltip title={`Measures how much your portfolio's value shifts in proportion to changes in the S&P500 (market)`} placement='right'>
+                                        <PortfolioHealthText>Profit Score</PortfolioHealthText>
+                                    </Tooltip>
                                     <ProgressBar
                                         width="100%"
                                         height="10px"
@@ -205,7 +212,12 @@ function Portfolio() {
                     {gainers !== 'Loading' && (
                         <Container flex_direction="column">
                             <SubTitle>Best Performing Stocks</SubTitle>
-                            <SubText>Based on profit margin.</SubText>
+                            <Tooltip 
+                                title='These are your top 10 performing stocks based on profit margin. We calculate it based on (current price - purchase price)/(purchase price).'
+                                placement="right"
+                            >
+                                <SubText margin="0 0 1em 0">*Based on profit margin.</SubText>
+                            </Tooltip>
                             {gainers.map((stock) => {
                                 return (
                                     <>
@@ -221,7 +233,12 @@ function Portfolio() {
                         <>
                             <Container flex_direction="column">
                                 <SubTitle>Worst Performing Stocks</SubTitle>
-                                <SubText>Based on profit margin.</SubText>
+                                <Tooltip 
+                                    title='These are your 10 worst performing stocks based on profit margin. We calculate it based on (current price - purchase price)/(purchase price).'
+                                    placement="right"
+                                >
+                                    <SubText margin="0 0 1em 0">*Based on profit margin.</SubText>
+                                </Tooltip>
                                 {losers.map((stock) => {
                                     return (
                                         <>
