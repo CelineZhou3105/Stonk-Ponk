@@ -5,14 +5,9 @@ import json
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.http import require_http_methods
 
-from rest_framework_jwt.utils import jwt_decode_handler
-
-import jwt.exceptions 
-
 from account.models import User
 from account.auth import require_token, get_user
 from portfolio.models import Portfolio, PortfolioStock, StockOwnership, Transaction
-from stocks import stock_api
 from watchlist.models import Watchlist, StockWatch
 
 @require_http_methods(["POST"])
@@ -20,11 +15,11 @@ from watchlist.models import Watchlist, StockWatch
 def create_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
-    name = body["watchlist_name"] 
+    name = body["label"] 
 
     # how do we want to handle things that have been aleady created?
     wl = Watchlist.objects.create(user = user, name = name) 
-    responseData = { "id": wl.id, "label": wl.name}
+    responseData = { "watchlist_id": wl.id, "label": wl.name}
     return HttpResponse(json.dumps(responseData))
 
 @require_http_methods(["DELETE"])
@@ -34,12 +29,10 @@ def delete_watchlist(request):
     user = get_user(request)
 
     watchlist_id = body["id"]
-
     try:
         wl = Watchlist.objects.get(id = watchlist_id, user = user) 
         if wl.user != user:
             return HttpResponseBadRequest("you naughty naughty")
-
         wl.delete()
     except Watchlist.DoesNotExist:
         return HttpResponseNotFound()
@@ -51,7 +44,6 @@ def delete_watchlist(request):
 def save_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
-
     watchlist = body["id"]
     
     try:

@@ -151,9 +151,11 @@ class YfApi():
         self.num_calls += 1
 
         for index, row in price_data.iterrows():
-            index.to_pydatetime()
-            index = index.strftime("%Y-%m-%d")
-            price_list.append({'date': index, 'price': row['close']})
+            #check for NaN
+            if row['close'] == row['close']:
+                index.to_pydatetime()
+                index = index.strftime("%Y-%m-%d")
+                price_list.append({'date': index, 'price': row['close']})
         
         return price_list
 
