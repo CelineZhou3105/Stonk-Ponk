@@ -159,7 +159,7 @@ function StockDetails() {
 				<PageTitle>
 					{name} <span>({ticker})</span>
 				</PageTitle>
-				<h1>${parseFloat(price).toFixed(2)}USD</h1>
+				<h1>${parseFloat(price).toFixed(2)} USD</h1>
 				<p>Market: {marketName}</p>
 				<p>Exchange: {exchange}</p>
 				<TableContainer>
