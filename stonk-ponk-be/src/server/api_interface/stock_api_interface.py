@@ -25,17 +25,7 @@ class StockApiInterface:
             return True
         except:
             return False 
-   
-    @cache(datetime.timedelta(minutes=1))
-    def get_market_status():
-        for api_dict in StockApiInterface.stock_api_list:
-            try:
-                api = StockApiInterface.stock_api_map[api_dict['name']]
-                return api.get_market_status()
-            except:
-                continue
 
-        return False
     
     @cache(datetime.timedelta(minutes=5))
     def get_most_active(start_index, end_index):
@@ -84,22 +74,11 @@ class StockApiInterface:
         return False
     
     @cache(datetime.timedelta(hours=1))
-    def get_stats(ticker):
+    def get_beta(ticker):
         for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
-                return api.get_stats(ticker)
-            except:
-                continue
-
-        return False
-    
-    @cache(datetime.timedelta(minutes=5))
-    def get_quotes(ticker):
-        for api_dict in StockApiInterface.stock_api_list:
-            try:
-                api = StockApiInterface.stock_api_map[api_dict['name']]
-                return api.get_quotes(ticker)
+                return api.get_beta(ticker)
             except:
                 continue
 

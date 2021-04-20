@@ -22,9 +22,6 @@ class AaApi():
         request_string = str("https://www.alphavantage.co/query?function=" + func + "&symbol=" + symbol +"&apikey=RYJOHTXNG0NQFQVQ")
         return request_string
 
-    def get_market_status(self):
-        return 
-
     def get_market_data(self,type,page_num):
         try:
             if type == "losers":

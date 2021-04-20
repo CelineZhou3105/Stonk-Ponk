@@ -25,5 +25,7 @@ class ForexTestCase(TestCase):
 
         #print(self.s_api.get_stock_prices("AAPL", "market"))
 
-        yesterday = date.today() - timedelta(days=1)
-        print(self.s_api.get_historical_price("AAPL", yesterday))
+        #yesterday = date.today() - timedelta(days=1)
+        #print(self.s_api.get_historical_price("AAPL", yesterday))
+
+        print(self.s_api.check_stocks("AAPL"))
