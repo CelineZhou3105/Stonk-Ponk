@@ -35,6 +35,7 @@ function Market() {
     // Component will rerender upon filtering the rows
     const [rows, setRows] = useState([]);
     const [page, setPage] = useState(0);
+
     const [pageDirection, setPageDirection] = useState('right');
     const [losers, setLosers] = useState('Loading');
     const [gainers, setGainers] = useState('Loading');
@@ -102,11 +103,16 @@ function Market() {
         }
     }, [history]);
 
+    
+    // Tracks the pages retrieved
+    const [pagesReceived, setPagesReceived] = useState([]);
+
     // useEffect for gathering data about the most active stocks on each page of the table
     useEffect(() => {
         console.log("Page direction: ", pageDirection);
-        if (pageDirection === 'right') {
+        if (pageDirection === 'right' && !pagesReceived.includes(page)) {
             console.log("I am getting page: ", page);
+            setPagesReceived(pages => [...pages, page]);
             market.getMarketData('most_active', page).then(response => {
                 console.log(response);
                 setRows(rows => rows.concat(response));
@@ -114,7 +120,7 @@ function Market() {
                 handleError(error);
             });
         } 
-    }, [page, pageDirection, handleError]);
+    }, [page, pageDirection, handleError, pagesReceived]);
 
     // useEffect for gathering data about the market losers
     useEffect(() => {
