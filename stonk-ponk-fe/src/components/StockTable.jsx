@@ -25,10 +25,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import EditIcon from '@material-ui/icons/Edit';
 import CreateModal from './CreateModal';
-
 import { portfolio } from '../services/portfolio';
-
 import PortfolioPricesChart from './PortfolioPricesChart';
+import { watchlist } from '../services/watchlist';
 
 /**
  * StockTableHead - The header column of the table
@@ -66,7 +65,7 @@ function StockTableHead(props) {
                             padding={cell.disablePadding ? 'none' : 'default'}
                             sortDirection={orderBy === cell.id ? order : false}
                         >
-                            {cell.id === "performance" 
+                            {cell.id === "performance"
                                 ? <Tooltip title='A graph showing the historical prices of the stock.' placement='bottom-start'>
                                     <span>{cell.label}</span>
                                 </Tooltip>
@@ -76,14 +75,14 @@ function StockTableHead(props) {
                                         direction={orderBy === cell.id ? order : 'asc'}
                                         onClick={createSortHandler(cell.id)}
                                     >
-                                        {cell.id === 'value' ? 
+                                        {cell.id === 'value' ?
                                             <Tooltip title='Total value is equal to #units owned * current market price' placement="bottom-end">
                                                 <span>{cell.label}</span>
                                             </Tooltip>
                                             : cell.label
                                         }
                                     </TableSortLabel>
-                                )  
+                                )
                             }
                         </TableCell>
                     )
@@ -139,11 +138,12 @@ function StockTable(props) {
     const [orderBy, setOrderBy] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [editMode, setEditMode] = useState(false);
-    const { data, headings, place, setRows, setPageDirection, page, setPage } = props;
+    const { data, headings, place, setRows, setPageDirection, page, setPage, watchlistId } = props;
 
     console.log(data);
 
     const [previousRows, setPreviousRows] = useState(data);
+    const [deleteVisible, setDeleteVisible] = useState(false);
 
     const handleSort = (property) => {
         const ascending = (orderBy === property && order === 'asc');
@@ -167,49 +167,67 @@ function StockTable(props) {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const onChange = (e, changedRow, changedColumn) => {
-        const newValue = (changedColumn === 'last_purchased') ? e.target.value : e.target.value;
+        if (place === 'portfolio') {
+            const newValue = (changedColumn === 'last_purchased') ? e.target.value : e.target.value;
 
-        const newRows = data.map(row => {
-            if (row.ticker === changedRow.ticker) {
-                return { ...row, [changedColumn]: newValue };
-            } else {
-                return { ...row };
-            }
-        })
-        setRows(newRows);
+            const newRows = data.map(row => {
+                if (row.ticker === changedRow.ticker) {
+                    return { ...row, [changedColumn]: newValue };
+                } else {
+                    return { ...row };
+                }
+            })
+            setRows(newRows);
+        }
     };
 
-    function saveChanges() {
-        const newPortfolio = {};
-        const newStocks = [];
-        const newStockMapping = {};
+    const saveChanges = () => {
+        // TODO: Call the API to save changes
+        const token = localStorage.getItem('token');
 
-        for (let i = 0; i < data.length; i++) {
-            let currentTicker = data[i].ticker;
-            if (!(currentTicker in newStockMapping)) {
-                newStockMapping[currentTicker] = newStocks.length;
-                newStocks.push({
-                    ticker: currentTicker,
-                    transactions: []
+        if (place === 'portfolio') {
+            const newPortfolio = {};
+            const newStocks = [];
+            const newStockMapping = {};
+
+            for (let i = 0; i < data.length; i++) {
+                let currentTicker = data[i].ticker;
+                if (!(currentTicker in newStockMapping)) {
+                    newStockMapping[currentTicker] = newStocks.length;
+                    newStocks.push({
+                        ticker: currentTicker,
+                        transactions: []
+                    })
+                }
+                newStocks[newStockMapping[currentTicker]].transactions.push({
+                    date: data[i].first_purchase_date,
+                    volume: data[i].volume,
+                    price: data[i].vwap,
                 })
             }
-            newStocks[newStockMapping[currentTicker]].transactions.push({
-                date: data[i].first_purchase_date,
-                volume: data[i].volume,
-                price: data[i].vwap,
-            })
-        }
-        newPortfolio['stocks'] = newStocks;
+            newPortfolio['stocks'] = newStocks;
 
-        portfolio.editPortfolio(newPortfolio).then(() => {
-            setEditMode(false);
-            console.log("Changes saved.");
-            setPreviousRows(data);
-            setSelected([]);
-        }).catch(error => {
-            console.log("???");
-            alert(error);
-        })
+            portfolio.editPortfolio(token, newPortfolio).then(() => {
+                setEditMode(false);
+                console.log("Changes saved.");
+                setPreviousRows(data);
+                setSelected([]);
+            }).catch(error => {
+                console.log("???");
+                alert(error);
+            })
+        } else if (place === 'watchlist') {
+            watchlist.updateStockToWatchlist(watchlistId, data)
+                .then(() => {
+                    console.log('updated stocks to watchlist!');
+                })
+                .catch((error) => {
+                    Promise.resolve(error)
+                        .then((e) => {
+                            alert(`${e.status} ${e.statusText}`)
+                        })
+                })
+        }
     }
 
     function cancelChanges() {
@@ -232,7 +250,7 @@ function StockTable(props) {
     const handleClick = (event, ticker) => {
         const selectedIndex = selected.indexOf(ticker);
         let newSelected = [];
-        
+
 
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, ticker);
@@ -249,6 +267,7 @@ function StockTable(props) {
 
         if (editMode) {
             setSelected(newSelected);
+            setDeleteVisible(true);
         }
     };
 
@@ -260,6 +279,7 @@ function StockTable(props) {
             return false;
         })
         setRows(newRows);
+        setDeleteVisible(false);
     }
 
     const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -269,16 +289,17 @@ function StockTable(props) {
             {(place === 'portfolio' || place === 'watchlist') &&
                 <RightAlignedButtonContainer>
                     {editMode ?
-                    <>
-                        <CustomButton id="save-button" backgroundColor="#00AD30" hoverColor="#2de361" onClick={() => saveChanges()}>Save</CustomButton>
-                        <CustomButton id="cancel-button" backgroundColor="#e80000" hoverColor="#ff5757" onClick={() => cancelChanges()}>Cancel</CustomButton>
-                    </>
-                    :   <CustomButton backgroundColor="#9e22ff" onClick={() => setEditMode(true)}><EditIcon />&nbsp;Edit {place === 'portfolio' ? 'Portfolio' : 'Watchlist'}</CustomButton>
+                        <>
+                            <CustomButton id="save-button" backgroundColor="#00AD30" hoverColor="#2de361" onClick={() => saveChanges()}>Save</CustomButton>
+                            <CustomButton id="cancel-button" backgroundColor="#e80000" hoverColor="#ff5757" onClick={() => cancelChanges()}>Cancel</CustomButton>
+                        </>
+                        :
+                        <CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}><EditIcon />&nbsp;Edit {place === 'portfolio' ? 'Portfolio' : 'Watchlist'}</CustomButton>
                     }
                 </RightAlignedButtonContainer>
             }
-            {(place === 'portfolio') && (editMode === true) && (
-                <TableToolbar numSelected={selected.length} place={place} handleDelete={handleDelete}></TableToolbar>
+            {(place === 'portfolio' || place === 'watchlist') && (editMode === true) && (deleteVisible === true) && (
+                <TableToolbar setVisibility={deleteVisible} numSelected={selected.length} place={place} handleDelete={handleDelete}></TableToolbar>
             )}
             <TableContainer>
                 <Table
@@ -302,60 +323,96 @@ function StockTable(props) {
                             .map((row, index) => {
                                 const isItemSelected = isSelected(row.ticker);
                                 return (
-                                    place === "portfolio" ?
-                                        <TableRow
-                                            hover
-                                            role="checkbox"
-                                            tabIndex={-1}
-                                            key={row.ticker}
-                                            onClick={(event) => handleClick(event, row.ticker)}
-                                        >
-                                            {editMode &&
-                                                <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                        checked={isItemSelected}
-                                                    />
-                                                </TableCell>
-                                            }
-                                            <TableCell component="th" scope="row" padding="none">
-                                                <NormalText>{row.name}</NormalText>
-                                                <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                <PortfolioPricesChart ticker={row.ticker} period="last_month"/>
-                                            </TableCell>
-                                            {editMode ?
-                                                <>
-                                                    <CustomTableCell row={row} column='first_purchase_date' onChange={onChange}></CustomTableCell>
-                                                    <CustomTableCell row={row} column='vwap' onChange={onChange}></CustomTableCell>
-                                                    <CustomTableCell row={row} column='volume' onChange={onChange}></CustomTableCell>
-                                                </> :
-                                                <>
-                                                    <TableCell align="right">{row.first_purchase_date}</TableCell>
-                                                    <TableCell align="right">{row.vwap}</TableCell>
-                                                    <TableCell align="right">{row.volume}</TableCell>
-                                                </>
-                                            }
+                                    <>
+                                        {place === 'portfolio' &&
+                                            <>
+                                                <TableRow
+                                                    hover
+                                                    role="checkbox"
+                                                    tabIndex={-1}
+                                                    key={row.ticker}
+                                                    onClick={(event) => handleClick(event, row.ticker)}
+                                                >
+                                                    {editMode &&
+                                                        <TableCell padding="checkbox">
+                                                            <Checkbox
+                                                                checked={isItemSelected}
+                                                            />
+                                                        </TableCell>
+                                                    }
+                                                    <TableCell component="th" scope="row" padding="none">
+                                                        <NormalText>{row.name}</NormalText>
+                                                        <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        <PortfolioPricesChart ticker={row.ticker} period="last_month" />
+                                                    </TableCell>
+                                                    {editMode ?
+                                                        <>
+                                                            <CustomTableCell row={row} column='first_purchase_date' onChange={onChange}></CustomTableCell>
+                                                            <CustomTableCell row={row} column='vwap' onChange={onChange}></CustomTableCell>
+                                                            <CustomTableCell row={row} column='volume' onChange={onChange}></CustomTableCell>
+                                                        </> :
+                                                        <>
+                                                            <TableCell align="right">{row.first_purchase_date}</TableCell>
+                                                            <TableCell align="right">{row.vwap}</TableCell>
+                                                            <TableCell align="right">{row.volume}</TableCell>
+                                                        </>
+                                                    }
 
-                                            <TableCell align="right">{row.price.toFixed(2)}</TableCell>
-                                            <TableCell align="right">{(row.volume * row.price).toFixed(2)}</TableCell>
-                                        </TableRow> :
+                                                    <TableCell align="right">{row.price.toFixed(2)}</TableCell>
+                                                    <TableCell align="right">{(row.volume * row.price).toFixed(2)}</TableCell>
+                                                </TableRow>
 
-                                        <TableRow
-                                            hover
-                                            role="checkbox"
-                                            tabIndex={-1}
-                                            key={row.ticker}
-                                        >
-                                            <TableCell component="th" scope="row" padding="none">
-                                                <NormalText>{row.name}</NormalText>
-                                                <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                <SummaryChart points={row.prev_week_prices} />
-                                            </TableCell>
-                                            <TableCell align="right">{row.price}</TableCell>
-                                        </TableRow>
+                                            </>
+                                        }
+                                        {place === 'watchlist' &&
+                                            <>
+                                                <TableRow
+                                                    hover
+                                                    role="checkbox"
+                                                    tabIndex={-1}
+                                                    key={row.ticker}
+                                                    onClick={(event) => handleClick(event, row.ticker)}
+                                                >
+                                                    {editMode &&
+                                                        <TableCell padding="checkbox">
+                                                            <Checkbox
+                                                                checked={isItemSelected}
+                                                            />
+                                                        </TableCell>
+                                                    }
+                                                    <TableCell component="th" scope="row" padding="none">
+                                                        <NormalText>{row.name}</NormalText>
+                                                        <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        <PortfolioPricesChart ticker={row.ticker} period="last_month" />
+                                                    </TableCell>
+                                                    <TableCell align="right">{row.price.toFixed(2)}</TableCell>
+                                                </TableRow>
+                                            </>
+                                        }
+                                        {place === 'market' &&
+                                            <>
+                                                <TableRow
+                                                    hover
+                                                    role="checkbox"
+                                                    tabIndex={-1}
+                                                    key={row.ticker}
+                                                >
+                                                    <TableCell component="th" scope="row" padding="none">
+                                                        <NormalText>{row.name}</NormalText>
+                                                        <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        <SummaryChart points={JSON.parse(row.prev_week_prices)} />
+                                                    </TableCell>
+                                                    <TableCell align="right">{row.price}</TableCell>
+                                                </TableRow>
+                                            </>
+                                        }
+                                    </>
                                 );
                             })}
                         {emptyRows > 0 && (
@@ -404,7 +461,7 @@ function StockTable(props) {
                 />
             }
             {createModalOpen &&
-                <CreateModal setVisibility={setCreateModalOpen} setRows={setRows} />
+                <CreateModal setVisibility={setCreateModalOpen} setRows={setRows} place={place} />
             }
         </div>
     )
