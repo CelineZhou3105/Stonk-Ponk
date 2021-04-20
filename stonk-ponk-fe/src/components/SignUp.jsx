@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
+import Particles from 'react-particles-js';
 import { useHistory } from 'react-router-dom';
-import { SignUpForm, TextField, Label, InputUnderlineDiv } from '../css/Form';
-import { LinkContainer, SignUpSectionDiv, SignUpPageContainer, PasswordResetBackground, LogoContainer } from '../css/Div';
-import { LinkText, PageTitle, SubText } from '../css/Text';
+
 import { authentication } from '../services/authentication';
 import { checkPassword } from '../helpers/helpers';
-import { DefaultLogo } from '../css/Logo';
+
 import logo from '../images/logo.png';
+
+import {
+    InputUnderlineDiv,
+    Label,
+    SignUpForm,
+    TextField
+} from '../css/Form';
+import {
+    LinkContainer,
+    LogoContainer,
+    PasswordResetBackground,
+    SignUpPageContainer,
+    SignUpSectionDiv
+} from '../css/Div';
+import { LinkText, PageTitle, SubText } from '../css/Text';
+import { DefaultLogo } from '../css/Logo';
 import { CustomButton } from '../css/Button';
 
-import Particles from 'react-particles-js';
+/**
+ * SignUp - Page where users can register for a new account.
+ */
 const SignUp = () => {
 
     // initialise variables

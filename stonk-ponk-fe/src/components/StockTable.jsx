@@ -1,5 +1,17 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
+
+import PortfolioPricesChart from './PortfolioPricesChart';
+import SummaryChart from './SummaryChart';
+import CreateModal from './CreateModal';
+
+import { portfolio } from '../services/portfolio';
+import { watchlist } from '../services/watchlist';
+
+import { NormalText } from '../css/Text';
+import { RightAlignedButtonContainer } from '../css/Div';
+import { CustomButton } from '../css/Button';
+
 import {
     Table,
     TableBody,
@@ -15,19 +27,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
-import SummaryChart from './SummaryChart';
-import { NormalText } from '../css/Text';
-import { RightAlignedButtonContainer } from '../css/Div';
-import { CustomButton } from '../css/Button';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import EditIcon from '@material-ui/icons/Edit';
-import CreateModal from './CreateModal';
-import { portfolio } from '../services/portfolio';
-import PortfolioPricesChart from './PortfolioPricesChart';
-import { watchlist } from '../services/watchlist';
 
 /**
  * StockTableHead - The header column of the table
@@ -145,18 +149,21 @@ function StockTable(props) {
     const [previousRows, setPreviousRows] = useState(data);
     const [deleteVisible, setDeleteVisible] = useState(false);
 
+    // Handle sorting when user clicks on a sort label
     const handleSort = (property) => {
         const ascending = (orderBy === property && order === 'asc');
         setOrder(ascending ? 'desc' : 'asc');
         setOrderBy(property);
     };
 
+    // Handles changing the page on the table
     const changePage = (event, newPage) => {
         event.preventDefault();
         console.log('new page is: ', newPage);
         setPage(newPage);
     };
 
+    // Change the number of rows per page
     const changeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
@@ -164,8 +171,10 @@ function StockTable(props) {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
+    // Function to determine whether the row is selected
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
+    // For portfolio view - when a user makes edits to their portfolio this function handles the change
     const onChange = (e, changedRow, changedColumn) => {
         if (place === 'portfolio') {
             const newValue = (changedColumn === 'last_purchased') ? e.target.value : e.target.value;
@@ -181,6 +190,7 @@ function StockTable(props) {
         }
     };
 
+    // For portfolio view - saves changes for a portfolio by making the API call
     const saveChanges = () => {
         // TODO: Call the API to save changes
         const token = localStorage.getItem('token');
@@ -230,6 +240,7 @@ function StockTable(props) {
         }
     }
 
+    // For portfolio view - Revert changes to the old portfolio 
     function cancelChanges() {
         setEditMode(false);
         console.log("Changes cancelled.");
@@ -247,11 +258,11 @@ function StockTable(props) {
         setSelected([]);
     };
 
+    // For portfolio view - allows the user to select rows in the stock table
     const handleClick = (event, ticker) => {
         const selectedIndex = selected.indexOf(ticker);
         let newSelected = [];
-
-
+        
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, ticker);
         } else if (selectedIndex === 0) {
@@ -265,12 +276,14 @@ function StockTable(props) {
             );
         }
 
+        // Only allow the user to select if edit mode is on
         if (editMode) {
             setSelected(newSelected);
             setDeleteVisible(true);
         }
     };
 
+    // For portfolio view - allows the user to delete rows in the stocktable
     const handleDelete = () => {
         const newRows = data.filter(row => {
             if (selected.indexOf(row.ticker) === -1) {
@@ -406,7 +419,7 @@ function StockTable(props) {
                                                         <a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
                                                     </TableCell>
                                                     <TableCell align="center">
-                                                        <SummaryChart points={JSON.parse(row.prev_week_prices)} />
+                                                        <SummaryChart points={row.prev_week_prices} />
                                                     </TableCell>
                                                     <TableCell align="right">{row.price}</TableCell>
                                                 </TableRow>
@@ -533,8 +546,9 @@ const CustomTableCell = (props) => {
     );
 };
 
-export default StockTable;
-
+/**
+ * useToolbarStyles - Creates the styling for the toolbar
+ */
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
@@ -556,3 +570,5 @@ const useToolbarStyles = makeStyles((theme) => ({
         flex: '1 1 100%',
     },
 }));
+
+export default StockTable;

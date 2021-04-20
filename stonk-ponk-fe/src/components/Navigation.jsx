@@ -1,34 +1,58 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink, useHistory } from "react-router-dom";
+
 import logo from '../images/logo.png';
 import profile from '../images/blobfish.png';
+import { settings } from '../services/settings';
 
-import { history } from '../helpers/history';
-
-import { NavLink } from "react-router-dom";
-
-import { CollapsedNavItem, CollapsedNavList, CompanyName, NavList, NavListItem } from '../css/Text';
-import { LogoContainer, NavigationContainer, ProfileModaItem, ProfileModal, ProfilePhotoContainer, MenuContainer, PhotoMenuContainer, SideBar } from '../css/Div';
+import {
+    CollapsedNavItem,
+    CollapsedNavList,
+    CompanyName,
+    NavList,
+    NavListItem
+} from '../css/Text';
+import {
+    LogoContainer,
+    MenuContainer,
+    NavigationContainer,
+    PhotoMenuContainer,
+    ProfileModal,
+    ProfileModaItem,
+    ProfilePhotoContainer,
+    SideBar
+} from '../css/Div';
 import { DefaultLogo } from '../css/Logo';
 import { ProfilePhoto } from '../css/Image';
-import { settings } from '../services/settings';
 import { MenuButtonContainer } from '../css/Button';
 
-
+/**
+ * Navigation - Responsive navigation bar shown at the top of each page across the website. 
+ * @param {*} settings - indicates whether the navigation bar is atop the settings page,
+ * changing the styling of the profile picture.
+ */
 function Navigation(props) {
+
+    // Profile modal details
     const [profileModalOpen, setProfileModalOpen] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
 
+    const history = useHistory();
+
+    // Redirect to settings
     const navigateToSettings = () => {
         history.push('/settings');
     }
 
+    // Logout of the website
     function logout(event) {
         // event.preventDefault();
         localStorage.removeItem('token');
         history.push('/');
     }
 
+    // useEffect to get data about the current logged in user
     useEffect(() => {
         settings.getUser()
             .then(response => response.json())

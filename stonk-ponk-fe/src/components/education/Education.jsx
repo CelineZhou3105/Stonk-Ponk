@@ -1,18 +1,25 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+
+import Navigation from '../Navigation';
+import { Glossary } from './Glossary';
+
 import { PageContainer, EducationTileGrid } from '../../css/Div';
 import { EducationTile } from '../../css/Button';
-import Navigation from '../Navigation';
+import { EducationIcon } from '../../css/Image';
+import { PageTitle } from '../../css/Text';
+
 import market from '../../images/stock-market.png';
 import news from '../../images/newspaper.png';
 import invest from '../../images/investing.png';
 import instrument from '../../images/tools-and-utensils.png';
 import graph from '../../images/diagram.png';
 import fund from '../../images/funds.png';
-import { EducationIcon } from '../../css/Image';
-import { PageTitle } from '../../css/Text';
-import { Glossary } from './Glossary';
 
+/**
+ * Education Page - consists of links that take the user to information about basic
+ * financial concepts. Contains a glossary for users to refer to. 
+ */
 const Education = () => {
     // navigate back to sign in
     const history = useHistory();

@@ -1,5 +1,14 @@
-import { ChangeNameLink, ChangeEmailLink, ChangePasswordWithAuthLink, GetUserDetailsLink } from '../api-links/constants';
+import {
+    ChangeEmailLink,
+    ChangeNameLink,
+    ChangePasswordWithAuthLink,
+    GetUserDetailsLink
+} from '../api-links/constants';
 
+/**
+ * getUser - makes the API call to get the user's details
+ * @returns user's details like first name, last name, email
+ */
 const getUser = async () => {
     const requestOptions = {
         method: 'GET',
@@ -22,6 +31,12 @@ const getUser = async () => {
         })
 }
 
+/**
+ * changeName - Allows the user to change their first name and/or last name
+ * @param {string} firstN - first name of the user
+ * @param {string} lastN - last name of the user
+ * @returns nothing if successful, a rejected promise if failed
+ */
 const changeName = async (firstN, lastN) => {
     const requestOptions = {
         method: 'PUT',
@@ -57,6 +72,11 @@ const changeName = async (firstN, lastN) => {
         });
 }
 
+/**
+ * changeEmail - Makes the API call to edit a user's email
+ * @param {*} emailNew - new email of the user
+ * @returns nothing if successful, a rejected Promise otherwise.
+ */
 const changeEmail = async (emailNew) => {
 
     const requestOptions = {
@@ -79,6 +99,9 @@ const changeEmail = async (emailNew) => {
         })
 }
 
+/**
+ * changePassword - Makes the API call to edit the user's password 
+ */
 const changePassword = async (passwordNew, passwordOld) => {
     const requestOptions = {
         method: 'PUT',

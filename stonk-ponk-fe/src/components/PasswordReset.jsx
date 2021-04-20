@@ -3,17 +3,31 @@ import Particles from 'react-particles-js';
 import { useHistory } from 'react-router-dom';
 
 import logo from '../images/logo.png';
-
-import { FormContainer, LogoContainer, ParticleContainer,  PasswordResetBackground, PasswordResetPageContainer} from '../css/Div';
-import { GenericForm, InputUnderlineDiv, Label, TextField } from '../css/Form';
-import { DefaultLogo } from '../css/Logo';
-import { ColorText, PageTitle, SubTitle } from '../css/Text';
-
 import { ForgotPasswordLink } from '../api-links/constants';
-import { CustomButton } from '../css/Button';
-
 import { checkPassword } from '../helpers/helpers';
 
+import {
+    FormContainer,
+    LogoContainer,
+    ParticleContainer, 
+    PasswordResetBackground,
+    PasswordResetPageContainer
+} from '../css/Div';
+import { 
+    GenericForm,
+    InputUnderlineDiv,
+    Label,
+    TextField
+} from '../css/Form';
+import { DefaultLogo } from '../css/Logo';
+import { ColorText, PageTitle, SubTitle } from '../css/Text';
+import { CustomButton } from '../css/Button';
+
+/**
+ * PasswordReset - This is the series of pages that the user goes through to reset their password
+ * if they have forgotten it. Allows the user to change their password once they have given the correct
+ * answer to their security question.
+ */
 function PasswordReset() {
 
     // Form values
@@ -36,16 +50,6 @@ function PasswordReset() {
     
     /* resetPasswordCheckEmail - The first of three parts to the 'forgot password' user flow. User submits 
     their email to retrieve their security question.  
-
-        Request = {
-            email: string;
-        }
-
-        Response = {
-            status: number (200 - OK, 403 - Invalid email/Unauthorised)
-            security_question: string
-        }
-
     */
     const [securityQuestion, setSecurityQuestion] = useState('');
     const resetPasswordCheckEmail = async (event) => {
@@ -105,15 +109,6 @@ function PasswordReset() {
 
     /* changePasswordWithoutAuth - The last of three parts to the 'forgot password' user flow. User submits
         their new password. 
-    
-        Request = {
-            email: string;
-            new_password: string;
-        }
-    
-        Response = {
-            status: number; (200 - OK)
-        }
     */
     const changePasswordWithoutAuth = async (event) => {
         event.preventDefault();

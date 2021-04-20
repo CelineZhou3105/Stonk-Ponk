@@ -1,17 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ModalContainer, ModalContent } from '../css/Div';
-import { CreateModalForm, InputUnderlineDiv, ModalLabel, TextField } from '../css/Form';
-import { TextField as AutocompleteTextField } from '@material-ui/core';
-import { CloseButton, CustomButton } from '../css/Button';
-import { ColorText, Link, SubText, SubTitle } from '../css/Text';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+
 import { market } from '../services/market';
 
+import { 
+    ModalContainer,
+    ModalContent,
+} from '../css/Div';
+import { 
+    CreateModalForm,
+    InputUnderlineDiv, 
+    ModalLabel, 
+    TextField 
+} from '../css/Form';
+import { CloseButton, CustomButton } from '../css/Button';
+import { ColorText, Link, SubText, SubTitle } from '../css/Text';
 
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { TextField as AutocompleteTextField } from '@material-ui/core';
+
+/**
+ * CreateModal - Modal for adding stocks to a user's portfolio.
+ * @param {function} setVisibility - useState setter for controlling the visibility of the create modal 
+ * @param {function} setRows - useState setter for controlling the rows of data in the stock table
+ */
 function CreateModal(props) {
     const { setVisibility, setRows, place } = props;
-
-    //TODO NOTE: Params will need the stock data from the BE, and the ability to set the rows
 
     const [purchasePrice, setPurchasePrice] = useState(0);
     const [unitsOwned, setUnitsOwned] = useState(1);

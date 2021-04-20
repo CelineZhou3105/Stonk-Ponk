@@ -416,6 +416,13 @@ export const LeftButtonContainer = styled.div`
     position: relative;
     top: 55px;
     width: min-content;
+
+    @media (max-width: 700px) {
+        position: static;
+        justify-content: flex-end;
+        width: 100%;
+        padding-bottom: 1em;
+    }
 `;
 
 export const ModalStocksContainer = styled.div`

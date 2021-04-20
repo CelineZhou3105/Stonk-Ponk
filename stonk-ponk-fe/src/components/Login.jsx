@@ -1,23 +1,31 @@
 import React, { useState } from 'react';
 import Particles from 'react-particles-js';
-
-import logo from '../images/logo.png';
-
-// import { history } from '../helpers/history';
-import { useHistory } from 'react-router-dom';
-
-import { LinkContainer, LoginFormContainer, LoginPageContainer, LogoContainer, ParticleContainer } from '../css/Div';
-import { GenericForm, InputUnderlineDiv, Label, TextField } from '../css/Form';
-import { DefaultLogo } from '../css/Logo';
-import { CompanyName, LinkText } from '../css/Text';
+import { Redirect, useHistory } from 'react-router-dom';
 
 import { authentication } from '../services/authentication';
-
-import { Redirect } from 'react-router-dom';
+import logo from '../images/logo.png';
+import { 
+    LinkContainer,
+    LoginFormContainer,
+    LoginPageContainer,
+    LogoContainer,
+    ParticleContainer
+} from '../css/Div';
+import { 
+    GenericForm,
+    InputUnderlineDiv,
+    Label,
+    TextField
+} from '../css/Form';
+import { DefaultLogo } from '../css/Logo';
+import { CompanyName, LinkText } from '../css/Text';
 import { CustomButton } from '../css/Button';
 
 import Alert from '@material-ui/lab/Alert';
 
+/**
+ * Login Page - Contains the form users enter their login credentials into. 
+ */
 function Login() {
     const history = useHistory();
 
@@ -26,6 +34,7 @@ function Login() {
     const [pass, setPass] = useState('');
     const [error, setError] = useState(false);
 
+    // Redirect to market upon successful login & token storage
     if (localStorage.getItem("token")) {
         history.push('/market');
         <Redirect to={{ pathname: '/market' }} />
@@ -59,7 +68,7 @@ function Login() {
             </ParticleContainer>
             <LoginFormContainer>
                 {error &&
-                    <Alert variant="filled" severity="error">
+                    <Alert onClose={() => setError(false)} variant="filled" severity="error">
                         Could not log in. Please try again.
                     </Alert>
                 }

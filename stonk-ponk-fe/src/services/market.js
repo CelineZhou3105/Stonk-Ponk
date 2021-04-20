@@ -28,7 +28,12 @@ export async function getMarketData(type, page_num) {
     };
     return await fetch(`${MarketsLink}`, requestOptions).then(response => {
         if (response.status === 200) {
-            return Promise.resolve(response.json());
+            console.log('Hello', response);
+            return response.json(res => {
+                console.log(res);
+                return Promise.resolve(res);
+            })
+            // return Promise.resolve(response.json());
         } else if (response.status === 403) {
             console.log("Unauthorised token. Session has expired.");
             return Promise.reject("Expired token");

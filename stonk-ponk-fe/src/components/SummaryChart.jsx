@@ -6,8 +6,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
  * Summary Chart - Line graph displayed on the Market Page to demonstrate the performance of each stock.
  */
 function SummaryChart(props) {
-    // TODO - Replace with calls for real data (not dummy data)
-
     const {points} = props;
 
     const data = [];

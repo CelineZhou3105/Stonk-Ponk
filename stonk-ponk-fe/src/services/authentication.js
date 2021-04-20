@@ -1,5 +1,12 @@
 import { LoginLink, RegisterLink } from '../api-links/constants';
 
+/**
+ * login - Sends the API call to verify the user's credentials.
+ * @param {Event} event - The event that triggers when the user clicks the login button
+ * @param {string} email - User's email
+ * @param {string} password - User's password
+ * @returns A resolved promise with the token if successful, OR a rejected promise if unsuccessful.
+ */
 async function login(event, email, password) {
     event.preventDefault();
     const requestOptions = {
@@ -28,6 +35,16 @@ async function login(event, email, password) {
         });
 }
 
+/**
+ * register - allows the user to register a new account
+ * @param {*} firstN - first name of the user
+ * @param {*} lastN - last name of the user
+ * @param {*} emailAdd - email of the user
+ * @param {*} pass - new password of the user
+ * @param {*} securityQ - security question of the user
+ * @param {*} securityA - security answer to the security question
+ * @returns A resolved promise upon success, a rejected promise upon fail. 
+ */
 async function register(firstN, lastN, emailAdd, pass, securityQ, securityA) {
     const requestOptions = {
         method: 'POST',

@@ -1,7 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import Navigation from './Navigation';
 
-import { ModalContainer, ModalContent, PageContainer, Container, PortfolioHealthContainer, PortfolioValueContainer, SectionRowDiv, LeftButtonContainer, ModalStocksContainer } from '../css/Div';
+import Navigation from './Navigation';
+import PortfolioChart from './PortfolioChart';
+import StockTable from './StockTable';
+
+import { portfolio } from '../services/portfolio';
+
+import {
+    Container,
+    LeftButtonContainer,
+    ModalContainer,
+    ModalContent,
+    ModalStocksContainer,
+    PageContainer,
+    PortfolioHealthContainer,
+    PortfolioValueContainer,
+    SectionRowDiv
+} from '../css/Div';
 import { 
     PortfolioSuggestionSubText,
     PortfolioSuggestionTitle,
@@ -14,18 +29,12 @@ import {
     PortfolioHealthText,
     ModalSuggestionTitle
 } from '../css/Text';
-
-import StockTable from './StockTable';
 import { CustomButton, CloseButton } from '../css/Button';
 
-
-import { portfolio } from '../services/portfolio';
-
-import PortfolioChart from './PortfolioChart';
+import ProgressBar from 'react-animated-progress-bar';
 import { Chip, CircularProgress } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import Alert from '@material-ui/lab/Alert';
-import ProgressBar from 'react-animated-progress-bar';
 import { Tooltip } from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
@@ -67,9 +76,14 @@ const sellStocksSuggestionEnd = `Every time you sell shares in a stock your port
 When you sell shares of a stock that you currently own, the % stake of that stock in your portfolio make up will decrease (or be completely removed if you sell all owned shares). 
 Depending on the type of stocks that you sell, your portfolio’s risk, profit, and volatility will be impacted. The portfolio health section will be updated after each sale to reflect these changes.`
 
-
+/**
+ * Portfolio page - Consists of information about the user's portfolio (stocks they own). This page describes
+ * the portfolio makeup, cumulative value, health scores, best and worst stocks and any suggestions to improve
+ * their portfolio. Also includes an editable stock table for users to add/remove/edit stocks in their portfolio.
+ */
 function Portfolio() {
 
+    // Data on the user's portfolio
     const [chartData, setChartData] = useState('Loading');
     const [portfolioValue, setPortfolioValue] = useState(0);
     const [lastContribution, setLastContribution] = useState(0);
@@ -91,6 +105,7 @@ function Portfolio() {
 
     const history = useHistory();
 
+    // Handles the errors when making api calls
     const handleError = useCallback((error) => {
         setError(true);
         if (error === "Expired token") {
@@ -163,6 +178,7 @@ function Portfolio() {
         excellent: '#0cac64',
     }
 
+    // Filters the user's portfolio to get stocks purchased more than a year ago
     function getOldStocks() {
         const oldStocks = portfolioStocks.filter(stock => {
             const purchaseDate = new Date(stock.first_purchase_date);
@@ -178,6 +194,7 @@ function Portfolio() {
         return oldStocks;
     }
 
+    // Filters the user's portfolio to get stocks purchased less than a year ago
     function getYoungStocks() {
         const newStocks = portfolioStocks.filter(stock => {
             const purchaseDate = new Date(stock.first_purchase_date);
@@ -197,7 +214,7 @@ function Portfolio() {
         <div>
             <Navigation />
             { error && (
-                <Alert variant="filled" severity="error">
+                <Alert onClose={() => setError(false)} variant="filled" severity="error">
                     {errorMsg}
                 </Alert>
             )}

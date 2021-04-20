@@ -1,12 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Navigation from './Navigation';
-import { Container, FilterContainer, SectionRowDiv, PageContainer } from '../css/Div';
-import { ColorText, NormalText, PageTitle, SubText, SubTitle } from '../css/Text';
 
+import Navigation from './Navigation';
 import StockTable from './StockTable';
 
 import { market } from '../services/market';
+
+import {
+    Container,
+    FilterContainer,
+    PageContainer,
+    SectionRowDiv
+} from '../css/Div';
+import { ColorText, NormalText, PageTitle, SubText, SubTitle } from '../css/Text';
 
 import Alert from '@material-ui/lab/Alert';
 import { CircularProgress } from '@material-ui/core';
@@ -21,6 +27,10 @@ const headings = [
     { id: 'price', disablePadding: false, numeric: true, label: 'Current Price' },
 ];
 
+/**
+ * Market Page - Page where users can see real stock data on the most active stocks in the market. 
+ * @returns 
+ */
 function Market() {
     // Component will rerender upon filtering the rows
     const [rows, setRows] = useState([]);
@@ -92,6 +102,7 @@ function Market() {
         }
     }, [history]);
 
+    // useEffect for gathering data about the most active stocks on each page of the table
     useEffect(() => {
         console.log("Page direction: ", pageDirection);
         if (pageDirection === 'right') {
@@ -105,6 +116,7 @@ function Market() {
         } 
     }, [page, pageDirection, handleError]);
 
+    // useEffect for gathering data about the market losers
     useEffect(() => {
         market.getMarketData('losers', 0).then(response => {
             console.log("Losers: ", response);
@@ -114,6 +126,7 @@ function Market() {
         });
     }, [history, handleError]);
 
+    // useEffect for gathering data about the market gainers
     useEffect(() => {
         market.getMarketData('gainers', 0).then(response => {
             console.log("Gainers: ", response);
@@ -127,7 +140,7 @@ function Market() {
         <>
             <Navigation />
             {error && (
-                <Alert variant="filled" severity="error">
+                <Alert onClose={() => setError(false)} variant="filled" severity="error">
                     {errorMsg}
                 </Alert>
             )}

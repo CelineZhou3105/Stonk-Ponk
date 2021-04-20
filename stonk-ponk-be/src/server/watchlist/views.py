@@ -15,7 +15,7 @@ from watchlist.models import Watchlist, StockWatch
 def create_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
-    name = body["watchlist_name"] 
+    name = body["label"] 
 
     # how do we want to handle things that have been aleady created?
     wl = Watchlist.objects.create(user = user, name = name) 
@@ -28,8 +28,7 @@ def delete_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
 
-    watchlist_id = body["watchlist_id"]
-
+    watchlist_id = body["id"]
     try:
         wl = Watchlist.objects.get(id = watchlist_id, user = user) 
         if wl.user != user:
@@ -45,8 +44,7 @@ def delete_watchlist(request):
 def save_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
-
-    watchlist = body["watchlist_id"]
+    watchlist = body["id"]
     
     try:
         wl = Watchlist.objects.get(id = watchlist, user = user)

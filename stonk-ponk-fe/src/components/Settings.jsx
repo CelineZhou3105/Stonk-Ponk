@@ -1,22 +1,45 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { TextField, SettingsLabel, SettingsModalLabel } from '../css/Form';
-import { FlexRowLeftDiv, FlexColumnLeftDiv, PageContainer, LineDivider, SettingRowDiv, SettingEditRowDiv, SettingFieldDiv, ModalContainer, ModalContent, SettingModalDiv, FlexColumnCenterDiv } from '../css/Div';
+
 import Navigation from './Navigation';
-import { EditButton, SaveButton, CancelButton, CloseButton } from '../css/Button';
-import { ProfilePhoto } from '../css/Image';
-import profile from '../images/blobfish.png';
-import { PageTitle } from '../css/Text';
+
 import { checkPassword } from '../helpers/helpers';
 import { settings } from '../services/settings';
+
+import profile from '../images/blobfish.png';
+import {
+    SettingsLabel,
+    SettingsModalLabel,
+    TextField
+} from '../css/Form';
+import { 
+    FlexColumnCenterDiv,
+    FlexColumnLeftDiv,
+    FlexRowLeftDiv,
+    LineDivider,
+    ModalContainer,
+    ModalContent,
+    PageContainer,
+    SettingEditRowDiv,
+    SettingFieldDiv,
+    SettingModalDiv,
+    SettingRowDiv,
+} from '../css/Div';
+
+import { EditButton, SaveButton, CancelButton, CloseButton } from '../css/Button';
+import { ProfilePhoto } from '../css/Image';
+import { PageTitle } from '../css/Text';
+
 import Alert from '@material-ui/lab/Alert';
 
+/**
+ * Settings - Page where the user can see their details (first & last name) and change their password.
+ */
 const Settings = () => {
 
     const history = useHistory();
 
-    // initialise variables
-    // change this to get from backend
+    // Initialise variables
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailAdd, setEmailAdd] = useState('');
@@ -53,6 +76,7 @@ const Settings = () => {
         }
     }, [history]);
 
+    // useEffect to get user's data from the backend
     useEffect(() => {
         settings.getUser()
             .then(response => response.json())
@@ -66,6 +90,7 @@ const Settings = () => {
             })
     }, [handleError]);
 
+    // Function to edit the name of the user
     const EditName = () => {
         setNameDisabled(true);
         setOldFirstName(firstName);
@@ -73,6 +98,7 @@ const Settings = () => {
         settings.changeName(firstName, lastName);
     }
 
+    // Function to edit the email of the user
     const EditEmail = () => {
         setEmailDisabled(true);
         setOldEmail(emailAdd);
@@ -122,12 +148,12 @@ const Settings = () => {
         <div>
             <Navigation settings="true" />
             {success && (
-                <Alert variant="filled" severity="success">
+                <Alert onClose={() => setSuccess(false)} variant="filled" severity="success">
                     You changed your login credentials! Please log in again. Logging out...
                 </Alert>
             )}
             {error && (
-                <Alert variant="filled" severity="error">
+                <Alert onClose={() => setError(false)} variant="filled" severity="error">
                     {errorMsg}
                 </Alert>
             )}

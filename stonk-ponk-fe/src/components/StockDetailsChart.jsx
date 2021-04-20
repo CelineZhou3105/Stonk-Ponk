@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
+
 import Chart from "react-google-charts";
 import { market } from '../services/market';
-
 
 /**
  * StockDetails Chart - Line graph displayed on each individual stock details page.
@@ -13,6 +13,7 @@ const StockDetailsChart = ({ period, id }) => {
         setData([['date', 'price']]);
     }, [period]);
 
+    // Gets historical prices of the given stock for a given period
     useEffect(() => {
         console.log(period);
         market.getStockPrice(id, period)
