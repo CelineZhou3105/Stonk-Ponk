@@ -62,8 +62,9 @@ Response
 @require_http_methods(["POST"])
 def login(request):
     try:
+        print("sdfsdf")
         body = json.loads(request.body.decode('utf-8'))
-        email = body["email"]
+        email = body["email"].lower()
         password = body["password"]
         user = User.objects.get(email=email)
 
@@ -73,7 +74,8 @@ def login(request):
         payload = jwt_payload_handler(user)
         res = { 'token': jwt_encode_handler(payload) }
         return HttpResponse(json.dumps(res))
-    except:
+    except Exception as e:
+        raise e
         return HttpResponseBadRequest()
     return HttpResponse()
 '''
@@ -199,19 +201,31 @@ def change_email(request):
 @require_http_methods(["PUT"])
 @require_token
 def change_password_with_auth(request):
-        body = json.loads(request.body.decode("utf-8"))
-        user = get_user(request)
+    body = json.loads(request.body.decode("utf-8"))
+    user = get_user(request)
 
-        old_password = body["old_password"]
-        new_password = body["new_password"]
+    old_password = body["old_password"]
+    new_password = body["new_password"]
 
-        if (user.check_password(old_password)):
-            user.set_password(new_password)
-            user.save()
-        else:
-            return HttpResponseForbidden(json.dumps({"error": "incorrect password"}))
+    if (user.check_password(old_password)):
+        user.set_password(new_password)
+        user.save()
+    else:
+        return HttpResponseForbidden(json.dumps({"error": "incorrect password"}))
 
-        return HttpResponse()
+    return HttpResponse()
+
+@require_http_methods(["POST"])
+@require_token
+def save_profile_picture(request):
+    body = json.loads(request.body.decode("utf-8"))
+    user = get_user(request)
+
+    image_encoded_64 = body["image"]
+    user.change_profile_picture(image_encoded_64)
+    user.save()
+
+    return HttpResponse()
 
 @require_http_methods(["GET"])
 @require_token
@@ -220,10 +234,12 @@ def get_user_details(request):
         user = get_user(request)
         ret = {"first_name" : str(user.first_name), 
                 "last_name" : str(user.last_name), 
-                "email" : str(user.email)}
+                "email" : str(user.email),
+                "image" : user.get_profile_picture()}
+                
         return HttpResponse(json.dumps(ret))
     except Exception as e :
+        raise e
         return HttpResponseBadRequest(json.dumps({"eee": "EEEE"})) 
 
     return HttpResponseBadRequest() 
-

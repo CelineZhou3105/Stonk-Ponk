@@ -221,16 +221,18 @@ def metrics(request):
         user = get_user(request)
         portfolio = Portfolio.objects.get(email=user.email)
 
-        scores = {}
-        scores["beta_score"] = round(calc_diversification_score(portfolio))
-        scores["profit_score"] = round(calc_profit_score(portfolio))
-        scores["volatility_score"] = round(calc_volatility_score(portfolio))
-
+        scores = {"beta_score": 0, "profit_score": 0, "volatility_score": 0}
         suggestions = []
 
-        suggestions.append(get_suggestions("beta", scores["beta_score"]))
-        suggestions.append(get_suggestions("profit", scores["profit_score"]))
-        suggestions.append(get_suggestions("volatility", scores["volatility_score"]))
+        if len(portfolio.get_stock_ownerships()) > 0:
+            scores["beta_score"] = round(calc_diversification_score(portfolio))
+            scores["profit_score"] = round(calc_profit_score(portfolio))
+            scores["volatility_score"] = round(calc_volatility_score(portfolio))
+
+            suggestions.append(get_suggestions("beta", scores["beta_score"]))
+            suggestions.append(get_suggestions("profit", scores["profit_score"]))
+            suggestions.append(get_suggestions("volatility", scores["volatility_score"]))
+        
 
         responseData = {"scores": scores, "suggestions": suggestions}
 

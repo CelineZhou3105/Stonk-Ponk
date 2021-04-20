@@ -96,6 +96,9 @@ export const CustomButton = styled.button`
     &:hover {
         background-color: ${props => props.hoverColor ? props.hoverColor : '#b55cfa'};
     }
+    &:disabled {
+        background-color: grey;
+    }
 `;
 
 /* Navigation */

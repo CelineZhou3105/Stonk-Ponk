@@ -25,9 +25,6 @@ class Watchlist(models.Model):
         for ticker in tickers:
             self.add_stock(ticker)
 
-#in future this will be an intermediary class with references to:
-#Watchlist
-#Stock
 class StockWatch(models.Model):
     ticker = models.CharField(max_length=10)
     watchlist = models.ForeignKey(Watchlist, on_delete = models.CASCADE) 

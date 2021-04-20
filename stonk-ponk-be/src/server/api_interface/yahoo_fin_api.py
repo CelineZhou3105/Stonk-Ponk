@@ -12,12 +12,6 @@ class YfApi():
         self.markets = ["", ".AX"]
         self.api = si
 
-    def get_market_status(self):
-        market_status = self.api.get_market_status()
-        self.num_calls += 1
-        print(market_status)
-        return market_status
-
     def get_most_active(self, start_index, end_index):
         market_stocks = self.api.get_day_most_active()
         self.num_calls += 1
@@ -47,8 +41,6 @@ class YfApi():
         end_index = start_index + 10
         market_stocks = market_stocks.iloc[start_index:end_index]
         market_stocks_list = []
-
-        market_stock_dict = {}
 
         for index, row in market_stocks.iterrows():
             market_stock_dict = {}
@@ -88,7 +80,7 @@ class YfApi():
             stock_dict['exchange'] = quotes['fullExchangeName']
 
             stock_dict['fifty_two_week_range'] = quotes['fiftyTwoWeekRange']
-            stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
+            stock_dict['market_cap'] = quotes['marketCap']
 
             return stock_dict
     
@@ -102,19 +94,18 @@ class YfApi():
         except: 
             return "Stock Not Found"
 
-    def get_stats(self,ticker):
+    #Refactored function deprecated get_stats
+    def get_beta(self, ticker):
         try:
-            return self.api.get_stats(ticker)
-            self.num_calls += 1
+            stats = self.api.get_stats(ticker)
+            for index, df in stats.iterrows():
+                if df["Attribute"] == "Beta (5Y Monthly)":
+                    beta = float(df["Value"])
+                    return beta
+        
+            return "Beta Not Found"
         except:
             return "Stock Not Found"
-
-    def get_quotes(self,ticker):
-        try:
-            return self.api.get_quote_table(ticker)
-            self.num_calls += 1
-        except:
-            raise Error("Stock Not Found")
 
     #interval will be market, last_week, last_month, last_six_months, last_year
     def get_stock_prices(self, ticker, interval_type):
@@ -151,9 +142,11 @@ class YfApi():
         self.num_calls += 1
 
         for index, row in price_data.iterrows():
-            index.to_pydatetime()
-            index = index.strftime("%Y-%m-%d")
-            price_list.append({'date': index, 'price': row['close']})
+            #check for NaN
+            if row['close'] == row['close']:
+                index.to_pydatetime()
+                index = index.strftime("%Y-%m-%d")
+                price_list.append({'date': index, 'price': row['close']})
         
         return price_list
 

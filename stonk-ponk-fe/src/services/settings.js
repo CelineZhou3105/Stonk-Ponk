@@ -1,5 +1,14 @@
-import { ChangeNameLink, ChangeEmailLink, ChangePasswordWithAuthLink, GetUserDetailsLink } from '../api-links/constants';
+import {
+    ChangeEmailLink,
+    ChangeNameLink,
+    ChangePasswordWithAuthLink,
+    GetUserDetailsLink
+} from '../api-links/constants';
 
+/**
+ * getUser - makes the API call to get the user's details
+ * @returns user's details like first name, last name, email
+ */
 const getUser = async () => {
     const requestOptions = {
         method: 'GET',
@@ -22,6 +31,12 @@ const getUser = async () => {
         })
 }
 
+/**
+ * changeName - Allows the user to change their first name and/or last name
+ * @param {string} firstN - first name of the user
+ * @param {string} lastN - last name of the user
+ * @returns nothing if successful, a rejected promise if failed
+ */
 const changeName = async (firstN, lastN) => {
     const requestOptions = {
         method: 'PUT',
@@ -46,17 +61,16 @@ const changeName = async (firstN, lastN) => {
                 return Promise.reject(response);
             }
         })
-        .then(() => {
-            alert("You changed your name!");
-        })
-        .catch((error) => {
-            Promise.resolve(error)
-                .then((e) => {
-                    alert(`${e.status} ${e.statusText}`);
-                });
+        .catch((e) => {
+            return Promise.reject(e);
         });
 }
 
+/**
+ * changeEmail - Makes the API call to edit a user's email
+ * @param {*} emailNew - new email of the user
+ * @returns nothing if successful, a rejected Promise otherwise.
+ */
 const changeEmail = async (emailNew) => {
 
     const requestOptions = {
@@ -75,10 +89,19 @@ const changeEmail = async (emailNew) => {
             if (response.ok) { // if status code is 200      
                 return response;
             } // if status code is not 200
-            return Promise.reject(response);
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject(response);
+            }
+        }).catch(e => {
+            return Promise.reject(e)
         })
 }
 
+/**
+ * changePassword - Makes the API call to edit the user's password 
+ */
 const changePassword = async (passwordNew, passwordOld) => {
     const requestOptions = {
         method: 'PUT',
@@ -101,6 +124,8 @@ const changePassword = async (passwordNew, passwordOld) => {
             } else {
                 return Promise.reject(response);
             }
+        }).catch(e => {
+            return Promise.reject(e);
         })
 }
 

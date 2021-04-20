@@ -113,13 +113,10 @@ class Portfolio(models.Model) :
         total_beta = 0 # beta * volume
         total_value= 0 # sum of all the volume used in calcuating the beta
         for so in self.get_stock_ownerships():
-            ticker = so.stock.ticker
-            stats = stock_api.get_stats(ticker)
-            beta = 0
-            for index, df in stats.iterrows():
-                if df["Attribute"] == "Beta (5Y Monthly)":
-                    beta = float(df["Value"])
-                    break
+            ticker = so.stock.market_ticker
+
+            beta = stock_api.get_beta(ticker)
+            
             if beta != None:
                 value = so.volume * stock_api.get_price(ticker)
                 total_beta += beta * value

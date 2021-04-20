@@ -1,9 +1,11 @@
 import React from 'react';
+
+import { GlossaryContainer } from '../../css/Div';
+import { SubText, SubTitle } from '../../css/Text';
+
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
-import { GlossaryContainer } from '../../css/Div';
-import { SubText, SubTitle } from '../../css/Text';
 
 const glossary = [
     { word: 'Ticker', definition: 'Or stock symbol is a unique series of letters assigned to a security for trading purposes'},
@@ -36,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
+/**
+ * Glossary - An accordion component which shows users the definition of words across the website.
+ */
 export function Glossary () {
     const classes = useStyles();
 

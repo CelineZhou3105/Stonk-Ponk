@@ -6,12 +6,12 @@ import Navigation from './Navigation';
 import { market } from '../services/market';
 import { getMarketNews, getNews } from '../services/news';
 
-import { 
+import {
     Container,
     FlexRowLeftDiv,
     NewsContainer,
     NewsTitleContainer,
-    PageContainer, 
+    PageContainer,
     SectionRowDiv
 } from "../css/Div";
 import {
@@ -27,10 +27,14 @@ import Pagination from '@material-ui/lab/Pagination';
 import Alert from '@material-ui/lab/Alert';
 import { CircularProgress, Chip } from '@material-ui/core';
 
-
+/**
+ * News - News page which shows the news around the most active stocks and allows the user to search for news
+ * on any particular stock by ticker. 
+ * @returns 20 articles for most active stocks, 5 articles per individual stock queried
+ */
 function News() {
     // User input into the search bar
-    const [input, setInput] = useState(null); 
+    const [input, setInput] = useState(null);
 
     // Aborter for cancelling previous API calls
     const lastAbortController = useRef();
@@ -73,7 +77,7 @@ function News() {
             setArticles(response);
             if (response.length > 10) {
                 setArticlesShown(response.slice(0, 10));
-                setPages(Math.floor(response.length /10));
+                setPages(Math.floor(response.length / 10));
 
             } else {
                 setArticlesShown(response);
@@ -96,29 +100,29 @@ function News() {
             lastAbortController.current = currentAbortController;
 
             const currentPromise = market.checkTickerExists(input, currentAbortController)
-            .then(response => response.json())
-            
+                .then(response => response.json())
+
             currentPromise
-            .then(res => {
-                console.log(res);
-                setStockOptions(res);
-            }).catch(error => {
-                // Do nothing - this means there are no search results, which is normal
-            })
+                .then(res => {
+                    console.log(res);
+                    setStockOptions(res);
+                }).catch(error => {
+                    // Do nothing - this means there are no search results, which is normal
+                })
         }
     }, [input, handleError])
 
-    function renderArticles (page) {
+    function renderArticles(page) {
         const start = page * 10;
         const end = page * 10 + 10;
-        
+
         const newArticles = articles.slice(start, end);
-        setArticlesShown(newArticles); 
+        setArticlesShown(newArticles);
     }
-    
+
     // Get market news after the person clears the search bar, otherwise get news for the stock
     const handleInputChange = (event, value, reason) => {
-        if (reason === "clear" ||  value === '') {
+        if (reason === "clear" || value === '') {
             // Set it back to market news
             setArticles(null);
             setInput(null);
@@ -132,21 +136,21 @@ function News() {
     // Function to get the news for the most active stocks
     const getTopStocksNews = useCallback(() => {
         getMarketNews()
-        .then(response => {
-            setArticles(response);
-            if (response.length > 10) {
-                const newArticles = response.slice(0, 10);
-                console.log(newArticles);
-                setArticlesShown(response.slice(0, 10));
-                setPages(Math.floor(response.length /10));
+            .then(response => {
+                setArticles(response);
+                if (response.length > 10) {
+                    const newArticles = response.slice(0, 10);
+                    console.log(newArticles);
+                    setArticlesShown(response.slice(0, 10));
+                    setPages(Math.floor(response.length / 10));
 
-            } else {
-                setArticlesShown(response);
-                setPages(1);
-            }
-        }).catch((error) => {
-            handleError(error);
-        });
+                } else {
+                    setArticlesShown(response);
+                    setPages(1);
+                }
+            }).catch((error) => {
+                handleError(error);
+            });
     }, [handleError]);
 
     // Function to handle page changes
@@ -164,31 +168,31 @@ function News() {
         <>
             <Navigation />
             {error && (
-                <Alert variant="filled" severity="error">
+                <Alert onClose={() => setError(false)} variant="filled" severity="error">
                     {errorMsg}
                 </Alert>
             )}
             <PageContainer>
                 <PageTitle>News</PageTitle>
-                <SubText>Don't know the ticker? Find it on: <Link href="https://www.marketwatch.com/tools/quotes/lookup.asp">Market Watch</Link></SubText>
+                <SubText>Don't know the ticker? Find it on: <Link href="https://www.marketwatch.com/tools/quotes/lookup.asp" target="_blank">Market Watch</Link></SubText>
                 <Autocomplete
                     options={stockOptions}
                     getOptionLabel={(option) => option.name}
-                    onChange={(e, value) => { 
+                    onChange={(e, value) => {
                         if (value !== null) {
                             getNewsForStock(value.ticker);
                         }
                     }}
                     style={{ width: '100%' }}
                     renderInput={(params) => <AutocompleteTextField {...params} label="Enter your ticker..." variant="outlined" />}
-                    onInputChange={(e, value, reason) => { 
-                        console.log("Setting input to: ", value); 
+                    onInputChange={(e, value, reason) => {
+                        console.log("Setting input to: ", value);
                         handleInputChange(e, value, reason);
                     }}
                     noOptionsText="No stocks found."
                     filterOptions={x => x}
                 />
-                {input === null 
+                {input === null
                     ? <PageTitle>Market News for Most Active Stocks</PageTitle>
                     : <PageTitle>Market News for {input}</PageTitle>
                 }
@@ -202,7 +206,7 @@ function News() {
                                 <NewsContainer key={index}>
                                     <div>
                                         <NewsTitleContainer>
-                                            <Chip color="primary" size="small" label={article.ticker}/>
+                                            <Chip color="primary" size="small" label={article.ticker} />
                                             <NormalText><Link color="black" href={article.link} target="_blank">{article.title}</Link></NormalText>
                                         </NewsTitleContainer>
                                         <SubText>{article.published}</SubText>
@@ -214,7 +218,7 @@ function News() {
                         }
                         <FlexRowLeftDiv>
                             Page: {pageNum}
-                            <Pagination count={pages} page={pageNum} onChange={handlePageChange}/>
+                            <Pagination count={pages} page={pageNum} onChange={handlePageChange} />
                         </FlexRowLeftDiv>
                     </Container>
                 }

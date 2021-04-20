@@ -26,7 +26,7 @@ class NewsApiInterface:
     #gets priority list from admin and sorts based on priority
     def set_news_api_order(order_list):
         try:
-            NewsApiInterface.news_api_list = sorted(NewsApiInterface.news_api_list, key = lambda item: item['priority'])
+            NewsApiInterface.news_api_list = sorted(order_list, key = lambda item: item['priority'])
             return True
         except:
             return False 

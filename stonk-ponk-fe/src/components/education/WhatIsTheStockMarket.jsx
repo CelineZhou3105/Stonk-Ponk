@@ -1,9 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+
+import Navigation from '../Navigation';
+
 import { FlexColumnLeftDiv, FlexRowDiv, PageContainer } from '../../css/Div';
 import { PurpleItalicText } from '../../css/Text';
 import { CustomButton } from '../../css/Button';
-import Navigation from '../Navigation';
 
 const WhatIsTheStockMarket = () => {
     // navigate back to sign in
@@ -12,7 +14,6 @@ const WhatIsTheStockMarket = () => {
         const path = `/education`;
         history.push(path);
     };
-
 
     return (
         <div>

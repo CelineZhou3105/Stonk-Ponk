@@ -1,5 +1,6 @@
 from GoogleNews import GoogleNews
-from stocks import stock_api
+from api_interface.stock_api_interface import StockApiInterface as stock_api
+#from stocks import stock_api
 import pandas as pd
 import requests
 import json

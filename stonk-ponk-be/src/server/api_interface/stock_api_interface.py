@@ -1,10 +1,16 @@
-from api_interface.yahoo_fin_api import YfApi
 from administration.models import StockApiPriority
+from .yahoo_fin_api import YfApi
+from .alphavantage_api import AaApi
+from .cache_api import cache
+
+import datetime
+
 #class creates an interface for all api classes.
 class StockApiInterface:
     #Creates an instance of all stock modules and stores them in order lists
     stock_api_map = {}
     stock_api_map["yahoo_fin"] = YfApi()
+    stock_api_map["alphavantage"] = AaApi()
 
     stock_api_list = [{"name":"yahoo_fin", "priority": 1},{"name":"alpha_vantage", "priority": 2}]
 
@@ -36,16 +42,7 @@ class StockApiInterface:
         except Exception as e:
             return e 
     
-    def get_market_status():
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
-            try:
-                api = StockApiInterface.stock_api_map[api_dict['name']]
-                return api.get_market_status()
-            except:
-                continue
-
-        return False
-    
+    @cache(datetime.timedelta(minutes=5))
     def get_most_active(start_index, end_index):
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
@@ -56,9 +53,11 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(minutes=5))
     def get_market_data(data_type, page_num):
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
+                print("Trying ", api_dict['name'])
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_market_data(data_type, page_num)
             except:
@@ -66,6 +65,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(minutes=5))
     def get_stock_data(ticker):
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
@@ -77,6 +77,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(minutes=5))
     def get_price(ticker):
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
@@ -87,26 +88,18 @@ class StockApiInterface:
 
         return False
     
-    def get_stats(ticker):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+    @cache(datetime.timedelta(hours=1))
+    def get_beta(ticker):
+        for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
-                return api.get_stats(ticker)
+                return api.get_beta(ticker)
             except:
                 continue
 
         return False
     
-    def get_quotes(ticker):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
-            try:
-                api = StockApiInterface.stock_api_map[api_dict['name']]
-                return api.get_quotes(ticker)
-            except:
-                continue
-
-        return False
-    
+    @cache(datetime.timedelta(minutes=5))
     def get_stock_prices(ticker, interval_type):
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
@@ -117,6 +110,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(hours=1))
     def get_historical_price(ticker, date):
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
@@ -126,6 +120,7 @@ class StockApiInterface:
                 continue
         return False
     
+    @cache(datetime.timedelta(minutes=1))
     def check_stock(ticker):
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
@@ -135,6 +130,7 @@ class StockApiInterface:
                 continue
         return False
     
+    @cache(datetime.timedelta(minutes=1))
     def check_stocks(ticker):
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:

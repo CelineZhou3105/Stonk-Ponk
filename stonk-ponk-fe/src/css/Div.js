@@ -71,7 +71,15 @@ export const SignUpSectionDiv = styled.div`
 
 export const FlexColumnCenterDiv = createFlexColumnDiv("center", "center", "50px");
 
-export const FlexColumnLeftDiv = createFlexColumnDiv("center", "flex-start", "2%");
+export const FlexColumnLeftDiv = createFlexColumnDiv("center", "flex-start", "10px");
+
+export const ProfilePictureContainer = styled.div`
+    ${FlexColumn}
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+`;
 
 function createLineDivider(width) {
     return styled.div`
@@ -191,11 +199,6 @@ export const ProfileModal = styled.div`
     color: #000;
     width: 300px;
     z-index: 9999;
-
-    @media (max-width: 1280px) {
-        top: 200px;
-        right: auto;
-    }
 `;
 
 export const ProfilePhotoContainer = styled.div`
@@ -222,7 +225,7 @@ export const MenuContainer = styled.div`
     justify-content: left;
     width: 100px;
     background-color: #af28ff;
-
+    z-index: 9999;
     @media (max-width: 1280px) {
         display: flex;
     }
@@ -230,7 +233,7 @@ export const MenuContainer = styled.div`
 
 export const SideBar = styled.div`
     height: 100%; 
-    width: ${props => props.open ? '250px': 0}; 
+    width: ${props => props.open ? '250px' : 0}; 
     position: fixed; 
     z-index: 1; 
     right: 0; 
@@ -385,12 +388,17 @@ export const NewsTitleContainer = styled.div`
     align-items: center;
 `;
 
+export const WatchlistTable = styled.div`
+    width: 98%;
+`;
+
 /* Education page elements */
 export const EducationTileGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1em;
-
+    margin-left: 20%;
+    margin-right: 20%;
     @media (max-width: 850px) {
         grid-template-columns: repeat(2, 1fr); 
     }
@@ -411,6 +419,13 @@ export const LeftButtonContainer = styled.div`
     position: relative;
     top: 55px;
     width: min-content;
+
+    @media (max-width: 700px) {
+        position: static;
+        justify-content: flex-end;
+        width: 100%;
+        padding-bottom: 1em;
+    }
 `;
 
 export const ModalStocksContainer = styled.div`
