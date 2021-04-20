@@ -137,7 +137,11 @@ function CreateModal(props) {
                     <Autocomplete
                         options={stockOptions}
                         getOptionLabel={(option) => option.name}
-                        onChange={(e, value) => { setStockTicker(value.ticker) }}
+                        onChange={(e, value) => { 
+                            if (value !== null) {
+                                setStockTicker(value.ticker) 
+                            }
+                        }}
                         style={{ width: '100%' }}
                         renderInput={(params) => <AutocompleteTextField {...params} label="Enter your ticker..." variant="outlined" />}
                         onInputChange={(e, value, reason) => {

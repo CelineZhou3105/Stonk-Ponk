@@ -193,9 +193,6 @@ function StockTable(props) {
 
     // For portfolio view - saves changes for a portfolio by making the API call
     const saveChanges = () => {
-        // TODO: Call the API to save changes
-        const token = localStorage.getItem('token');
-
         if (place === 'portfolio') {
             const newPortfolio = {};
             const newStocks = [];
@@ -218,7 +215,7 @@ function StockTable(props) {
             }
             newPortfolio['stocks'] = newStocks;
 
-            portfolio.editPortfolio(token, newPortfolio).then(() => {
+            portfolio.editPortfolio(newPortfolio).then(() => {
                 setEditMode(false);
                 console.log("Changes saved.");
                 setPreviousRows(data);
