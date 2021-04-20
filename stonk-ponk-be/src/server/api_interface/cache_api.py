@@ -9,6 +9,7 @@ class CacheExpired(Exception):
 class CacheMiss(Exception):
     pass
 
+
 class cache():
     def __init__(self, ttl, max_items=C_DEFAULT_CACHE_MAX):
         self.blob = {}
@@ -66,21 +67,3 @@ class cache():
 
     def eject(self, entry):
         self.blob.pop(entry)
-
-class testClass():
-    def __init__(self, secret):
-        self.secret = secret
-
-    @cache(datetime.timedelta(seconds=5))
-    def mult(self, x):
-        return self.secret * x
-
-if __name__ == '__main__':
-    tc = testClass(3)
-    print(tc.mult(2))
-    print(tc.mult(3))
-    print(tc.mult(4))
-    print(tc.mult(5))
-    print(tc.mult(6))
-    print(tc.mult(7))
-
