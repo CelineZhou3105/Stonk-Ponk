@@ -215,6 +215,17 @@ def change_password_with_auth(request):
 
     return HttpResponse()
 
+@require_http_methods(["POST"])
+@require_token
+def save_profile_picture(request):
+    body = json.loads(request.body.decode("utf-8"))
+    user = get_user(request)
+
+    image_encoded_64 = body["image"]
+    user.change_profile_picture(image_encoded_64)
+
+    return HttpResponse()
+
 @require_http_methods(["GET"])
 @require_token
 def get_user_details(request):
