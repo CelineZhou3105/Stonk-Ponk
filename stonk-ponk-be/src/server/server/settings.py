@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'stocks',
     'portfolio',
     'watchlist',
-    'api_interface'
+    'api_interface',
+    'administration'
 ]
 
 MIDDLEWARE = [
