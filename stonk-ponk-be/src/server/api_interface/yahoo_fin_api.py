@@ -175,8 +175,6 @@ class YfApi():
     
         except:
             return False
-        
-        return stock_list
 
     def check_stocks(self, ticker):
         stock_list = []

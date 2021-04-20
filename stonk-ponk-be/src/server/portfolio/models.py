@@ -103,7 +103,7 @@ class Portfolio(models.Model) :
         au_value = forex_api.calc_forex_rate(tVal, "USD", "AUD")
         print("tVal ", tVal)
         print("au_val ", au_value)
-        return tVal
+        return au_value
 
     def get_investment(self):
         tVal = 0
