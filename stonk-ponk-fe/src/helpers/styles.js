@@ -1,13 +1,13 @@
 export const customStyles = {
     menu: (provided, state) => ({
         ...provided,
-        width: 200,
+        width: 250,
         backgroundColor: 'white',
         padding: 10,
     }),
     control: (styles) => ({
         ...styles,
-        width: 200,
+        width: 250,
         cursor: 'pointer',
     }),
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
