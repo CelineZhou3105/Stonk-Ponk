@@ -21,18 +21,23 @@ class NewsApiInterface:
 
     @staticmethod
     def get_news_api_order():
-        return NewsApiInterface.news_api_list
+        return NewsApiInterface.get_ordered_news_api_list()
     
     #gets priority list from admin and sorts based on priority
+    #simply delete all existing NewsApiPriority objects and reinsert
+    #TODO
     def set_news_api_order(order_list):
         try:
-            NewsApiInterface.news_api_list = sorted(order_list, key = lambda item: item['priority'])
+            NewsApiPriority.objects.all().delete();
+            for np in order_list:
+                #update entry
+                NewsApiPriority.objects.create(name = np["name"], priority = np["priority"])
             return True
-        except:
-            return False 
-    
+        except Exception as e:
+            return e    
+
     def get_news(ticker):
-        for api_dict in NewsApiInterface.news_api_list:
+        for api_dict in NewsApiInterface.get_ordered_news_api_list():
             try:
                 api = NewsApiInterface.news_api_map[api_dict['name']]
                 return api.get_news(ticker)
@@ -42,7 +47,7 @@ class NewsApiInterface:
         return False 
     
     def get_market_news():
-        for api_dict in NewsApiInterface.news_api_list:
+        for api_dict in NewsApiInterface.get_ordered_news_api_list():
             try:
                 print(api_dict['name'])
                 api = NewsApiInterface.news_api_map[api_dict['name']]
@@ -53,7 +58,7 @@ class NewsApiInterface:
         return False 
     
     def get_num_calls():
-        for api_dict in NewsApiInterface.news_api_list:
+        for api_dict in NewsApiInterface.get_ordered_news_api_list():
             total_calls = 0
             try:
                 api = NewsApiInterface.news_api_map[api_dict['name']]

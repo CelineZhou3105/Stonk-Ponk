@@ -26,12 +26,15 @@ class ForexApiInterface:
     
     #gets priority list from admin and sorts based on priority
     def set_forex_api_order(order_list):
-        try:
-            ForexApiInterface.forex_api_list = sorted(order_list, key = lambda item: item['priority'])
+   	try:
+            ForexApiPriority.objects.all().delete();
+            for fp in order_list:
+                #update entry
+                ForexApiPriority.objects.create(name = fp["name"], priority = fp["priority"])
             return True
-        except:
-            return False 
-    
+        except Exception as e:
+            return e 
+
     def get_currency_exchange(from_currency, to_currency):
         for api_dict in ForexApiInterface.get_ordered_forex_api_list():
             try:
