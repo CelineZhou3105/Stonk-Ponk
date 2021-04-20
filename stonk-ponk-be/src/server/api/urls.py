@@ -6,6 +6,6 @@ urlpatterns = [
     path('portfolio/', include('portfolio.urls')),
     path('news/', include('news.urls')),
     path('watchlist/', include('watchlist.urls')),
-    path('administration/', include('watchlist.urls')),
+    path('administration/', include('administration.urls')),
 ]    
 
