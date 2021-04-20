@@ -201,19 +201,19 @@ def change_email(request):
 @require_http_methods(["PUT"])
 @require_token
 def change_password_with_auth(request):
-        body = json.loads(request.body.decode("utf-8"))
-        user = get_user(request)
+    body = json.loads(request.body.decode("utf-8"))
+    user = get_user(request)
 
-        old_password = body["old_password"]
-        new_password = body["new_password"]
+    old_password = body["old_password"]
+    new_password = body["new_password"]
 
-        if (user.check_password(old_password)):
-            user.set_password(new_password)
-            user.save()
-        else:
-            return HttpResponseForbidden(json.dumps({"error": "incorrect password"}))
+    if (user.check_password(old_password)):
+        user.set_password(new_password)
+        user.save()
+    else:
+        return HttpResponseForbidden(json.dumps({"error": "incorrect password"}))
 
-        return HttpResponse()
+    return HttpResponse()
 
 @require_http_methods(["GET"])
 @require_token
