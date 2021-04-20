@@ -12,7 +12,6 @@ import jwt.exceptions
 from account.models import User
 from account.auth import require_token, get_user
 from portfolio.models import Portfolio, PortfolioStock, StockOwnership, Transaction
-from stocks import stock_api
 from watchlist.models import Watchlist, StockWatch
 
 @require_http_methods(["POST"])
