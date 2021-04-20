@@ -21,21 +21,10 @@ class StockApiInterface:
     def set_stock_api_order(order_list):
         try:
             StockApiInterface.stock_api_list = sorted(order_list, key = lambda item: item['priority'])
-            print(StockApiInterface.stock_api_list)
             return True
         except:
             return False 
-   
-    @cache(datetime.timedelta(minutes=1))
-    def get_market_status():
-        for api_dict in StockApiInterface.stock_api_list:
-            try:
-                api = StockApiInterface.stock_api_map[api_dict['name']]
-                return api.get_market_status()
-            except:
-                continue
 
-        return False
     
     @cache(datetime.timedelta(minutes=5))
     def get_most_active(start_index, end_index):
@@ -52,7 +41,6 @@ class StockApiInterface:
     def get_market_data(data_type, page_num):
         for api_dict in StockApiInterface.stock_api_list:
             try:
-                print("Trying ", api_dict['name'])
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_market_data(data_type, page_num)
             except:
@@ -65,7 +53,6 @@ class StockApiInterface:
         for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
-                print(api.get_stock_data(ticker))
                 return api.get_stock_data(ticker)
             except:
                 continue
@@ -84,22 +71,11 @@ class StockApiInterface:
         return False
     
     @cache(datetime.timedelta(hours=1))
-    def get_stats(ticker):
+    def get_beta(ticker):
         for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
-                return api.get_stats(ticker)
-            except:
-                continue
-
-        return False
-    
-    @cache(datetime.timedelta(minutes=5))
-    def get_quotes(ticker):
-        for api_dict in StockApiInterface.stock_api_list:
-            try:
-                api = StockApiInterface.stock_api_map[api_dict['name']]
-                return api.get_quotes(ticker)
+                return api.get_beta(ticker)
             except:
                 continue
 
@@ -138,8 +114,6 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(minutes=1))
     def check_stocks(ticker):
-        print("aaa")
-        print(ticker)
         for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]

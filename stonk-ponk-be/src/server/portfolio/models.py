@@ -1,6 +1,7 @@
 from django.db import models
 
 from api_interface.stock_api_interface import StockApiInterface as stock_api
+from api_interface.forex_api_interface import ForexApiInterface as forex_api
 
 import uuid
 import datetime
@@ -98,6 +99,10 @@ class Portfolio(models.Model) :
                 tVal += stock_api.get_price(so.get_stock_ticker()) * so.volume
             except:
                 print("LOG: ERROR: could not process {} in get_value".format(so.get_stock_ticker()))
+        
+        au_value = forex_api.calc_forex_rate(tVal, "USD", "AUD")
+        print("tVal ", tVal)
+        print("au_val ", au_value)
         return tVal
 
     def get_investment(self):
@@ -113,13 +118,10 @@ class Portfolio(models.Model) :
         total_beta = 0 # beta * volume
         total_value= 0 # sum of all the volume used in calcuating the beta
         for so in self.get_stock_ownerships():
-            ticker = so.stock.ticker
-            stats = stock_api.get_stats(ticker)
-            beta = 0
-            for index, df in stats.iterrows():
-                if df["Attribute"] == "Beta (5Y Monthly)":
-                    beta = float(df["Value"])
-                    break
+            ticker = so.stock.market_ticker
+
+            beta = stock_api.get_beta(ticker)
+            
             if beta != None:
                 value = so.volume * stock_api.get_price(ticker)
                 total_beta += beta * value

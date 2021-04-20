@@ -18,7 +18,7 @@ class cache():
 
     def __call__(self, func):
         def inner(*args, **kwargs):
-            entry = str((args[1:], kwargs))
+            entry = str((args[:], kwargs))
             try:
                 return self.get_data(entry)
             except CacheExpired:
@@ -33,7 +33,6 @@ class cache():
         return inner
 
     def get_data(self, entry):
-        print(entry)
         try:
             ref = self.blob[entry]
             if self.check_expired(entry):

@@ -12,12 +12,6 @@ class YfApi():
         self.markets = ["", ".AX"]
         self.api = si
 
-    def get_market_status(self):
-        market_status = self.api.get_market_status()
-        self.num_calls += 1
-        print(market_status)
-        return market_status
-
     def get_most_active(self, start_index, end_index):
         market_stocks = self.api.get_day_most_active()
         self.num_calls += 1
@@ -100,13 +94,6 @@ class YfApi():
         except: 
             return "Stock Not Found"
 
-    def get_stats(self,ticker):
-        try:
-            return self.api.get_stats(ticker)
-            self.num_calls += 1
-        except:
-            return "Stock Not Found"
-
     #Refactored function deprecated get_stats
     def get_beta(self, ticker):
         try:
@@ -119,14 +106,6 @@ class YfApi():
             return "Beta Not Found"
         except:
             return "Stock Not Found"
-
-    #Remove get_quotes      
-    def get_quotes(self,ticker):
-        try:
-            return self.api.get_quote_table(ticker)
-            self.num_calls += 1
-        except:
-            raise Error("Stock Not Found")
 
     #interval will be market, last_week, last_month, last_six_months, last_year
     def get_stock_prices(self, ticker, interval_type):
