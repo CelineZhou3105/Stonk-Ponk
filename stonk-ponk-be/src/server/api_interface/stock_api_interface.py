@@ -9,7 +9,7 @@ class StockApiInterface:
     stock_api_map = {}
     stock_api_map["yahoo_fin"] = YfApi()
 
-    stock_api_list = [{"name":"yahoo_fin", "priority": 2},{"name":"alpha_vantage", "priority": 1}]
+    stock_api_list = [{"name":"yahoo_fin", "priority": 1},{"name":"alpha_vantage", "priority": 2}]
     
     @staticmethod
     def get_stock_api_order():
@@ -18,7 +18,7 @@ class StockApiInterface:
     #gets priority list from admin and sorts based on priority
     def set_stock_api_order(order_list):
         try:
-            StockApiInterface.stock_api_list = sorted(StockApiInterface.stock_api_list, key = lambda item: item['priority'])
+            StockApiInterface.stock_api_list = sorted(order_list, key = lambda item: item['priority'])
             return True
         except:
             return False 
