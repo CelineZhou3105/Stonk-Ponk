@@ -1,3 +1,5 @@
+from api_interface.alphavantage_forex_api import AaForexApi
+
 class ForexApiInterface:
     forex_api_map = {}
     forex_api_map['alphavantage'] = AaForexApi()
@@ -28,5 +30,5 @@ class ForexApiInterface:
     
     def calc_forex_rate(from_value, from_currency, to_currency):
         forex_rate = ForexApiInterface.get_currency_exchange(from_currency, to_currency)
-        exchange_rate = from_value * forex_rate
-        return exchange_rate
+        exchange_value = float(from_value) * float(forex_rate)
+        return exchange_value
