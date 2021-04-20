@@ -71,7 +71,15 @@ export const SignUpSectionDiv = styled.div`
 
 export const FlexColumnCenterDiv = createFlexColumnDiv("center", "center", "50px");
 
-export const FlexColumnLeftDiv = createFlexColumnDiv("center", "flex-start", "2%");
+export const FlexColumnLeftDiv = createFlexColumnDiv("center", "flex-start", "10px");
+
+export const ProfilePictureContainer = styled.div`
+    ${FlexColumn}
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+`;
 
 function createLineDivider(width) {
     return styled.div`
