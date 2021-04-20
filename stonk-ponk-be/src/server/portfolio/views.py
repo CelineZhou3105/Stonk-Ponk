@@ -240,16 +240,3 @@ def metrics(request):
     except Exception as e:
         pass
     return HttpResponseBadRequest()
-
-
-         
-    
-
-    
-    
-
-
-
-
-
-

@@ -18,7 +18,7 @@ class cache():
 
     def __call__(self, func):
         def inner(*args, **kwargs):
-            entry = str((args[1:], kwargs))
+            entry = str((args[:], kwargs))
             try:
                 return self.get_data(entry)
             except CacheExpired:

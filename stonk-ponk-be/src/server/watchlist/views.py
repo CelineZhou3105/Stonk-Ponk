@@ -10,6 +10,8 @@ from account.auth import require_token, get_user
 from portfolio.models import Portfolio, PortfolioStock, StockOwnership, Transaction
 from watchlist.models import Watchlist, StockWatch
 
+from api_interface.stock_api_interface import StockApiInterface as stock_api
+
 @require_http_methods(["POST"])
 @require_token
 def create_watchlist(request):
@@ -77,5 +79,15 @@ def get_watchlist_stocks(request):
     if watchlist.user != user:
         return HttpResponseBadRequest("you naughty naughty")
     tickers = [sw.ticker for sw in list(StockWatch.objects.filter(watchlist = watchlist))]
-    ret = {"tickers" : tickers}
-    return HttpResponse(json.dumps(ret))
+    
+    stock_data_list = []
+
+    for ticker in tickers:
+        stock_dict = {}
+        stock_dict['ticker'] = ticker
+        stock_dict['price'] = stock_api.get_price(ticker)
+        stock_dict['name'] = stock_api.check_stock(ticker)['name']
+        stock_dict['prices'] = stock_api.get_stock_prices(ticker, "market")
+        stock_data_list.append(stock_dict)
+    
+    return HttpResponse(json.dumps(stock_data_list))

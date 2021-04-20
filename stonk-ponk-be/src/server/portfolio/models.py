@@ -1,6 +1,7 @@
 from django.db import models
 
 from api_interface.stock_api_interface import StockApiInterface as stock_api
+from api_interface.forex_api_interface import ForexApiInterface as forex_api
 
 import uuid
 import datetime
@@ -98,7 +99,11 @@ class Portfolio(models.Model) :
                 tVal += stock_api.get_price(so.get_stock_ticker()) * so.volume
             except:
                 print("LOG: ERROR: could not process {} in get_value".format(so.get_stock_ticker()))
-        return tVal
+        
+        au_value = forex_api.calc_forex_rate(tVal, "USD", "AUD")
+        print("tVal ", tVal)
+        print("au_val ", au_value)
+        return au_value
 
     def get_investment(self):
         tVal = 0

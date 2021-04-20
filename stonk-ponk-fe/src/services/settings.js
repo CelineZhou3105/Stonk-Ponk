@@ -129,6 +129,10 @@ const changePassword = async (passwordNew, passwordOld) => {
         })
 }
 
+const changeProfilePicture = async (image) => {
+    
+}
+
 
 export const settings = {
     getUser,
