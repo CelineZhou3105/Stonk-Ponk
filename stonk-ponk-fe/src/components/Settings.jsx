@@ -340,20 +340,6 @@ const Settings = () => {
 					</FlexColumnLeftDiv>
 				</FlexRowLeftDiv>
 				<LineDivider />
-				<FlexRowLeftDiv>
-					<label class="switch">
-						<input type="checkbox" />
-						<span class="slider" />
-					</label>
-					<FlexColumnLeftDiv>
-						<h3>Suggestions</h3>
-						<p>These are suggestions on how to improve your portfolio over time.</p>
-						<p>
-							Depending on the composition of your portfolio and earnings, we will give you suggestions on
-							your next investment move.
-						</p>
-					</FlexColumnLeftDiv>
-				</FlexRowLeftDiv>
 			</PageContainer>
 		</div>
 	);
