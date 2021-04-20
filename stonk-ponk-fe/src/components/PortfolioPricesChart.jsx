@@ -10,6 +10,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
  */
 const PortfolioPricesChart = ({ ticker, period }) => {
 
+    // Tracks errors
+    const [error, setError] = useState(false);
+
     const [data, setData] = useState([['date', 'price']]);
     useEffect(() => {
         setData([['date', 'price']]);
@@ -28,11 +31,7 @@ const PortfolioPricesChart = ({ ticker, period }) => {
                 setData(data => data.concat(tableArray));
             })
             .catch((error) => {
-                Promise.resolve(error)
-                    .then((error) => {
-                        console.log(error)
-                        alert(`${error.status} ${error.statusText}`);
-                    });
+                setError(true);
             })
     }, [ticker, period]);
 
@@ -54,7 +53,9 @@ const PortfolioPricesChart = ({ ticker, period }) => {
     }
 
     return (
-        <Chart
+        error 
+        ? <div>Could not load chart data.</div>
+        : <Chart
             width={350}
             height={150}
             chartType="LineChart" 

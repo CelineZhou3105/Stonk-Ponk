@@ -23,6 +23,7 @@ import { PageTitle } from '../css/Text';
 import { Tooltip, Chip } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 /**
  * StockDetails - Page showing the details of an individual stock. 
@@ -42,6 +43,10 @@ function StockDetails() {
     const [articlesShown, setArticlesShown] = useState([]);
     const [pageNum, setPageNum] = useState(1);
     const [pages, setPages] = useState(0);
+
+    // Tracks errors
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
     const [stats, setStats] = useState([
         { label: 'Bid', value: "N/A" },
@@ -81,11 +86,8 @@ function StockDetails() {
                 ]);
             })
             .catch((error) => {
-                Promise.resolve(error)
-                    .then((error) => {
-                        console.log(error)
-                        alert(`${error.status} ${error.statusText}`);
-                    });
+                setError(true);
+                setErrorMsg('An error occured while getting stock details. Please refresh.');
             })
     }, [id, setStats, setName, setTicker, setPrice, setMarketName, setExchange]);
 
@@ -103,7 +105,8 @@ function StockDetails() {
                     setPages(1);
                 }
             }).catch(() => {
-                alert("Error with getting stock details news");
+                setError(true);
+                setErrorMsg('An error occured while getting stock news. Please refresh.');
             });
         }
     }, [ticker]);
@@ -146,6 +149,11 @@ function StockDetails() {
     return (
         <div>
             <Navigation />
+            {error &&
+                <Alert onClose={() => setError(false)} variant="filled" severity="error">
+                    {errorMsg}
+                </Alert>
+            }
             <PageContainer>
                 <PageTitle>{name} <span>({ticker})</span></PageTitle>
                 <h1>${parseFloat(price).toFixed(2)}USD</h1>

@@ -47,6 +47,10 @@ function PasswordReset() {
     const redirectToLogin = () => {
         history.push("/");
     };
+
+    // Handles errors
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
     
     /* resetPasswordCheckEmail - The first of three parts to the 'forgot password' user flow. User submits 
     their email to retrieve their security question.  
@@ -70,11 +74,13 @@ function PasswordReset() {
                 })
                 setEmailFormVisible(false);
                 setSecurityQuestionVisible(true);
+            } else {
+                setError(true);
+                setErrorMsg('This email is not associated with an account. Please try again.');
             }
-        }).catch((error) => {
-            return Promise.resolve(e => {
-                alert(e.error);
-            })
+        }).catch(() => {
+            setError(true);
+            setErrorMsg('An error occured while getting submitting your email. Please try again.');
         });
     }
 
@@ -98,12 +104,12 @@ function PasswordReset() {
                 setSecurityQuestionVisible(false);
                 setNewPasswordFormVisible(true);
             } else {
-                alert("Answer to security question is incorrect.");
+                setError(true);
+                setErrorMsg('Answer to your security question is incorrect. Please try again.');
             }
-        }).catch((error) => {
-            return Promise.resolve(e => {
-                alert(e);
-            })
+        }).catch(() => {
+            setError(true);
+            setErrorMsg('There was an error checking your security question answer. Please try again.');
         })
     }
 
@@ -112,7 +118,10 @@ function PasswordReset() {
     */
     const changePasswordWithoutAuth = async (event) => {
         event.preventDefault();
-        if (!checkPassword(pass, passConfirm)) { // Check password is valid
+        const checkResult = checkPassword(pass, passConfirm);
+        if ( checkResult !== 'success') { // Password is invalid, show error
+            setError(true);
+            setErrorMsg(checkResult);
             return;
         } else {
             await fetch(ForgotPasswordLink, {
@@ -129,11 +138,13 @@ function PasswordReset() {
                 if (response.ok) {
                     setNewPasswordFormVisible(false);
                     setResetSuccess(true);
+                } else {
+                    setError(true);
+                    setErrorMsg('There was an error changing your password. Please try again.');
                 }
             }).catch((error) => {
-                return Promise.resolve(e => {
-                    alert("Couldn't fetch security questions.");
-                })
+                setError(true);
+                setErrorMsg('There was an error changing your password. Please try again.');
             });
         }
     }
@@ -175,6 +186,9 @@ function PasswordReset() {
                                 <Label htmlFor="email">Enter your email below</Label>
                                 <TextField id="email" type="email" onChange={(e) => setEmail(e.target.value)} required/>
                                 <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
+                                {error && (
+                                    <ColorText color="red">{errorMsg}</ColorText>
+                                )}
                                 <CustomButton margin="20px 0" type="submit" value="Next" aria-label="Button to submit your email">Submit</CustomButton>
                             </GenericForm>
                         </FormContainer>
@@ -187,6 +201,9 @@ function PasswordReset() {
                                 <Label htmlFor="security-question-answer">Enter your answer below</Label>
                                 <TextField type="text" id="security-question-answer" required onChange={(e) => {setAnswer(e.target.value)}} />
                                 <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
+                                {error && (
+                                    <ColorText color="red">{errorMsg}</ColorText>
+                                )}
                                 <CustomButton margin="20px 0" type="submit" id="security-question-submit" value="Submit" aria-label="Button to submit your email">Submit</CustomButton>
                             </GenericForm>
                         </FormContainer>
@@ -201,6 +218,9 @@ function PasswordReset() {
                                 <Label htmlFor="new-password-confirm">Confirm Password</Label>
                                 <TextField type="password" id="new-password-confirm" required onChange={(e) => {setPassConfirm(e.target.value)}} />
                                 <InputUnderlineDiv width="100%" className="underline"></InputUnderlineDiv>
+                                {error && (
+                                    <ColorText color="red">{errorMsg}</ColorText>
+                                )}
                                 <CustomButton margin="20px 0" type="submit" value="Submit" aria-label="Button to submit your new password">Submit</CustomButton>
                             </GenericForm>
                         </FormContainer>

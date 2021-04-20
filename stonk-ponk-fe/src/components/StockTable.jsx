@@ -32,6 +32,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import EditIcon from '@material-ui/icons/Edit';
+import Alert from '@material-ui/lab/Alert';
 
 /**
  * StockTableHead - The header column of the table
@@ -149,6 +150,14 @@ function StockTable(props) {
     const [previousRows, setPreviousRows] = useState(data);
     const [deleteVisible, setDeleteVisible] = useState(false);
 
+    // Handles errors
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+
+    // Handles success when saving
+    const [success, setSuccess] = useState(false);
+    const [successMsg, setSuccessMsg] = useState('');
+
     // Handle sorting when user clicks on a sort label
     const handleSort = (event, property) => {
         console.log("PROPERTY: ", property);
@@ -220,9 +229,11 @@ function StockTable(props) {
                 console.log("Changes saved.");
                 setPreviousRows(data);
                 setSelected([]);
-            }).catch(error => {
-                console.log("???");
-                alert(error);
+                setSuccess(true);
+                setSuccessMsg('Changes saved.');
+            }).catch(() => {
+                setError(true);
+                setErrorMsg('Could not edit your portfolio');
             })
         } else if (place === 'watchlist') {
             watchlist.updateStockToWatchlist(watchlistId, data)
@@ -311,6 +322,16 @@ function StockTable(props) {
             }
             {(place === 'portfolio' || place === 'watchlist') && (editMode === true) && (deleteVisible === true) && (
                 <TableToolbar setVisibility={deleteVisible} numSelected={selected.length} place={place} handleDelete={handleDelete}></TableToolbar>
+            )}
+            {error && (
+                <Alert onClose={() => setError(false)} variant='filled' severity='error'>
+                    {errorMsg}
+                </Alert>
+            )}
+            {success && (
+                <Alert onClose={() => setSuccess(false)} variant='filled' severity='success'>
+                    {successMsg}
+                </Alert>
             )}
             <TableContainer>
                 <Table

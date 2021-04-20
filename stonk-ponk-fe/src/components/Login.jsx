@@ -18,10 +18,8 @@ import {
     TextField
 } from '../css/Form';
 import { DefaultLogo } from '../css/Logo';
-import { CompanyName, LinkText } from '../css/Text';
+import { ColorText, CompanyName, LinkText } from '../css/Text';
 import { CustomButton } from '../css/Button';
-
-import Alert from '@material-ui/lab/Alert';
 
 /**
  * Login Page - Contains the form users enter their login credentials into. 
@@ -67,11 +65,6 @@ function Login() {
                 />
             </ParticleContainer>
             <LoginFormContainer>
-                {error &&
-                    <Alert onClose={() => setError(false)} variant="filled" severity="error">
-                        Could not log in. Please try again.
-                    </Alert>
-                }
                 <LogoContainer>
                     <DefaultLogo src={logo} alt="Stonk Ponk Logo" />
                 </LogoContainer>
@@ -94,6 +87,9 @@ function Login() {
                     <LinkContainer right id="forgot-password">
                         <LinkText href="/forgot-password"> Forgot your password?</LinkText>
                     </LinkContainer>
+                    {error &&
+                        <ColorText color="red" >Incorrect username or password.</ColorText>
+                    }
                     <CustomButton margin="30px 0" type="submit" value="Login" aria-label="Button to login">Login</CustomButton>
                     <LinkContainer>Don't have an account?&nbsp; <LinkText href="/sign-up"> Sign up now!</LinkText></LinkContainer>
                 </GenericForm>

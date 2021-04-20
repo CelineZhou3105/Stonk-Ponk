@@ -25,6 +25,7 @@ import {
 import { DefaultLogo } from '../css/Logo';
 import { ProfilePhoto } from '../css/Image';
 import { MenuButtonContainer } from '../css/Button';
+import Alert from '@material-ui/lab/Alert';
 
 /**
  * Navigation - Responsive navigation bar shown at the top of each page across the website. 
@@ -39,6 +40,10 @@ function Navigation(props) {
     const [lastName, setLastName] = useState('');
 
     const history = useHistory();
+
+    // Used to track errors
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
     // Redirect to settings
     const navigateToSettings = () => {
@@ -60,11 +65,9 @@ function Navigation(props) {
                 setFirstName(json.first_name);
                 setLastName(json.last_name);
             })
-            .catch((error) => {
-                Promise.resolve(error)
-                    .then((error) => {
-                        alert(`${error.status} ${error.statusText}`);
-                    });
+            .catch(() => {
+                setError(true);
+                setErrorMsg('Could not retrieve your details properly, please refresh.');
             })
     }, []);
 
@@ -93,6 +96,11 @@ function Navigation(props) {
             </PhotoMenuContainer>
             {profileModalOpen &&
                 <ProfileModal>
+                    {error && (
+                        <Alert onClose={() => setError(false)} variant='filled' severity='error'>
+                            {errorMsg}
+                        </Alert>
+                    )}
                     <ProfilePhotoContainer>
                         <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" />
                     </ProfilePhotoContainer>
