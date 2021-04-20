@@ -62,8 +62,9 @@ Response
 @require_http_methods(["POST"])
 def login(request):
     try:
+        print("sdfsdf")
         body = json.loads(request.body.decode('utf-8'))
-        email = body["email"]
+        email = body["email"].lower()
         password = body["password"]
         user = User.objects.get(email=email)
 
@@ -73,7 +74,8 @@ def login(request):
         payload = jwt_payload_handler(user)
         res = { 'token': jwt_encode_handler(payload) }
         return HttpResponse(json.dumps(res))
-    except:
+    except Exception as e:
+        raise e
         return HttpResponseBadRequest()
     return HttpResponse()
 '''

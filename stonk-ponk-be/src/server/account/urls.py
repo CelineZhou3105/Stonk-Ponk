@@ -6,7 +6,7 @@ from . import views
 
 urlpatterns = [
     path('register', views.register, name='register'),
-    path('login', obtain_jwt_token),
+    path('login', views.login, name='login'),
     path('forgot_password', views.forgot_password, name='forgot_password'),
     path('change_name' , views.change_name, name ='change_name'),
     path('change_email', views.change_email, name = 'change_email'),
