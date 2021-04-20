@@ -1,31 +1,27 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-
-import Navigation from "./Navigation";
-
-import { checkPassword } from "../helpers/helpers";
-import { settings } from "../services/settings";
-
-import profile from "../images/blobfish.png";
-import { SettingsLabel, SettingsModalLabel, TextField } from "../css/Form";
+import { TextField, SettingsLabel, SettingsModalLabel, UploadImage } from "../css/Form";
 import {
-	FlexColumnCenterDiv,
-	FlexColumnLeftDiv,
 	FlexRowLeftDiv,
-	LineDivider,
-	ModalContainer,
-	ModalContent,
+	FlexColumnLeftDiv,
 	PageContainer,
+	LineDivider,
+	SettingRowDiv,
 	SettingEditRowDiv,
 	SettingFieldDiv,
+	ModalContainer,
+	ModalContent,
 	SettingModalDiv,
-	SettingRowDiv,
+	FlexColumnCenterDiv,
+	ProfilePictureContainer,
 } from "../css/Div";
-
-import { EditButton, SaveButton, CancelButton, CloseButton } from "../css/Button";
-import { ProfilePhoto } from "../css/Image";
+import Navigation from "./Navigation";
+import { EditButton, SaveButton, CancelButton, CloseButton, CustomButton } from "../css/Button";
+import { SettingsPhoto } from "../css/Image";
+import profile from "../images/blobfish.png";
 import { PageTitle } from "../css/Text";
-
+import { checkPassword } from "../helpers/helpers";
+import { settings } from "../services/settings";
 import Alert from "@material-ui/lab/Alert";
 
 /**
@@ -34,7 +30,8 @@ import Alert from "@material-ui/lab/Alert";
 const Settings = () => {
 	const history = useHistory();
 
-	// Initialise variables
+	// initialise variables
+	// change this to get from backend
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [emailAdd, setEmailAdd] = useState("");
@@ -48,7 +45,11 @@ const Settings = () => {
 
 	const [nameDisabled, setNameDisabled] = useState(true);
 	const [emailDisabled, setEmailDisabled] = useState(true);
-	const [modalDisabled, setModalDisabled] = useState(true);
+	const [detailModalDisabled, setDetailModalDisabled] = useState(true);
+	const [profileModalDisabled, setProfileModalDisabled] = useState(true);
+
+	const [profileImage, setProfileImage] = useState(profile);
+	const [newProfileImage, setNewProfileImage] = useState("");
 
 	// Tracks when errors occurs - for showing error banners to the user
 	const [error, setError] = useState(false);
@@ -154,6 +155,10 @@ const Settings = () => {
 		setEmailDisabled(true);
 	};
 
+	const changeProfilePic = () => {
+		console.log(newProfileImage);
+		setProfileImage(newProfileImage.name);
+	};
 	return (
 		<div>
 			<Navigation settings="true" />
@@ -170,9 +175,46 @@ const Settings = () => {
 			<PageContainer>
 				<PageTitle>Account Settings</PageTitle>
 				<FlexRowLeftDiv>
-					<ProfilePhoto src={profile} alt="Your profile picture" style={{ width: "13%", height: "10%" }} />
-					<FlexColumnLeftDiv>
-						<SettingRowDiv style={{ width: "40%", height: "80px", fontWeight: "bold" }}>
+					<ProfilePictureContainer>
+						<SettingsPhoto src={profileImage} alt="Your profile picture" />
+						<CustomButton
+							backgroundColor="#9e22ff"
+							hoverColor="#b55cfa"
+							margin="10px"
+							aria-label="open up form to change profile picture"
+							onClick={() => setProfileModalDisabled(false)}
+						>
+							Change Profile Picture
+						</CustomButton>
+						{!profileModalDisabled && (
+							<ModalContainer>
+								<ModalContent style={{ width: "80%", padding: "5px" }}>
+									<CloseButton onClick={() => setProfileModalDisabled(true)}>&times;</CloseButton>
+									<FlexColumnCenterDiv>
+										{/* <ImageUploader
+                                            withIcon={true}
+                                            withPreview={true}
+                                            buttonText="Choose Image"
+                                            fileSizeError="file size is too big"
+                                            fileTypeError=" is not supported file extension"
+                                            onChange={(e) => setNewProfileImage(e)}
+                                            singleImage={true}
+                                        /> */}
+										<CustomButton
+											backgroundColor="#9e22ff"
+											hoverColor="#b55cfa"
+											aria-label="save uploaded profile picture"
+											onClick={changeProfilePic}
+										>
+											Save Profile Picture
+										</CustomButton>
+									</FlexColumnCenterDiv>
+								</ModalContent>
+							</ModalContainer>
+						)}
+					</ProfilePictureContainer>
+					<FlexColumnLeftDiv style={{ width: "80%" }}>
+						<SettingRowDiv style={{ width: "100%", height: "80px", fontWeight: "bold" }}>
 							<SettingFieldDiv>
 								<SettingsLabel htmlFor="firstName">First Name</SettingsLabel>
 								<TextField
@@ -210,7 +252,7 @@ const Settings = () => {
 								)}
 							</SettingFieldDiv>
 						</SettingRowDiv>
-						<SettingRowDiv style={{ width: "26%", height: "80px", fontWeight: "bold" }}>
+						<SettingRowDiv style={{ width: "60%", height: "80px", fontWeight: "bold" }}>
 							<SettingFieldDiv>
 								<SettingsLabel htmlFor="emailAdd">Email</SettingsLabel>
 								<TextField
@@ -239,14 +281,14 @@ const Settings = () => {
 							</SettingFieldDiv>
 						</SettingRowDiv>
 						<SettingRowDiv>
-							<EditButton aria-label="Edit password Button" onClick={() => setModalDisabled(false)}>
+							<EditButton aria-label="Edit password Button" onClick={() => setDetailModalDisabled(false)}>
 								Edit Password
 							</EditButton>
 						</SettingRowDiv>
-						{!modalDisabled && (
+						{!detailModalDisabled && (
 							<ModalContainer>
 								<ModalContent>
-									<CloseButton onClick={() => setModalDisabled(true)}>&times;</CloseButton>
+									<CloseButton onClick={() => setDetailModalDisabled(true)}>&times;</CloseButton>
 									<FlexColumnCenterDiv>
 										<SettingModalDiv>
 											<SettingsModalLabel htmlFor="passOld">Old Password</SettingsModalLabel>
