@@ -1,10 +1,12 @@
 from api_interface.alphavantage_forex_api import AaForexApi
+from api_interface.yf_forex_api import YfForexApi
 
 class ForexApiInterface:
     forex_api_map = {}
     forex_api_map['alphavantage'] = AaForexApi()
+    forex_api_map['yahoo_finance'] = YfForexApi()
 
-    forex_api_list = [{"name":"alphavantage", "priority": 1}]
+    forex_api_list = [{"name":"alphavantage", "priority": 1}, {"name":"yahoo_finance", "priority": 2}]
 
     @staticmethod
     def get_forex_api_order():
