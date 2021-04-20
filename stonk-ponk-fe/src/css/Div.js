@@ -435,3 +435,10 @@ export const ModalStocksContainer = styled.div`
     align-items: flex-start;
     padding: 1em 0;
 `;
+
+export const StockDetailTopBar = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+`;
