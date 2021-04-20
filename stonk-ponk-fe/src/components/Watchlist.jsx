@@ -40,7 +40,7 @@ const Watchlist = () => {
 	const [watchlistNames, setWatchlistNames] = useState([{ id: -1, label: "" }]);
 	const [newWatchlist, setNewWatchlist] = useState("");
 	const [modalDisabled, setModalDisabled] = useState(true);
-	const [currentWatchlist, setCurrentWatchlist] = useState(watchlistNames[0].label);
+	const [currentWatchlist, setCurrentWatchlist] = useState("");
 	const [watchlistData, setWatchlistData] = useState([]);
 	const [page, setPage] = useState(0);
 	const [tableVisible, setTableVisible] = useState(false);
@@ -57,7 +57,7 @@ const Watchlist = () => {
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
-					alert(`${error.status} ${error.statusText}`);
+					console.log(error);
 				});
 			});
 	}, []);
@@ -84,6 +84,7 @@ const Watchlist = () => {
 	};
 
 	const viewWatchlist = (watchlistLabel) => {
+		console.log(watchlistLabel);
 		setCurrentWatchlist(watchlistLabel);
 		const id = watchlistNames.find((item) => item.label === watchlistLabel);
 		setWatchlistId(id.id);
