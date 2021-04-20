@@ -129,7 +129,7 @@ const changePassword = async (passwordNew, passwordOld) => {
         })
 }
 
-const changeProfilePicture = async(image) => {
+const changeProfilePicture = async (image) => {
     
 }
 

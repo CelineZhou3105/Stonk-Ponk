@@ -94,7 +94,7 @@ const Watchlist = () => {
 			.then((response) => response.json())
 			.then((json) => {
 				console.log(json);
-				setWatchlistData(json.tickers);
+				setWatchlistData(json);
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
