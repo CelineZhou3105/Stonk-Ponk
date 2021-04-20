@@ -28,9 +28,13 @@ class StockApiInterface:
     def set_stock_api_order(order_list):
         try:
 #            StockApiInterface.get_ordered_stock_api_list() = sorted(StockApiInterface.get_ordered_stock_api_list(), key = lambda item: item['priority'])
+            StockApiPriority.objects.all().delete();
+            for sp in order_list:
+                #update entry
+                StockApiPriority.objects.create(name = sp["name"], priority = sp["priority"])
             return True
-        except:
-            return False 
+        except Exception as e:
+            return e 
     
     def get_market_status():
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
