@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 import json
 
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
 from django.views.decorators.http import require_http_methods
 
 from account.models import User
