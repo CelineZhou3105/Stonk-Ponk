@@ -150,7 +150,8 @@ function StockTable(props) {
     const [deleteVisible, setDeleteVisible] = useState(false);
 
     // Handle sorting when user clicks on a sort label
-    const handleSort = (property) => {
+    const handleSort = (event, property) => {
+        console.log("PROPERTY: ", property);
         const ascending = (orderBy === property && order === 'asc');
         setOrder(ascending ? 'desc' : 'asc');
         setOrderBy(property);
@@ -487,13 +488,28 @@ function StockTable(props) {
  * @param {string} orderBy - property to order the two objects by
  */
 function comparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
+    console.log("ORDERING BY: ", orderBy);
+    console.log("a[orderBy]", a[orderBy]);
+    console.log("b[orderBy]", b[orderBy]);
+    if (orderBy === 'value') {
+        const aValue = a['volume'] * a['price'];
+        const bValue = b['volume'] * b['price'];
+        if (bValue > aValue) {
+            return -1;
+        }
+        if (bValue > aValue) {
+            return 1
+        }
+        return 0;
+    } else {
+        if (b[orderBy] < a[orderBy]) {
+            return -1;
+        }
+        if (b[orderBy] > a[orderBy]) {
+            return 1;
+        }
+        return 0;
     }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
 }
 
 /**
@@ -513,6 +529,7 @@ function getComparator(order, orderBy) {
  * @param {function} comparator - the function to sort the data
  */
 function stableSort(array, comparator) {
+    console.log('NEED TO SORT:', array);
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);

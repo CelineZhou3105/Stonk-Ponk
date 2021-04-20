@@ -43,10 +43,10 @@ import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 const tableHeadings = [
     { id: 'name', disablePadding: true, numeric: false, label: 'Name' },
     { id: 'performance', disablePadding: false, numeric: false, label: 'Performance (Month)' },
-    { id: 'date', disablePadding: true, numeric: true, label: 'Purchase Date' },
-    { id: 'purchase_price', disablePadding: false, numeric: true, label: 'Purchase Price (AUD)' },
-    { id: 'units', disablePadding: false, numeric: false, label: 'Units Owned' },
-    { id: 'current_price', disablePadding: false, numeric: true, label: 'Current Price (AUD)' },
+    { id: 'first_purchase_date', disablePadding: true, numeric: true, label: 'Purchase Date' },
+    { id: 'vwap', disablePadding: false, numeric: true, label: 'Purchase Price (AUD)' },
+    { id: 'volume', disablePadding: false, numeric: true, label: 'Units Owned' },
+    { id: 'price', disablePadding: false, numeric: true, label: 'Current Price (AUD)' },
     { id: 'value', disablePadding: false, numeric: true, label: 'Total Value (AUD)' },
 ];
 
