@@ -8,6 +8,9 @@ import { market } from '../services/market';
  */
 const StockDetailsChart = ({ period, id }) => {
 
+    // Tracks whether there are errors
+    const [error, setError] = useState(false);
+
     const [data, setData] = useState([['date', 'price']]);
     useEffect(() => {
         setData([['date', 'price']]);
@@ -26,12 +29,8 @@ const StockDetailsChart = ({ period, id }) => {
                 }
                 setData(data => data.concat(tableArray));
             })
-            .catch((error) => {
-                Promise.resolve(error)
-                    .then((error) => {
-                        console.log(error)
-                        alert(`${error.status} ${error.statusText}`);
-                    });
+            .catch(() => {
+                setError(true);
             })
     }, [id, period]);
 
@@ -48,7 +47,9 @@ const StockDetailsChart = ({ period, id }) => {
     }
 
     return (
-        <Chart
+        error 
+        ? <div>Error occured when loading chart.</div> 
+        : <Chart
             width="1100px"
             height="500px"
             chartType="LineChart"

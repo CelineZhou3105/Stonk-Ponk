@@ -347,12 +347,24 @@ function Portfolio() {
                                 <SubTitle>
                                     Suggestions
                                 </SubTitle>
-                                <PortfolioSuggestionTitle>Beta Score</PortfolioSuggestionTitle>
-                                <PortfolioSuggestionSubText>{suggestions[0]}</PortfolioSuggestionSubText>
-                                <PortfolioSuggestionTitle>Profit Score</PortfolioSuggestionTitle>
-                                <PortfolioSuggestionSubText>{suggestions[1]}</PortfolioSuggestionSubText>
-                                <PortfolioSuggestionTitle>Volatility Score</PortfolioSuggestionTitle>
-                                <PortfolioSuggestionSubText>{suggestions[2]}</PortfolioSuggestionSubText>
+                                {suggestions.length > 0 &&(
+                                    <>
+                                        <PortfolioSuggestionTitle>Beta Score</PortfolioSuggestionTitle>
+                                        <PortfolioSuggestionSubText>{suggestions[0]}</PortfolioSuggestionSubText>
+                                    </>
+                                )}
+                                {suggestions.length > 1 && (
+                                    <>
+                                        <PortfolioSuggestionTitle>Profit Score</PortfolioSuggestionTitle>
+                                        <PortfolioSuggestionSubText>{suggestions[1]}</PortfolioSuggestionSubText>
+                                    </>
+                                )} 
+                                {suggestions.length > 2 && (
+                                    <>
+                                    <PortfolioSuggestionTitle>Volatility Score</PortfolioSuggestionTitle>
+                                    <PortfolioSuggestionSubText>{suggestions.length > 2 && suggestions[2]}</PortfolioSuggestionSubText>
+                                    </>
+                                )}
                             </Container>
                         </>
                     )}

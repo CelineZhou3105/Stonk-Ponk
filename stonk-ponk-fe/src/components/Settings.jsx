@@ -81,6 +81,11 @@ const Settings = () => {
         settings.getUser()
             .then(response => response.json())
             .then(json => {
+                // Set the old values in case the user cancels
+                setOldFirstName(json.first_name);
+                setOldLastName(json.last_name);
+                setOldEmail(json.email);
+
                 setFirstName(json.first_name);
                 setLastName(json.last_name);
                 setEmailAdd(json.email);
@@ -114,23 +119,27 @@ const Settings = () => {
     }
 
     const ChangePassword = () => {
-        if (checkPassword(passNew, passConfirm)) {
+        const checkResult = checkPassword(passNew, passConfirm)
+        if ( checkResult === 'success') {
             settings.changePassword(passNew, passOld).then(() => {
-                alert("You changed your login credentials! Please relog, logging out in 3 seconds...");
+                setSuccess(true);
                 setTimeout(() => {
                     localStorage.removeItem('token');
                     history.push('/');
                 }, 3000);
             }).catch((error) => {
-                Promise.resolve(error)
-                    .then((e) => {
-                        if (e.status === 403) {
-                            alert(`Old password incorrect. Please re-enter your password.`);
-                        } else {
-                            alert(`${e.status} ${e.statusText}`);
-                        }
-                    });
+                // Password didn't change properly
+                if (error === 'Expired Token') {
+                    setError(true);
+                    setErrorMsg('Old password is incorrect. Please re-enter your password.');
+                } else {
+                    setError(true);
+                    setErrorMsg('Something went wrong with changing your password. Please try again.');
+                }
             });
+        } else {
+            setError(true);
+            setErrorMsg(checkResult);
         }
     }
 

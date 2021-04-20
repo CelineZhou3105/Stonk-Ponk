@@ -61,14 +61,8 @@ const changeName = async (firstN, lastN) => {
                 return Promise.reject(response);
             }
         })
-        .then(() => {
-            alert("You changed your name!");
-        })
-        .catch((error) => {
-            Promise.resolve(error)
-                .then((e) => {
-                    alert(`${e.status} ${e.statusText}`);
-                });
+        .catch((e) => {
+            return Promise.reject(e);
         });
 }
 
@@ -95,7 +89,13 @@ const changeEmail = async (emailNew) => {
             if (response.ok) { // if status code is 200      
                 return response;
             } // if status code is not 200
-            return Promise.reject(response);
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject(response);
+            }
+        }).catch(e => {
+            return Promise.reject(e)
         })
 }
 
@@ -124,6 +124,8 @@ const changePassword = async (passwordNew, passwordOld) => {
             } else {
                 return Promise.reject(response);
             }
+        }).catch(e => {
+            return Promise.reject(e);
         })
 }
 
