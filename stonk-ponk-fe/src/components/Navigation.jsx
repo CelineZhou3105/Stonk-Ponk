@@ -27,23 +27,25 @@ import Alert from "@material-ui/lab/Alert";
  * changing the styling of the profile picture.
  */
 function Navigation(props) {
-	// Profile modal details
-	const [profileModalOpen, setProfileModalOpen] = useState(false);
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
+    // Profile modal details
+    const [profileModalOpen, setProfileModalOpen] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
 
-	const history = useHistory();
+    const history = useHistory();
 
-	// Used to track errors
-	const [error, setError] = useState(false);
-	const [errorMsg, setErrorMsg] = useState("");
+    // Used to track errors
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
-	// Redirect to settings
-	const navigateToSettings = () => {
-		history.push("/settings");
-	};
-	// Logout of the website
-	function logout() {
+    // Redirect to settings
+    const redirect = (path) => {
+        history.push(path);
+    }
+
+    // Logout of the website
+	function logout(event) {
+		// event.preventDefault();
 		localStorage.removeItem("token");
 		history.push("/");
 	}
@@ -62,78 +64,46 @@ function Navigation(props) {
 			});
 	}, []);
 
-	return (
-		<NavigationContainer>
-			<LogoContainer>
-				<DefaultLogo navigation src={logo} alt="Stonk Ponk Logo" />
-				<CompanyName>Stonk Ponk</CompanyName>
-			</LogoContainer>
-			<NavList>
-				<NavListItem>
-					<NavLink to="/market">Market</NavLink>
-				</NavListItem>
-				<NavListItem>
-					<NavLink to="/portfolio">Portfolio</NavLink>
-				</NavListItem>
-				<NavListItem>
-					<NavLink to="/watchlist">Watchlist</NavLink>
-				</NavListItem>
-				<NavListItem>
-					<NavLink to="/news">News</NavLink>
-				</NavListItem>
-				<NavListItem>
-					<NavLink to="/education">Education</NavLink>
-				</NavListItem>
-			</NavList>
-			<PhotoMenuContainer>
-				<ProfilePhotoContainer>
-					{!props.settings ? (
-						<ProfilePhoto
-							className="profile-photo"
-							src={profile}
-							alt="Your profile picture"
-							onClick={() => setProfileModalOpen(!profileModalOpen)}
-						/>
-					) : (
-						<ProfilePhoto
-							className="profile-photo"
-							src={profile}
-							alt="Your profile picture"
-							style={{ border: "3px solid #9e22ff" }}
-							onClick={() => setProfileModalOpen(!profileModalOpen)}
-						/>
-					)}
-				</ProfilePhotoContainer>
-				<Menu />
-			</PhotoMenuContainer>
-			{profileModalOpen && (
-				<ProfileModal>
-					{error && (
-						<Alert onClose={() => setError(false)} variant="filled" severity="error">
-							{errorMsg}
-						</Alert>
-					)}
-					<ProfilePhotoContainer>
-						<ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" />
-					</ProfilePhotoContainer>
-					<h2>
-						{firstName} {lastName}
-					</h2>
-					<ProfileModaItem className="profile-modal-item" onClick={navigateToSettings}>
-						Settings
-					</ProfileModaItem>
-					<ProfileModaItem className="profile-modal-item">Contact Us</ProfileModaItem>
-					<ProfileModaItem
-						onClick={() => {
-							logout();
-						}}
-						className="profile-modal-item"
-					>
-						Logout
-					</ProfileModaItem>
-				</ProfileModal>
-			)}
-		</NavigationContainer>
+    return (
+        <NavigationContainer>
+            <LogoContainer>
+                <DefaultLogo navigation src={logo} alt="Stonk Ponk Logo" />
+                <CompanyName>Stonk Ponk</CompanyName>
+            </LogoContainer>
+            <NavList>
+                <NavListItem><NavLink to="/market">Market</NavLink></NavListItem>
+                <NavListItem><NavLink to="/portfolio">Portfolio</NavLink></NavListItem>
+                <NavListItem><NavLink to="/watchlist">Watchlist</NavLink></NavListItem>
+                <NavListItem><NavLink to="/news">News</NavLink></NavListItem>
+                <NavListItem><NavLink to="/education">Education</NavLink></NavListItem>
+            </NavList>
+            <PhotoMenuContainer>
+                <ProfilePhotoContainer>
+                    {!props.settings ?
+                        <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" onClick={() => setProfileModalOpen(!profileModalOpen)} />
+                        :
+                        <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" style={{ border: "3px solid #FFF" }} onClick={() => setProfileModalOpen(!profileModalOpen)} />
+                    }
+                </ProfilePhotoContainer>
+                <Menu />
+            </PhotoMenuContainer>
+            {profileModalOpen &&
+                <ProfileModal>
+                    {error && (
+                        <Alert onClose={() => setError(false)} variant='filled' severity='error'>
+                            {errorMsg}
+                        </Alert>
+                    )}
+                    <ProfilePhotoContainer>
+                        <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" />
+                    </ProfilePhotoContainer>
+                    <h2>{firstName} {lastName}</h2>
+                    <ProfileModaItem className="profile-modal-item" onClick={() => redirect('/settings')}>Settings</ProfileModaItem>
+                    <ProfileModaItem className="profile-modal-item" onClick={() => redirect('/contact-us')}>Contact Us</ProfileModaItem>
+                    <ProfileModaItem onClick={() => { logout() }} className="profile-modal-item">Logout</ProfileModaItem>
+                </ProfileModal>
+            }
+        </NavigationContainer>
 	);
 }
 

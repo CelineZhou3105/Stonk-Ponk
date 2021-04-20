@@ -199,11 +199,6 @@ export const ProfileModal = styled.div`
     color: #000;
     width: 300px;
     z-index: 9999;
-
-    @media (max-width: 1280px) {
-        top: 200px;
-        right: auto;
-    }
 `;
 
 export const ProfilePhotoContainer = styled.div`
