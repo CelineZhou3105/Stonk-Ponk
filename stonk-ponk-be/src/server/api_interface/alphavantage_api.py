@@ -61,9 +61,6 @@ class AaApi():
                     market_stock_dict['price'] = stock_dict['price']
                     market_stock_dict['change_perc'] = stock_dict['changesPercentage']
 
-                    #prices = self.get_stock_prices(market_stock_dict['ticker'], 'market')
-                    #market_stock_dict['prev_week_prices'] = prices
-
                     market_stocks_list.append(market_stock_dict)
 
                 return market_stocks_list
@@ -253,4 +250,4 @@ class AaApi():
         return self.num_calls
 
     def get_self_markets(self):
-        return self.markets
+        return [""]
