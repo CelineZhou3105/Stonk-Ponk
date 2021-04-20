@@ -8,7 +8,6 @@ from django.views.decorators.http import require_http_methods
 from account.models import User
 from account.auth import require_token, get_user
 from portfolio.models import Portfolio, PortfolioStock, StockOwnership, Transaction
-from stocks import stock_api
 from watchlist.models import Watchlist, StockWatch
 
 @require_http_methods(["POST"])
@@ -16,15 +15,11 @@ from watchlist.models import Watchlist, StockWatch
 def create_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
-    name = body["watchlist_name"] 
+    name = body["label"] 
 
     # how do we want to handle things that have been aleady created?
     wl = Watchlist.objects.create(user = user, name = name) 
-<<<<<<< HEAD
-    responseData = { "id": wl.id, "label": wl.name}
-=======
     responseData = { "watchlist_id": wl.id, "label": wl.name}
->>>>>>> celine/dev/watchlist
     return HttpResponse(json.dumps(responseData))
 
 @require_http_methods(["DELETE"])
@@ -33,20 +28,11 @@ def delete_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
 
-<<<<<<< HEAD
     watchlist_id = body["id"]
-=======
-    watchlist_id = body["watchlist_id"]
->>>>>>> celine/dev/watchlist
-
     try:
         wl = Watchlist.objects.get(id = watchlist_id, user = user) 
         if wl.user != user:
             return HttpResponseBadRequest("you naughty naughty")
-<<<<<<< HEAD
-
-=======
->>>>>>> celine/dev/watchlist
         wl.delete()
     except Watchlist.DoesNotExist:
         return HttpResponseNotFound()
@@ -58,8 +44,6 @@ def delete_watchlist(request):
 def save_watchlist(request):
     body = json.loads(request.body.decode("utf-8"))
     user = get_user(request)
-<<<<<<< HEAD
-
     watchlist = body["id"]
     
     try:
@@ -70,19 +54,6 @@ def save_watchlist(request):
     
     return HttpResponse()    
 
-=======
-
-    watchlist = body["watchlist_id"]
-    
-    try:
-        wl = Watchlist.objects.get(id = watchlist, user = user)
-        wl.save_stocks(set(body["tickers"]))
-    except Watchlist.DoesNotExist:
-        return HttpResponseNotFound() 
-    
-    return HttpResponse()    
-
->>>>>>> celine/dev/watchlist
 @require_http_methods(["GET"])
 @require_token
 def get_watchlists(request):
