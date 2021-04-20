@@ -42,10 +42,8 @@ function Navigation(props) {
 	const navigateToSettings = () => {
 		history.push("/settings");
 	};
-
 	// Logout of the website
-	function logout(event) {
-		// event.preventDefault();
+	function logout() {
 		localStorage.removeItem("token");
 		history.push("/");
 	}
@@ -110,6 +108,11 @@ function Navigation(props) {
 			</PhotoMenuContainer>
 			{profileModalOpen && (
 				<ProfileModal>
+					{error && (
+						<Alert onClose={() => setError(false)} variant="filled" severity="error">
+							{errorMsg}
+						</Alert>
+					)}
 					<ProfilePhotoContainer>
 						<ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" />
 					</ProfilePhotoContainer>
