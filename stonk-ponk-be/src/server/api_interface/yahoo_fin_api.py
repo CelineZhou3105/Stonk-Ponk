@@ -48,8 +48,6 @@ class YfApi():
         market_stocks = market_stocks.iloc[start_index:end_index]
         market_stocks_list = []
 
-        market_stock_dict = {}
-
         for index, row in market_stocks.iterrows():
             market_stock_dict = {}
             market_stock_dict['ticker'] = row['Symbol']

@@ -1,39 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 
-import logo from '../images/logo.png';
-import profile from '../images/blobfish.png';
-import { settings } from '../services/settings';
+import logo from "../images/logo.png";
+import profile from "../images/blobfish.png";
+import { settings } from "../services/settings";
 
+import { CollapsedNavItem, CollapsedNavList, CompanyName, NavList, NavListItem } from "../css/Text";
 import {
-    CollapsedNavItem,
-    CollapsedNavList,
-    CompanyName,
-    NavList,
-    NavListItem
-} from '../css/Text';
-import {
-    LogoContainer,
-    MenuContainer,
-    NavigationContainer,
-    PhotoMenuContainer,
-    ProfileModal,
-    ProfileModaItem,
-    ProfilePhotoContainer,
-    SideBar
-} from '../css/Div';
-import { DefaultLogo } from '../css/Logo';
-import { ProfilePhoto } from '../css/Image';
-import { MenuButtonContainer } from '../css/Button';
-import Alert from '@material-ui/lab/Alert';
+	LogoContainer,
+	MenuContainer,
+	NavigationContainer,
+	PhotoMenuContainer,
+	ProfileModal,
+	ProfileModaItem,
+	ProfilePhotoContainer,
+	SideBar,
+} from "../css/Div";
+import { DefaultLogo } from "../css/Logo";
+import { ProfilePhoto } from "../css/Image";
+import { MenuButtonContainer } from "../css/Button";
+import Alert from "@material-ui/lab/Alert";
 
 /**
- * Navigation - Responsive navigation bar shown at the top of each page across the website. 
+ * Navigation - Responsive navigation bar shown at the top of each page across the website.
  * @param {*} settings - indicates whether the navigation bar is atop the settings page,
  * changing the styling of the profile picture.
  */
 function Navigation(props) {
-
     // Profile modal details
     const [profileModalOpen, setProfileModalOpen] = useState(false);
     const [firstName, setFirstName] = useState('');
@@ -51,25 +44,25 @@ function Navigation(props) {
     }
 
     // Logout of the website
-    function logout(event) {
-        // event.preventDefault();
-        localStorage.removeItem('token');
-        history.push('/');
-    }
-
-    // useEffect to get data about the current logged in user
-    useEffect(() => {
-        settings.getUser()
-            .then(response => response.json())
-            .then(json => {
-                setFirstName(json.first_name);
-                setLastName(json.last_name);
-            })
-            .catch(() => {
-                setError(true);
-                setErrorMsg('Could not retrieve your details properly, please refresh.');
-            })
-    }, []);
+	function logout(event) {
+		// event.preventDefault();
+		localStorage.removeItem("token");
+		history.push("/");
+	}
+	// useEffect to get data about the current logged in user
+	useEffect(() => {
+		settings
+			.getUser()
+			.then((response) => response.json())
+			.then((json) => {
+				setFirstName(json.first_name);
+				setLastName(json.last_name);
+			})
+			.catch(() => {
+				setError(true);
+				setErrorMsg("Could not retrieve your details properly, please refresh.");
+			});
+	}, []);
 
     return (
         <NavigationContainer>
@@ -110,40 +103,51 @@ function Navigation(props) {
                     <ProfileModaItem onClick={() => { logout() }} className="profile-modal-item">Logout</ProfileModaItem>
                 </ProfileModal>
             }
-
         </NavigationContainer>
-    )
+	);
 }
 
 export const Menu = () => {
-    const [open, setOpen] = useState(false);
-    return (
-        <MenuContainer>
-            <MenuButton onClick={() => setOpen(!open)} open={open} key={0} />
-            <SideBar open={open}>
-                <span className='closeBtn' onClick={() => setOpen(false)}>&times;</span>
-                <CollapsedNavList>
-                    <NavLink to="/market"><CollapsedNavItem>Market</CollapsedNavItem></NavLink>
-                    <NavLink to="/portfolio"><CollapsedNavItem>Portfolio</CollapsedNavItem></NavLink>
-                    <NavLink to="/watchlist"><CollapsedNavItem>Watchlist</CollapsedNavItem></NavLink>
-                    <NavLink to="/news"><CollapsedNavItem>News</CollapsedNavItem></NavLink>
-                    <NavLink to="/education"><CollapsedNavItem>Education</CollapsedNavItem></NavLink>
-                </CollapsedNavList>
-            </SideBar>
-        </MenuContainer>
-    )
+	const [open, setOpen] = useState(false);
+	return (
+		<MenuContainer>
+			<MenuButton onClick={() => setOpen(!open)} open={open} key={0} />
+			<SideBar open={open}>
+				<span className="closeBtn" onClick={() => setOpen(false)}>
+					&times;
+				</span>
+				<CollapsedNavList>
+					<NavLink to="/market">
+						<CollapsedNavItem>Market</CollapsedNavItem>
+					</NavLink>
+					<NavLink to="/portfolio">
+						<CollapsedNavItem>Portfolio</CollapsedNavItem>
+					</NavLink>
+					<NavLink to="/watchlist">
+						<CollapsedNavItem>Watchlist</CollapsedNavItem>
+					</NavLink>
+					<NavLink to="/news">
+						<CollapsedNavItem>News</CollapsedNavItem>
+					</NavLink>
+					<NavLink to="/education">
+						<CollapsedNavItem>Education</CollapsedNavItem>
+					</NavLink>
+				</CollapsedNavList>
+			</SideBar>
+		</MenuContainer>
+	);
 };
 
 export const MenuButton = ({ open, onClick }) => {
-    return (
-        <MenuButtonContainer onClick={onClick} className="menu-button" aria-label="Toggle Menu" aria-expanded={open}>
-            <svg viewBox="0 0 100 100" width="50" height="50">
-                <rect x="20" y="20" width="60" height="8" fill="white" />
-                <rect x="20" y="45" width="60" height="8" fill="white" />
-                <rect x="20" y="70" width="60" height="8" fill="white" />
-            </svg>
-        </MenuButtonContainer>
-    );
+	return (
+		<MenuButtonContainer onClick={onClick} className="menu-button" aria-label="Toggle Menu" aria-expanded={open}>
+			<svg viewBox="0 0 100 100" width="50" height="50">
+				<rect x="20" y="20" width="60" height="8" fill="white" />
+				<rect x="20" y="45" width="60" height="8" fill="white" />
+				<rect x="20" y="70" width="60" height="8" fill="white" />
+			</svg>
+		</MenuButtonContainer>
+	);
 };
 
 export default Navigation;
