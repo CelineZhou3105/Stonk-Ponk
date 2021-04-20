@@ -29,6 +29,7 @@ import Portfolio from './components/Portfolio';
 
 import News from './components/News';
 import { PrivateRoute } from './components/PrivateRoute';
+import { ContactUs } from './components/ContactUs';
 
 function App() {
   // Check whether the user is logged in
@@ -46,6 +47,7 @@ function App() {
           <PrivateRoute exact path='/portfolio' component={Portfolio} />
           <PrivateRoute exact path='/news' component={News} />
           <PrivateRoute exact path='/watchlist' component={Watchlist} />
+          <PrivateRoute exact path='/contact-us' component={ContactUs} />
 
           {/*Education pages*/}
           <PrivateRoute exact path='/education' component={Education} />
