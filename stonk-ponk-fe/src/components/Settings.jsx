@@ -92,15 +92,12 @@ const Settings = () => {
 	// Function to edit the name of the user
 	const EditName = () => {
 		setNameDisabled(true);
-		setOldFirstName(firstName);
-		setOldLastName(lastName);
 		settings.changeName(firstName, lastName);
 	};
 
 	// Function to edit the email of the user
 	const EditEmail = () => {
 		setEmailDisabled(true);
-		setOldEmail(emailAdd);
 		settings
 			.changeEmail(emailAdd)
 			.then(() => {
@@ -114,7 +111,6 @@ const Settings = () => {
 				handleError(error);
 			});
 	};
-
 	const ChangePassword = () => {
 		const checkResult = checkPassword(passNew, passConfirm);
 		if (checkResult === "success") {
@@ -236,7 +232,14 @@ const Settings = () => {
 							</SettingFieldDiv>
 							<SettingFieldDiv>
 								{nameDisabled ? (
-									<EditButton aria-label="Edit Name Button" onClick={() => setNameDisabled(false)}>
+									<EditButton
+										aria-label="Edit Name Button"
+										onClick={() => {
+											setNameDisabled(false);
+											setOldFirstName(firstName);
+											setOldLastName(lastName);
+										}}
+									>
 										Edit Name
 									</EditButton>
 								) : (
@@ -264,7 +267,13 @@ const Settings = () => {
 							</SettingFieldDiv>
 							<SettingFieldDiv>
 								{emailDisabled ? (
-									<EditButton aria-label="Edit Email Button" onClick={() => setEmailDisabled(false)}>
+									<EditButton
+										aria-label="Edit Email Button"
+										onClick={() => {
+											setEmailDisabled(false);
+											setOldEmail(emailAdd);
+										}}
+									>
 										Edit Email
 									</EditButton>
 								) : (
