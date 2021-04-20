@@ -1,0 +1,18 @@
+[
+{
+    "model": "administration.newsapipriority",
+    "pk": 1,
+    "fields": {
+        "name": "yahoo_fin_news",
+        "priority": 1
+    }
+},
+{
+    "model": "administration.newsapipriority",
+    "pk": 2,
+    "fields": {
+        "name": "google_news",
+        "priority": 2
+    }
+}
+]

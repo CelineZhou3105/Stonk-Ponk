@@ -1,13 +1,25 @@
 from api_interface.yahoo_fin_api import YfApi
-
+from administration.models import StockApiPriority
 #class creates an interface for all api classes.
 class StockApiInterface:
     #Creates an instance of all stock modules and stores them in order lists
     stock_api_map = {}
     stock_api_map["yahoo_fin"] = YfApi()
 
-    stock_api_list = [{"name":"yahoo_fin", "priority": 2},{"name":"alpha_vantage", "priority": 1}]
-    
+    stock_api_list = [{"name":"yahoo_fin", "priority": 1},{"name":"alpha_vantage", "priority": 2}]
+
+    #TODO
+    def get_stock_api_priorities():
+        #refer to admin database
+        ret = []
+        for i in StockApiPriority.objects.all():
+            ret.append({"name" : i.name, "priority" : i.priority}) 
+        return ret
+    #TODO
+    def get_ordered_stock_api_list():
+        #call get_stock_api_priorities(), then sort
+        return sorted(StockApiInterface.get_stock_api_priorities(), key = lambda item: item['priority'])
+
     @staticmethod
     def get_stock_api_order():
         return StockApiInterface.stock_api_list

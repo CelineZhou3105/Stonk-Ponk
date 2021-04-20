@@ -41,7 +41,8 @@ def get_stock_api_priority(request):
     user = get_user(request); 
     
     if is_admin(user):
-        ret =      
+     #   ret = ApiPriority.objects.filter(user =      
+        pass
     else:
         return HttpResponseForbidden()
 
@@ -55,7 +56,7 @@ def set_stock_api_priority(request):
     user = get_user(request); 
     
     if is_admin(user):
-
+        pass
     else:
         return HttpResponseForbidden()
     
@@ -88,5 +89,3 @@ def make_user_admin(user):
     Administration.objects.get_or_create(user=user)
 
 #------- Exceptions
-class CustomError(Exception):
-    
