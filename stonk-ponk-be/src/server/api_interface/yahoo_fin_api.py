@@ -183,6 +183,7 @@ class YfApi():
         return price_dict
 
     def check_stock(self, ticker):
+        print(ticker)
         try:
             quotes = self.api.get_quote_data(ticker)
             self.num_calls += 1

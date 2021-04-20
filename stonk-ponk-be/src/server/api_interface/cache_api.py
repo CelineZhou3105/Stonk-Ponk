@@ -33,6 +33,7 @@ class cache():
         return inner
 
     def get_data(self, entry):
+        print(entry)
         try:
             ref = self.blob[entry]
             if self.check_expired(entry):

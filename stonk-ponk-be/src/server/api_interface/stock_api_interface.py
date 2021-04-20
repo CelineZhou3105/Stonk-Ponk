@@ -138,6 +138,8 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(minutes=1))
     def check_stocks(ticker):
+        print("aaa")
+        print(ticker)
         for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]

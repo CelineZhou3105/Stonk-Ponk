@@ -76,6 +76,7 @@ def get_watchlist_stocks(request):
     watchlist = Watchlist.objects.get(id = wid)
     if watchlist.user != user:
         return HttpResponseBadRequest("you naughty naughty")
+
     tickers = [sw.ticker for sw in list(StockWatch.objects.filter(watchlist = watchlist))]
     ret = {"tickers" : tickers}
     return HttpResponse(json.dumps(ret))
