@@ -1,4 +1,5 @@
 from .yahoo_fin_api import YfApi
+from .alphavantage_api import AaApi
 from .cache_api import cache
 
 import datetime
@@ -8,8 +9,9 @@ class StockApiInterface:
     #Creates an instance of all stock modules and stores them in order lists
     stock_api_map = {}
     stock_api_map["yahoo_fin"] = YfApi()
+    stock_api_map["alphavantage"] = AaApi()
 
-    stock_api_list = [{"name":"yahoo_fin", "priority": 1},{"name":"alpha_vantage", "priority": 2}]
+    stock_api_list = [{"name":"yahoo_fin", "priority": 1},{"name":"alphavantage", "priority": 2}]
     
     @staticmethod
     def get_stock_api_order():
@@ -19,6 +21,7 @@ class StockApiInterface:
     def set_stock_api_order(order_list):
         try:
             StockApiInterface.stock_api_list = sorted(order_list, key = lambda item: item['priority'])
+            print(StockApiInterface.stock_api_list)
             return True
         except:
             return False 
@@ -49,6 +52,7 @@ class StockApiInterface:
     def get_market_data(data_type, page_num):
         for api_dict in StockApiInterface.stock_api_list:
             try:
+                print("Trying ", api_dict['name'])
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_market_data(data_type, page_num)
             except:

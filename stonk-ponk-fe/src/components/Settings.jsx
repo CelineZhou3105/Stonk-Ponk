@@ -31,7 +31,6 @@ const Settings = () => {
 	const history = useHistory();
 
 	// initialise variables
-	// change this to get from backend
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [emailAdd, setEmailAdd] = useState("");
@@ -93,15 +92,12 @@ const Settings = () => {
 	// Function to edit the name of the user
 	const EditName = () => {
 		setNameDisabled(true);
-		setOldFirstName(firstName);
-		setOldLastName(lastName);
 		settings.changeName(firstName, lastName);
 	};
 
 	// Function to edit the email of the user
 	const EditEmail = () => {
 		setEmailDisabled(true);
-		setOldEmail(emailAdd);
 		settings
 			.changeEmail(emailAdd)
 			.then(() => {
@@ -115,7 +111,6 @@ const Settings = () => {
 				handleError(error);
 			});
 	};
-
 	const ChangePassword = () => {
 		const checkResult = checkPassword(passNew, passConfirm);
 		if (checkResult === "success") {
@@ -237,7 +232,14 @@ const Settings = () => {
 							</SettingFieldDiv>
 							<SettingFieldDiv>
 								{nameDisabled ? (
-									<EditButton aria-label="Edit Name Button" onClick={() => setNameDisabled(false)}>
+									<EditButton
+										aria-label="Edit Name Button"
+										onClick={() => {
+											setNameDisabled(false);
+											setOldFirstName(firstName);
+											setOldLastName(lastName);
+										}}
+									>
 										Edit Name
 									</EditButton>
 								) : (
@@ -265,7 +267,13 @@ const Settings = () => {
 							</SettingFieldDiv>
 							<SettingFieldDiv>
 								{emailDisabled ? (
-									<EditButton aria-label="Edit Email Button" onClick={() => setEmailDisabled(false)}>
+									<EditButton
+										aria-label="Edit Email Button"
+										onClick={() => {
+											setEmailDisabled(false);
+											setOldEmail(emailAdd);
+										}}
+									>
 										Edit Email
 									</EditButton>
 								) : (
@@ -332,20 +340,6 @@ const Settings = () => {
 					</FlexColumnLeftDiv>
 				</FlexRowLeftDiv>
 				<LineDivider />
-				<FlexRowLeftDiv>
-					<label class="switch">
-						<input type="checkbox" />
-						<span class="slider" />
-					</label>
-					<FlexColumnLeftDiv>
-						<h3>Suggestions</h3>
-						<p>These are suggestions on how to improve your portfolio over time.</p>
-						<p>
-							Depending on the composition of your portfolio and earnings, we will give you suggestions on
-							your next investment move.
-						</p>
-					</FlexColumnLeftDiv>
-				</FlexRowLeftDiv>
 			</PageContainer>
 		</div>
 	);
