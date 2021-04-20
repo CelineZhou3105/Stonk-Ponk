@@ -19,6 +19,8 @@ def require_token(func):
             user = get_user(request)
         except PyJWTError:
             return HttpResponseForbidden()
+        except:
+            return HttpResponseForbidden()
         return func(*args, **kwargs)
     return inner
 
