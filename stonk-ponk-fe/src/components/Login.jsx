@@ -68,7 +68,7 @@ function Login() {
             </ParticleContainer>
             <LoginFormContainer>
                 {error &&
-                    <Alert variant="filled" severity="error">
+                    <Alert onClose={() => setError(false)} variant="filled" severity="error">
                         Could not log in. Please try again.
                     </Alert>
                 }

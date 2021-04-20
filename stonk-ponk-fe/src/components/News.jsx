@@ -168,7 +168,7 @@ function News() {
         <>
             <Navigation />
             {error && (
-                <Alert variant="filled" severity="error">
+                <Alert onClose={() => setError(false)} variant="filled" severity="error">
                     {errorMsg}
                 </Alert>
             )}

@@ -148,12 +148,12 @@ const Settings = () => {
         <div>
             <Navigation settings="true" />
             {success && (
-                <Alert variant="filled" severity="success">
+                <Alert onClose={() => setSuccess(false)} variant="filled" severity="success">
                     You changed your login credentials! Please log in again. Logging out...
                 </Alert>
             )}
             {error && (
-                <Alert variant="filled" severity="error">
+                <Alert onClose={() => setError(false)} variant="filled" severity="error">
                     {errorMsg}
                 </Alert>
             )}

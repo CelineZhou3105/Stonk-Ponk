@@ -55,6 +55,8 @@ Bug fixes for stock table.
 Moving our 'what if I buy/sell now' functionality to the portfolio page + adding modals.
 Changing the search bar in the Market page to accomodate API calls, and taking users straight to the stock details page.
 Creating a responsive/collapsible navigation bar.
+Added comments to all our FE code. 
+Making alerts dismissable across the entire website.
 
 
 
