@@ -3,6 +3,17 @@ class ForexApiInterface:
     forex_api_map['alphavantage'] = AaForexApi()
 
     forex_api_list = [{"name":"alphavantage", "priority": 1}]
+    def get_forex_api_priorities():
+        #refer to admin database
+        ret = []
+        for i in ForexApiPriority.objects.all():
+            ret.append({"name" : i.name, "priority" : i.priority})
+        return ret
+
+    def get_ordered_forex_api_list():
+        #call get_stock_api_priorities(), then sort
+        return sorted(ForexApiInterface.get_forex_api_priorities(), key = lambda item: item['priority'])
+
 
     @staticmethod
     def get_forex_api_order():

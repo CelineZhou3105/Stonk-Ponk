@@ -8,6 +8,16 @@ class NewsApiInterface:
     news_api_map["google_news"] = GoogleNewsApi()
 
     news_api_list = [{"name":"yahoo_fin_news", "priority": 1},{"name":"google_news", "priority": 2}]
+    def get_news_api_priorities():
+        #refer to admin database
+        ret = []
+        for i in NewsApiPriority.objects.all():
+            ret.append({"name" : i.name, "priority" : i.priority})
+        return ret
+
+    def get_ordered_news_api_list():
+        #call get_stock_api_priorities(), then sort
+        return sorted(NewsApiInterface.get_news_api_priorities(), key = lambda item: item['priority'])
 
     @staticmethod
     def get_news_api_order():
