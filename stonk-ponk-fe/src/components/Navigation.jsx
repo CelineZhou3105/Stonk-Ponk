@@ -46,8 +46,8 @@ function Navigation(props) {
     const [errorMsg, setErrorMsg] = useState('');
 
     // Redirect to settings
-    const navigateToSettings = () => {
-        history.push('/settings');
+    const redirect = (path) => {
+        history.push(path);
     }
 
     // Logout of the website
@@ -89,7 +89,7 @@ function Navigation(props) {
                     {!props.settings ?
                         <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" onClick={() => setProfileModalOpen(!profileModalOpen)} />
                         :
-                        <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" style={{ border: "3px solid #9e22ff" }} onClick={() => setProfileModalOpen(!profileModalOpen)} />
+                        <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" style={{ border: "3px solid #FFF" }} onClick={() => setProfileModalOpen(!profileModalOpen)} />
                     }
                 </ProfilePhotoContainer>
                 <Menu />
@@ -105,8 +105,8 @@ function Navigation(props) {
                         <ProfilePhoto className="profile-photo" src={profile} alt="Your profile picture" />
                     </ProfilePhotoContainer>
                     <h2>{firstName} {lastName}</h2>
-                    <ProfileModaItem className="profile-modal-item" onClick={navigateToSettings}>Settings</ProfileModaItem>
-                    <ProfileModaItem className="profile-modal-item">Contact Us</ProfileModaItem>
+                    <ProfileModaItem className="profile-modal-item" onClick={() => redirect('/settings')}>Settings</ProfileModaItem>
+                    <ProfileModaItem className="profile-modal-item" onClick={() => redirect('/contact-us')}>Contact Us</ProfileModaItem>
                     <ProfileModaItem onClick={() => { logout() }} className="profile-modal-item">Logout</ProfileModaItem>
                 </ProfileModal>
             }
