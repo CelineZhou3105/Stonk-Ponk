@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.mail import send_mail
 from django.core.files import File
+from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
@@ -19,8 +20,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     security_question = models.CharField(_('security question'), default='security question',  max_length=50)
     security_answer = models.CharField(_('security answer'), default='security answer', max_length=30)
 
-    profile_picture = models.FileField()
-        
+    profile_picture = models.FileField(storage=FileSystemStorage(location=settings.MEDIA_ROOT), upload_to='account', default='account/default.img') 
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -65,10 +65,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.full_name = '%s %s' % (self.first_name, self.last_name)
 
     def change_profile_picture(self, data):
-        with open("{}/media/account/{}.img".format(settings.BASE_DIR,self.id), "w") as f:
+        with open("{}/media/account/{}.img".format(settings.BASE_DIR, self.id), "w") as f:
             dfile = File(f)
             f.write(data)
             self.profile_picture = dfile
+
+    def get_profile_picture(self):
+        with open(self.profile_picture.path, "r") as f:
+            return f.read().replace('\n', '')
+        return ""
 
     def save(self, *args, **kwargs):
         self.email = self.email.lower()

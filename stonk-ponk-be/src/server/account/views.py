@@ -223,6 +223,7 @@ def save_profile_picture(request):
 
     image_encoded_64 = body["image"]
     user.change_profile_picture(image_encoded_64)
+    user.save()
 
     return HttpResponse()
 
@@ -233,10 +234,12 @@ def get_user_details(request):
         user = get_user(request)
         ret = {"first_name" : str(user.first_name), 
                 "last_name" : str(user.last_name), 
-                "email" : str(user.email)}
+                "email" : str(user.email),
+                "image" : user.get_profile_picture()}
+                
         return HttpResponse(json.dumps(ret))
     except Exception as e :
+        raise e
         return HttpResponseBadRequest(json.dumps({"eee": "EEEE"})) 
 
     return HttpResponseBadRequest() 
-
