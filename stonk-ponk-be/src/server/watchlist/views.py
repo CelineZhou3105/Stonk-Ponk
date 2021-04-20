@@ -86,7 +86,8 @@ def get_watchlist_stocks(request):
     stock_dict = {}
 
     for ticker in tickers:
-        stock_dict['data'] = stock_api.get_stock_data(ticker)
+        stock_dict['ticker'] = ticker
+        stock_dict['data'] = stock_api.get_stock_data(ticker, "market")
         stock_dict['prices'] = stock_api.get_stock_prices(ticker)
         stock_data_list.append(stock_dict)
     
