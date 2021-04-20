@@ -225,7 +225,7 @@ export const MenuContainer = styled.div`
     justify-content: left;
     width: 100px;
     background-color: #af28ff;
-
+    z-index: 9999;
     @media (max-width: 1280px) {
         display: flex;
     }

@@ -64,7 +64,7 @@ const Watchlist = () => {
 	console.log(watchlistNames);
 	const addNewWatchlist = () => {
 		watchlist
-			.createWatchlist(newWatchlist)
+			.createWatchlist(newWatchlist.trim())
 			.then((response) => response.json())
 			.then((json) => {
 				console.log("Added new watchlist");

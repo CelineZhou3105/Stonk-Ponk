@@ -50,11 +50,11 @@ const SignUp = () => {
 		const checkResult = checkPassword(pass, passConfirm);
 		if (checkResult === "success") {
 			authentication
-				.register(firstName, lastName, emailAdd, pass, securityQ, securityA)
+				.register(firstName.trim(), lastName.trim(), emailAdd.trim(), pass, securityQ.trim(), securityA.trim())
 				.then(() => {
 					successfulSignUp();
 				})
-				.catch((error) => {
+				.catch(() => {
 					setError(true);
 					setErrorMsg("An error occured during registration. Please try again.");
 				});
