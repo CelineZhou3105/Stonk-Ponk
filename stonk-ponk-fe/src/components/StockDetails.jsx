@@ -1,22 +1,36 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
 
 import StockDetailsChart from './StockDetailsChart';
 import Navigation from './Navigation';
-import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
-import { Container, ChartContainer, GraphAndPeriodDiv, NewsContainer, NewsTitleContainer, PageContainer, FlexRowDiv } from '../css/Div';
-import { Link, NormalText, SubText } from '../css/Text';
-import { useParams } from "react-router-dom";
-import { PageTitle } from '../css/Text';
+
+import { getNews } from '../services/news';
 import { market } from '../services/market';
 import { getStockDetailTooltipText } from '../helpers/tooltipText';
+
+import { 
+    ChartContainer,
+    Container,
+    FlexRowDiv,
+    GraphAndPeriodDiv,
+    PageContainer,
+    NewsContainer,
+    NewsTitleContainer
+} from '../css/Div';
+import { Link, NormalText, SubText } from '../css/Text';
+import { PageTitle } from '../css/Text';
+
 import { Tooltip, Chip } from '@material-ui/core';
-import { getNews } from '../services/news';
 import Pagination from '@material-ui/lab/Pagination';
+import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from '@material-ui/core';
 
+/**
+ * StockDetails - Page showing the details of an individual stock. 
+ */
 function StockDetails() {
-
     let { id } = useParams(); // gets the ticker of the share
 
+    // Variables for information related to the stock
     const [name, setName] = useState('');
     const [ticker, setTicker] = useState('');
     const [price, setPrice] = useState('');
@@ -42,6 +56,7 @@ function StockDetails() {
         { label: 'Market Cap', value: "N/A" }
     ]);
 
+    // useEffect to make API call for stock data
     useEffect(() => {
         market.getStockDetail(id)
             .then(response => response.json())
@@ -74,6 +89,7 @@ function StockDetails() {
             })
     }, [id, setStats, setName, setTicker, setPrice, setMarketName, setExchange]);
 
+    // useEffect to get news articles related to the stock
     useEffect(() => {
         if (ticker !== '') {
             getNews(ticker)

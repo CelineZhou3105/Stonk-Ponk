@@ -1,9 +1,11 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { FlexColumnLeftDiv, FlexRowDiv, PageContainer } from '../../css/Div';
-import { PurpleItalicText } from '../../css/Text';
-import { CustomButton } from '../../css/Button';
+
 import Navigation from '../Navigation';
+
+import { FlexColumnLeftDiv, FlexRowDiv, PageContainer } from '../../css/Div';
+import { PageTitle, PurpleItalicText } from '../../css/Text';
+import { CustomButton } from '../../css/Button';
 
 const InterpretingTheNews = () => {
     // navigate back to sign in
@@ -20,7 +22,7 @@ const InterpretingTheNews = () => {
             <PageContainer>
                 <FlexColumnLeftDiv>
                     <FlexRowDiv style={{ width: "100%" }}>
-                        <h1>Education</h1>
+                        <PageTitle>Education</PageTitle>
                         <CustomButton backgroundColor="#d6d6d6" color="#000000" hoverColor="#c2c2c2" aria-label="Navigate back to education page" onClick={navigateToEducation}>Back</CustomButton>
                     </FlexRowDiv>
                     <h1>Interpreting the News</h1>

@@ -1,8 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+
+import Navigation from '../Navigation';
+
 import { FlexColumnLeftDiv, FlexRowDiv, PageContainer } from '../../css/Div';
 import { CustomButton } from '../../css/Button';
-import Navigation from '../Navigation';
 
 const WhyInvest = () => {
     // navigate back to sign in

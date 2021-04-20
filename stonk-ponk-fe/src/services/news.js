@@ -1,10 +1,10 @@
-//TODO Replace with the correct link
-
-// Request will just require getting top 10 news articles
-// Response will give us numResults, the title, description and urlToImage
-
 import { MarketNewsLink, StockNewsLink } from '../api-links/constants';
 
+/**
+ * getNews - gets the news for a particular ticker
+ * @param {string} ticker - unique identifier for the stock 
+ * @returns List of objects where each object represents an article
+ */
 export async function getNews(ticker) {
     const token = localStorage.getItem('token');
     const body = {
@@ -37,7 +37,7 @@ export async function getNews(ticker) {
 
 /**
  * getMarketNews - Gets the news on the top 10 most active stocks
- * @returns List of lists, where each list represets articles for one of the most active stocks
+ * @returns List of lists, where each list represents articles for one of the most active stocks
  */
 export async function getMarketNews() {
     const token = localStorage.getItem('token');

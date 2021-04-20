@@ -27,7 +27,11 @@ import Pagination from '@material-ui/lab/Pagination';
 import Alert from '@material-ui/lab/Alert';
 import { CircularProgress, Chip } from '@material-ui/core';
 
-
+/**
+ * News - News page which shows the news around the most active stocks and allows the user to search for news
+ * on any particular stock by ticker. 
+ * @returns 20 articles for most active stocks, 5 articles per individual stock queried
+ */
 function News() {
     // User input into the search bar
     const [input, setInput] = useState(null); 

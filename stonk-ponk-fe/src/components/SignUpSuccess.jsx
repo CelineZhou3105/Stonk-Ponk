@@ -1,12 +1,17 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import Particles from 'react-particles-js';
+
+import logo from '../images/logo.png';
+
 import { PasswordResetBackground, LogoContainer, SignUpPageContainer } from '../css/Div';
 import { CustomButton } from '../css/Button';
 import { DefaultLogo } from '../css/Logo';
-import logo from '../images/logo.png';
-import Particles from 'react-particles-js';
 import { PageTitle } from '../css/Text';
 
+/**
+ * SignUpSuccess - Page shown when the user has successfully signed up for an account
+ */
 const SignUpSuccess = () => {
 
     // navigate back to sign in

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import Chart from "react-google-charts";
+
 import { market } from '../services/market';
 
+import Chart from "react-google-charts";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 /**

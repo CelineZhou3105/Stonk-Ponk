@@ -1,13 +1,20 @@
 import React from 'react';
-import Chart from "react-google-charts";
 
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { NormalText } from '../css/Text';
 
+import Chart from "react-google-charts";
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+/**
+ * PortfolioChart - pie chart that displays the make-up of a user's portfolio. 
+ * @param {Array} stockData - the stocks in the user's portfolio
+ * @param {number} portfolioValue - The cumulative value of the user's portfolio, in AUD
+ */
 function PortfolioChart(props) {
     
     const { stockData, portfolioValue } = props;
 
+    // Reformat the data for the chart to understand
     const data = [['stock name', 'value']];
     let empty = false;
     if (stockData.length === 0) { // The user has no stocks in their portfolio
