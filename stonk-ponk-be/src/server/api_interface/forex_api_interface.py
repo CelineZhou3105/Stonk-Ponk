@@ -13,7 +13,7 @@ class ForexApiInterface:
     #gets priority list from admin and sorts based on priority
     def set_forex_api_order(order_list):
         try:
-            ForexApiInterface.forex_api_list = sorted(ForexApiInterface.forex_api_list, key = lambda item: item['priority'])
+            ForexApiInterface.forex_api_list = sorted(order_list, key = lambda item: item['priority'])
             return True
         except:
             return False 

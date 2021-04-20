@@ -71,7 +71,15 @@ export const SignUpSectionDiv = styled.div`
 
 export const FlexColumnCenterDiv = createFlexColumnDiv("center", "center", "50px");
 
-export const FlexColumnLeftDiv = createFlexColumnDiv("center", "flex-start", "2%");
+export const FlexColumnLeftDiv = createFlexColumnDiv("center", "flex-start", "10px");
+
+export const ProfilePictureContainer = styled.div`
+    ${FlexColumn}
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+`;
 
 function createLineDivider(width) {
     return styled.div`
@@ -191,11 +199,6 @@ export const ProfileModal = styled.div`
     color: #000;
     width: 300px;
     z-index: 9999;
-
-    @media (max-width: 1280px) {
-        top: 200px;
-        right: auto;
-    }
 `;
 
 export const ProfilePhotoContainer = styled.div`
