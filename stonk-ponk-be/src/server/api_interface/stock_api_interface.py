@@ -1,4 +1,7 @@
-from api_interface.yahoo_fin_api import YfApi
+from .yahoo_fin_api import YfApi
+from .cache_api import cache
+
+import datetime
 
 #class creates an interface for all api classes.
 class StockApiInterface:
@@ -19,7 +22,8 @@ class StockApiInterface:
             return True
         except:
             return False 
-    
+   
+    @cache(datetime.timedelta(minutes=1))
     def get_market_status():
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -30,6 +34,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(minutes=5))
     def get_most_active(start_index, end_index):
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -40,6 +45,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(minutes=5))
     def get_market_data(data_type, page_num):
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -50,6 +56,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(minutes=5))
     def get_stock_data(ticker):
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -61,6 +68,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(minutes=5))
     def get_price(ticker):
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -71,6 +79,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(hours=1))
     def get_stats(ticker):
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -81,6 +90,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(minutes=5))
     def get_quotes(ticker):
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -91,6 +101,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(minutes=5))
     def get_stock_prices(ticker, interval_type):
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -101,6 +112,7 @@ class StockApiInterface:
 
         return False
     
+    @cache(datetime.timedelta(hours=1))
     def get_historical_price(ticker, date):
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -110,6 +122,7 @@ class StockApiInterface:
                 continue
         return False
     
+    @cache(datetime.timedelta(minutes=1))
     def check_stock(ticker):
         for api_dict in StockApiInterface.stock_api_list:
             try:
@@ -119,6 +132,7 @@ class StockApiInterface:
                 continue
         return False
     
+    @cache(datetime.timedelta(minutes=1))
     def check_stocks(ticker):
         for api_dict in StockApiInterface.stock_api_list:
             try:
