@@ -1,8 +1,8 @@
-import { 
-    EditPortfolio, 
-    GetPortfolioSummary, 
-    GetPortfolioBestStocks, 
-    GetPortfolioWorstStocks, 
+import {
+    EditPortfolio,
+    GetPortfolioSummary,
+    GetPortfolioBestStocks,
+    GetPortfolioWorstStocks,
     GetPortfolioDetails,
     GetPortfolioHealth
 } from '../api-links/constants';
@@ -13,12 +13,13 @@ import {
  * @returns - An array of stocks owned by the user, the cumulative value of their portfolio, percentage change of the portfolio
  */
 export async function getPortfolioSummary() {
+    const token = localStorage.getItem('token');
     const requestOptions = {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token'),
+            'Authorization': token,
         },
     };
     return await fetch(GetPortfolioSummary + '?n=5', requestOptions)
@@ -41,12 +42,14 @@ export async function getPortfolioSummary() {
  * @returns - returns more details on the stocks of the portfolio (price, purchase date, units owned)
  */
 export async function getPortfolioDetails() {
+    const token = localStorage.getItem('token');
+
     const requestOptions = {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token'),
+            'Authorization': token,
         },
     };
     return await fetch(GetPortfolioDetails, requestOptions)
@@ -70,12 +73,14 @@ export async function getPortfolioDetails() {
  * @returns - nothing.
  */
 export async function editPortfolio(data) {
+    const token = localStorage.getItem('token');
+
     const requestOptions = {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token'),
+            'Authorization': token,
         },
         body: JSON.stringify(data)
     };
@@ -99,12 +104,14 @@ export async function editPortfolio(data) {
  * @returns - an array of the user's best performing stocks (by profit)
  */
 export async function getPortfolioBest(num_stocks) {
+    const token = localStorage.getItem('token');
+
     const requestOptions = {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token'),
+            'Authorization': token,
         },
     };
     return await fetch(GetPortfolioBestStocks + "?n=" + num_stocks, requestOptions)
@@ -128,12 +135,14 @@ export async function getPortfolioBest(num_stocks) {
  * @returns - An array of the user's worst performing stocks (by loss)
  */
 export async function getPortfolioWorst(num_stocks) {
+    const token = localStorage.getItem('token');
+
     const requestOptions = {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token'),
+            'Authorization': token,
         },
     };
     return await fetch(GetPortfolioWorstStocks + "?n=" + num_stocks, requestOptions)
@@ -156,12 +165,14 @@ export async function getPortfolioWorst(num_stocks) {
  * @returns - Returns a user's beta score, profitability score, volatility score
  */
 export async function getPortfolioHealth() {
+    const token = localStorage.getItem('token');
+
     const requestOptions = {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token'),
+            'Authorization': token,
         },
     };
     return await fetch(GetPortfolioHealth, requestOptions)

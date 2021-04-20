@@ -78,40 +78,40 @@ function Navigation(props) {
                     <ProfileModaItem onClick={() => { logout() }} className="profile-modal-item">Logout</ProfileModaItem>
                 </ProfileModal>
             }
-            
+
         </NavigationContainer>
     )
 }
 
 export const Menu = () => {
-  const [open, setOpen] = useState(false);
-  return (
-      <MenuContainer>
-        <MenuButton onClick={() => setOpen(!open)} open={open} key={0} />
-        <SideBar open={open}>
-            <span className='closeBtn' onClick={() => setOpen(false)}>&times;</span>
-            <CollapsedNavList>
-                <NavLink to="/market"><CollapsedNavItem>Market</CollapsedNavItem></NavLink>
-                <NavLink to="/portfolio"><CollapsedNavItem>Portfolio</CollapsedNavItem></NavLink>
-                <NavLink to="/watchlist"><CollapsedNavItem>Watchlist</CollapsedNavItem></NavLink>
-                <NavLink to="/news"><CollapsedNavItem>News</CollapsedNavItem></NavLink>
-                <NavLink to="/education"><CollapsedNavItem>Education</CollapsedNavItem></NavLink>
-            </CollapsedNavList>
-        </SideBar>
-      </MenuContainer>
-  )
+    const [open, setOpen] = useState(false);
+    return (
+        <MenuContainer>
+            <MenuButton onClick={() => setOpen(!open)} open={open} key={0} />
+            <SideBar open={open}>
+                <span className='closeBtn' onClick={() => setOpen(false)}>&times;</span>
+                <CollapsedNavList>
+                    <NavLink to="/market"><CollapsedNavItem>Market</CollapsedNavItem></NavLink>
+                    <NavLink to="/portfolio"><CollapsedNavItem>Portfolio</CollapsedNavItem></NavLink>
+                    <NavLink to="/watchlist"><CollapsedNavItem>Watchlist</CollapsedNavItem></NavLink>
+                    <NavLink to="/news"><CollapsedNavItem>News</CollapsedNavItem></NavLink>
+                    <NavLink to="/education"><CollapsedNavItem>Education</CollapsedNavItem></NavLink>
+                </CollapsedNavList>
+            </SideBar>
+        </MenuContainer>
+    )
 };
 
 export const MenuButton = ({ open, onClick }) => {
-  return (
-      <MenuButtonContainer onClick={onClick} className="menu-button" aria-label="Toggle Menu" aria-expanded={open}>
-        <svg viewBox="0 0 100 100" width="50" height="50">
-          <rect x="20" y="20" width="60" height="8" fill="white" />
-          <rect x="20" y="45" width="60" height="8" fill="white" />
-          <rect x="20" y="70" width="60" height="8" fill="white" />
-        </svg>
-      </MenuButtonContainer>
-  );
+    return (
+        <MenuButtonContainer onClick={onClick} className="menu-button" aria-label="Toggle Menu" aria-expanded={open}>
+            <svg viewBox="0 0 100 100" width="50" height="50">
+                <rect x="20" y="20" width="60" height="8" fill="white" />
+                <rect x="20" y="45" width="60" height="8" fill="white" />
+                <rect x="20" y="70" width="60" height="8" fill="white" />
+            </svg>
+        </MenuButtonContainer>
+    );
 };
 
 export default Navigation;

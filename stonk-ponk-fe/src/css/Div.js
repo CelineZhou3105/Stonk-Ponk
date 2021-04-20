@@ -230,7 +230,7 @@ export const MenuContainer = styled.div`
 
 export const SideBar = styled.div`
     height: 100%; 
-    width: ${props => props.open ? '250px': 0}; 
+    width: ${props => props.open ? '250px' : 0}; 
     position: fixed; 
     z-index: 1; 
     right: 0; 
@@ -385,12 +385,17 @@ export const NewsTitleContainer = styled.div`
     align-items: center;
 `;
 
+export const WatchlistTable = styled.div`
+    width: 98%;
+`;
+
 /* Education page elements */
 export const EducationTileGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1em;
-
+    margin-left: 20%;
+    margin-right: 20%;
     @media (max-width: 850px) {
         grid-template-columns: repeat(2, 1fr); 
     }
