@@ -12,6 +12,7 @@ import {
 	ChartContainer,
 	Container,
 	FlexRowDiv,
+	FlexColumnCenterDiv,
 	GraphAndPeriodDiv,
 	PageContainer,
 	NewsContainer,
@@ -24,6 +25,7 @@ import { Tooltip, Chip } from "@material-ui/core";
 import Pagination from "@material-ui/lab/Pagination";
 import { Table, TableCell, TableContainer, TableRow, Tabs, Tab } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 /**
  * StockDetails - Page showing the details of an individual stock.
@@ -48,6 +50,9 @@ function StockDetails() {
 	const [error, setError] = useState(false);
 	const [errorMsg, setErrorMsg] = useState("");
 
+	// Tracks whether data has loaded from api
+	const [loading, setLoading] = useState(true);
+
 	const [stats, setStats] = useState([
 		{ label: "Bid", value: "N/A" },
 		{ label: "Ask", value: "N/A" },
@@ -67,7 +72,6 @@ function StockDetails() {
 			.getStockDetail(id)
 			.then((response) => response.json())
 			.then((json) => {
-				console.log(json);
 				setName(json.name);
 				setTicker(json.ticker);
 				setPrice(json.price);
@@ -85,8 +89,9 @@ function StockDetails() {
 					{ label: "52 Week Range", value: json.fifty_two_week_range },
 					{ label: "Market Cap", value: json.market_cap },
 				]);
+				setLoading(false);
 			})
-			.catch((error) => {
+			.catch(() => {
 				setError(true);
 				setErrorMsg("An error occured while getting stock details. Please refresh.");
 			});
@@ -155,76 +160,90 @@ function StockDetails() {
 					{errorMsg}
 				</Alert>
 			)}
-			<PageContainer>
-				<PageTitle>
-					{name} <span>({ticker})</span>
-				</PageTitle>
-				<h1>${parseFloat(price).toFixed(2)} USD</h1>
-				<p>Market: {marketName}</p>
-				<p>Exchange: {exchange}</p>
-				<TableContainer>
-					<Table>
-						{stats.map((value) => {
-							return (
-								<TableRow>
-									<Tooltip title={getStockDetailTooltipText(value.label)} placement="right">
-										<TableCell variant="head">{value.label}</TableCell>
-									</Tooltip>
-									<TableCell>{value.value}</TableCell>
-								</TableRow>
-							);
-						})}
-					</Table>
-				</TableContainer>
-				<ChartContainer style={{ width: "100%" }}>
-					<GraphAndPeriodDiv>
-						<StockDetailsChart period={period} id={id} />
-						<Tabs
-							value={tabValue}
-							indicatorColor="primary"
-							textColor="primary"
-							onChange={handleChange}
-							aria-label="tabs to switch between different periods to view the graph with"
-						>
-							<Tab label="Week" />
-							<Tab label="Month" />
-							<Tab label="6 months" />
-							<Tab label="Year" />
-						</Tabs>
-					</GraphAndPeriodDiv>
-				</ChartContainer>
-				<div>
-					<h1>News feed for {name}</h1>
-				</div>
-				{articles && articles.length === 0 && <div>No search results.</div>}
-				{articles && articles.length > 0 && (
-					<Container flex_direction="column" gap="1em">
-						{articlesShown.map((article) => {
-							return (
-								<NewsContainer>
-									<div>
-										<NewsTitleContainer>
-											<Chip color="primary" size="small" label={article.ticker} />
-											<NormalText>
-												<Link color="black" href={article.link} target="_blank">
-													{article.title}
-												</Link>
-											</NormalText>
-										</NewsTitleContainer>
-										<SubText>{article.published}</SubText>
-										<SubText>{article.summary}...</SubText>
-									</div>
-								</NewsContainer>
-							);
-						})}
-						<FlexRowDiv>
-							Page: {pageNum}
-							<Pagination count={pages} page={pageNum} onChange={handlePageChange} />
-						</FlexRowDiv>
-					</Container>
-				)}
-				{articles === null && <div>Loading...</div>}
-			</PageContainer>
+			{loading ? (
+				<FlexColumnCenterDiv>
+					<CircularProgress />
+				</FlexColumnCenterDiv>
+			) : (
+				<>
+					<PageContainer>
+						<PageTitle>
+							{name} <span>({ticker})</span>
+						</PageTitle>
+						<h1>${parseFloat(price).toFixed(2)} USD</h1>
+						<p>Market: {marketName}</p>
+						<p>Exchange: {exchange}</p>
+						<TableContainer>
+							<Table>
+								{stats.map((value) => {
+									return (
+										<TableRow>
+											<TableCell variant="head">
+												<Tooltip
+													title={getStockDetailTooltipText(value.label)}
+													placement="right"
+													style={{ cursor: "pointer" }}
+												>
+													<span>{value.label}</span>
+												</Tooltip>
+											</TableCell>
+											<TableCell>{value.value}</TableCell>
+										</TableRow>
+									);
+								})}
+							</Table>
+						</TableContainer>
+						<ChartContainer style={{ width: "100%" }}>
+							<GraphAndPeriodDiv>
+								<StockDetailsChart period={period} id={id} />
+								<Tabs
+									value={tabValue}
+									indicatorColor="primary"
+									textColor="primary"
+									onChange={handleChange}
+									aria-label="tabs to switch between different periods to view the graph with"
+								>
+									<Tab label="Week" />
+									<Tab label="Month" />
+									<Tab label="6 months" />
+									<Tab label="Year" />
+								</Tabs>
+							</GraphAndPeriodDiv>
+						</ChartContainer>
+						<div>
+							<h1>News feed for {name}</h1>
+						</div>
+						{articles && articles.length === 0 && <div>No search results.</div>}
+						{articles && articles.length > 0 && (
+							<Container flex_direction="column" gap="1em">
+								{articlesShown.map((article) => {
+									return (
+										<NewsContainer>
+											<div>
+												<NewsTitleContainer>
+													<Chip color="primary" size="small" label={article.ticker} />
+													<NormalText>
+														<Link color="black" href={article.link} target="_blank">
+															{article.title}
+														</Link>
+													</NormalText>
+												</NewsTitleContainer>
+												<SubText>{article.published}</SubText>
+												<SubText>{article.summary}...</SubText>
+											</div>
+										</NewsContainer>
+									);
+								})}
+								<FlexRowDiv>
+									Page: {pageNum}
+									<Pagination count={pages} page={pageNum} onChange={handlePageChange} />
+								</FlexRowDiv>
+							</Container>
+						)}
+						{articles === null && <div>Loading...</div>}
+					</PageContainer>
+				</>
+			)}
 		</div>
 	);
 }

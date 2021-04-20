@@ -31,7 +31,6 @@ const Settings = () => {
 	const history = useHistory();
 
 	// initialise variables
-	// change this to get from backend
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [emailAdd, setEmailAdd] = useState("");
