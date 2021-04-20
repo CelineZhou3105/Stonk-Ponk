@@ -49,6 +49,7 @@ const Settings = () => {
 
 	const [profileImage, setProfileImage] = useState(profile);
 	const [newProfileImage, setNewProfileImage] = useState("");
+	const [uploadDisabled, setUploadDisabled] = useState(true);
 
 	// Tracks when errors occurs - for showing error banners to the user
 	const [error, setError] = useState(false);
@@ -150,10 +151,17 @@ const Settings = () => {
 		setEmailDisabled(true);
 	};
 
-	const changeProfilePic = () => {
-		console.log(newProfileImage);
-		setProfileImage(newProfileImage.name);
+	const convertToBase64 = (image) => {
+		const reader = new FileReader();
+		reader.readAsDataURL(image);
+		reader.onload = () => {
+			setNewProfileImage(reader.result.split(",")[1]);
+			setUploadDisabled(false);
+		};
 	};
+
+	const changeProfilePic = () => {};
+
 	return (
 		<div>
 			<Navigation settings="true" />
@@ -184,22 +192,27 @@ const Settings = () => {
 						{!profileModalDisabled && (
 							<ModalContainer>
 								<ModalContent style={{ width: "80%", padding: "5px" }}>
-									<CloseButton onClick={() => setProfileModalDisabled(true)}>&times;</CloseButton>
+									<CloseButton
+										onClick={() => {
+											setProfileModalDisabled(true);
+											setUploadDisabled(true);
+										}}
+									>
+										&times;
+									</CloseButton>
 									<FlexColumnCenterDiv>
-										{/* <ImageUploader
-                                            withIcon={true}
-                                            withPreview={true}
-                                            buttonText="Choose Image"
-                                            fileSizeError="file size is too big"
-                                            fileTypeError=" is not supported file extension"
-                                            onChange={(e) => setNewProfileImage(e)}
-                                            singleImage={true}
-                                        /> */}
+										<UploadImage
+											id="uploadProfile"
+											type="file"
+											accept=".png, .jpg"
+											onChange={(e) => convertToBase64(e.target.files[0])}
+										/>
 										<CustomButton
 											backgroundColor="#9e22ff"
 											hoverColor="#b55cfa"
 											aria-label="save uploaded profile picture"
 											onClick={changeProfilePic}
+											disabled={uploadDisabled}
 										>
 											Save Profile Picture
 										</CustomButton>

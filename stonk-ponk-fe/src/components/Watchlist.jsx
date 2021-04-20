@@ -40,7 +40,7 @@ const Watchlist = () => {
 	const [watchlistNames, setWatchlistNames] = useState([{ id: -1, label: "" }]);
 	const [newWatchlist, setNewWatchlist] = useState("");
 	const [modalDisabled, setModalDisabled] = useState(true);
-	const [currentWatchlist, setCurrentWatchlist] = useState(watchlistNames[0].label);
+	const [currentWatchlist, setCurrentWatchlist] = useState("");
 	const [watchlistData, setWatchlistData] = useState([]);
 	const [page, setPage] = useState(0);
 	const [tableVisible, setTableVisible] = useState(false);
@@ -63,6 +63,7 @@ const Watchlist = () => {
 	}, []);
 	console.log(watchlistNames);
 	const addNewWatchlist = () => {
+		console.log(newWatchlist.trim());
 		watchlist
 			.createWatchlist(newWatchlist.trim())
 			.then((response) => response.json())
