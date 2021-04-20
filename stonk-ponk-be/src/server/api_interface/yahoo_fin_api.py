@@ -86,7 +86,7 @@ class YfApi():
             stock_dict['exchange'] = quotes['fullExchangeName']
 
             stock_dict['fifty_two_week_range'] = quotes['fiftyTwoWeekRange']
-            stock_dict['market_cap'] = quotes['fiftyTwoWeekRange']
+            stock_dict['market_cap'] = quotes['marketCap']
 
             return stock_dict
     
@@ -107,6 +107,20 @@ class YfApi():
         except:
             return "Stock Not Found"
 
+    #Refactored function deprecated get_stats
+    def get_beta(self, ticker):
+        try:
+            stats = self.api.get_stats(ticker)
+            for index, df in stats.iterrows():
+                if df["Attribute"] == "Beta (5Y Monthly)":
+                    beta = float(df["Value"])
+                    return beta
+        
+            return "Beta Not Found"
+        except:
+            return "Stock Not Found"
+
+    #Remove get_quotes      
     def get_quotes(self,ticker):
         try:
             return self.api.get_quote_table(ticker)
