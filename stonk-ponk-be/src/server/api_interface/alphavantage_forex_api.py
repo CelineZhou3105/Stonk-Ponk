@@ -30,7 +30,7 @@ class AaForexApi():
             
             if response.status_code == 200:
                 values = json.loads(response.text)
-                values_dict =  values['Time Series FX (Daily)']['5. Exchange Rate']:
+                values_dict =  values['Time Series FX (Daily)']['5. Exchange Rate']
                 
                 for date in values_dict:
                     if str(date).strip() == str(given_date).strip():

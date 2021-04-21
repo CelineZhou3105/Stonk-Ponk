@@ -112,11 +112,12 @@ class Portfolio(models.Model) :
                 tVal += stock_api.get_price(so.get_stock_ticker()) * so.volume
             except:
                 print("LOG: ERROR: could not process {} in get_value".format(so.get_stock_ticker()))
-        
+        ''' 
         au_value = forex_api.calc_forex_rate(tVal, "USD", "AUD")
         print("tVal ", tVal)
         print("au_val ", au_value)
-        return au_value
+        '''
+        return tVal
 
     def get_investment(self):
         tVal = 0
