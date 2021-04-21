@@ -1,6 +1,7 @@
+from server import settings
 import json
 
-C_SUGGESTIONS_FILE = "portfolio/config/suggestions.json"
+C_SUGGESTIONS_FILE = "{}/{}".format(settings.BASE_DIR, "portfolio/config/suggestions.json")
 
 
 def load_suggestions():

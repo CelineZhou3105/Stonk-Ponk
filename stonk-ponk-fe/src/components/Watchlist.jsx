@@ -57,7 +57,7 @@ const Watchlist = () => {
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
-					alert(`${error.status} ${error.statusText}`);
+					console.log(error);
 				});
 			});
 	}, []);
@@ -85,6 +85,7 @@ const Watchlist = () => {
 	};
 
 	const viewWatchlist = (watchlistLabel) => {
+		console.log(watchlistLabel);
 		setCurrentWatchlist(watchlistLabel);
 		const id = watchlistNames.find((item) => item.label === watchlistLabel);
 		setWatchlistId(id.id);

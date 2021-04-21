@@ -21,7 +21,7 @@ def create_watchlist(request):
 
     # how do we want to handle things that have been aleady created?
     wl = Watchlist.objects.create(user = user, name = name) 
-    responseData = { "watchlist_id": wl.id, "label": wl.name}
+    responseData = { "id": wl.id, "label": wl.name}
     return HttpResponse(json.dumps(responseData))
 
 @require_http_methods(["DELETE"])

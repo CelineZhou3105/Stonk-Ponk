@@ -93,11 +93,13 @@ def summary(request):
         pInvestment = portfolio.get_investment()
         pValue = portfolio.get_value()
         pProfit = pValue - pInvestment
+        pValueTm1 = portfolio.get_value
         pLastUpdate = str(portfolio.last_update)
 
         ownerships = list(portfolio.get_stock_ownerships())
         ownerships.sort(reverse=True, key=lambda x : x.VWAP * x.volume)
         ownerships = ownerships[:min(5,len(ownerships))] # get top 5
+
         pKeyStocks = [ {"name": so.get_stock_name(),
                         "ticker": so.get_stock_ticker(),
                         "value": stock_api.get_price(so.get_stock_ticker()) * so.volume}
@@ -241,5 +243,6 @@ def metrics(request):
 
         return HttpResponse(json.dumps(responseData))
     except Exception as e:
+        raise e
         pass
     return HttpResponseBadRequest()

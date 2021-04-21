@@ -45,7 +45,7 @@ const createWatchlist = async (watchlistName) => {
             'Authorization': `${localStorage.getItem('token')}`,
         },
         body: JSON.stringify({
-            watchlist_name: watchlistName,
+            label: watchlistName,
         }),
     };
     return await fetch(CreateWatchlistLink, requestOptions)

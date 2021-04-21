@@ -108,6 +108,7 @@ class Portfolio(models.Model) :
         tVal = 0
         for so in self.get_stock_ownerships():
             try:
+                #tVal += stock_api.get_historical_price(so.get_stock_ticker(), date) * so.volume
                 tVal += stock_api.get_price(so.get_stock_ticker()) * so.volume
             except:
                 print("LOG: ERROR: could not process {} in get_value".format(so.get_stock_ticker()))
@@ -130,7 +131,7 @@ class Portfolio(models.Model) :
         total_beta = 0 # beta * volume
         total_value= 0 # sum of all the volume used in calcuating the beta
         for so in self.get_stock_ownerships():
-            ticker = so.stock.market_ticker
+            ticker = so.stock.ticker
 
             beta = stock_api.get_beta(ticker)
             
@@ -241,3 +242,19 @@ class Transaction(models.Model):
     purchase_vol = models.IntegerField(default=0)
     purchase_price = models.FloatField(default=0)
     stockOwnership = models.ForeignKey("StockOwnership", on_delete = models.CASCADE)
+
+
+#helper function
+#trade day is monday to friday
+#offset counts to the previous offset number of trade days
+def get_trade_day(offset):
+    ret = datetime.datetime.now()
+    ret -= datetime.timedelta(max(4-t.weekday,0))
+    while offset > 0:
+        ret -= datetime.timdelta(days=1)
+        if is_trade_day(ret):
+            offset -= 1
+'''
+def is_trade_day(dt):
+    return dt.weekday() < 5
+'''
