@@ -84,7 +84,6 @@ function CreateModal(props) {
 
 			currentPromise
 				.then((res) => {
-					console.log(res);
 					setStockOptions(res);
 				})
 				.catch((error) => {
@@ -139,7 +138,9 @@ function CreateModal(props) {
 						options={stockOptions}
 						getOptionLabel={(option) => option.name}
 						onChange={(e, value) => {
-							setStockTicker(value.ticker);
+							if (value !== null) {
+								setStockTicker(value.ticker);	
+							}
 						}}
 						style={{ width: "100%" }}
 						renderInput={(params) => (

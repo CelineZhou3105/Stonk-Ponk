@@ -151,7 +151,7 @@ function StockTable(props) {
 	const [editMode, setEditMode] = useState(false);
 	const { data, headings, place, setRows, setPageDirection, page, setPage, watchlistId } = props;
 
-	console.log(data);
+	// console.log(data);
 
 	const [previousRows, setPreviousRows] = useState(data);
 	const [deleteVisible, setDeleteVisible] = useState(false);
@@ -240,9 +240,10 @@ function StockTable(props) {
 					setSuccess(true);
 					setSuccessMsg("Changes saved.");
 				})
-				.catch(() => {
+				.catch((e) => {
+					console.log('ERROR:', e);
 					setError(true);
-					setErrorMsg("Could not edit your portfolio");
+					setErrorMsg(e);
 				});
 		} else if (place === "watchlist") {
 			watchlist
@@ -576,7 +577,6 @@ function getComparator(order, orderBy) {
  * @param {function} comparator - the function to sort the data
  */
 function stableSort(array, comparator) {
-	console.log("NEED TO SORT:", array);
 	const stabilizedThis = array.map((el, index) => [el, index]);
 	stabilizedThis.sort((a, b) => {
 		const order = comparator(a[0], b[0]);

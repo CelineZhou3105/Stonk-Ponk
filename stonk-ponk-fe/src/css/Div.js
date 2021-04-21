@@ -358,7 +358,8 @@ export const ModalContent = styled.div`
     height: ${props => props.height ? props.height : ''};
     overflow: scroll;
 
-    &::-webkit-scrollbar { 
+    &::-webkit-scrollbar {
+        display: none; 
         background: none;
         width: 10px;
     }
