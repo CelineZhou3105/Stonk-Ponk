@@ -69,6 +69,7 @@ function PasswordReset() {
 					});
 					setEmailFormVisible(false);
 					setSecurityQuestionVisible(true);
+					setError(false);
 				} else {
 					setError(true);
 					setErrorMsg("This email is not associated with an account. Please try again.");
@@ -100,6 +101,7 @@ function PasswordReset() {
 				if (response.status === 202) {
 					setSecurityQuestionVisible(false);
 					setNewPasswordFormVisible(true);
+					setError(false);
 				} else {
 					setError(true);
 					setErrorMsg("Answer to your security question is incorrect. Please try again.");
@@ -138,6 +140,7 @@ function PasswordReset() {
 					if (response.ok) {
 						setNewPasswordFormVisible(false);
 						setResetSuccess(true);
+						setError(false);
 					} else {
 						setError(true);
 						setErrorMsg("There was an error changing your password. Please try again.");

@@ -110,3 +110,12 @@ export const MenuButtonContainer = styled.button`
     border: none;
     cursor: pointer;
 `;
+
+export const NavCloseButton = styled.span`
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+`;

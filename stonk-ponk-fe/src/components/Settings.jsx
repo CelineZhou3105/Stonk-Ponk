@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { TextField, SettingsLabel, SettingsModalLabel, UploadImage } from "../css/Form";
 import {
+	AdminContainer,
+	AdminSelect,
 	FlexRowLeftDiv,
 	FlexColumnLeftDiv,
 	PageContainer,
@@ -18,11 +20,12 @@ import {
 import Navigation from "./Navigation";
 import { EditButton, SaveButton, CancelButton, CloseButton, CustomButton } from "../css/Button";
 import { SettingsPhoto } from "../css/Image";
-import profile from "../images/blobfish.png";
-import { PageTitle } from "../css/Text";
+import { PageTitle, AdminPriority } from "../css/Text";
 import { checkPassword } from "../helpers/helpers";
 import { settings } from "../services/settings";
 import Alert from "@material-ui/lab/Alert";
+import Select from "react-select";
+import { customStyles } from "../helpers/styles";
 
 /**
  * Settings - Page where the user can see their details (first & last name) and change their password.
@@ -47,9 +50,13 @@ const Settings = () => {
 	const [detailModalDisabled, setDetailModalDisabled] = useState(true);
 	const [profileModalDisabled, setProfileModalDisabled] = useState(true);
 
-	const [profileImage, setProfileImage] = useState(profile);
-	const [newProfileImage, setNewProfileImage] = useState("");
+	const [profileImage, setProfileImage] = useState("");
+	const [base64Image, setBase64Image] = useState("");
 	const [uploadDisabled, setUploadDisabled] = useState(true);
+
+	const [isAdmin, setIsAdmin] = useState(true);
+	const [apiPriorityList, setApiPriorityList] = useState([]);
+	const [apiPriority, setApiPriority] = useState("");
 
 	// Tracks when errors occurs - for showing error banners to the user
 	const [error, setError] = useState(false);
@@ -84,11 +91,27 @@ const Settings = () => {
 				setFirstName(json.first_name);
 				setLastName(json.last_name);
 				setEmailAdd(json.email);
+				setProfileImage(`data:image/png;base64, ${json.image}`);
 			})
 			.catch((error) => {
 				handleError(error);
 			});
 	}, [handleError]);
+
+	// Function to check whether user is an admin
+	useEffect(() => {
+		// settings
+		// 	.checkAdmin()
+		// 	.then((response) => response.json())
+		// 	.then((json) => {
+		// 		if (json.admin === true) {
+		// 			setIsAdmin(true);
+		// 		}
+		// 	})
+		// 	.catch((error) => {
+		// 		handleError(error);
+		// 	});
+	}, []);
 
 	// Function to edit the name of the user
 	const EditName = () => {
@@ -155,12 +178,17 @@ const Settings = () => {
 		const reader = new FileReader();
 		reader.readAsDataURL(image);
 		reader.onload = () => {
-			setNewProfileImage(reader.result.split(",")[1]);
+			setBase64Image(reader.result.split(",")[1]);
 			setUploadDisabled(false);
 		};
 	};
 
-	const changeProfilePic = () => {};
+	const changeProfilePic = () => {
+		settings.changeProfilePicture(base64Image).catch((error) => {
+			console.log(error);
+			handleError(error);
+		});
+	};
 
 	return (
 		<div>
@@ -201,18 +229,25 @@ const Settings = () => {
 										&times;
 									</CloseButton>
 									<FlexColumnCenterDiv>
-										<UploadImage
-											id="uploadProfile"
-											type="file"
-											accept=".png, .jpg"
-											onChange={(e) => convertToBase64(e.target.files[0])}
-										/>
+										<SettingModalDiv style={{ width: "40%" }}>
+											<SettingsModalLabel htmlFor="uploadProfile" style={{ width: "100%" }}>
+												Upload Profile Picture
+											</SettingsModalLabel>
+											<UploadImage
+												id="uploadProfile"
+												type="file"
+												accept=".png, .jpg"
+												onChange={(e) => convertToBase64(e.target.files[0])}
+											/>
+										</SettingModalDiv>
+
 										<CustomButton
 											backgroundColor="#9e22ff"
 											hoverColor="#b55cfa"
 											aria-label="save uploaded profile picture"
 											onClick={changeProfilePic}
 											disabled={uploadDisabled}
+											margin="5%"
 										>
 											Save Profile Picture
 										</CustomButton>
@@ -353,6 +388,21 @@ const Settings = () => {
 					</FlexColumnLeftDiv>
 				</FlexRowLeftDiv>
 				<LineDivider />
+				{isAdmin && (
+					<AdminContainer>
+						<PageTitle>Admin Controls</PageTitle>
+						<AdminSelect>
+							<AdminPriority>API Priority:</AdminPriority>
+							<Select
+								styles={customStyles}
+								options={apiPriorityList}
+								defaultValue={"Select"}
+								aria-label="Drop down to select api priorities"
+								onChange={(e) => setApiPriority(e.label)}
+							/>
+						</AdminSelect>
+					</AdminContainer>
+				)}
 			</PageContainer>
 		</div>
 	);

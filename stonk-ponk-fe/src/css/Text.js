@@ -153,3 +153,8 @@ export const Link = styled.a`
         color: #44BCFF;
     }
 `;
+
+export const AdminPriority = styled.p`
+    font-size: 15pt;
+    margin-right: 10px;
+`;
