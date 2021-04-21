@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 
 import PortfolioPricesChart from "./PortfolioPricesChart";
@@ -193,10 +193,10 @@ function StockTable(props) {
 	// For portfolio view - when a user makes edits to their portfolio this function handles the change
 	const onChange = (e, changedRow, changedColumn) => {
 		if (place === "portfolio") {
-			console.log('COLUMN CHANGED:', changedColumn);
+			console.log("COLUMN CHANGED:", changedColumn);
 			const newValue = e.target.value;
 
-			if (changedColumn === 'first_purchase_date') {
+			if (changedColumn === "first_purchase_date") {
 				// Check that the date is not a weekend
 				const day = new Date(newValue).getUTCDay();
 				if ([6, 0].includes(day)) {
@@ -204,13 +204,13 @@ function StockTable(props) {
 					setErrorMsg("Cannot enter weekends as they are not valid trading days.");
 					return;
 				}
-			} else if (changedColumn === 'volume') {
+			} else if (changedColumn === "volume") {
 				console.log("hello");
 				// Check that the volume is not 0
 				console.log(newValue);
-				if (newValue === '0') {
+				if (newValue === "0") {
 					setError(true);
-					setErrorMsg('You cannot own 0 units of a stock. Please enter a positive integer.');
+					setErrorMsg("You cannot own 0 units of a stock. Please enter a positive integer.");
 					return;
 				}
 			}
@@ -261,7 +261,7 @@ function StockTable(props) {
 					setSuccessMsg("Changes saved.");
 				})
 				.catch((e) => {
-					console.log('ERROR:', e);
+					console.log("ERROR:", e);
 					setError(true);
 					setErrorMsg(e);
 				});
@@ -271,6 +271,7 @@ function StockTable(props) {
 				.updateStockToWatchlist(watchlistId, data)
 				.then(() => {
 					console.log("updated stocks to watchlist!");
+					setEditMode(false);
 				})
 				.catch((error) => {
 					Promise.resolve(error).then((e) => {
@@ -358,7 +359,14 @@ function StockTable(props) {
 							</CustomButton>
 						</>
 					) : (
-						<CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}>
+						<CustomButton
+							backgroundColor="#9e22ff"
+							hoverColor="#b55cfa"
+							onClick={() => {
+								setEditMode(true);
+								setPreviousRows(data);
+							}}
+						>
 							<EditIcon />
 							&nbsp;Edit {place === "portfolio" ? "Portfolio" : "Watchlist"}
 						</CustomButton>
@@ -404,15 +412,13 @@ function StockTable(props) {
 									<>
 										{place === "portfolio" && (
 											<>
-												<TableRow
-													hover
-													role="checkbox"
-													tabIndex={-1}
-													key={row.ticker}
-												>
+												<TableRow hover role="checkbox" tabIndex={-1} key={row.ticker}>
 													{editMode && (
 														<TableCell padding="checkbox">
-															<Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, row.ticker)}/>
+															<Checkbox
+																checked={isItemSelected}
+																onChange={(event) => handleClick(event, row.ticker)}
+															/>
 														</TableCell>
 													)}
 													<TableCell component="th" scope="row" padding="none">

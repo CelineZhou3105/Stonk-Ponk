@@ -37,7 +37,7 @@ const headings = [
 
 const Watchlist = () => {
 	const [watchlistId, setWatchlistId] = useState(-1);
-	const [watchlistNames, setWatchlistNames] = useState([{ id: -1, label: "" }]);
+	const [watchlistNames, setWatchlistNames] = useState([]);
 	const [newWatchlist, setNewWatchlist] = useState("");
 	const [modalDisabled, setModalDisabled] = useState(true);
 	const [currentWatchlist, setCurrentWatchlist] = useState("");
@@ -51,9 +51,7 @@ const Watchlist = () => {
 			.then((response) => response.json())
 			.then((json) => {
 				console.log(json);
-				if (json.watchlists.length !== watchlistNames.length) {
-					setWatchlistNames(json.watchlists);
-				}
+				setWatchlistNames(json.watchlists);
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
@@ -61,7 +59,7 @@ const Watchlist = () => {
 				});
 			});
 	}, []);
-	console.log(watchlistNames);
+	console.log(watchlistData);
 	const addNewWatchlist = () => {
 		console.log(newWatchlist.trim());
 		watchlist
@@ -70,7 +68,7 @@ const Watchlist = () => {
 			.then((json) => {
 				console.log("Added new watchlist");
 				console.log(json);
-				if (watchlistNames[0].label !== "") {
+				if (watchlistNames.length !== 0) {
 					setWatchlistNames((watchlistNames) => watchlistNames.concat(json));
 				} else {
 					setWatchlistNames(json);
