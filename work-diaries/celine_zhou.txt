@@ -13,10 +13,34 @@ Fine tuned the UI design.
 Held frontend meetings to deligate tickets and talked about how to approach the tasks.
 
 Week 4
-Worked on and finished tickets in the current sprint.
+Worked on registration, settings and education and finished tickets in the current sprint.
 Discussed how to manage the frontend project and how to keep code consistent among members.
 
 Week 5
 Connected frontend and backend through meetings.
+Worked on stock details and graphs.
 Adjusted tickets and practiced demoing.
-Worked on tickets in the current sprint.
+Participated in Demo A.
+Participated in Retro A. 
+
+Week 6
+Worked on some tickets, this week was relatively quiet compared to the other weeks.
+
+Week 7
+Worked on watchlist and preparing for Demo B.
+Participated in more meetings to pair program and connect front end and back end.
+
+Week 8
+Demoed in Demo B.
+Participated in Retro B.
+Worked on settings changes for a more secure account.
+
+Week 9
+Worked on fixing bugs and UI changes.
+Worked on watchlist api calls with backend.
+
+Week 10
+Worked on profile picture, admin controls, watchlist, bug fixes and UI changes.
+Added bug fix tickets into Jira.
+Prepared for final demo.
+
