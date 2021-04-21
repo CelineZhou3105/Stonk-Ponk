@@ -13,7 +13,7 @@ export const ChangeEmailLink = "http://localhost:8000/api/account/change_email";
 export const ChangePasswordWithAuthLink = "http://localhost:8000/api/account/change_password_with_auth";
 export const GetUserDetailsLink = "http://localhost:8000/api/account/get_user_details";
 export const ChangeProfilePictureLink = "http://localhost:8000/api/account/change_profile_picture";
-export const GetAdminLink = "";
+
 
 
 // Portfolio Information 

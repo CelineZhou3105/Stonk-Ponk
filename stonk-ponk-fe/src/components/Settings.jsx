@@ -91,7 +91,7 @@ const Settings = () => {
 				setFirstName(json.first_name);
 				setLastName(json.last_name);
 				setEmailAdd(json.email);
-				setProfileImage(`data:image/png;base64, ${json.image}`);
+				setProfileImage(json.image);
 			})
 			.catch((error) => {
 				handleError(error);
@@ -178,7 +178,7 @@ const Settings = () => {
 		const reader = new FileReader();
 		reader.readAsDataURL(image);
 		reader.onload = () => {
-			setBase64Image(reader.result.split(",")[1]);
+			setBase64Image(reader.result);
 			setUploadDisabled(false);
 		};
 	};
