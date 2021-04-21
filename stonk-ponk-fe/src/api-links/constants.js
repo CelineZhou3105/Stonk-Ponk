@@ -15,7 +15,7 @@ export const GetUserDetailsLink = "http://localhost:8000/api/account/get_user_de
 export const ChangeProfilePictureLink = "http://localhost:8000/api/account/change_profile_picture";
 
 // Admin
-export const GetAdminLink = "http://localhost:8000/api/administration/check_admin";
+export const CheckAdminLink = "http://localhost:8000/api/administration/check_admin";
 export const GetStockPriority = "http://localhost:8000/api/administration/get_stock_api_priority";
 export const SetStockPriority = "http://localhost:8000/api/administration/set_stock_api_priority";
 export const GetNewsPriority = "http://localhost:8000/api/administration/get_news_api_priority";
