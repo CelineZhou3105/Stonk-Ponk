@@ -50,7 +50,9 @@ def save_watchlist(request):
     
     try:
         wl = Watchlist.objects.get(id = watchlist, user = user)
-        wl.save_stocks(set(body["tickers"]))
+        tickers = [x["ticker"] for x in body["tickers"]]
+        wl.save_stocks(set(tickers))
+
     except Watchlist.DoesNotExist:
         return HttpResponseNotFound() 
     
