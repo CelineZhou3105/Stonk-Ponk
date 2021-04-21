@@ -18,7 +18,6 @@ import {
 import Navigation from "./Navigation";
 import { EditButton, SaveButton, CancelButton, CloseButton, CustomButton } from "../css/Button";
 import { SettingsPhoto } from "../css/Image";
-import profile from "../images/blobfish.png";
 import { PageTitle } from "../css/Text";
 import { checkPassword } from "../helpers/helpers";
 import { settings } from "../services/settings";
@@ -47,8 +46,8 @@ const Settings = () => {
 	const [detailModalDisabled, setDetailModalDisabled] = useState(true);
 	const [profileModalDisabled, setProfileModalDisabled] = useState(true);
 
-	const [profileImage, setProfileImage] = useState(profile);
-	const [newProfileImage, setNewProfileImage] = useState("");
+	const [profileImage, setProfileImage] = useState("");
+	const [base64Image, setBase64Image] = useState("");
 	const [uploadDisabled, setUploadDisabled] = useState(true);
 
 	// Tracks when errors occurs - for showing error banners to the user
@@ -84,6 +83,7 @@ const Settings = () => {
 				setFirstName(json.first_name);
 				setLastName(json.last_name);
 				setEmailAdd(json.email);
+				setProfileImage(`data:image/png;base64, ${json.image}`);
 			})
 			.catch((error) => {
 				handleError(error);
@@ -155,12 +155,17 @@ const Settings = () => {
 		const reader = new FileReader();
 		reader.readAsDataURL(image);
 		reader.onload = () => {
-			setNewProfileImage(reader.result.split(",")[1]);
+			setBase64Image(reader.result.split(",")[1]);
 			setUploadDisabled(false);
 		};
 	};
 
-	const changeProfilePic = () => {};
+	const changeProfilePic = () => {
+		settings.changeProfilePicture(base64Image).catch((error) => {
+			console.log(error);
+			handleError(error);
+		});
+	};
 
 	return (
 		<div>
@@ -201,18 +206,25 @@ const Settings = () => {
 										&times;
 									</CloseButton>
 									<FlexColumnCenterDiv>
-										<UploadImage
-											id="uploadProfile"
-											type="file"
-											accept=".png, .jpg"
-											onChange={(e) => convertToBase64(e.target.files[0])}
-										/>
+										<SettingModalDiv style={{ width: "40%" }}>
+											<SettingsModalLabel htmlFor="uploadProfile" style={{ width: "100%" }}>
+												Upload Profile Picture
+											</SettingsModalLabel>
+											<UploadImage
+												id="uploadProfile"
+												type="file"
+												accept=".png, .jpg"
+												onChange={(e) => convertToBase64(e.target.files[0])}
+											/>
+										</SettingModalDiv>
+
 										<CustomButton
 											backgroundColor="#9e22ff"
 											hoverColor="#b55cfa"
 											aria-label="save uploaded profile picture"
 											onClick={changeProfilePic}
 											disabled={uploadDisabled}
+											margin="5%"
 										>
 											Save Profile Picture
 										</CustomButton>
