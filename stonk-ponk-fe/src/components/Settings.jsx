@@ -191,6 +191,7 @@ const Settings = () => {
 			.then(() => {
 				setProfileImage(base64Image);
 				setProfileModalDisabled(true);
+				window.location.reload();
 			})
 			.catch((error) => {
 				console.log(error);
