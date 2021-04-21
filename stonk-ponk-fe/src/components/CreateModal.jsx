@@ -62,6 +62,12 @@ function CreateModal(props) {
 				setErrorMsg("Cannot enter weekends as they are not valid trading days.");
 				return;
 			}
+
+			// Check that the volume is not 0
+            if (unitsOwned === 0) {
+                setError(true);
+                setErrorMsg('You cannot own 0 units of a stock. Please enter a positive integer.');
+            }
 		}
 		const newRow = createStockRow();
 		setRows((rows) => [...rows, newRow]);

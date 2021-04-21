@@ -193,7 +193,27 @@ function StockTable(props) {
 	// For portfolio view - when a user makes edits to their portfolio this function handles the change
 	const onChange = (e, changedRow, changedColumn) => {
 		if (place === "portfolio") {
-			const newValue = changedColumn === "last_purchased" ? e.target.value : e.target.value;
+			console.log('COLUMN CHANGED:', changedColumn);
+			const newValue = e.target.value;
+
+			if (changedColumn === 'first_purchase_date') {
+				// Check that the date is not a weekend
+				const day = new Date(newValue).getUTCDay();
+				if ([6, 0].includes(day)) {
+					setError(true);
+					setErrorMsg("Cannot enter weekends as they are not valid trading days.");
+					return;
+				}
+			} else if (changedColumn === 'volume') {
+				console.log("hello");
+				// Check that the volume is not 0
+				console.log(newValue);
+				if (newValue === '0') {
+					setError(true);
+					setErrorMsg('You cannot own 0 units of a stock. Please enter a positive integer.');
+					return;
+				}
+			}
 
 			const newRows = data.map((row) => {
 				if (row.ticker === changedRow.ticker) {
@@ -388,11 +408,10 @@ function StockTable(props) {
 													role="checkbox"
 													tabIndex={-1}
 													key={row.ticker}
-													onClick={(event) => handleClick(event, row.ticker)}
 												>
 													{editMode && (
 														<TableCell padding="checkbox">
-															<Checkbox checked={isItemSelected} />
+															<Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, row.ticker)}/>
 														</TableCell>
 													)}
 													<TableCell component="th" scope="row" padding="none">

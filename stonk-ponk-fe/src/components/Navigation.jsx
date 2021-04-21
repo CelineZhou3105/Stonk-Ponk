@@ -18,7 +18,7 @@ import {
 } from "../css/Div";
 import { DefaultLogo } from "../css/Logo";
 import { ProfilePhoto } from "../css/Image";
-import { MenuButtonContainer } from "../css/Button";
+import { MenuButtonContainer, NavCloseButton } from "../css/Button";
 import Alert from "@material-ui/lab/Alert";
 
 /**
@@ -113,9 +113,9 @@ export const Menu = () => {
 		<MenuContainer>
 			<MenuButton onClick={() => setOpen(!open)} open={open} key={0} />
 			<SideBar open={open}>
-				<span className="closeBtn" onClick={() => setOpen(false)}>
+				<NavCloseButton className="closeBtn" onClick={() => setOpen(false)}>
 					&times;
-				</span>
+				</NavCloseButton>
 				<CollapsedNavList>
 					<NavLink to="/market">
 						<CollapsedNavItem>Market</CollapsedNavItem>
