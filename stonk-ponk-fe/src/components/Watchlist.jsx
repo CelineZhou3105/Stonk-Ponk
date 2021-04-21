@@ -77,7 +77,7 @@ const Watchlist = () => {
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
-					alert(`${error.status} ${error.statusText}`);
+					console.log(`${error.status} ${error.statusText}`);
 				});
 			});
 	};
@@ -98,10 +98,22 @@ const Watchlist = () => {
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
-					alert(`${error.status} ${error.statusText}`);
+					console.log(`${error.status} ${error.statusText}`);
 				});
 			});
 	};
+
+	const deleteWatchlist = () => {
+		watchlist
+			.deleteWatchlist(watchlistId)
+			.then(() => {
+				window.location.reload();
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
 	return (
 		<>
 			<Navigation />
@@ -155,6 +167,7 @@ const Watchlist = () => {
 						onChange={(e) => viewWatchlist(e.label)}
 					/>
 				</FlexRowEndDiv>
+
 				<Container
 					flex_direction="column"
 					gap="1em"
@@ -166,6 +179,14 @@ const Watchlist = () => {
 						<>
 							<FlexRowDiv style={{ width: "100%" }}>
 								<SubTitle style={{ margin: "10px" }}>{currentWatchlist}</SubTitle>
+								<CustomButton
+									backgroundColor="#e80000"
+									hoverColor="#ff5757"
+									onClick={deleteWatchlist}
+									margin="10px"
+								>
+									Delete Watchlist
+								</CustomButton>
 							</FlexRowDiv>
 							<WatchlistTable>
 								<StockTable
