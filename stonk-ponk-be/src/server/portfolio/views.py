@@ -193,7 +193,10 @@ def edit(request):
         for s in body["stocks"]:
             ticker = s["ticker"]
             for t in s["transactions"]:
-                portfolio.add_stock(ticker, t["date"], int(t["volume"]), float(t["price"]))
+                add_result = portfolio.add_stock(ticker, t["date"], int(t["volume"]), float(t["price"]))
+                
+                if add_result['message'] != "Success":
+                    return HttpResponseBadRequest(json.dumps(add_result))
 
         for so in portfolio.get_stock_ownerships():
             so.recalculate()

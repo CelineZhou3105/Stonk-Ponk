@@ -23,6 +23,16 @@ class Portfolio(models.Model) :
     @log_date
     def add_stock(self, ticker, date, volume, price):
         # get this from market price
+
+        # check that stock price is legit
+        date_obj = datetime.datetime.strptime(date, '%Y-%m-%d')
+        price_dict = stock_api.get_historical_price(ticker, date_obj)
+        print(price_dict)
+        
+        if float(price) < float(price_dict['low']) or float(price) > float(price_dict['high']):
+            print("Invalid Price You a Liar")
+            return {"message": "Invalid Price", "price_range": price_dict}
+
         stock, created = PortfolioStock.objects.get_or_create(ticker=ticker)
         ownership, created = StockOwnership.objects.get_or_create(owner=self, stock=stock)
         ownership.VWAP = (ownership.VWAP * ownership.volume + price * volume) / (ownership.volume + volume)
@@ -34,6 +44,8 @@ class Portfolio(models.Model) :
                 purchase_date  = date, 
                 purchase_vol   = volume,
                 purchase_price = price)
+
+        return {"message": "Success", "price_range": price_dict}
 
     @log_date
     def remove_transaction(self, _uuid):
