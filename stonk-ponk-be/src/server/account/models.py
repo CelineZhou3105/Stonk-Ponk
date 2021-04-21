@@ -20,7 +20,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     security_question = models.CharField(_('security question'), default='security question',  max_length=50)
     security_answer = models.CharField(_('security answer'), default='security answer', max_length=30)
 
-    profile_picture = models.FileField(storage=FileSystemStorage(location=settings.MEDIA_ROOT), upload_to='account', default='account/default.img') 
+    #profile_picture = models.FileField(storage=FileSystemStorage(location=settings.MEDIA_ROOT), upload_to='account', default='account/default.img') 
+    profile_picture = models.CharField(default="{}/account/default.img".format(settings.MEDIA_ROOT), max_length=255)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -65,13 +66,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         self.full_name = '%s %s' % (self.first_name, self.last_name)
 
     def change_profile_picture(self, data):
-        with open("{}/media/account/{}.img".format(settings.BASE_DIR, self.id), "w") as f:
-            dfile = File(f)
+        new_file = "{}/account/{}.img".format(settings.MEDIA_ROOT, self.id)
+        with open(new_file, "w") as f:
             f.write(data)
-            self.profile_picture = dfile
+            self.profile_picture = new_file
 
     def get_profile_picture(self):
-        with open(self.profile_picture.path, "r") as f:
+        with open(self.profile_picture, "r") as f:
             return f.read().replace('\n', '')
         return ""
 
