@@ -67,3 +67,6 @@ class cache():
 
     def eject(self, entry):
         self.blob.pop(entry)
+
+    def get_stats():
+        pass
