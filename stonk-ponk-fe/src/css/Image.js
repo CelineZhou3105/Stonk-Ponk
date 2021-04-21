@@ -10,8 +10,8 @@ export const ProfilePhoto = styled.img`
 export const SettingsPhoto = styled.img`
     border-radius: 50%;
     border: #9e22ff solid 2px;
-    width: 80%;
-    height: 80%;
+    width: 250px;
+    height: 250px;
 `;
 export const EducationIcon = styled.img`
     width: 40%;
