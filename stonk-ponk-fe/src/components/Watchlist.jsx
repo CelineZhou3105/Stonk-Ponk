@@ -90,6 +90,7 @@ const Watchlist = () => {
 		const id = watchlistNames.find((item) => item.label === watchlistLabel);
 		setWatchlistId(id.id);
 		setTableVisible(true);
+		console.log(id.id);
 		watchlist
 			.getWatchlistStocks(id.id)
 			.then((response) => response.json())
@@ -122,7 +123,9 @@ const Watchlist = () => {
 								<CloseButton onClick={() => setModalDisabled(true)}>&times;</CloseButton>
 								<FlexColumnCenterDiv>
 									<SettingModalDiv>
-										<SettingsModalLabel htmlFor="newWatchlist">Watchlist Name</SettingsModalLabel>
+										<SettingsModalLabel style={{ width: "100%" }} htmlFor="newWatchlist">
+											Watchlist Name
+										</SettingsModalLabel>
 										<TextField
 											type="text"
 											id="newWatchlist"

@@ -266,6 +266,7 @@ function StockTable(props) {
 					setErrorMsg(e);
 				});
 		} else if (place === "watchlist") {
+			console.log(data);
 			watchlist
 				.updateStockToWatchlist(watchlistId, data)
 				.then(() => {
