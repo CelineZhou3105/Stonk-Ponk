@@ -77,7 +77,7 @@ const Watchlist = () => {
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
-					alert(`${error.status} ${error.statusText}`);
+					console.log(`${error.status} ${error.statusText}`);
 				});
 			});
 	};
@@ -98,7 +98,7 @@ const Watchlist = () => {
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
-					alert(`${error.status} ${error.statusText}`);
+					console.log(`${error.status} ${error.statusText}`);
 				});
 			});
 	};

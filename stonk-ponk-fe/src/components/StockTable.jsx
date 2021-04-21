@@ -265,6 +265,7 @@ function StockTable(props) {
 					setError(true);
 					setErrorMsg(e);
 				});
+			window.location.reload();
 		} else if (place === "watchlist") {
 			console.log(data);
 			watchlist

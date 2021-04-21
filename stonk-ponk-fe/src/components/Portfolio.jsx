@@ -16,6 +16,7 @@ import {
 	PortfolioHealthContainer,
 	PortfolioValueContainer,
 	SectionRowDiv,
+	FlexColumnCenterDiv,
 } from "../css/Div";
 import {
 	PortfolioSuggestionSubText,
@@ -240,7 +241,11 @@ function Portfolio() {
 				{(chartData === "Loading" ||
 					gainers === "Loading" ||
 					losers === "Loading" ||
-					portfolioStocks === "Loading") && <CircularProgress />}
+					portfolioStocks === "Loading") && (
+					<FlexColumnCenterDiv>
+						<CircularProgress />
+					</FlexColumnCenterDiv>
+				)}
 				{chartData !== "Loading" && (
 					<Container align_items="center" justify_content="space-evenly">
 						<PortfolioChart stockData={chartData} portfolioValue={portfolioValue} />
