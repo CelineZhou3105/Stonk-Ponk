@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { TextField, SettingsLabel, SettingsModalLabel, UploadImage } from "../css/Form";
 import {
 	AdminContainer,
-	AdminSelect,
+	AdminControlsContainer,
 	FlexRowLeftDiv,
 	FlexColumnLeftDiv,
 	PageContainer,
@@ -57,10 +57,23 @@ const Settings = () => {
 
 	const [loaded, setLoaded] = useState(false);
 
-	const [isAdmin, setIsAdmin] = useState(true);
-	const [apiPriorityList, setApiPriorityList] = useState([]);
-	const [apiPriority, setApiPriority] = useState("");
-	const [currentPriority, setCurrentPriority] = useState("");
+	const [isAdmin, setIsAdmin] = useState(false);
+
+	const [stockApiDisabled, setStockApiDisabled] = useState(true);
+	const [newsApiDisabled, setNewsApiDisabled] = useState(true);
+	const [forexApiDisabled, setForexApiDisabled] = useState(true);
+
+	const [yahooStockPriority, setYahooStockPriority] = useState(1);
+	const [alphaStockPriority, setAlphaStockPriority] = useState(2);
+
+	const [yahooNewsPriority, setYahooNewsPriority] = useState(1);
+	const [googleNewsPriority, setGoogleNewsPriority] = useState(2);
+
+	const [yahooForexPriority, setYahooForexPriority] = useState(1);
+	const [alphaForexPriority, setAlphaForexPriority] = useState(2);
+
+	const [oldYahooForex, setOldYahooForex] = useState(yahooForexPriority);
+	const [oldAlphaForex, setOldAlphaForex] = useState(alphaForexPriority);
 
 	// Tracks when errors occurs - for showing error banners to the user
 	const [error, setError] = useState(false);
@@ -203,6 +216,25 @@ const Settings = () => {
 			});
 	};
 
+	const EditForexPriority = () => {
+		setOldAlphaForex(alphaForexPriority);
+		setOldYahooForex(yahooForexPriority);
+	};
+
+	const CancelForexPriority = () => {
+		setAlphaForexPriority(oldAlphaForex);
+		setYahooForexPriority(oldYahooForex);
+		setForexApiDisabled(true);
+	};
+
+	const ChangeForexPriority = () => {
+		settings
+			.setForexApiPriority(alphaForexPriority, yahooForexPriority)
+			.then(() => {})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 	return (
 		<div>
 			<Navigation settings="true" />
@@ -432,16 +464,55 @@ const Settings = () => {
 						{isAdmin && (
 							<AdminContainer>
 								<PageTitle>Admin Controls</PageTitle>
-								<AdminSelect>
-									<AdminPriority>API Priority:</AdminPriority>
-									<Select
-										styles={customStyles}
-										options={apiPriorityList}
-										defaultValue={"Select"}
-										aria-label="Drop down to select api priorities"
-										onChange={(e) => setApiPriority(e.label)}
-									/>
-								</AdminSelect>
+								<AdminContainer>
+									<AdminContainer>
+										<AdminControlsContainer>
+											<AdminPriority>Forex API Priority:</AdminPriority>
+											{forexApiDisabled ? (
+												<EditButton
+													aria-label="Edit Forex API Priority Button"
+													onClick={() => {
+														setForexApiDisabled(false);
+													}}
+												>
+													Edit Forex Api Priority
+												</EditButton>
+											) : (
+												<SettingEditRowDiv>
+													<SaveButton
+														aria-label="Save changes to forex api button"
+														onClick={ChangeForexPriority}
+													>
+														Save
+													</SaveButton>
+													<CancelButton
+														aria-label="Cancel changes to forex api button"
+														onClick={CancelForexPriority}
+													>
+														Cancel
+													</CancelButton>
+												</SettingEditRowDiv>
+											)}
+										</AdminControlsContainer>
+
+										<label htmlFor="alphaForex">Alpha vantage</label>
+										<TextField
+											type="text"
+											id="alphaForex"
+											value={alphaForexPriority}
+											onChange={(e) => setAlphaForexPriority(e.target.value)}
+											disabled={forexApiDisabled}
+										/>
+										<label htmlFor="yahooForex">Yahoo Finance</label>
+										<TextField
+											type="text"
+											id="yahooForex"
+											value={yahooForexPriority}
+											onChange={(e) => setYahooForexPriority(e.target.value)}
+											disabled={forexApiDisabled}
+										/>
+									</AdminContainer>
+								</AdminContainer>
 							</AdminContainer>
 						)}
 					</>

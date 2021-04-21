@@ -5,6 +5,7 @@ import {
     ChangeProfilePictureLink,
     CheckAdminLink,
     GetUserDetailsLink,
+    SetForexPriorityLink,
 } from '../api-links/constants';
 
 /**
@@ -179,7 +180,32 @@ const checkAdmin = async() => {
         })
 }
 
-
+const setForexApiPriority = async (alpha, yahoo) => {
+    const priority = [{name: "yahoo_finance", priority: yahoo}, {name: "alphavantage", priority: alpha}];
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+            priority: priority,
+        }),
+    };
+    return await fetch(SetForexPriorityLink, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200      
+                return response;
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
+            } else {
+                return Promise.reject(response);
+            }
+        }).catch(e => {
+            return Promise.reject(e);
+        })
+}
 
 
 export const settings = {
@@ -189,4 +215,5 @@ export const settings = {
     changePassword,
     changeProfilePicture,
     checkAdmin,
+    setForexApiPriority,
 };

@@ -443,8 +443,9 @@ export const AdminContainer = styled.div`
     align-items: flex-start;
 `;
 
-export const AdminSelect = styled.div`
-    display: flex;
-    justify-content: flex-start;
+export const AdminControlsContainer = styled.div`
+    ${FlexRow}
+    justify-content: space-between;
     align-items: center;
 `;
+
