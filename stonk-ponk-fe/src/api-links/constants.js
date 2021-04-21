@@ -13,8 +13,15 @@ export const ChangeEmailLink = "http://localhost:8000/api/account/change_email";
 export const ChangePasswordWithAuthLink = "http://localhost:8000/api/account/change_password_with_auth";
 export const GetUserDetailsLink = "http://localhost:8000/api/account/get_user_details";
 export const ChangeProfilePictureLink = "http://localhost:8000/api/account/change_profile_picture";
-export const GetAdminLink = "";
 
+// Admin
+export const CheckAdminLink = "http://localhost:8000/api/administration/check_admin";
+export const GetStockPriority = "http://localhost:8000/api/administration/get_stock_api_priority";
+export const SetStockPriority = "http://localhost:8000/api/administration/set_stock_api_priority";
+export const GetNewsPriority = "http://localhost:8000/api/administration/get_news_api_priority";
+export const SetNewsPriority = "http://localhost:8000/api/administration/set_news_api_priority";
+export const GetForexPriority = "http://localhost:8000/api/administration/get_forex_api_priority";
+export const SetForexPriority = "http://localhost:8000/api/administration/set_forex_api_priority";
 
 // Portfolio Information 
 export const EditPortfolio = "http://localhost:8000/api/portfolio/edit";

@@ -57,6 +57,7 @@ const Settings = () => {
 	const [isAdmin, setIsAdmin] = useState(true);
 	const [apiPriorityList, setApiPriorityList] = useState([]);
 	const [apiPriority, setApiPriority] = useState("");
+	const [currentPriority, setCurrentPriority] = useState("");
 
 	// Tracks when errors occurs - for showing error banners to the user
 	const [error, setError] = useState(false);
