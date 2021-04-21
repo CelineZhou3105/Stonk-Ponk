@@ -245,6 +245,7 @@ function StockTable(props) {
 					setErrorMsg("Could not edit your portfolio");
 				});
 		} else if (place === "watchlist") {
+			console.log(data);
 			watchlist
 				.updateStockToWatchlist(watchlistId, data)
 				.then(() => {
