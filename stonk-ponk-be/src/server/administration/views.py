@@ -149,6 +149,51 @@ def set_forex_api_priority(request):
     
     return HttpResponseBadRequest()
    
+@require_http_methods(["GET"])
+@require_token
+def get_num_stock_calls(request):
+    body = json.loads(request.body.decode('utf-8'))
+    ret = {}
+    user = get_user(request); 
+
+    if is_admin(user) :
+        ret = {"num_calls" : StockApiInterface.get_num_calls()}
+    
+    else :
+        return HttpResponseForbidden() 
+    return HttpResponseOk(json.dumps(ret))
+
+@require_http_methods(["GET"])
+@require_token
+def get_num_news_calls(request):
+    body = json.loads(request.body.decode('utf-8'))
+    ret = {}
+    user = get_user(request); 
+
+    if is_admin(user) :
+        ret = {"num_calls" : NewsApiInterface.get_num_calls()}
+    
+    else :
+        return HttpResponseForbidden() 
+    return HttpResponseOk(json.dumps(ret))
+    
+
+@require_http_methods(["GET"])
+@require_token
+def get_num_forex_calls(request):
+    body = json.loads(request.body.decode('utf-8'))
+    ret = {}
+    user = get_user(request); 
+
+    if is_admin(user) :
+        ret = {"num_calls" : ForexApiInterface.get_num_calls()}
+     
+    else :
+        return HttpResponseForbidden() 
+    return HttpResponseOk(json.dumps(ret))
+
+
+
 #--------- Helpers
 def is_admin(user):
     try:
