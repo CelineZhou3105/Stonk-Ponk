@@ -143,6 +143,7 @@ const Settings = () => {
 				.changePassword(passNew, passOld)
 				.then(() => {
 					setSuccess(true);
+					setDetailModalDisabled(true);
 					setTimeout(() => {
 						localStorage.removeItem("token");
 						history.push("/");
@@ -185,10 +186,16 @@ const Settings = () => {
 	};
 
 	const changeProfilePic = () => {
-		settings.changeProfilePicture(base64Image).catch((error) => {
-			console.log(error);
-			handleError(error);
-		});
+		settings
+			.changeProfilePicture(base64Image)
+			.then(() => {
+				setProfileImage(base64Image);
+				setProfileModalDisabled(true);
+			})
+			.catch((error) => {
+				console.log(error);
+				handleError(error);
+			});
 	};
 
 	return (
@@ -220,7 +227,7 @@ const Settings = () => {
 						</CustomButton>
 						{!profileModalDisabled && (
 							<ModalContainer>
-								<ModalContent style={{ width: "80%", padding: "5px" }}>
+								<ModalContent style={{ padding: "5px" }}>
 									<CloseButton
 										onClick={() => {
 											setProfileModalDisabled(true);
