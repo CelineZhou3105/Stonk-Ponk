@@ -436,3 +436,15 @@ export const StockDetailTopBar = styled.div`
     align-items: center;
     width: 100%;
 `;
+
+export const AdminContainer = styled.div`
+    ${FlexColumn}
+    justify-content: center;
+    align-items: flex-start;
+`;
+
+export const AdminSelect = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+`;

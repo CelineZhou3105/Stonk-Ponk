@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { TextField, SettingsLabel, SettingsModalLabel, UploadImage } from "../css/Form";
 import {
+	AdminContainer,
+	AdminSelect,
 	FlexRowLeftDiv,
 	FlexColumnLeftDiv,
 	PageContainer,
@@ -18,10 +20,12 @@ import {
 import Navigation from "./Navigation";
 import { EditButton, SaveButton, CancelButton, CloseButton, CustomButton } from "../css/Button";
 import { SettingsPhoto } from "../css/Image";
-import { PageTitle } from "../css/Text";
+import { PageTitle, AdminPriority } from "../css/Text";
 import { checkPassword } from "../helpers/helpers";
 import { settings } from "../services/settings";
 import Alert from "@material-ui/lab/Alert";
+import Select from "react-select";
+import { customStyles } from "../helpers/styles";
 
 /**
  * Settings - Page where the user can see their details (first & last name) and change their password.
@@ -49,6 +53,10 @@ const Settings = () => {
 	const [profileImage, setProfileImage] = useState("");
 	const [base64Image, setBase64Image] = useState("");
 	const [uploadDisabled, setUploadDisabled] = useState(true);
+
+	const [isAdmin, setIsAdmin] = useState(true);
+	const [apiPriorityList, setApiPriorityList] = useState([]);
+	const [apiPriority, setApiPriority] = useState("");
 
 	// Tracks when errors occurs - for showing error banners to the user
 	const [error, setError] = useState(false);
@@ -89,6 +97,21 @@ const Settings = () => {
 				handleError(error);
 			});
 	}, [handleError]);
+
+	// Function to check whether user is an admin
+	useEffect(() => {
+		// settings
+		// 	.checkAdmin()
+		// 	.then((response) => response.json())
+		// 	.then((json) => {
+		// 		if (json.admin === true) {
+		// 			setIsAdmin(true);
+		// 		}
+		// 	})
+		// 	.catch((error) => {
+		// 		handleError(error);
+		// 	});
+	}, []);
 
 	// Function to edit the name of the user
 	const EditName = () => {
@@ -365,6 +388,21 @@ const Settings = () => {
 					</FlexColumnLeftDiv>
 				</FlexRowLeftDiv>
 				<LineDivider />
+				{isAdmin && (
+					<AdminContainer>
+						<PageTitle>Admin Controls</PageTitle>
+						<AdminSelect>
+							<AdminPriority>API Priority:</AdminPriority>
+							<Select
+								styles={customStyles}
+								options={apiPriorityList}
+								defaultValue={"Select"}
+								aria-label="Drop down to select api priorities"
+								onChange={(e) => setApiPriority(e.label)}
+							/>
+						</AdminSelect>
+					</AdminContainer>
+				)}
 			</PageContainer>
 		</div>
 	);

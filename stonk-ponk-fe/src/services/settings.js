@@ -3,6 +3,7 @@ import {
     ChangeNameLink,
     ChangePasswordWithAuthLink,
     ChangeProfilePictureLink,
+    GetAdminLink,
     GetUserDetailsLink,
 } from '../api-links/constants';
 
@@ -156,6 +157,28 @@ const changeProfilePicture = async (image) => {
         })
 }
 
+const checkAdmin = async() => {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`,
+        },
+    };
+    return await fetch(GetAdminLink, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200
+                return Promise.resolve(response);
+            } // if status code is not 200
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject(response);
+            }
+        })
+}
+
 
 export const settings = {
     getUser,
@@ -163,4 +186,5 @@ export const settings = {
     changeEmail,
     changePassword,
     changeProfilePicture,
+    checkAdmin,
 };
