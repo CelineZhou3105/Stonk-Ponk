@@ -7,7 +7,7 @@ import StockTable from "./StockTable";
 import { market } from "../services/market";
 
 import { Container, FilterContainer, PageContainer, SectionRowDiv } from "../css/Div";
-import { ColorText, NormalText, PageTitle, SubText, SubTitle } from "../css/Text";
+import { ColorText, Link, NormalText, PageTitle, SubText, SubTitle } from "../css/Text";
 
 import Alert from "@material-ui/lab/Alert";
 import { CircularProgress } from "@material-ui/core";
@@ -161,6 +161,7 @@ function Market() {
 			<PageContainer>
 				<PageTitle>Market</PageTitle>
 				<FilterContainer>
+					<SubText>Don't know the ticker? Find it on: <Link href="https://www.marketwatch.com/tools/quotes/lookup.asp" target="_blank">Market Watch</Link></SubText>
 					<Autocomplete
 						style={{ width: 300 }}
 						options={stockOptions}
