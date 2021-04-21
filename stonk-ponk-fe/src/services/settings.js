@@ -3,7 +3,7 @@ import {
     ChangeNameLink,
     ChangePasswordWithAuthLink,
     ChangeProfilePictureLink,
-    GetAdminLink,
+    CheckAdminLink,
     GetUserDetailsLink,
 } from '../api-links/constants';
 
@@ -166,7 +166,7 @@ const checkAdmin = async() => {
             'Authorization': `${localStorage.getItem('token')}`,
         },
     };
-    return await fetch(GetAdminLink, requestOptions)
+    return await fetch(CheckAdminLink, requestOptions)
         .then(response => {
             if (response.ok) { // if status code is 200
                 return Promise.resolve(response);
@@ -178,6 +178,8 @@ const checkAdmin = async() => {
             }
         })
 }
+
+
 
 
 export const settings = {
