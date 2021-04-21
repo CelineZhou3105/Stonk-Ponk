@@ -359,17 +359,19 @@ function StockTable(props) {
 							</CustomButton>
 						</>
 					) : (
-						<CustomButton
-							backgroundColor="#9e22ff"
-							hoverColor="#b55cfa"
-							onClick={() => {
-								setEditMode(true);
-								setPreviousRows(data);
-							}}
-						>
-							<EditIcon />
-							&nbsp;Edit {place === "portfolio" ? "Portfolio" : "Watchlist"}
-						</CustomButton>
+						<>
+							<CustomButton
+								backgroundColor="#9e22ff"
+								hoverColor="#b55cfa"
+								onClick={() => {
+									setEditMode(true);
+									setPreviousRows(data);
+								}}
+							>
+								<EditIcon />
+								&nbsp;Edit {place === "portfolio" ? "Portfolio" : "Watchlist"}
+							</CustomButton>
+						</>
 					)}
 				</RightAlignedButtonContainer>
 			)}
