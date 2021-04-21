@@ -19,6 +19,7 @@ import { DefaultLogo } from "../css/Logo";
 import { ProfilePhoto } from "../css/Image";
 import { MenuButtonContainer, NavCloseButton } from "../css/Button";
 import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 /**
  * Navigation - Responsive navigation bar shown at the top of each page across the website.
@@ -31,6 +32,7 @@ function Navigation(props) {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [profilePic, setProfilePic] = useState("");
+	const [loaded, setLoaded] = useState(false);
 
 	const history = useHistory();
 
@@ -58,6 +60,7 @@ function Navigation(props) {
 				setFirstName(json.first_name);
 				setLastName(json.last_name);
 				setProfilePic(json.image);
+				setLoaded(true);
 			})
 			.catch(() => {
 				setError(true);
@@ -88,27 +91,33 @@ function Navigation(props) {
 					<NavLink to="/education">Education</NavLink>
 				</NavListItem>
 			</NavList>
-			<PhotoMenuContainer>
-				<ProfilePhotoContainer>
-					{!props.settings ? (
-						<ProfilePhoto
-							className="profile-photo"
-							src={profilePic}
-							alt="Your profile picture"
-							onClick={() => setProfileModalOpen(!profileModalOpen)}
-						/>
-					) : (
-						<ProfilePhoto
-							className="profile-photo"
-							src={profilePic}
-							alt="Your profile picture"
-							style={{ border: "3px solid #FFF" }}
-							onClick={() => setProfileModalOpen(!profileModalOpen)}
-						/>
-					)}
-				</ProfilePhotoContainer>
-				<Menu />
-			</PhotoMenuContainer>
+			{!loaded ? (
+				<CircularProgress />
+			) : (
+				<>
+					<PhotoMenuContainer>
+						<ProfilePhotoContainer>
+							{!props.settings ? (
+								<ProfilePhoto
+									className="profile-photo"
+									src={profilePic}
+									alt="Your profile picture"
+									onClick={() => setProfileModalOpen(!profileModalOpen)}
+								/>
+							) : (
+								<ProfilePhoto
+									className="profile-photo"
+									src={profilePic}
+									alt="Your profile picture"
+									style={{ border: "3px solid #FFF" }}
+									onClick={() => setProfileModalOpen(!profileModalOpen)}
+								/>
+							)}
+						</ProfilePhotoContainer>
+						<Menu />
+					</PhotoMenuContainer>
+				</>
+			)}
 			{profileModalOpen && (
 				<ProfileModal>
 					{error && (
