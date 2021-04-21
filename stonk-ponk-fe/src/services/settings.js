@@ -2,7 +2,8 @@ import {
     ChangeEmailLink,
     ChangeNameLink,
     ChangePasswordWithAuthLink,
-    GetUserDetailsLink
+    ChangeProfilePictureLink,
+    GetUserDetailsLink,
 } from '../api-links/constants';
 
 /**
@@ -130,7 +131,29 @@ const changePassword = async (passwordNew, passwordOld) => {
 }
 
 const changeProfilePicture = async (image) => {
-    
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+            image: image,
+        }),
+    };
+    return await fetch(ChangeProfilePictureLink, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200      
+                return response;
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
+            } else {
+                return Promise.reject(response);
+            }
+        }).catch(e => {
+            return Promise.reject(e);
+        })
 }
 
 
@@ -139,4 +162,5 @@ export const settings = {
     changeName,
     changeEmail,
     changePassword,
+    changeProfilePicture,
 };
