@@ -165,18 +165,8 @@ const Watchlist = () => {
 					{tableVisible ? (
 						<>
 							<FlexRowDiv style={{ width: "100%" }}>
-								<SubTitle style={{ margin: "5px" }}>{currentWatchlist}</SubTitle>
-								<FlexRowDiv style={{ margin: "5px" }}>
-									<CustomButton
-										backgroundColor="#44BCFF"
-										hoverColor="#68c7fc"
-										style={{ marginRight: "10px" }}
-									>
-										What if I owned this?
-									</CustomButton>
-								</FlexRowDiv>
+								<SubTitle style={{ margin: "10px" }}>{currentWatchlist}</SubTitle>
 							</FlexRowDiv>
-
 							<WatchlistTable>
 								<StockTable
 									data={watchlistData}
@@ -186,7 +176,7 @@ const Watchlist = () => {
 									page={page}
 									setPage={setPage}
 									watchlistId={watchlistId}
-								></StockTable>
+								/>
 							</WatchlistTable>
 						</>
 					) : (
