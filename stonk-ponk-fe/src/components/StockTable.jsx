@@ -259,13 +259,13 @@ function StockTable(props) {
 					setSelected([]);
 					setSuccess(true);
 					setSuccessMsg("Changes saved.");
+					window.location.reload();
 				})
 				.catch((e) => {
 					console.log("ERROR:", e);
 					setError(true);
 					setErrorMsg(e);
 				});
-			window.location.reload();
 		} else if (place === "watchlist") {
 			console.log(data);
 			watchlist
