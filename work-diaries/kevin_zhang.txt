@@ -22,3 +22,9 @@ Fixed bugs with login and register. Fixing miscellaneous bugs
 
 Week7
 Added portfolio routing, logic code and set up portfolio databases. Connected frontend with backend api for portfolios.
+
+Week 9
+Added watchlists. Expired tokens will send 403 so that the website will be logged out.
+
+Week 10
+Finishing reports. Making last minute bug fixes. Added profile picture.
