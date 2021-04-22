@@ -12,5 +12,9 @@ urlpatterns = [
     path('get_news_api_priority', views.get_news_api_priority, name = 'get_news_api_priority'),
     path('set_news_api_priority', views.set_news_api_priority, name = 'set_news_api_priority'),
     path('get_forex_api_priority', views.get_forex_api_priority, name = 'get_forex_api_priority'),
-    path('set_forex_api_priority', views.set_forex_api_priority, name = 'set_forex_api_priority')
+    path('set_forex_api_priority', views.set_forex_api_priority, name = 'set_forex_api_priority'),
+    path('get_num_stock_calls', views.get_num_stock_calls, name = 'get_num_stock_calls'),
+    path('get_num_news_calls', views.get_num_news_calls, name = 'get_num_news_calls'),
+    path('get_num_forex_calls', views.get_num_forex_calls, name = 'get_num_forex_calls')
+
 ]

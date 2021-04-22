@@ -25,7 +25,6 @@ class NewsApiInterface:
     
     #gets priority list from admin and sorts based on priority
     #simply delete all existing NewsApiPriority objects and reinsert
-    #TODO
     def set_news_api_order(order_list):
         try:
             NewsApiPriority.objects.all().delete();
@@ -67,3 +66,4 @@ class NewsApiInterface:
                 continue
         
         return total_calls
+
