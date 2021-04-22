@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 
 import PortfolioPricesChart from "./PortfolioPricesChart";
@@ -263,6 +263,7 @@ function StockTable(props) {
 				})
 				.catch((e) => {
 					console.log("ERROR:", e);
+					console.log("DATA: ", data);
 					setError(true);
 					setErrorMsg(e);
 				});
@@ -534,9 +535,9 @@ function StockTable(props) {
 				/>
 			) : (
 				<TablePagination
-					rowsPerPageOptions={[5, 10, 25]}
+					rowsPerPageOptions={[10]}
 					component="div"
-					count={300}
+					count={place === 'watchlist' ? data.length : 300}
 					rowsPerPage={rowsPerPage}
 					page={page}
 					onChangePage={changePage}
