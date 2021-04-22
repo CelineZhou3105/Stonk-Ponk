@@ -57,6 +57,7 @@ Changing the search bar in the Market page to accomodate API calls, and taking u
 Creating a responsive/collapsible navigation bar.
 Added comments to all our FE code. 
 Making alerts dismissable across the entire website.
+Wrote the functionalities section of the report.
 
 
 
