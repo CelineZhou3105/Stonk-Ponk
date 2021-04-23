@@ -8,7 +8,7 @@ import CreateModal from "./CreateModal";
 import { portfolio } from "../services/portfolio";
 import { watchlist } from "../services/watchlist";
 
-import { NormalText } from "../css/Text";
+import { NormalText, SubText } from "../css/Text";
 import { RightAlignedButtonContainer } from "../css/Div";
 import { CustomButton } from "../css/Button";
 
@@ -414,6 +414,7 @@ function StockTable(props) {
 													<TableCell component="th" scope="row" padding="none">
 														<NormalText>{row.name}</NormalText>
 														<a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
+														<SubText>Currency: {row.ticker.includes('.AX') ? 'AUD' : 'USD' }</SubText>
 													</TableCell>
 													<TableCell align="center">
 														<PortfolioPricesChart ticker={row.ticker} period="last_month" />
@@ -470,6 +471,7 @@ function StockTable(props) {
 													<TableCell component="th" scope="row" padding="none">
 														<NormalText>{row.name}</NormalText>
 														<a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
+														<SubText>Currency: {row.ticker.includes('.AX') ? 'AUD' : 'USD' }</SubText>
 													</TableCell>
 													<TableCell align="right">
 														<PortfolioPricesChart ticker={row.ticker} period="last_month" />
@@ -484,6 +486,7 @@ function StockTable(props) {
 													<TableCell component="th" scope="row" padding="none">
 														<NormalText>{row.name}</NormalText>
 														<a href={`/stocks/${row.ticker}`}>{row.ticker}</a>
+														<SubText>Currency: {row.ticker.includes('.AX') ? 'AUD' : 'USD' }</SubText>
 													</TableCell>
 													<TableCell align="center">
 														<SummaryChart points={row.prev_week_prices} />

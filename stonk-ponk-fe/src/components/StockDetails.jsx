@@ -189,7 +189,7 @@ function StockDetails() {
 								Back
 							</CustomButton>
 						</StockDetailTopBar>
-						<h1>${parseFloat(price).toFixed(2)} USD</h1>
+						<h1>${parseFloat(price).toFixed(2)} {exchange === 'ASX' ? 'AUD' : 'USD'}</h1>
 						<p>Market: {marketName}</p>
 						<p>Exchange: {exchange}</p>
 						<TableContainer>

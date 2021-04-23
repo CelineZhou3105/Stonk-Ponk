@@ -114,7 +114,12 @@ class Portfolio(models.Model) :
         for so in self.get_stock_ownerships():
             try:
                 #tVal += stock_api.get_historical_price(so.get_stock_ticker(), date) * so.volume
-                tVal += stock_api.get_price(so.get_stock_ticker()) * so.volume
+                if ".AX" in so.get_stock_ticker():
+                    tVal += stock_api.get_price(so.get_stock_ticker()) * so.volume
+                else:
+                    value = stock_api.get_price(so.get_stock_ticker()) * so.volume
+                    tVal += forex_api.calc_forex_rate(value, "USD", "AUD")
+
             except:
                 print("LOG: ERROR: could not process {} in get_value".format(so.get_stock_ticker()))
         ''' 
@@ -122,6 +127,7 @@ class Portfolio(models.Model) :
         print("tVal ", tVal)
         print("au_val ", au_value)
         '''
+        # au_value = forex_api.calc_forex_rate(tVal, "USD", "AUD")
         return tVal
 
     def get_investment(self):

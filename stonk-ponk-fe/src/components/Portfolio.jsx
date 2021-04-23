@@ -45,10 +45,10 @@ const tableHeadings = [
 	{ id: "name", disablePadding: true, numeric: false, label: "Name" },
 	{ id: "performance", disablePadding: false, numeric: false, label: "Performance (Month)" },
 	{ id: "first_purchase_date", disablePadding: true, numeric: true, label: "Purchase Date" },
-	{ id: "vwap", disablePadding: false, numeric: true, label: "Purchase Price (AUD)" },
+	{ id: "vwap", disablePadding: false, numeric: true, label: "Purchase Price" },
 	{ id: "volume", disablePadding: false, numeric: true, label: "Units Owned" },
-	{ id: "price", disablePadding: false, numeric: true, label: "Current Price (AUD)" },
-	{ id: "value", disablePadding: false, numeric: true, label: "Total Value (AUD)" },
+	{ id: "price", disablePadding: false, numeric: true, label: "Current Price" },
+	{ id: "value", disablePadding: false, numeric: true, label: "Total Value" },
 ];
 
 // Suggestions based on your portfolio makeup
@@ -93,7 +93,7 @@ function Portfolio() {
 	const [portfolioStocks, setPortfolioStocks] = useState("Loading");
 	const [page, setPage] = useState(0);
 	const [health, setHealth] = useState("Loading");
-	const [suggestions, setSuggestions] = useState("Loading");
+	const [suggestions, setSuggestions] = useState(false);
 
 	// Tracks whether there are errors, shows a banner if there is
 	const [error, setError] = useState(false);
@@ -396,6 +396,11 @@ function Portfolio() {
 							</Container>
 							<Container flex_direction="column">
 								<SubTitle>Suggestions</SubTitle>
+								{!suggestions && (
+									<FlexColumnCenterDiv style={{width: '100%', margin: 0}}>
+										<CircularProgress />
+									</FlexColumnCenterDiv>
+								)}
 								{suggestions.length > 0 && (
 									<>
 										<PortfolioSuggestionTitle>Beta Score</PortfolioSuggestionTitle>
