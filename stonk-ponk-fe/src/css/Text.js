@@ -158,3 +158,7 @@ export const AdminPriority = styled.p`
     font-size: 15pt;
     margin-right: 10px;
 `;
+
+export const RedText = styled.span`
+    color: red;
+`;
