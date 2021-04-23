@@ -91,7 +91,7 @@ const Watchlist = () => {
 				if (watchlistNames.length !== 0) {
 					setWatchlistNames((watchlistNames) => watchlistNames.concat(json));
 				} else {
-					setWatchlistNames(json);
+					setWatchlistNames([json]);
 				}
 				setModalDisabled(true);
 			})
