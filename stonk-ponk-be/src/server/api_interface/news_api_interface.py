@@ -40,7 +40,7 @@ class NewsApiInterface:
     
     @cache(datetime.timedelta(minutes=5))
     def get_news(ticker):
-        for api_dict in NewsApiInterface.get_ordered_news_api_list():
+        for api_dict in NewsApiInterface.news_api_list:
             try:
                 api = NewsApiInterface.news_api_map[api_dict['name']]
                 return api.get_news(ticker)
@@ -51,7 +51,7 @@ class NewsApiInterface:
     
     @cache(datetime.timedelta(minutes=5))
     def get_market_news():
-        for api_dict in NewsApiInterface.get_ordered_news_api_list():
+        for api_dict in NewsApiInterface.news_api_list:
             try:
                 print(api_dict['name'])
                 api = NewsApiInterface.news_api_map[api_dict['name']]
@@ -62,7 +62,7 @@ class NewsApiInterface:
         return False 
     
     def get_num_calls():
-        for api_dict in NewsApiInterface.get_ordered_news_api_list():
+        for api_dict in NewsApiInterface.news_api_list:
             total_calls = 0
             try:
                 api = NewsApiInterface.news_api_map[api_dict['name']]
@@ -71,7 +71,3 @@ class NewsApiInterface:
                 continue
         
         return total_calls
-<<<<<<< HEAD
-
-=======
->>>>>>> master

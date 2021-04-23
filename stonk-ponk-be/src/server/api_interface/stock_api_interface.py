@@ -17,8 +17,12 @@ class StockApiInterface:
     def get_stock_api_priorities():
         #refer to admin database
         ret = []
+        print(StockApiPriority.objects.all())
         for i in StockApiPriority.objects.all():
+            print("i is ", i)
             ret.append({"name" : i.name, "priority" : i.priority}) 
+        
+        print("ret after for loop", ret)
         return ret
 
     def get_ordered_stock_api_list():
@@ -44,7 +48,7 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(minutes=5))
     def get_most_active(start_index, end_index):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+        for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_most_active(start_index, end_index)
@@ -55,8 +59,10 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(minutes=5))
     def get_market_data(data_type, page_num):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+        print("Got here", StockApiInterface.stock_api_list)
+        for api_dict in StockApiInterface.stock_api_list:
             try:
+                print(api_dict['name'])
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_market_data(data_type, page_num)
             except:
@@ -66,7 +72,7 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(minutes=5))
     def get_stock_data(ticker):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+        for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_stock_data(ticker)
@@ -77,7 +83,7 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(minutes=5))
     def get_price(ticker):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+        for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_price(ticker)
@@ -99,7 +105,7 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(minutes=5))
     def get_stock_prices(ticker, interval_type):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+        for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_stock_prices(ticker, interval_type)
@@ -110,8 +116,9 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(hours=1))
     def get_historical_price(ticker, date):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+        for api_dict in StockApiInterface.stock_api_list:
             try:
+                print("Got hre", api_dict['name'])
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_historical_price(ticker, date)
             except:
@@ -120,7 +127,7 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(minutes=1))
     def check_stock(ticker):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+        for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.check_stock(ticker)
@@ -130,7 +137,7 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(minutes=1))
     def check_stocks(ticker):
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+        for api_dict in StockApiInterface.stock_api_list:
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.check_stocks(ticker)
@@ -139,7 +146,7 @@ class StockApiInterface:
         return False
     
     def get_num_calls():
-        for api_dict in StockApiInterface.get_ordered_stock_api_list():
+        for api_dict in StockApiInterface.stock_api_list:
             total_calls = 0
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]

@@ -215,7 +215,7 @@ class AaApi():
                 return price_dict
             
             else:
-                return "Stock Not Found"
+                return "Stock Price Not Found"
         
         except:
             return "Stock Not Found"

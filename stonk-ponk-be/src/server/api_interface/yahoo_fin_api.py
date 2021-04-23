@@ -153,12 +153,18 @@ class YfApi():
     def get_historical_price(self, ticker, date):
         start_date = date.strftime("%m/%d/%Y")
         end_date = (date+timedelta(days=1)).strftime("%m/%d/%Y")
-        price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = "1d")
-
+        try:
+            price_data = si.get_data(ticker, start_date = start_date, end_date = end_date, interval = "1d")
+        except: 
+            #stock price does not exist
+            return "Stock Price Not Found"
+        
         price_dict = {}
         for index, row in price_data.iterrows():
             price_dict['low'] = row['low']
             price_dict['high'] = row['high']
+        
+        print(price_dict)
         return price_dict
 
     def check_stock(self, ticker):

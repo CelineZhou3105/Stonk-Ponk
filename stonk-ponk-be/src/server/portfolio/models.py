@@ -26,10 +26,12 @@ class Portfolio(models.Model) :
 
         # check that stock price is legit
         date_obj = datetime.datetime.strptime(date, '%Y-%m-%d')
-        price_dict = stock_api.get_historical_price(ticker, date_obj)
-        print(price_dict)
+        prices = stock_api.get_historical_price(ticker, date_obj)
+
+        if prices == "Stock Price Not Found":
+            return {"message": "Stock Price Not Found For This Day", "price_range": "none"}
         
-        if float(price) < float(price_dict['low']) or float(price) > float(price_dict['high']):
+        if float(price) < float(prices['low']) or float(price) > float(prices['high']):
             print("Invalid Price You a Liar")
             return {"message": "Invalid Price", "price_range": price_dict}
 
@@ -45,7 +47,7 @@ class Portfolio(models.Model) :
                 purchase_vol   = volume,
                 purchase_price = price)
 
-        return {"message": "Success", "price_range": price_dict}
+        return {"message": "Success", "price_range": prices}
 
     @log_date
     def remove_transaction(self, _uuid):

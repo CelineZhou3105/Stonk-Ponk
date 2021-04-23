@@ -198,6 +198,7 @@ def edit(request):
                 add_result = portfolio.add_stock(ticker, t["date"], int(t["volume"]), float(t["price"]))
                 
                 if add_result['message'] != "Success":
+                    print("Returned ", add_result)
                     return HttpResponseBadRequest(json.dumps(add_result))
 
         for so in portfolio.get_stock_ownerships():

@@ -36,7 +36,7 @@ class ForexApiInterface:
             return e 
 
     def get_currency_exchange(from_currency, to_currency):
-        for api_dict in ForexApiInterface.get_ordered_forex_api_list():
+        for api_dict in ForexApiInterface.forex_api_list():
             try:
                 api = ForexApiInterface.forex_api_map[api_dict['name']]
                 return api.get_currency_exchange(from_currency, to_currency)
