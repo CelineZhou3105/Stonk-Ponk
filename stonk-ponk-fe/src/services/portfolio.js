@@ -97,7 +97,11 @@ export async function editPortfolio(data) {
                     return response.json()
                     .then(res => {
                         console.log(res);
-                        return Promise.reject(`${res.message}. Price must be within range $${res.price_range.low.toFixed(2)} - $${res.price_range.high.toFixed(2)}`);
+                        if (res.message === 'Stock Price Not Found For This Day') {
+                            return Promise.reject(`${res.message}.`);
+                        } else {
+                            return Promise.reject(`${res.message}. Price must be within range $${res.price_range.low.toFixed(2)} - $${res.price_range.high.toFixed(2)}`);
+                        }
                     })
                 } catch (e) {
                     return Promise.reject("An error occured while editing your portfolio. Please retry.");

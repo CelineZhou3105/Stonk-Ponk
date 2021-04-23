@@ -33,6 +33,9 @@ class Portfolio(models.Model) :
         
         if float(price) < float(prices['low']) or float(price) > float(prices['high']):
             print("Invalid Price You a Liar")
+            price_dict = {}
+            price_dict['low'] = prices['low']
+            price_dict['high'] = prices['high']
             return {"message": "Invalid Price", "price_range": price_dict}
 
         stock, created = PortfolioStock.objects.get_or_create(ticker=ticker)
