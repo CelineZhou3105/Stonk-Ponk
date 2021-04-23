@@ -141,7 +141,7 @@ function CreateModal(props) {
 						getOptionLabel={(option) => option.name}
 						onChange={(e, value) => {
 							if (value !== null) {
-								setStockTicker(value.ticker);
+								setStockTicker(value.ticker.toUpperCase());
 							}
 						}}
 						style={{ width: "100%" }}
