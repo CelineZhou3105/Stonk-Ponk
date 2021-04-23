@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+
+import { checkPassword } from "../helpers/helpers";
+import { settings } from "../services/settings";
+import { admin } from "../services/admin";
+
 import { TextField, SettingsLabel, SettingsModalLabel, UploadImage } from "../css/Form";
 import {
 	AdminContainer,
@@ -21,8 +26,7 @@ import Navigation from "./Navigation";
 import { EditButton, SaveButton, CancelButton, CloseButton, CustomButton } from "../css/Button";
 import { SettingsPhoto } from "../css/Image";
 import { PageTitle, AdminPriority } from "../css/Text";
-import { checkPassword } from "../helpers/helpers";
-import { settings } from "../services/settings";
+
 import Alert from "@material-ui/lab/Alert";
 import Select from "react-select";
 import { customStyles } from "../helpers/styles";
@@ -105,18 +109,17 @@ const Settings = () => {
 
 	// Function to check whether user is an admin
 	useEffect(() => {
-		// settings
-		// 	.checkAdmin()
-		// 	.then((response) => response.json())
-		// 	.then((json) => {
-		// 		if (json.admin === true) {
-		// 			setIsAdmin(true);
-		// 		}
-		// 	})
-		// 	.catch((error) => {
-		// 		handleError(error);
-		// 	});
-	}, []);
+		admin.checkAdmin()
+			.then(() => {
+				setIsAdmin(true);
+			})
+			.catch((error) => {
+				if (error === 'Expired token') {
+					handleError(error);
+				}
+				// Else, do nothing because the user is not an admin
+			});
+	}, [handleError]);
 
 	// Function to edit the name of the user
 	const EditName = () => {
