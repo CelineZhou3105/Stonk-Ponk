@@ -1,6 +1,7 @@
 from django.db import models
 
 from api_interface.stock_api_interface import StockApiInterface as stock_api
+from api_interface.forex_api_interface import ForexApiInterface as forex_api
 
 import uuid
 import datetime
@@ -22,6 +23,16 @@ class Portfolio(models.Model) :
     @log_date
     def add_stock(self, ticker, date, volume, price):
         # get this from market price
+
+        # check that stock price is legit
+        date_obj = datetime.datetime.strptime(date, '%Y-%m-%d')
+        price_dict = stock_api.get_historical_price(ticker, date_obj)
+        print(price_dict)
+        
+        if float(price) < float(price_dict['low']) or float(price) > float(price_dict['high']):
+            print("Invalid Price You a Liar")
+            return {"message": "Invalid Price", "price_range": price_dict}
+
         stock, created = PortfolioStock.objects.get_or_create(ticker=ticker)
         ownership, created = StockOwnership.objects.get_or_create(owner=self, stock=stock)
         ownership.VWAP = (ownership.VWAP * ownership.volume + price * volume) / (ownership.volume + volume)
@@ -33,6 +44,8 @@ class Portfolio(models.Model) :
                 purchase_date  = date, 
                 purchase_vol   = volume,
                 purchase_price = price)
+
+        return {"message": "Success", "price_range": price_dict}
 
     @log_date
     def remove_transaction(self, _uuid):
@@ -95,9 +108,15 @@ class Portfolio(models.Model) :
         tVal = 0
         for so in self.get_stock_ownerships():
             try:
+                #tVal += stock_api.get_historical_price(so.get_stock_ticker(), date) * so.volume
                 tVal += stock_api.get_price(so.get_stock_ticker()) * so.volume
             except:
                 print("LOG: ERROR: could not process {} in get_value".format(so.get_stock_ticker()))
+        ''' 
+        au_value = forex_api.calc_forex_rate(tVal, "USD", "AUD")
+        print("tVal ", tVal)
+        print("au_val ", au_value)
+        '''
         return tVal
 
     def get_investment(self):
@@ -113,7 +132,7 @@ class Portfolio(models.Model) :
         total_beta = 0 # beta * volume
         total_value= 0 # sum of all the volume used in calcuating the beta
         for so in self.get_stock_ownerships():
-            ticker = so.stock.market_ticker
+            ticker = so.stock.ticker
 
             beta = stock_api.get_beta(ticker)
             
@@ -224,3 +243,19 @@ class Transaction(models.Model):
     purchase_vol = models.IntegerField(default=0)
     purchase_price = models.FloatField(default=0)
     stockOwnership = models.ForeignKey("StockOwnership", on_delete = models.CASCADE)
+
+
+#helper function
+#trade day is monday to friday
+#offset counts to the previous offset number of trade days
+def get_trade_day(offset):
+    ret = datetime.datetime.now()
+    ret -= datetime.timedelta(max(4-t.weekday,0))
+    while offset > 0:
+        ret -= datetime.timdelta(days=1)
+        if is_trade_day(ret):
+            offset -= 1
+'''
+def is_trade_day(dt):
+    return dt.weekday() < 5
+'''

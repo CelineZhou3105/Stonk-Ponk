@@ -57,7 +57,6 @@ class StockApiInterface:
     def get_market_data(data_type, page_num):
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
-                print("Trying ", api_dict['name'])
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_market_data(data_type, page_num)
             except:
@@ -70,7 +69,6 @@ class StockApiInterface:
         for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
-                print(api.get_stock_data(ticker))
                 return api.get_stock_data(ticker)
             except:
                 continue

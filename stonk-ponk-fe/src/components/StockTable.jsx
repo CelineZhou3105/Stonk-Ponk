@@ -151,7 +151,7 @@ function StockTable(props) {
 	const [editMode, setEditMode] = useState(false);
 	const { data, headings, place, setRows, setPageDirection, page, setPage, watchlistId } = props;
 
-	console.log(data);
+	// console.log(data);
 
 	const [previousRows, setPreviousRows] = useState(data);
 	const [deleteVisible, setDeleteVisible] = useState(false);
@@ -193,7 +193,27 @@ function StockTable(props) {
 	// For portfolio view - when a user makes edits to their portfolio this function handles the change
 	const onChange = (e, changedRow, changedColumn) => {
 		if (place === "portfolio") {
-			const newValue = changedColumn === "last_purchased" ? e.target.value : e.target.value;
+			console.log("COLUMN CHANGED:", changedColumn);
+			const newValue = e.target.value;
+
+			if (changedColumn === "first_purchase_date") {
+				// Check that the date is not a weekend
+				const day = new Date(newValue).getUTCDay();
+				if ([6, 0].includes(day)) {
+					setError(true);
+					setErrorMsg("Cannot enter weekends as they are not valid trading days.");
+					return;
+				}
+			} else if (changedColumn === "volume") {
+				console.log("hello");
+				// Check that the volume is not 0
+				console.log(newValue);
+				if (newValue === "0") {
+					setError(true);
+					setErrorMsg("You cannot own 0 units of a stock. Please enter a positive integer.");
+					return;
+				}
+			}
 
 			const newRows = data.map((row) => {
 				if (row.ticker === changedRow.ticker) {
@@ -239,16 +259,21 @@ function StockTable(props) {
 					setSelected([]);
 					setSuccess(true);
 					setSuccessMsg("Changes saved.");
+					window.location.reload();
 				})
-				.catch(() => {
+				.catch((e) => {
+					console.log("ERROR:", e);
+					console.log("DATA: ", data);
 					setError(true);
-					setErrorMsg("Could not edit your portfolio");
+					setErrorMsg(e);
 				});
 		} else if (place === "watchlist") {
+			console.log(data);
 			watchlist
 				.updateStockToWatchlist(watchlistId, data)
 				.then(() => {
 					console.log("updated stocks to watchlist!");
+					setEditMode(false);
 				})
 				.catch((error) => {
 					Promise.resolve(error).then((e) => {
@@ -336,10 +361,19 @@ function StockTable(props) {
 							</CustomButton>
 						</>
 					) : (
-						<CustomButton backgroundColor="#9e22ff" hoverColor="#b55cfa" onClick={() => setEditMode(true)}>
-							<EditIcon />
-							&nbsp;Edit {place === "portfolio" ? "Portfolio" : "Watchlist"}
-						</CustomButton>
+						<>
+							<CustomButton
+								backgroundColor="#9e22ff"
+								hoverColor="#b55cfa"
+								onClick={() => {
+									setEditMode(true);
+									setPreviousRows(data);
+								}}
+							>
+								<EditIcon />
+								&nbsp;Edit {place === "portfolio" ? "Portfolio" : "Watchlist"}
+							</CustomButton>
+						</>
 					)}
 				</RightAlignedButtonContainer>
 			)}
@@ -382,16 +416,13 @@ function StockTable(props) {
 									<>
 										{place === "portfolio" && (
 											<>
-												<TableRow
-													hover
-													role="checkbox"
-													tabIndex={-1}
-													key={row.ticker}
-													onClick={(event) => handleClick(event, row.ticker)}
-												>
+												<TableRow hover role="checkbox" tabIndex={-1} key={row.ticker}>
 													{editMode && (
 														<TableCell padding="checkbox">
-															<Checkbox checked={isItemSelected} />
+															<Checkbox
+																checked={isItemSelected}
+																onChange={(event) => handleClick(event, row.ticker)}
+															/>
 														</TableCell>
 													)}
 													<TableCell component="th" scope="row" padding="none">
@@ -504,9 +535,9 @@ function StockTable(props) {
 				/>
 			) : (
 				<TablePagination
-					rowsPerPageOptions={[5, 10, 25]}
+					rowsPerPageOptions={[10]}
 					component="div"
-					count={300}
+					count={place === 'watchlist' ? data.length : 300}
 					rowsPerPage={rowsPerPage}
 					page={page}
 					onChangePage={changePage}
@@ -576,7 +607,6 @@ function getComparator(order, orderBy) {
  * @param {function} comparator - the function to sort the data
  */
 function stableSort(array, comparator) {
-	console.log("NEED TO SORT:", array);
 	const stabilizedThis = array.map((el, index) => [el, index]);
 	stabilizedThis.sort((a, b) => {
 		const order = comparator(a[0], b[0]);

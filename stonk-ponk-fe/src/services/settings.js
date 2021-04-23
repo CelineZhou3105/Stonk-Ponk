@@ -2,7 +2,9 @@ import {
     ChangeEmailLink,
     ChangeNameLink,
     ChangePasswordWithAuthLink,
-    GetUserDetailsLink
+    ChangeProfilePictureLink,
+    CheckAdminLink,
+    GetUserDetailsLink,
 } from '../api-links/constants';
 
 /**
@@ -129,10 +131,62 @@ const changePassword = async (passwordNew, passwordOld) => {
         })
 }
 
+const changeProfilePicture = async (image) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+            image: image,
+        }),
+    };
+    return await fetch(ChangeProfilePictureLink, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200      
+                return response;
+            } else if (response.status === 403) {
+                return Promise.reject("Expired token");
+            } else {
+                return Promise.reject(response);
+            }
+        }).catch(e => {
+            return Promise.reject(e);
+        })
+}
+
+const checkAdmin = async() => {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `${localStorage.getItem('token')}`,
+        },
+    };
+    return await fetch(CheckAdminLink, requestOptions)
+        .then(response => {
+            if (response.ok) { // if status code is 200
+                return Promise.resolve(response);
+            } // if status code is not 200
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject(response);
+            }
+        })
+}
+
+
+
 
 export const settings = {
     getUser,
     changeName,
     changeEmail,
     changePassword,
+    changeProfilePicture,
+    checkAdmin,
 };

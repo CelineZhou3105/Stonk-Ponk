@@ -117,15 +117,3 @@ export const ModalLabel = createLabel("100%", "10px", "10px");
 
 export const UploadImage = styled.input``;
 
-export const SaveProfileImage = styled.input`
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    background-color: #9e22ff;
-    color: white;
-    font-size: 18pt;
-    padding: 15px;
-    width: 15%;
-    margin: 20px;
-    ${FlexCenter}
-`;

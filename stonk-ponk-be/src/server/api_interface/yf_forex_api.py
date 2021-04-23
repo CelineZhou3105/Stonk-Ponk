@@ -22,3 +22,6 @@ class YfForexApi():
 
         except:
             return "Incorrect Currencies"
+
+    #def get_historical_forex(self, from_currency, to_currency, given_date):
+    #    return 

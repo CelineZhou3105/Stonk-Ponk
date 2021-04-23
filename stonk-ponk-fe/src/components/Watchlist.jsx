@@ -37,10 +37,10 @@ const headings = [
 
 const Watchlist = () => {
 	const [watchlistId, setWatchlistId] = useState(-1);
-	const [watchlistNames, setWatchlistNames] = useState([{ id: -1, label: "" }]);
+	const [watchlistNames, setWatchlistNames] = useState([]);
 	const [newWatchlist, setNewWatchlist] = useState("");
 	const [modalDisabled, setModalDisabled] = useState(true);
-	const [currentWatchlist, setCurrentWatchlist] = useState(watchlistNames[0].label);
+	const [currentWatchlist, setCurrentWatchlist] = useState("");
 	const [watchlistData, setWatchlistData] = useState([]);
 	const [page, setPage] = useState(0);
 	const [tableVisible, setTableVisible] = useState(false);
@@ -51,25 +51,24 @@ const Watchlist = () => {
 			.then((response) => response.json())
 			.then((json) => {
 				console.log(json);
-				if (json.watchlists.length !== watchlistNames.length) {
-					setWatchlistNames(json.watchlists);
-				}
+				setWatchlistNames(json.watchlists);
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
-					alert(`${error.status} ${error.statusText}`);
+					console.log(error);
 				});
 			});
 	}, []);
-	console.log(watchlistNames);
+	console.log(watchlistData);
 	const addNewWatchlist = () => {
+		console.log(newWatchlist.trim());
 		watchlist
 			.createWatchlist(newWatchlist.trim())
 			.then((response) => response.json())
 			.then((json) => {
 				console.log("Added new watchlist");
 				console.log(json);
-				if (watchlistNames[0].label !== "") {
+				if (watchlistNames.length !== 0) {
 					setWatchlistNames((watchlistNames) => watchlistNames.concat(json));
 				} else {
 					setWatchlistNames(json);
@@ -78,29 +77,43 @@ const Watchlist = () => {
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
-					alert(`${error.status} ${error.statusText}`);
+					console.log(`${error.status} ${error.statusText}`);
 				});
 			});
 	};
 
 	const viewWatchlist = (watchlistLabel) => {
+		console.log(watchlistLabel);
 		setCurrentWatchlist(watchlistLabel);
 		const id = watchlistNames.find((item) => item.label === watchlistLabel);
 		setWatchlistId(id.id);
 		setTableVisible(true);
+		console.log(id.id);
 		watchlist
 			.getWatchlistStocks(id.id)
 			.then((response) => response.json())
 			.then((json) => {
 				console.log(json);
-				setWatchlistData(json.tickers);
+				setWatchlistData(json);
 			})
 			.catch((error) => {
 				Promise.resolve(error).then((error) => {
-					alert(`${error.status} ${error.statusText}`);
+					console.log(`${error.status} ${error.statusText}`);
 				});
 			});
 	};
+
+	const deleteWatchlist = () => {
+		watchlist
+			.deleteWatchlist(watchlistId)
+			.then(() => {
+				window.location.reload();
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
 	return (
 		<>
 			<Navigation />
@@ -120,7 +133,9 @@ const Watchlist = () => {
 								<CloseButton onClick={() => setModalDisabled(true)}>&times;</CloseButton>
 								<FlexColumnCenterDiv>
 									<SettingModalDiv>
-										<SettingsModalLabel htmlFor="newWatchlist">Watchlist Name</SettingsModalLabel>
+										<SettingsModalLabel style={{ width: "100%" }} htmlFor="newWatchlist">
+											Watchlist Name
+										</SettingsModalLabel>
 										<TextField
 											type="text"
 											id="newWatchlist"
@@ -152,6 +167,7 @@ const Watchlist = () => {
 						onChange={(e) => viewWatchlist(e.label)}
 					/>
 				</FlexRowEndDiv>
+
 				<Container
 					flex_direction="column"
 					gap="1em"
@@ -162,18 +178,16 @@ const Watchlist = () => {
 					{tableVisible ? (
 						<>
 							<FlexRowDiv style={{ width: "100%" }}>
-								<SubTitle style={{ margin: "5px" }}>{currentWatchlist}</SubTitle>
-								<FlexRowDiv style={{ margin: "5px" }}>
-									<CustomButton
-										backgroundColor="#44BCFF"
-										hoverColor="#68c7fc"
-										style={{ marginRight: "10px" }}
-									>
-										What if I owned this?
-									</CustomButton>
-								</FlexRowDiv>
+								<SubTitle style={{ margin: "10px" }}>{currentWatchlist}</SubTitle>
+								<CustomButton
+									backgroundColor="#e80000"
+									hoverColor="#ff5757"
+									onClick={deleteWatchlist}
+									margin="10px"
+								>
+									Delete Watchlist
+								</CustomButton>
 							</FlexRowDiv>
-
 							<WatchlistTable>
 								<StockTable
 									data={watchlistData}
@@ -183,7 +197,7 @@ const Watchlist = () => {
 									page={page}
 									setPage={setPage}
 									watchlistId={watchlistId}
-								></StockTable>
+								/>
 							</WatchlistTable>
 						</>
 					) : (

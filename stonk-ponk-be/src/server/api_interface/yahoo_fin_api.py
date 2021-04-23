@@ -162,6 +162,7 @@ class YfApi():
         return price_dict
 
     def check_stock(self, ticker):
+        print(ticker)
         try:
             quotes = self.api.get_quote_data(ticker)
             self.num_calls += 1
@@ -174,8 +175,6 @@ class YfApi():
     
         except:
             return False
-        
-        return stock_list
 
     def check_stocks(self, ticker):
         stock_list = []

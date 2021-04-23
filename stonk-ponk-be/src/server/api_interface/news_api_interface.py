@@ -1,5 +1,8 @@
 from api_interface.yahoo_fin_news_api import YfNewsApi
 from api_interface.google_news_api import GoogleNewsApi
+from .cache_api import cache
+
+import datetime
 
 class NewsApiInterface:
     #Creates an instance of all stock modules and stores them in order lists
@@ -32,9 +35,10 @@ class NewsApiInterface:
                 #update entry
                 NewsApiPriority.objects.create(name = np["name"], priority = np["priority"])
             return True
-        except Exception as e:
-            return e    
-
+        except:
+            return False 
+    
+    @cache(datetime.timedelta(minutes=5))
     def get_news(ticker):
         for api_dict in NewsApiInterface.get_ordered_news_api_list():
             try:
@@ -45,6 +49,7 @@ class NewsApiInterface:
 
         return False 
     
+    @cache(datetime.timedelta(minutes=5))
     def get_market_news():
         for api_dict in NewsApiInterface.get_ordered_news_api_list():
             try:
@@ -66,4 +71,7 @@ class NewsApiInterface:
                 continue
         
         return total_calls
+<<<<<<< HEAD
 
+=======
+>>>>>>> master

@@ -93,11 +93,13 @@ def summary(request):
         pInvestment = portfolio.get_investment()
         pValue = portfolio.get_value()
         pProfit = pValue - pInvestment
+        pValueTm1 = portfolio.get_value
         pLastUpdate = str(portfolio.last_update)
 
         ownerships = list(portfolio.get_stock_ownerships())
         ownerships.sort(reverse=True, key=lambda x : x.VWAP * x.volume)
         ownerships = ownerships[:min(5,len(ownerships))] # get top 5
+
         pKeyStocks = [ {"name": so.get_stock_name(),
                         "ticker": so.get_stock_ticker(),
                         "value": stock_api.get_price(so.get_stock_ticker()) * so.volume}
@@ -193,7 +195,10 @@ def edit(request):
         for s in body["stocks"]:
             ticker = s["ticker"]
             for t in s["transactions"]:
-                portfolio.add_stock(ticker, t["date"], int(t["volume"]), float(t["price"]))
+                add_result = portfolio.add_stock(ticker, t["date"], int(t["volume"]), float(t["price"]))
+                
+                if add_result['message'] != "Success":
+                    return HttpResponseBadRequest(json.dumps(add_result))
 
         for so in portfolio.get_stock_ownerships():
             so.recalculate()
@@ -238,18 +243,6 @@ def metrics(request):
 
         return HttpResponse(json.dumps(responseData))
     except Exception as e:
+        raise e
         pass
     return HttpResponseBadRequest()
-
-
-         
-    
-
-    
-    
-
-
-
-
-
-

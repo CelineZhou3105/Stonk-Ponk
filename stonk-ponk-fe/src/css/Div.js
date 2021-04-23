@@ -243,14 +243,6 @@ export const SideBar = styled.div`
     padding-top: 60px;
     transition: 0.5s; 
     box-shadow: -4px -4px 4px rgba(0,0,0,0.2);
-
-    & > .closeBtn {
-        position: absolute;
-        top: 10px;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 50px;
-    }
 `;
 
 export const PhotoMenuContainer = styled.div`
@@ -260,9 +252,10 @@ export const PhotoMenuContainer = styled.div`
 
 /* Market Filters */
 export const FilterContainer = styled.div`
-    ${FlexRow};
-    justify-content: flex-end;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
     margin: 30px;
     gap: 1em;
 `
@@ -358,7 +351,8 @@ export const ModalContent = styled.div`
     height: ${props => props.height ? props.height : ''};
     overflow: scroll;
 
-    &::-webkit-scrollbar { 
+    &::-webkit-scrollbar {
+        display: none; 
         background: none;
         width: 10px;
     }
@@ -420,7 +414,7 @@ export const LeftButtonContainer = styled.div`
     top: 55px;
     width: min-content;
 
-    @media (max-width: 700px) {
+    @media (max-width: 960px) {
         position: static;
         justify-content: flex-end;
         width: 100%;
@@ -434,4 +428,23 @@ export const ModalStocksContainer = styled.div`
     gap: 0.5em;
     align-items: flex-start;
     padding: 1em 0;
+`;
+
+export const StockDetailTopBar = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+`;
+
+export const AdminContainer = styled.div`
+    ${FlexColumn}
+    justify-content: center;
+    align-items: flex-start;
+`;
+
+export const AdminSelect = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 `;

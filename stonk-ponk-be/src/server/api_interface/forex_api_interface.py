@@ -49,3 +49,11 @@ class ForexApiInterface:
         forex_rate = ForexApiInterface.get_currency_exchange(from_currency, to_currency)
         exchange_value = float(from_value) * float(forex_rate)
         return exchange_value
+
+    def get_historical_forex(self, from_currency, to_currency, given_date):
+        for api_dict in ForexApiInterface.forex_api_list:
+            try:
+                api = ForexApiInterface.forex_api_map[api_dict['name']]
+                return api.get_historical_forex(from_currency, to_currency, given_date)
+            except:
+                continue

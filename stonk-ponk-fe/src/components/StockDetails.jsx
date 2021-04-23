@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import StockDetailsChart from "./StockDetailsChart";
 import Navigation from "./Navigation";
@@ -8,6 +8,7 @@ import { getNews } from "../services/news";
 import { market } from "../services/market";
 import { getStockDetailTooltipText } from "../helpers/tooltipText";
 
+import { CustomButton } from "../css/Button";
 import {
 	ChartContainer,
 	Container,
@@ -15,6 +16,7 @@ import {
 	FlexColumnCenterDiv,
 	GraphAndPeriodDiv,
 	PageContainer,
+	StockDetailTopBar,
 	NewsContainer,
 	NewsTitleContainer,
 } from "../css/Div";
@@ -65,6 +67,12 @@ function StockDetails() {
 		{ label: "52 Week Range", value: "N/A" },
 		{ label: "Market Cap", value: "N/A" },
 	]);
+
+	// navigate back to sign in
+	const history = useHistory();
+	const navigateBack = () => {
+		history.goBack();
+	};
 
 	// useEffect to make API call for stock data
 	useEffect(() => {
@@ -167,9 +175,20 @@ function StockDetails() {
 			) : (
 				<>
 					<PageContainer>
-						<PageTitle>
-							{name} <span>({ticker})</span>
-						</PageTitle>
+						<StockDetailTopBar>
+							<PageTitle>
+								{name} <span>({ticker})</span>
+							</PageTitle>
+							<CustomButton
+								backgroundColor="#d6d6d6"
+								color="#000000"
+								hoverColor="#c2c2c2"
+								aria-label="Navigate back to previous page"
+								onClick={navigateBack}
+							>
+								Back
+							</CustomButton>
+						</StockDetailTopBar>
 						<h1>${parseFloat(price).toFixed(2)} USD</h1>
 						<p>Market: {marketName}</p>
 						<p>Exchange: {exchange}</p>

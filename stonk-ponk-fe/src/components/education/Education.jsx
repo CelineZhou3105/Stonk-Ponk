@@ -12,7 +12,7 @@ import { PageTitle } from '../../css/Text';
 import market from '../../images/stock-market.png';
 import news from '../../images/newspaper.png';
 import invest from '../../images/investing.png';
-import instrument from '../../images/tools-and-utensils.png';
+import tax from '../../images/tax.png';
 import graph from '../../images/diagram.png';
 import fund from '../../images/funds.png';
 
@@ -47,8 +47,8 @@ const Education = () => {
                             Why Invest?
                         </EducationTile>
                         <EducationTile aria-label="Navigate to financial instruments 101 page" onClick={() => navigateToSite("financial-instruments-101")}>
-                            <EducationIcon src={instrument} alt="icon for financial instruments 101" />
-                            Financial Instruments 101
+                            <EducationIcon src={tax} alt="icon for tax" />
+                            Taxation
                         </EducationTile>
                         <EducationTile aria-label="Navigate to statistics and graphs 101 page" onClick={() => navigateToSite("statistics-and-graphs-101")}>
                             <EducationIcon src={graph} alt="icon for statistics and graphs 101" />
