@@ -33,3 +33,9 @@ DEMO'd 2 with team . Retro on friday
 
 week9:
 Finished up project, did multiple watchlists for a user and hooked up with frontend and team. 
+Began working on administration as a final feature for the portfolio. 
+
+week10:
+Finalised admin feature and pushed to deployment. Worked with Celine to make sure things connected properly. Finished up project report section 
+(I did the technical overview and design section) 
+
