@@ -3,7 +3,6 @@ import {
     ChangeNameLink,
     ChangePasswordWithAuthLink,
     ChangeProfilePictureLink,
-    CheckAdminLink,
     GetUserDetailsLink,
 } from '../api-links/constants';
 
@@ -156,6 +155,7 @@ const changeProfilePicture = async (image) => {
             return Promise.reject(e);
         })
 }
+
 
 export const settings = {
     getUser,
