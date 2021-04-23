@@ -18,12 +18,10 @@ const PortfolioPricesChart = ({ ticker, period }) => {
 	const [error, setError] = useState(false);
 
 	useEffect(() => {
-		console.log(period);
 		market
 			.getStockPrice(ticker, period)
 			.then((response) => response.json())
 			.then((json) => {
-				console.log(json);
 				const tableArray = [];
 				for (let i = 0; i < json.length; i++) {
 					tableArray.push([json[i].date, json[i].price]);

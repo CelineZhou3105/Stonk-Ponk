@@ -17,12 +17,10 @@ const StockDetailsChart = ({ period, id }) => {
 
 	// Gets historical prices of the given stock for a given period
 	useEffect(() => {
-		console.log(period);
 		market
 			.getStockPrice(id, period)
 			.then((response) => response.json())
 			.then((json) => {
-				console.log(json);
 				const tableArray = [];
 				for (let i = 0; i < json.length; i++) {
 					tableArray.push([json[i].date, json[i].price]);

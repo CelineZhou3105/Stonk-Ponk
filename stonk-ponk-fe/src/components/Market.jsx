@@ -66,10 +66,9 @@ function Market() {
 
 			currentPromise
 				.then((res) => {
-					console.log(res);
 					setStockOptions(res);
 				})
-				.catch((error) => {
+				.catch(() => {
 					// Do nothing - this means there are no search results, which is normal
 				});
 		}
@@ -81,7 +80,6 @@ function Market() {
 			// Set it back to market news
 			setInput(null);
 		} else {
-			console.log("Getting results for...", value);
 			setInput(value);
 		}
 	};
@@ -108,14 +106,11 @@ function Market() {
 
 	// useEffect for gathering data about the most active stocks on each page of the table
 	useEffect(() => {
-		console.log("Page direction: ", pageDirection);
 		if (pageDirection === "right" && !pagesReceived.includes(page)) {
-			console.log("I am getting page: ", page);
 			setPagesReceived((pages) => [...pages, page]);
 			market
 				.getMarketData("most_active", page)
 				.then((response) => {
-					console.log(response);
 					setRows((rows) => rows.concat(response));
 				})
 				.catch((error) => {
@@ -129,7 +124,6 @@ function Market() {
 		market
 			.getMarketData("losers", 0)
 			.then((response) => {
-				console.log("Losers: ", response);
 				setLosers(response);
 			})
 			.catch((error) => {
@@ -142,7 +136,6 @@ function Market() {
 		market
 			.getMarketData("gainers", 0)
 			.then((response) => {
-				console.log("Gainers: ", response);
 				setGainers(response);
 			})
 			.catch((error) => {
@@ -161,7 +154,12 @@ function Market() {
 			<PageContainer>
 				<PageTitle>Market</PageTitle>
 				<FilterContainer>
-					<SubText>Don't know the ticker? Find it on: <Link href="https://www.marketwatch.com/tools/quotes/lookup.asp" target="_blank">Market Watch</Link></SubText>
+					<SubText>
+						Don't know the ticker? Find it on:{" "}
+						<Link href="https://www.marketwatch.com/tools/quotes/lookup.asp" target="_blank">
+							Market Watch
+						</Link>
+					</SubText>
 					<Autocomplete
 						style={{ width: 300 }}
 						options={stockOptions}
@@ -179,7 +177,6 @@ function Market() {
 							/>
 						)}
 						onInputChange={(e, value, reason) => {
-							console.log("Setting input to: ", value);
 							handleInputChange(e, value, reason);
 						}}
 						noOptionsText="No stocks found."

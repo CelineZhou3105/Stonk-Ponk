@@ -28,14 +28,11 @@ export async function getMarketData(type, page_num) {
     };
     return await fetch(`${MarketsLink}`, requestOptions).then(response => {
         if (response.status === 200) {
-            console.log('Hello', response);
             return response.json(res => {
-                console.log(res);
                 return Promise.resolve(res);
             })
             // return Promise.resolve(response.json());
         } else if (response.status === 403) {
-            console.log("Unauthorised token. Session has expired.");
             return Promise.reject("Expired token");
         } else {
             return Promise.reject("There was an error getting market data. Please refresh.");
@@ -69,7 +66,6 @@ async function getStockDetail(ticker) {
                 return Promise.resolve(response);
             } // if status code is not 200
             else if (response.status === 403) {
-                console.log("Unauthorised token. Session has expired.");
                 return Promise.reject("Expired token");
             } else {
                 return Promise.reject("There was an error getting the details of this stock. Please refresh.");
@@ -104,7 +100,6 @@ async function getStockPrice(ticker, typeInterval) {
                 return Promise.resolve(response);
             } // if status code is not 200
             else if (response.status === 403) {
-                console.log("Unauthorised token. Session has expired.");
                 return Promise.reject("Expired token");
             } else {
                 return Promise.reject("There was an error getting the historical prices of this stock. Please refresh.");
@@ -141,7 +136,6 @@ async function checkTickerExists(ticker, abortController) {
                 return Promise.resolve(response);
             } // if status code is not 200
             else if (response.status === 403) {
-                console.log("Unauthorised token. Session has expired.");
                 return Promise.reject("Expired token");
             } else {
                 return Promise.reject("There was an error checking if this stock exists.");

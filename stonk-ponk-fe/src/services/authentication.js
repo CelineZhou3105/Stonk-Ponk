@@ -23,7 +23,6 @@ async function login(event, email, password) {
     return await fetch(LoginLink, requestOptions)
         .then(response => {
             if (response.status === 200) {
-                console.log("Successful login.");
                 return response.json().then(res => {
                     localStorage.setItem('token', res.token);
                     return Promise.resolve(res);

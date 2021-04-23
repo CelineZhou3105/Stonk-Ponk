@@ -29,7 +29,6 @@ export async function getNews(ticker) {
         } else if (response.status === 403) {
             return Promise.reject("Expired token");
         } else {
-            console.log("Could not fetch news.", response);
             return Promise.reject("Could not fetch news on your stock. Please try again.");
         }
     })
@@ -53,13 +52,11 @@ export async function getMarketNews() {
     .then(response => {
         if (response.status === 200) {
             return response.json().then(news => {
-                console.log("MARKET NEWS:", news); // TODO - remove this console log
                 return Promise.resolve(news);
             })
         } else if (response.status === 403) {
             return Promise.reject("Expired token");
         } else {
-            console.log("Could not fetch news.", response);
             return Promise.reject("Could not get market news. Please refresh.");
         }
     })

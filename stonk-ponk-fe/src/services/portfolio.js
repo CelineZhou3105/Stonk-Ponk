@@ -25,7 +25,6 @@ export async function getPortfolioSummary() {
     return await fetch(GetPortfolioSummary + '?n=5', requestOptions)
         .then(response => {
             if (response.status === 200) {
-                console.log("Successfully got portfolio");
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })
@@ -55,7 +54,6 @@ export async function getPortfolioDetails() {
     return await fetch(GetPortfolioDetails, requestOptions)
         .then(response => {
             if (response.status === 200) {
-                console.log("Successfully retrieved portfolio stocks.");
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })
@@ -88,7 +86,6 @@ export async function editPortfolio(data) {
     return await fetch(EditPortfolio, requestOptions)
         .then(response => {
             if (response.status === 200) {
-                console.log("Successful edit. Response: ", response);
                 return Promise.resolve();
             } else if (response.status === 403) {
                 return Promise.reject("Expired token");
@@ -96,7 +93,6 @@ export async function editPortfolio(data) {
                 try {
                     return response.json()
                     .then(res => {
-                        console.log(res);
                         return Promise.reject(`${res.message}. Price must be within range $${res.price_range.low.toFixed(2)} - $${res.price_range.high.toFixed(2)}`);
                     })
                 } catch (e) {
@@ -125,7 +121,6 @@ export async function getPortfolioBest(num_stocks) {
     return await fetch(GetPortfolioBestStocks + "?n=" + num_stocks, requestOptions)
         .then(response => {
             if (response.status === 200) {
-                console.log("Best stocks successfully retrieved.");
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })
@@ -156,7 +151,6 @@ export async function getPortfolioWorst(num_stocks) {
     return await fetch(GetPortfolioWorstStocks + "?n=" + num_stocks, requestOptions)
         .then(response => {
             if (response.status === 200) {
-                console.log("Worst stocks successfully retrieved.");
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })
@@ -186,7 +180,6 @@ export async function getPortfolioHealth() {
     return await fetch(GetPortfolioHealth, requestOptions)
         .then(response => {
             if (response.status === 200) {
-                console.log("Portfolio health successfully retrieved.");
                 return response.json().then(res => {
                     return Promise.resolve(res);
                 })

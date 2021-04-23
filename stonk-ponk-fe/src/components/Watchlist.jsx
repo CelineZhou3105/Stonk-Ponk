@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useHistory } from "react-router-dom";
+
 import Navigation from "./Navigation";
 import {
 	Container,
@@ -18,6 +20,7 @@ import Select from "react-select";
 import { customStyles } from "../helpers/styles";
 import StockTable from "./StockTable";
 import { watchlist } from "../services/watchlist";
+import Alert from "@material-ui/lab/Alert";
 
 const headings = [
 	{ id: "name", disablePadding: true, numeric: false, label: "Name" },
@@ -45,29 +48,46 @@ const Watchlist = () => {
 	const [page, setPage] = useState(0);
 	const [tableVisible, setTableVisible] = useState(false);
 
+	// Tracks when errors occurs - for showing error banners to the user
+	const [error, setError] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
+
+	const history = useHistory();
+
+	// Handle errors when they are returned by the fetch calls
+	const handleError = useCallback(
+		(error) => {
+			setError(true);
+			if (error === "Expired token") {
+				setErrorMsg("Your session has expired. Logging out...");
+				setTimeout(() => {
+					localStorage.removeItem("token");
+					history.push("/");
+				}, 3000);
+			} else {
+				setErrorMsg(error);
+			}
+		},
+		[history]
+	);
+
 	useEffect(() => {
 		watchlist
 			.getWatchlistName()
 			.then((response) => response.json())
 			.then((json) => {
-				console.log(json);
 				setWatchlistNames(json.watchlists);
 			})
 			.catch((error) => {
-				Promise.resolve(error).then((error) => {
-					console.log(error);
-				});
+				handleError(error);
 			});
 	}, []);
-	console.log(watchlistData);
+
 	const addNewWatchlist = () => {
-		console.log(newWatchlist.trim());
 		watchlist
 			.createWatchlist(newWatchlist.trim())
 			.then((response) => response.json())
 			.then((json) => {
-				console.log("Added new watchlist");
-				console.log(json);
 				if (watchlistNames.length !== 0) {
 					setWatchlistNames((watchlistNames) => watchlistNames.concat(json));
 				} else {
@@ -76,30 +96,23 @@ const Watchlist = () => {
 				setModalDisabled(true);
 			})
 			.catch((error) => {
-				Promise.resolve(error).then((error) => {
-					console.log(`${error.status} ${error.statusText}`);
-				});
+				handleError(error);
 			});
 	};
 
 	const viewWatchlist = (watchlistLabel) => {
-		console.log(watchlistLabel);
 		setCurrentWatchlist(watchlistLabel);
 		const id = watchlistNames.find((item) => item.label === watchlistLabel);
 		setWatchlistId(id.id);
 		setTableVisible(true);
-		console.log(id.id);
 		watchlist
 			.getWatchlistStocks(id.id)
 			.then((response) => response.json())
 			.then((json) => {
-				console.log(json);
 				setWatchlistData(json);
 			})
 			.catch((error) => {
-				Promise.resolve(error).then((error) => {
-					console.log(`${error.status} ${error.statusText}`);
-				});
+				handleError(error);
 			});
 	};
 
@@ -110,13 +123,18 @@ const Watchlist = () => {
 				window.location.reload();
 			})
 			.catch((error) => {
-				console.log(error);
+				handleError(error);
 			});
 	};
 
 	return (
 		<>
 			<Navigation />
+			{error && (
+				<Alert onClose={() => setError(false)} variant="filled" severity="error">
+					{errorMsg}
+				</Alert>
+			)}
 			<PageContainer>
 				<FlexRowDiv>
 					<PageTitle>Watchlist</PageTitle>

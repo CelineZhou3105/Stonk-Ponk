@@ -54,10 +54,8 @@ const getForexApiPriority = async () => {
             } else if (response.status === 403) {
                 return Promise.reject("Expired token");
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while retrieving the forex api priority. Please refresh.');
             }
-        }).catch(e => {
-            return Promise.reject(e);
         })
 }
 
@@ -81,10 +79,8 @@ const setForexApiPriority = async (alpha, yahoo) => {
             } else if (response.status === 403) {
                 return Promise.reject("Expired token");
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while setting the forex api priority. Please refresh.');
             }
-        }).catch(e => {
-            return Promise.reject(e);
         })
 }
 
@@ -106,10 +102,8 @@ const getNewsPriority = async () => {
             } else if (response.status === 403) {
                 return Promise.reject("Expired token");
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while getting the news api priority. Please refresh.');
             }
-        }).catch(e => {
-            return Promise.reject(e);
         })
 }
 
@@ -133,10 +127,8 @@ const setNewsPriority = async (google, yahoo) => {
             } else if (response.status === 403) {
                 return Promise.reject("Expired token");
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while setting the news api priority. Please refresh.');
             }
-        }).catch(e => {
-            return Promise.reject(e);
         })
 }
 
@@ -158,10 +150,8 @@ const getStockPriority = async () => {
             } else if (response.status === 403) {
                 return Promise.reject("Expired token");
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while getting the stock api priority. Please refresh.');
             }
-        }).catch(e => {
-            return Promise.reject(e);
         })
 }
 
@@ -185,10 +175,8 @@ const setStockPriority = async (yahoo, alpha) => {
             } else if (response.status === 403) {
                 return Promise.reject("Expired token");
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while setting the stock api priority. Please refresh.');
             }
-        }).catch(e => {
-            return Promise.reject(e);
         })
 }
 
