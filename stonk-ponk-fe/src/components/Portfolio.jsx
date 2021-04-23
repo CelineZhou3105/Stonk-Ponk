@@ -116,7 +116,6 @@ function Portfolio() {
 					history.push("/");
 				}, 3000);
 			} else {
-				console.log("An error occured while fetching market data. Please refresh."); // TODO - remove this
 				setError(true);
 				setErrorMsg(error);
 			}
@@ -180,7 +179,6 @@ function Portfolio() {
 		portfolio
 			.getPortfolioHealth()
 			.then((response) => {
-				console.log(response);
 				setHealth(response.scores);
 				setSuggestions(response.suggestions);
 			})

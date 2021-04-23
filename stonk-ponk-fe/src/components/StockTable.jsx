@@ -151,8 +151,6 @@ function StockTable(props) {
 	const [editMode, setEditMode] = useState(false);
 	const { data, headings, place, setRows, setPageDirection, page, setPage, watchlistId } = props;
 
-	// console.log(data);
-
 	const [previousRows, setPreviousRows] = useState(data);
 	const [deleteVisible, setDeleteVisible] = useState(false);
 
@@ -166,7 +164,6 @@ function StockTable(props) {
 
 	// Handle sorting when user clicks on a sort label
 	const handleSort = (event, property) => {
-		console.log("PROPERTY: ", property);
 		const ascending = orderBy === property && order === "asc";
 		setOrder(ascending ? "desc" : "asc");
 		setOrderBy(property);
@@ -175,7 +172,6 @@ function StockTable(props) {
 	// Handles changing the page on the table
 	const changePage = (event, newPage) => {
 		event.preventDefault();
-		console.log("new page is: ", newPage);
 		setPage(newPage);
 	};
 
@@ -193,7 +189,6 @@ function StockTable(props) {
 	// For portfolio view - when a user makes edits to their portfolio this function handles the change
 	const onChange = (e, changedRow, changedColumn) => {
 		if (place === "portfolio") {
-			console.log("COLUMN CHANGED:", changedColumn);
 			const newValue = e.target.value;
 
 			if (changedColumn === "first_purchase_date") {
@@ -205,9 +200,7 @@ function StockTable(props) {
 					return;
 				}
 			} else if (changedColumn === "volume") {
-				console.log("hello");
 				// Check that the volume is not 0
-				console.log(newValue);
 				if (newValue === "0") {
 					setError(true);
 					setErrorMsg("You cannot own 0 units of a stock. Please enter a positive integer.");
@@ -254,7 +247,6 @@ function StockTable(props) {
 				.editPortfolio(newPortfolio)
 				.then(() => {
 					setEditMode(false);
-					console.log("Changes saved.");
 					setPreviousRows(data);
 					setSelected([]);
 					setSuccess(true);
@@ -262,23 +254,18 @@ function StockTable(props) {
 					window.location.reload();
 				})
 				.catch((e) => {
-					console.log("ERROR:", e);
-					console.log("DATA: ", data);
 					setError(true);
 					setErrorMsg(e);
 				});
 		} else if (place === "watchlist") {
-			console.log(data);
 			watchlist
 				.updateStockToWatchlist(watchlistId, data)
 				.then(() => {
-					console.log("updated stocks to watchlist!");
 					setEditMode(false);
 				})
 				.catch((error) => {
-					Promise.resolve(error).then((e) => {
-						alert(`${e.status} ${e.statusText}`);
-					});
+					setError(true);
+					setErrorMsg(error);
 				});
 		}
 	};
@@ -286,7 +273,6 @@ function StockTable(props) {
 	// For portfolio view - Revert changes to the old portfolio
 	function cancelChanges() {
 		setEditMode(false);
-		console.log("Changes cancelled.");
 		setRows(previousRows);
 		setSelected([]);
 	}
@@ -537,7 +523,7 @@ function StockTable(props) {
 				<TablePagination
 					rowsPerPageOptions={[10]}
 					component="div"
-					count={place === 'watchlist' ? data.length : 300}
+					count={place === "watchlist" ? data.length : 300}
 					rowsPerPage={rowsPerPage}
 					page={page}
 					onChangePage={changePage}
@@ -568,9 +554,6 @@ function StockTable(props) {
  * @param {string} orderBy - property to order the two objects by
  */
 function comparator(a, b, orderBy) {
-	console.log("ORDERING BY: ", orderBy);
-	console.log("a[orderBy]", a[orderBy]);
-	console.log("b[orderBy]", b[orderBy]);
 	if (orderBy === "value") {
 		const aValue = a["volume"] * a["price"];
 		const bValue = b["volume"] * b["price"];
@@ -625,7 +608,6 @@ const CustomTableCell = (props) => {
 	const { row, column, onChange } = props;
 
 	const value = column === "first_purchase_date" ? row[column] : row[column];
-	console.log("value: ", value);
 	const type = column === "first_purchase_date" ? "date" : "number";
 
 	return (

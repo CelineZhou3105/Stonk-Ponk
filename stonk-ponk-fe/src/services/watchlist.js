@@ -11,10 +11,14 @@ const getWatchlistName = async () => {
     };
     return await fetch(GetWatchlistNameLink, requestOptions)
         .then(response => {
-            if (response.ok) { // if status code is 200
-                return Promise.resolve(response);
+            if (response.ok) { // if status code is 200      
+                return response;
             } // if status code is not 200
-            return Promise.reject(response);
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject('Something went wrong while retrieving watchlist information. Please refresh.');
+            }
         })
 }
 
@@ -29,10 +33,14 @@ const getWatchlistStocks = async (id) => {
     };
     return await fetch(`${GetWatchlistStockLink}?id=${id}`, requestOptions)
         .then(response => {
-            if (response.ok) { // if status code is 200
-                return Promise.resolve(response);
+            if (response.ok) { // if status code is 200      
+                return response;
             } // if status code is not 200
-            return Promise.reject(response);
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject('Something went wrong while retrieving watchlist information. Please refresh.');
+            }
         })
 }
 
@@ -50,10 +58,14 @@ const createWatchlist = async (watchlistName) => {
     };
     return await fetch(CreateWatchlistLink, requestOptions)
         .then(response => {
-            if (response.ok) { // if status code is 200
+            if (response.ok) { // if status code is 200      
                 return response;
             } // if status code is not 200
-            return Promise.reject(response);
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject('Something went wrong while creating the watchlist. Please retry.');
+            }
         })
 }
 
@@ -71,10 +83,14 @@ const deleteWatchlist = async (id) => {
     };
     return await fetch(DeleteWatchlistLink, requestOptions)
         .then(response => {
-            if (response.ok) { // if status code is 200
+            if (response.ok) { // if status code is 200      
                 return response;
             } // if status code is not 200
-            return Promise.reject(response);
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject('Something went wrong while deleting the watchlist. Please retry.');
+            }
         })
 }
 
@@ -93,10 +109,14 @@ const updateStockToWatchlist = async (id, tickers) => {
     };
     return await fetch(UpdateWatchlistLink, requestOptions)
         .then(response => {
-            if (response.ok) { // if status code is 200
+            if (response.ok) { // if status code is 200      
                 return response;
             } // if status code is not 200
-            return Promise.reject(response);
+            else if (response.status === 403) {
+                return Promise.reject('Expired token');
+            } else {
+                return Promise.reject('Something went wrong while updating the watchlist. Please retry.');
+            }
         })
 }
 

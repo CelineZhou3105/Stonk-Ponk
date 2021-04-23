@@ -15,7 +15,7 @@ import {
 	SignUpPageContainer,
 	SignUpSectionDiv,
 } from "../css/Div";
-import { ColorText, LinkText, PageTitle, SubText } from "../css/Text";
+import { ColorText, LinkText, PageTitle, SubText, RedText } from "../css/Text";
 import { DefaultLogo } from "../css/Logo";
 import { CustomButton } from "../css/Button";
 
@@ -100,7 +100,9 @@ const SignUp = () => {
 					<PageTitle>Get started right now, Join us!</PageTitle>
 					<SignUpSectionDiv row gap="2em">
 						<SignUpSectionDiv>
-							<Label htmlFor="firstName">First Name*</Label>
+							<Label htmlFor="firstName">
+								First Name <RedText>*</RedText>
+							</Label>
 							<TextField
 								type="text"
 								id="firstName"
@@ -111,7 +113,9 @@ const SignUp = () => {
 							<InputUnderlineDiv className="underline" />
 						</SignUpSectionDiv>
 						<SignUpSectionDiv>
-							<Label htmlFor="lastName">Last Name*</Label>
+							<Label htmlFor="lastName">
+								Last Name <RedText>*</RedText>
+							</Label>
 							<TextField
 								type="text"
 								id="lastName"
@@ -123,7 +127,9 @@ const SignUp = () => {
 						</SignUpSectionDiv>
 					</SignUpSectionDiv>
 					<SignUpSectionDiv>
-						<Label htmlFor="emailAdd">Email*</Label>
+						<Label htmlFor="emailAdd">
+							Email <RedText>*</RedText>
+						</Label>
 						<TextField
 							type="text"
 							id="emailAdd"
@@ -134,7 +140,9 @@ const SignUp = () => {
 						<InputUnderlineDiv className="underline" />
 					</SignUpSectionDiv>
 					<SignUpSectionDiv>
-						<Label htmlFor="pass">Password*</Label>
+						<Label htmlFor="pass">
+							Password <RedText>*</RedText>
+						</Label>
 						<TextField
 							type="password"
 							id="pass"
@@ -149,7 +157,9 @@ const SignUp = () => {
 						1 number and 1 special character.
 					</SubText>
 					<SignUpSectionDiv>
-						<Label htmlFor="passConfirm">Confirm Password*</Label>
+						<Label htmlFor="passConfirm">
+							Confirm Password <RedText>*</RedText>
+						</Label>
 						<TextField
 							type="password"
 							id="passConfirm"
@@ -160,7 +170,9 @@ const SignUp = () => {
 						<InputUnderlineDiv className="underline" />
 					</SignUpSectionDiv>
 					<SignUpSectionDiv>
-						<Label htmlFor="securityQ">Security Question*</Label>
+						<Label htmlFor="securityQ">
+							Security Question <RedText>*</RedText>
+						</Label>
 						<TextField
 							type="text"
 							id="securityQ"
@@ -171,7 +183,9 @@ const SignUp = () => {
 						<InputUnderlineDiv className="underline" />
 					</SignUpSectionDiv>
 					<SignUpSectionDiv>
-						<Label htmlFor="securityA">Security Question Answer*</Label>
+						<Label htmlFor="securityA">
+							Security Question Answer <RedText>*</RedText>
+						</Label>
 						<TextField
 							type="text"
 							id="securityA"

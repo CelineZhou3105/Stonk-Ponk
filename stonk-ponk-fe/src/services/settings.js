@@ -27,7 +27,7 @@ const getUser = async () => {
             else if (response.status === 403) {
                 return Promise.reject('Expired token');
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while retrieving user information. Please refresh.');
             }
         })
 }
@@ -59,12 +59,9 @@ const changeName = async (firstN, lastN) => {
             else if (response.status === 403) {
                 return Promise.reject('Expired token');
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while changing user information. Please refresh.');
             }
         })
-        .catch((e) => {
-            return Promise.reject(e);
-        });
 }
 
 /**
@@ -93,10 +90,8 @@ const changeEmail = async (emailNew) => {
             else if (response.status === 403) {
                 return Promise.reject('Expired token');
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while changing user information. Please refresh.');
             }
-        }).catch(e => {
-            return Promise.reject(e)
         })
 }
 
@@ -121,12 +116,10 @@ const changePassword = async (passwordNew, passwordOld) => {
             if (response.ok) { // if status code is 200      
                 return response;
             } else if (response.status === 403) {
-                return Promise.reject("Expired token");
+                return Promise.reject('Old password is incorrect. Please retry.');
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while changing user information. Please refresh.');
             }
-        }).catch(e => {
-            return Promise.reject(e);
         })
 }
 
@@ -149,10 +142,8 @@ const changeProfilePicture = async (image) => {
             } else if (response.status === 403) {
                 return Promise.reject("Expired token");
             } else {
-                return Promise.reject(response);
+                return Promise.reject('Something went wrong while changing user information. Please refresh.');
             }
-        }).catch(e => {
-            return Promise.reject(e);
         })
 }
 

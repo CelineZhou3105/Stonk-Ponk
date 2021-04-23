@@ -37,7 +37,6 @@ function CreateModal(props) {
 
 	function createStockRow() {
 		const newRow = {};
-		console.log(selectedStock);
 		newRow["name"] = selectedStock.name;
 		newRow["ticker"] = selectedStock.ticker;
 		newRow["price"] = selectedStock.price; // current price, gotten from backend
@@ -46,8 +45,6 @@ function CreateModal(props) {
 			newRow["volume"] = unitsOwned;
 			newRow["vwap"] = purchasePrice; // This is the price that they purchased at - will be recalculated TODO
 		}
-		console.log(`row here`);
-		console.log(newRow);
 		return newRow;
 	}
 
@@ -56,7 +53,6 @@ function CreateModal(props) {
 		if (place === "portfolio") {
 			// Check that the date is not a weekend
 			const day = new Date(purchaseDate).getUTCDay();
-			console.log("DAY", day);
 			if ([6, 0].includes(day)) {
 				setError(true);
 				setErrorMsg("Cannot enter weekends as they are not valid trading days.");
@@ -64,10 +60,10 @@ function CreateModal(props) {
 			}
 
 			// Check that the volume is not 0
-            if (unitsOwned === 0) {
-                setError(true);
-                setErrorMsg('You cannot own 0 units of a stock. Please enter a positive integer.');
-            }
+			if (unitsOwned === 0) {
+				setError(true);
+				setErrorMsg("You cannot own 0 units of a stock. Please enter a positive integer.");
+			}
 		}
 		const newRow = createStockRow();
 		setRows((rows) => [...rows, newRow]);
@@ -109,7 +105,8 @@ function CreateModal(props) {
 					setAddButtonDisabled(false);
 				})
 				.catch(() => {
-					console.log("No stock with that ticker");
+					setError(true);
+					setErrorMsg("No stock with that ticker");
 				});
 		}
 	}, [stockTicker]);
@@ -121,7 +118,6 @@ function CreateModal(props) {
 			setSelectedStock(null);
 			setInput(null);
 		} else {
-			console.log("Getting results for...", value);
 			setInput(value);
 		}
 	};
@@ -145,7 +141,7 @@ function CreateModal(props) {
 						getOptionLabel={(option) => option.name}
 						onChange={(e, value) => {
 							if (value !== null) {
-								setStockTicker(value.ticker);	
+								setStockTicker(value.ticker);
 							}
 						}}
 						style={{ width: "100%" }}
@@ -153,7 +149,6 @@ function CreateModal(props) {
 							<AutocompleteTextField {...params} label="Enter your ticker..." variant="outlined" />
 						)}
 						onInputChange={(e, value, reason) => {
-							console.log("Setting input to: ", value);
 							handleInputChange(e, value, reason);
 						}}
 						noOptionsText="No stocks found."
