@@ -14,6 +14,10 @@ class NewsApiInterface:
     def get_news_api_priorities():
         #refer to admin database
         ret = []
+        if (not NewsApiPriority.objects.exists()):
+            NewsApiPriority.objects.create(name = "yahoo_fin_news", priority = 1)
+            NewsApiPriority.objects.create(name = "google_news", priority = 2)
+            return news_api_list
         for i in NewsApiPriority.objects.all():
             ret.append({"name" : i.name, "priority" : i.priority})
         return ret
@@ -30,17 +34,17 @@ class NewsApiInterface:
     #simply delete all existing NewsApiPriority objects and reinsert
     def set_news_api_order(order_list):
         try:
-            NewsApiPriority.objects.all().delete();
             for np in order_list:
                 #update entry
-                NewsApiPriority.objects.create(name = np["name"], priority = np["priority"])
+                p = NewsApiPriority.objects.get(name = np["name"])
+                p.priority = np["priority"]
             return True
         except:
             return False 
     
     @cache(datetime.timedelta(minutes=5))
     def get_news(ticker):
-        for api_dict in NewsApiInterface.news_api_list:
+        for api_dict in NewsApiInterface.get_ordered_news_api_list():
             try:
                 api = NewsApiInterface.news_api_map[api_dict['name']]
                 return api.get_news(ticker)
@@ -51,7 +55,7 @@ class NewsApiInterface:
     
     @cache(datetime.timedelta(minutes=5))
     def get_market_news():
-        for api_dict in NewsApiInterface.news_api_list:
+        for api_dict in NewsApiInterface.get_ordered_news_api_list():
             try:
                 print(api_dict['name'])
                 api = NewsApiInterface.news_api_map[api_dict['name']]
@@ -62,7 +66,7 @@ class NewsApiInterface:
         return False 
     
     def get_num_calls():
-        for api_dict in NewsApiInterface.news_api_list:
+        for api_dict in NewsApiInterface.get_ordered_news_api_list():
             total_calls = 0
             try:
                 api = NewsApiInterface.news_api_map[api_dict['name']]
