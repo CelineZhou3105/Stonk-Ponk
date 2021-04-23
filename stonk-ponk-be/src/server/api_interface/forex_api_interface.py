@@ -26,7 +26,7 @@ class ForexApiInterface:
     
     #gets priority list from admin and sorts based on priority
     def set_forex_api_order(order_list):
-   	try:
+        try:
             ForexApiPriority.objects.all().delete();
             for fp in order_list:
                 #update entry
