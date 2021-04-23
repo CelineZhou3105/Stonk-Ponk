@@ -71,7 +71,3 @@ class NewsApiInterface:
                 continue
         
         return total_calls
-<<<<<<< HEAD
-
-=======
->>>>>>> master
