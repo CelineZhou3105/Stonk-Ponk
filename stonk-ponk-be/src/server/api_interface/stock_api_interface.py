@@ -17,8 +17,15 @@ class StockApiInterface:
     def get_stock_api_priorities():
         #refer to admin database
         ret = []
-        for i in StockApiPriority.objects.all():
-            ret.append({"name" : i.name, "priority" : i.priority}) 
+        
+        #need to handle case where stockApiPriority Objects are empty
+        if(not StockApiPriority.objects.exists()):
+                StockApiPriority.objects.create(name = "yahoo_fin", priority = 1)
+                StockApiPriority.objects.create(name = "alpha_vantage", priority = 2)
+                return StockApiInterface.stock_api_list 
+        else:
+            for i in StockApiPriority.objects.all():
+                ret.append({"name" : i.name, "priority" : i.priority})
         return ret
 
     def get_ordered_stock_api_list():
@@ -34,10 +41,10 @@ class StockApiInterface:
     def set_stock_api_order(order_list):
         try:
 #            StockApiInterface.get_ordered_stock_api_list() = sorted(StockApiInterface.get_ordered_stock_api_list(), key = lambda item: item['priority'])
-            StockApiPriority.objects.all().delete();
             for sp in order_list:
                 #update entry
-                StockApiPriority.objects.create(name = sp["name"], priority = sp["priority"])
+                p = StockApiPriority.objects.get(name = sp["name"])
+                p.priority = sp["priority"]
             return True
         except Exception as e:
             return e 
@@ -88,7 +95,7 @@ class StockApiInterface:
     
     @cache(datetime.timedelta(hours=1))
     def get_beta(ticker):
-        for api_dict in StockApiInterface.stock_api_list:
+        for api_dict in StockApiInterface.get_ordered_stock_api_list():
             try:
                 api = StockApiInterface.stock_api_map[api_dict['name']]
                 return api.get_beta(ticker)

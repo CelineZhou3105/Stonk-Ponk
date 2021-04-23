@@ -7,13 +7,18 @@ class ForexApiInterface:
     forex_api_map['alphavantage'] = AaForexApi()
     forex_api_map['yahoo_finance'] = YfForexApi()
 
-    forex_api_list = [{"name":"alphavantage", "priority": 1}]
+    forex_api_list = [{"name":"alphavantage", "priority": 1}, {"name" : "yahoo_finance", "priority" : 2}]
     def get_forex_api_priorities():
         #refer to admin database
         ret = []
-        for i in ForexApiPriority.objects.all():
-            ret.append({"name" : i.name, "priority" : i.priority})
-        return ret
+        if (not ForexApiPriority.objects.exists()):
+            ForexApiPriority.objects.create(name = "alphavantage", priority = 1) 
+            ForexApiPriority.objects.create(name = "yahoo_finance", priority = 2) 
+            return forex_api_list
+        else:
+            for i in ForexApiPriority.objects.all():
+                ret.append({"name" : i.name, "priority" : i.priority})
+            return ret
 
     def get_ordered_forex_api_list():
         #call get_stock_api_priorities(), then sort
@@ -51,7 +56,7 @@ class ForexApiInterface:
         return exchange_value
 
     def get_historical_forex(self, from_currency, to_currency, given_date):
-        for api_dict in ForexApiInterface.forex_api_list:
+        for api_dict in ForexApiInterface.get_ordered_forex_api_list():
             try:
                 api = ForexApiInterface.forex_api_map[api_dict['name']]
                 return api.get_historical_forex(from_currency, to_currency, given_date)

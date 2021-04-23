@@ -14,6 +14,10 @@ class NewsApiInterface:
     def get_news_api_priorities():
         #refer to admin database
         ret = []
+        if (not NewsApiPriority.objects.exists()):
+            NewsApiPriority.objects.create(name = "yahoo_fin_news", priority = 1)
+            NewsApiPriority.objects.create(name = "google_news", priority = 2)
+            return news_api_list
         for i in NewsApiPriority.objects.all():
             ret.append({"name" : i.name, "priority" : i.priority})
         return ret
@@ -30,10 +34,10 @@ class NewsApiInterface:
     #simply delete all existing NewsApiPriority objects and reinsert
     def set_news_api_order(order_list):
         try:
-            NewsApiPriority.objects.all().delete();
             for np in order_list:
                 #update entry
-                NewsApiPriority.objects.create(name = np["name"], priority = np["priority"])
+                p = NewsApiPriority.objects.get(name = np["name"])
+                p.priority = np["priority"]
             return True
         except:
             return False 
