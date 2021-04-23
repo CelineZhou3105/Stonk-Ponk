@@ -14,7 +14,6 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
 			const token = localStorage.getItem("token");
 			if (!token) {
 				// not logged in so redirect to login page with the return url
-				console.log("Redirecting to login page. Summary page is a private route!");
 				return <Redirect to={{ pathname: "/" }} />;
 			}
 
