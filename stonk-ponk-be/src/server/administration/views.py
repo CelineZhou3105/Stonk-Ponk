@@ -17,9 +17,13 @@ def make_admin(request):
     body = json.loads(request.body.decode('utf-8'))
     ret = {}
     user = get_user(request); 
-    
+    try:
+        to_admin = User.objects.get(email = body["user"])   
+    except User.DoesNotExist:
+        return HttpResponseNotFound() 
+
     if (user.is_admin):
-        make_user_admin(user) 
+        make_user_admin(to_admin) 
         return HttpResponseOk()
    
     return HttpResponseForbidden()
