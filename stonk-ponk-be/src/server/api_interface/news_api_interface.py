@@ -19,7 +19,7 @@ class NewsApiInterface:
         if (not NewsApiPriority.objects.exists()):
             NewsApiPriority.objects.create(name = "yahoo_fin_news", priority = 1)
             NewsApiPriority.objects.create(name = "google_news", priority = 2)
-            return news_api_list
+            return NewApiInterface.news_api_list
         for i in NewsApiPriority.objects.all():
             ret.append({"name" : i.name, "priority" : i.priority})
         return ret
