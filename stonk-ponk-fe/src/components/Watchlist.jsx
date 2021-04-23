@@ -81,7 +81,7 @@ const Watchlist = () => {
 			.catch((error) => {
 				handleError(error);
 			});
-	}, []);
+	}, [handleError]);
 
 	const addNewWatchlist = () => {
 		watchlist
