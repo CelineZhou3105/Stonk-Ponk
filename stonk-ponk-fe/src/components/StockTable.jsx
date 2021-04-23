@@ -1,4 +1,4 @@
-import React, { useState, useHistory, useCallback } from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 
 import PortfolioPricesChart from "./PortfolioPricesChart";
@@ -162,25 +162,6 @@ function StockTable(props) {
 	const [success, setSuccess] = useState(false);
 	const [successMsg, setSuccessMsg] = useState("");
 
-	const history = useHistory();
-
-	// Handle errors when they are returned by the fetch calls
-	const handleError = useCallback(
-		(error) => {
-			setError(true);
-			if (error === "Expired token") {
-				setErrorMsg("Your session has expired. Logging out...");
-				setTimeout(() => {
-					localStorage.removeItem("token");
-					history.push("/");
-				}, 3000);
-			} else {
-				setErrorMsg(error);
-			}
-		},
-		[history]
-	);
-
 	// Handle sorting when user clicks on a sort label
 	const handleSort = (event, property) => {
 		const ascending = orderBy === property && order === "asc";
@@ -283,7 +264,8 @@ function StockTable(props) {
 					setEditMode(false);
 				})
 				.catch((error) => {
-					handleError(error);
+					setError(true);
+					setErrorMsg(error);
 				});
 		}
 	};
