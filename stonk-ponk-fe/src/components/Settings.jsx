@@ -25,10 +25,9 @@ import {
 import Navigation from "./Navigation";
 import { EditButton, SaveButton, CancelButton, CloseButton, CustomButton } from "../css/Button";
 import { SettingsPhoto } from "../css/Image";
-import { PageTitle, AdminPriority, SubText } from "../css/Text";
+import { PageTitle, AdminPriority, SubText, ColorText } from "../css/Text";
 
 import Alert from "@material-ui/lab/Alert";
-import { customStyles } from "../helpers/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 /**
@@ -84,8 +83,12 @@ const Settings = () => {
 	const [oldYahooForex, setOldYahooForex] = useState(yahooForexPriority);
 	const [oldAlphaForex, setOldAlphaForex] = useState(alphaForexPriority);
 
+	// Handling errors on forms
+	const [forexPriorityError, setForexPriorityError] = useState(false);
+	const [newsPriorityError, setNewsPriorityError] = useState(false);
+	const [stockPriorityError, setStockPriorityError] = useState(false);
+	const [priorityErrorMsg, setPriorityErrorMsg] = useState('');
 	
-
 	/*Get the priorities of the API */
 
 	// Handle errors when they are returned by the fetch calls
@@ -109,20 +112,16 @@ const Settings = () => {
 	useEffect(() => {
 		admin.getForexApiPriority()
 		.then((response => {
-			// Responses looks like: [{"name":"yahoo_fin", "priority": 1},{"name":"alpha_vantage" , "priority": 2}]
-			if (response[0].name === 'yahoo_fin') {
-				setOldYahooForex(response[0].priorty);
-				setYahooForexPriority(response[0].priority);
+			console.log("FOREX:", response);
+			// Responses looks like: {"forex_api_priorities": [{"name": "alphavantage", "priority": 1}, {"name": "yahoo_finance", "priority": 2}]}
+			const alpha = response.forex_api_priorities[0].priority;
+			const yahoo = response.forex_api_priorities[1].priority;
+			
+			setOldYahooForex(yahoo);
+			setYahooForexPriority(yahoo);
 
-				setOldAlphaForex(response[1].priorty);
-				setAlphaForexPriority(response[1].priority);
-			} else {
-				setOldYahooForex(response[1].priorty);
-				setYahooForexPriority(response[1].priority);
-
-				setOldAlphaForex(response[0].priorty);
-				setAlphaForexPriority(response[0].priority);
-			}
+			setOldAlphaForex(alpha);
+			setAlphaForexPriority(alpha);
 		}))
 		.catch(error => {
 			handleError(error);
@@ -133,20 +132,16 @@ const Settings = () => {
 	useEffect(() => {
 		admin.getNewsPriority()
 		.then((response => {
-			// Responses looks like: [{"name":"yahoo_fin", "priority": 1},{"name":"alpha_vantage", "priority": 2}]
-			if (response[0].name === 'yahoo_fin') {
-				setOldYahooNewsPriority(response[0].priorty);
-				setYahooNewsPriority(response[0].priority);
+			console.log("NEWS:", response);
+			// Responses looks like: {"news_api_priorities": [{"name": "yahoo_fin_news", "priority": 1}, {"name": "google_news", "priority": 2}]}
+			const yahoo = response.news_api_priorities[0].priority;
+			const google = response.news_api_priorities[1].priority;
 
-				setOldGoogleNewsPriority(response[1].priorty);
-				setGoogleNewsPriority(response[1].priority);
-			} else {
-				setOldYahooNewsPriority(response[1].priorty);
-				setYahooNewsPriority(response[1].priority);
+			setOldYahooNewsPriority(yahoo);
+			setYahooNewsPriority(yahoo);
 
-				setOldGoogleNewsPriority(response[0].priorty);
-				setGoogleNewsPriority(response[0].priority);
-			}
+			setOldGoogleNewsPriority(google);
+			setGoogleNewsPriority(google);
 		})).catch(error => {
 			handleError(error);
 		})
@@ -156,20 +151,16 @@ const Settings = () => {
 	useEffect(() => {
 		admin.getStockPriority()
 		.then((response => {
-			// Responses looks like: [{"name":"yahoo_fin", "priority": 1},{"name":"alpha_vantage", "priority": 2}]
-			if (response[0].name === 'yahoo_fin') {
-				setOldYahooStockPriority(response[0].priorty);
-				setYahooStockPriority(response[0].priority);
+			console.log("STOCKS:", response);
+			// Responses looks like: {"stock_api_priorities": [{"name": "yahoo_fin", "priority": 1}, {"name": "alpha_vantage", "priority": 2}]}
+			const yahoo = response.stock_api_priorities[0].priority;
+			const alpha = response.stock_api_priorities[1].priority;
 
-				setOldAlphaStockPriority(response[1].priorty);
-				setAlphaStockPriority(response[1].priority);
-			} else {
-				setOldYahooStockPriority(response[1].priorty);
-				setYahooStockPriority(response[1].priority);
+			setOldYahooStockPriority(yahoo);
+			setYahooStockPriority(yahoo);
 
-				setOldAlphaStockPriority(response[0].priorty);
-				setAlphaStockPriority(response[0].priority);
-			}
+			setOldAlphaStockPriority(alpha);
+			setAlphaStockPriority(alpha);
 		})).catch(error => {
 			handleError(error);
 		})
@@ -298,21 +289,23 @@ const Settings = () => {
 			});
 	};
 
-	const EditForexPriority = () => {
-		setOldAlphaForex(alphaForexPriority);
-		setOldYahooForex(yahooForexPriority);
-	};
-
 	// Cancel the Forex Priority form and disable it 
-	const CancelForexPriority = () => {
+	const CancelForexPriority = (e) => {
+		e.preventDefault();
+		setForexPriorityError(false);
 		setAlphaForexPriority(oldAlphaForex);
 		setYahooForexPriority(oldYahooForex);
 		setForexApiDisabled(true);
 	};
 
 	// Change the Forex Priority form (make api call)
-	const ChangeForexPriority = () => {
-		admin
+	const ChangeForexPriority = (e) => {
+		e.preventDefault();
+		setForexPriorityError(false);
+
+		// Check the forms have valid inputs (must be positive integers)
+		if (alphaForexPriority > 0 && yahooForexPriority > 0) {
+			admin
 			.setForexApiPriority(alphaForexPriority, yahooForexPriority)
 			.then(() => {
 				setForexApiDisabled(true);
@@ -322,45 +315,67 @@ const Settings = () => {
 			.catch((error) => {
 				console.log(error);
 			});
+		} else {
+			setForexPriorityError(true);
+			setPriorityErrorMsg('Priorities must be positive integers.');
+		}
 	};
 
 	// Cancel the News Priority form and disable it 
-	const CancelNewsPriority = () => {
-		// TODO change this to different old stuff
+	const CancelNewsPriority = (e) => {
+		e.preventDefault();
+		setNewsPriorityError(false);
+
 		setYahooNewsPriority(oldYahooNewsPriority);
 		setGoogleNewsPriority(oldGoogleNewsPriority);
 		setNewsApiDisabled(true);
 	};
 
 	// Change the News Priority form (make api call)
-	const ChangeNewsPriority = () => {
-		admin
-		.setNewsPriority(googleNewsPriority, yahooNewsPriority)
-		.then(() => {
-			setNewsApiDisabled(true);
-		})
-		.catch((error) => {
-			console.log(error);
-		});
+	const ChangeNewsPriority = (e) => {
+		e.preventDefault();
+		setNewsPriorityError(false);
+		if (googleNewsPriority > 0 && yahooNewsPriority > 0) {
+			admin
+			.setNewsPriority(googleNewsPriority, yahooNewsPriority)
+			.then(() => {
+				setNewsApiDisabled(true);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		} else {
+			setNewsPriorityError(true);
+			setPriorityErrorMsg('Priorities must be positive integers.');
+		}
 	};
 
 	// Cancel the Stock Priority form and disable it 
-	const CancelStockPriority = () => {
+	const CancelStockPriority = (e) => {
+		e.preventDefault();
+		setStockPriorityError(false);
 		setAlphaStockPriority(oldAlphaStockPriority);
 		setYahooStockPriority(oldYahooStockPriority);
 		setStockApiDisabled(true);
 	};
 
 	// Change the Forex Priority form (make api call)
-	const ChangeStockPriority = () => {
-		admin
-		.setStockPriority(yahooStockPriority, alphaStockPriority)
-		.then(() => {
-			setStockApiDisabled(true);
-		})
-		.catch((error) => {
-			console.log(error);
-		});
+	const ChangeStockPriority = (e) => {
+		e.preventDefault();
+		setStockPriorityError(false);
+		if (yahooStockPriority > 0 && alphaStockPriority > 0) {
+			admin
+			.setStockPriority(yahooStockPriority, alphaStockPriority)
+			.then(() => {
+				setStockApiDisabled(true);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		} else {
+			setStockPriorityError(true);
+			setPriorityErrorMsg('Priorities must be positive integers.');
+		}
 	};
 	return (
 		<div>
@@ -594,12 +609,14 @@ const Settings = () => {
 								
 								<AdminContainer>
 									<AdminContainer>
+										<form>
 										<AdminControlsContainer>
 											<AdminPriority>Forex API Priority:</AdminPriority>
 											{forexApiDisabled ? (
 												<EditButton
 													aria-label="Edit Forex API Priority Button"
-													onClick={() => {
+													onClick={(e) => {
+														e.preventDefault();
 														setForexApiDisabled(false);
 													}}
 												>
@@ -609,13 +626,14 @@ const Settings = () => {
 												<SettingEditRowDiv>
 													<SaveButton
 														aria-label="Save changes to forex api button"
-														onClick={ChangeForexPriority}
+														type="submit"
+														onClick={e => ChangeForexPriority(e)}
 													>
 														Save
 													</SaveButton>
 													<CancelButton
 														aria-label="Cancel changes to forex api button"
-														onClick={CancelForexPriority}
+														onClick={e => CancelForexPriority(e)}
 													>
 														Cancel
 													</CancelButton>
@@ -623,6 +641,11 @@ const Settings = () => {
 											)}
 										</AdminControlsContainer>
 										<SubText>Enter the priority of the Forex APIs (in integers)</SubText>
+										{forexPriorityError && (
+											<div>
+												<ColorText color="red">{priorityErrorMsg}</ColorText>
+											</div>
+										)}
 										<label htmlFor="alphaForex">Alpha vantage</label>
 										<TextField
 											type="number"
@@ -639,107 +662,128 @@ const Settings = () => {
 											onChange={(e) => setYahooForexPriority(e.target.value)}
 											disabled={forexApiDisabled}
 										/>
+									</form>
 									</AdminContainer>
 								</AdminContainer>
 
 								{/* Form for News API Priority */}
 								<AdminContainer>
 									<AdminContainer>
-										<AdminControlsContainer>
-											<AdminPriority>News API Priority:</AdminPriority>
-											{newsApiDisabled ? (
-												<EditButton
-													aria-label="Edit News API Priority Button"
-													onClick={() => {
-														setNewsApiDisabled(false);
-													}}
-												>
-													Edit News API Priority
-												</EditButton>
-											) : (
-												<SettingEditRowDiv>
-													<SaveButton
-														aria-label="Save changes to news api button"
-														onClick={ChangeNewsPriority}
+										<form>
+											<AdminControlsContainer>
+												<AdminPriority>News API Priority:</AdminPriority>
+												{newsApiDisabled ? (
+													<EditButton
+														aria-label="Edit News API Priority Button"
+														onClick={(e) => {
+															e.preventDefault();
+															setNewsApiDisabled(false);
+														}}
 													>
-														Save
-													</SaveButton>
-													<CancelButton
-														aria-label="Cancel changes to news api button"
-														onClick={CancelNewsPriority}
-													>
-														Cancel
-													</CancelButton>
-												</SettingEditRowDiv>
+														Edit News API Priority
+													</EditButton>
+												) : (
+													<SettingEditRowDiv>
+														<SaveButton
+															aria-label="Save changes to news api button"
+															onClick={e => ChangeNewsPriority(e)}
+														>
+															Save
+														</SaveButton>
+														<CancelButton
+															aria-label="Cancel changes to news api button"
+															onClick={e => CancelNewsPriority(e)}
+														>
+															Cancel
+														</CancelButton>
+													</SettingEditRowDiv>
+												)}
+											</AdminControlsContainer>
+											<SubText>Enter the priority of the News APIs (in integers)</SubText>
+											{newsPriorityError && (
+												<div>
+													<ColorText color="red">{priorityErrorMsg}</ColorText>
+												</div>
 											)}
-										</AdminControlsContainer>
-										<SubText>Enter the priority of the News APIs (in integers)</SubText>
-										<label htmlFor="googleNews">Google News</label>
-										<TextField
-											type="number"
-											id="googleNews"
-											value={googleNewsPriority}
-											onChange={(e) => setGoogleNewsPriority(e.target.value)}
-											disabled={newsApiDisabled}
-										/>
-										<label htmlFor="yahooNews">Yahoo News</label>
-										<TextField
-											type="number"
-											id="yahooNews"
-											value={yahooNewsPriority}
-											onChange={(e) => setYahooNewsPriority(e.target.value)}
-											disabled={newsApiDisabled}
-										/>
+											<label htmlFor="googleNews">Google News</label>
+											<TextField
+												type="number"
+												id="googleNews"
+												value={googleNewsPriority}
+												onChange={(e) => setGoogleNewsPriority(e.target.value)}
+												min={1}
+												disabled={newsApiDisabled}
+											/>
+											<label htmlFor="yahooNews">Yahoo News</label>
+											<TextField
+												type="number"
+												id="yahooNews"
+												value={yahooNewsPriority}
+												onChange={(e) => setYahooNewsPriority(e.target.value)}
+												min={1}
+												disabled={newsApiDisabled}
+											/>
+										</form>
 									</AdminContainer>
 								</AdminContainer>
 
 								<AdminContainer>
 									<AdminContainer>
-										<AdminControlsContainer>
-											<AdminPriority>Stock API Priority:</AdminPriority>
-											{newsApiDisabled ? (
-												<EditButton
-													aria-label="Edit Stocks API Priority Button"
-													onClick={() => {
-														setStockApiDisabled(false);
-													}}
-												>
-													Edit Stock API Priority
-												</EditButton>
-											) : (
-												<SettingEditRowDiv>
-													<SaveButton
-														aria-label="Save changes to stock api button"
-														onClick={ChangeStockPriority}
+										<form>
+											<AdminControlsContainer>
+												<AdminPriority>Stock API Priority:</AdminPriority>
+												{stockApiDisabled ? (
+													<EditButton
+														aria-label="Edit Stocks API Priority Button"
+														onClick={(e) => {
+															e.preventDefault();
+															setStockApiDisabled(false);
+														}}
 													>
-														Save
-													</SaveButton>
-													<CancelButton
-														aria-label="Cancel changes to stock api button"
-														onClick={CancelStockPriority}
-													>
-														Cancel
-													</CancelButton>
-												</SettingEditRowDiv>
+														Edit Stock API Priority
+													</EditButton>
+												) : (
+													<SettingEditRowDiv>
+														<SaveButton
+															aria-label="Save changes to stock api button"
+															onClick={e => ChangeStockPriority(e)}
+														>
+															Save
+														</SaveButton>
+														<CancelButton
+															aria-label="Cancel changes to stock api button"
+															onClick={e => CancelStockPriority(e)}
+														>
+															Cancel
+														</CancelButton>
+													</SettingEditRowDiv>
+												)}
+											</AdminControlsContainer>
+											<SubText>Enter the priority of the Stock APIs (in integers)</SubText>
+											{stockPriorityError && (
+												<div>
+													<ColorText color="red">{priorityErrorMsg}</ColorText>
+												</div>
 											)}
-										</AdminControlsContainer>
-										<SubText>Enter the priority of the Stock APIs (in integers)</SubText>
-										<label htmlFor="yahooFin">Yahoo Finance</label>
-										<TextField
-											type="number"
-											id="yahooFin"
-											value={googleNewsPriority}
-											onChange={(e) => setYahooStockPriority(e.target.value)}
-											disabled={newsApiDisabled}
-										/>
-										<label htmlFor="alphaVantage">Alphavantage</label>
-										<TextField
-											type="number"
-											id="alphaVantage"
-											value={yahooNewsPriority}
-											onChange={(e) => setAlphaStockPriority(e.target.value)}
-											disabled={newsApiDisabled}
-										/>
+											<label htmlFor="yahooFin">Yahoo Finance</label>
+											<TextField
+												type="number"
+												id="yahooFin"
+												value={yahooStockPriority}
+												onChange={(e) => setYahooStockPriority(e.target.value)}
+												min={1}
+												disabled={stockApiDisabled}
+											/>
+											<label htmlFor="alphaVantage">Alphavantage</label>
+											<TextField
+												type="number"
+												id="alphaVantage"
+												value={alphaStockPriority}
+												onChange={(e) => setAlphaStockPriority(e.target.value)}
+												min={1}
+												disabled={stockApiDisabled}
+											/>
+										</form>
 									</AdminContainer>
 								</AdminContainer>
 							</AdminContainer>

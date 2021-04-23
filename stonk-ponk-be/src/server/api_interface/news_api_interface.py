@@ -2,6 +2,8 @@ from api_interface.yahoo_fin_news_api import YfNewsApi
 from api_interface.google_news_api import GoogleNewsApi
 from .cache_api import cache
 
+from administration.models import NewsApiPriority
+
 import datetime
 
 class NewsApiInterface:

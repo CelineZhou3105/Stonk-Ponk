@@ -441,6 +441,7 @@ export const AdminContainer = styled.div`
     ${FlexColumn}
     justify-content: center;
     align-items: flex-start;
+    gap: 2em;
 `;
 
 export const AdminControlsContainer = styled.div`

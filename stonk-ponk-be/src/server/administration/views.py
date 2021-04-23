@@ -10,6 +10,8 @@ from api_interface.stock_api_interface import StockApiInterface
 from api_interface.news_api_interface import NewsApiInterface
 from api_interface.forex_api_interface import ForexApiInterface
 
+from administration.models import *
+
 import json
 
 #--------- Admin Creation
@@ -48,8 +50,9 @@ def get_stock_api_priority(request):
     ret = {} 
     user = get_user(request); 
     
+    ret = {"stock_api_priorities" : [] } 
     if is_admin(user):
-        ret["stock_api_priorities"].append(StockApiInterface.get_ordered_stock_api_list())
+        ret["stock_api_priorities"] = (StockApiInterface.get_ordered_stock_api_list())
     else:
         return HttpResponseForbidden()
     return HttpResponse(json.dumps(ret))
@@ -86,8 +89,9 @@ def get_news_api_priority(request):
     ret = {} 
     user = get_user(request); 
     
+    ret = {"news_api_priorities" : [] } 
     if is_admin(user):
-        ret["stock_api_priorities"].append(NewsApiInterface.get_ordered_news_api_list())
+        ret["news_api_priorities"] = (NewsApiInterface.get_ordered_news_api_list())
     else:
         return HttpResponseForbidden()
     return HttpResponse(json.dumps(ret))
@@ -118,12 +122,12 @@ def set_news_api_priority(request):
 
 @require_http_methods(["GET"])
 @require_token
-def get_forex_api_priority(request):
-    ret = {} 
+def get_forex_api_priority(request): 
+    ret = {"forex_api_priorities" : [] } 
     user = get_user(request); 
     
     if is_admin(user):
-        ret["forex_api_priorities"].append(ForexApiInterface.get_ordered_forex_api_list())
+        ret["forex_api_priorities"] = (ForexApiInterface.get_ordered_forex_api_list())
     else:
         return HttpResponseForbidden()
     return HttpResponse(json.dumps(ret))

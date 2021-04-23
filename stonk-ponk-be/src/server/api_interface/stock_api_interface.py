@@ -2,6 +2,7 @@ from administration.models import StockApiPriority
 from .yahoo_fin_api import YfApi
 from .alphavantage_api import AaApi
 from .cache_api import cache
+from administration.models import StockApiPriority
 
 import datetime
 

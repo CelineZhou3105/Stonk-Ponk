@@ -2,6 +2,8 @@ from api_interface.alphavantage_forex_api import AaForexApi
 from administration.models import StockApiPriority
 from api_interface.yf_forex_api import YfForexApi
 
+from administration.models import ForexApiPriority
+
 class ForexApiInterface:
     forex_api_map = {}
     forex_api_map['alphavantage'] = AaForexApi()
