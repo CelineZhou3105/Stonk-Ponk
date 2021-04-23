@@ -88,7 +88,7 @@ function CreateModal(props) {
 				.then((res) => {
 					setStockOptions(res);
 				})
-				.catch((error) => {
+				.catch(() => {
 					// Do nothing - this means there are no search results, which is normal
 				});
 		}
