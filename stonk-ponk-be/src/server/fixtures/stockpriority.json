@@ -1,0 +1,18 @@
+[
+{
+    "model": "administration.stockapipriority",
+    "pk": 1,
+    "fields": {
+        "name": "alpha_vantage",
+        "priority": 2
+    }
+},
+{
+    "model": "administration.stockapipriority",
+    "pk": 2,
+    "fields": {
+        "name": "yahoo_fin",
+        "priority": 1
+    }
+}
+]

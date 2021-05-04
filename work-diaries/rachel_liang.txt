@@ -1,0 +1,63 @@
+Week 1
+Collaborated with the team to determine key details such as features, deciding on project, and tech stack. 
+
+Week 2
+Wrote User Stories and Epics
+Scaffolding for the Proposal
+UI Flow diagrams 
+Architecture diagram (Front-end)
+Creating tickets for the backlog + sprint backlog
+
+Week 3
+UI Flow diagrams for further pages (market, summary, profile, stock details)
+Estimating user stories and split them between sprints
+
+
+Week 4
+Login page and JWT token handling for authentication
+Market page - material ui tables for the data display, google charts for graphs
+Several meetings with backend team to figure out API schema and bug fixes.
+
+Week 5
+Presented demo A.
+Facilitated retrospective and submitted corresponding report.
+
+Week 6
+Portfolio Page - filtering, pie graph for portfolio makeup, value calculations.
+Refactoring Filter component, Search components, and StockTable components into their own files.
+Market wide News Page
+Hooking up the FE to the BE for Market Data and Portfolio Data
+UI Consistency improvements for titles, buttons, divs
+
+Week 7
+Market page - hooking the FE to the BE for most active stocks, gainers and losers
+Graph designs
+Portfolio Page - working with BE to get the market data, editing and adding stocks now working
+Real time search results for searching stocks by ticker in 'add stock modal' when editing portfolio. 
+
+Week 8
+News Page - Hooking up FE and BE for News homepage, individual stocks, and portfolio
+Retro B facilitation and report
+Organised a Demo B preparation meeting
+
+Week 9
+Finishing Up News Pages.
+Bug Fixes across the website.
+Error handling - Implemented error banners across our news, settings, portfolio, market pages.
+Turns out there is another use case for tokens that we did not originally factor - refreshing tokens between sessions. 
+Working on separate ticket to handle expiration of tokens - user is now automatically logged out when a token is expired.
+Portfolio Health section - display the health of the portfolio to the user.
+
+Week 10
+Added tooltips & suggestions to the portfolio page. 
+Added a glossary section into the education page.
+Bug fixes for stock table.
+Moving our 'what if I buy/sell now' functionality to the portfolio page + adding modals.
+Changing the search bar in the Market page to accomodate API calls, and taking users straight to the stock details page.
+Creating a responsive/collapsible navigation bar.
+Added comments to all our FE code. 
+Making alerts dismissable across the entire website.
+Wrote the functionalities section of the report.
+
+
+

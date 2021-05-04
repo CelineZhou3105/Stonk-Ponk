@@ -1,0 +1,19 @@
+[
+{
+    "model": "administration.forexapipriority",
+    "pk": 1,
+    "fields": {
+        "name": "alphavantage",
+        "priority": 1
+    }
+},
+{
+    "model": "administration.forexapipriority",
+    "pk": 2,
+    "fields": {
+        "name": "yahoo_finance",
+        "priority": 2
+    }
+}
+
+]

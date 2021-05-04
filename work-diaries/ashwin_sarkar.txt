@@ -1,0 +1,41 @@
+week 1:
+collaborated with rest of backend team to determine tech stack.
+determined rough outline of project proposal
+
+week2:
+worked with sampath to setup a local mongoDB instance.
+fixed python dependencies and managed to hook up a python script to a runner mongo local server instance
+
+week3:
+started adding database functionality, we switched to sqlite3 so I began working on porting over username/password rego to
+the new server. 
+paired more with sampath to achieve this
+
+week4:
+finished rewriting the database to sqlite to work better with the Django framework so we could support JWT 
+paired more with the front end team (rachel and celine) to connect backend to front end so we were all on the same page. 
+
+week 5:
+had demo week, worked hard with team to make sure we had a demoable object; Realised some team short comings in communication,
+had a retro to rectify this. set out more goals for next sprint and what to have finished by the next demo.
+Started building the portfolio schema 
+
+week6:
+quiet week. 
+
+week7:
+worked with kevin to get portfolio functionality working, largely for adding, removing and detailing stocks for front end display
+incorporated stock_api written by sampath to get stock information into portfolio 
+
+week8:
+worked on settings with celine to get a functioning settings page, allowing for first/last name changes as well as credential changes.
+DEMO'd 2 with team . Retro on friday 
+
+week9:
+Finished up project, did multiple watchlists for a user and hooked up with frontend and team. 
+Began working on administration as a final feature for the portfolio. 
+
+week10:
+Finalised admin feature and pushed to deployment. Worked with Celine to make sure things connected properly. Finished up project report section 
+(I did the technical overview and design section) 
+

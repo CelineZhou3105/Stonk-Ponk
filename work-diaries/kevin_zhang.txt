@@ -1,0 +1,30 @@
+Week 1
+Collaborated and discussed possible custom projects we can do. 
+Created the group on webcms3. 
+
+Week2
+Worked on the user stories for the backend.
+Added some jira tickets.
+Wrote about the technical depth.
+Clarified system architecture.
+
+Week3
+Cleaned up user stories.
+Estimated SP.
+Begun designing API.
+
+Week4
+Added django routing
+Made the api for account login and registration and linked to backend database calls
+
+Week 6
+Fixed bugs with login and register. Fixing miscellaneous bugs
+
+Week7
+Added portfolio routing, logic code and set up portfolio databases. Connected frontend with backend api for portfolios.
+
+Week 9
+Added watchlists. Expired tokens will send 403 so that the website will be logged out.
+
+Week 10
+Finishing reports. Making last minute bug fixes. Added profile picture.
