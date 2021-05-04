@@ -1,6 +1,6 @@
 # Stonk-Ponk
 A stock portfolio management system made for dummies!  
-Simplistic UI design, tailored suggestions and Education pages are available so that you will never feel lost or intimidated trying to start your investment career!
+Simplistic UI design, tailored suggestions and education pages are available so that you will never feel lost or intimidated trying to start your investment career!
 We are not kidding when we mean...   
 "ANYONE CAN BECOME A SMART INVESTOR!!!"
 
