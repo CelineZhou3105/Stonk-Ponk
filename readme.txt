@@ -1,2 +1,0 @@
-We have chosen to upload our final submission using the Github Classroom submission portal as our zip file exceeded 100MB.
-Link to the submission: https://github.com/unsw-cse-comp3900-9900-21T1/capstone-project-3900-w18b-quuack-heads/blob/master/Quuack-HeadsFinalSoftwareQuality.zip
